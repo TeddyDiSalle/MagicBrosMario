@@ -1,6 +1,10 @@
-# skip jetbrain files
+# skip editor config files
 **/.idea
+**/.vs
+**/.vscode
+**/.zed
 
 # skip build caches
-**/bin
-**/obj
+**/bin/
+**/obj/
+**/.mgstats
