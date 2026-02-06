@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <SourceFile>C:/Users/v1nc4/source/repos/IntroToMonoGame/IntroToMonoGame/Content/characters.gif</SourceFile>
-  <SourceTime>2026-01-26T16:43:14.4158872-05:00</SourceTime>
-  <DestFile>C:/Users/v1nc4/source/repos/IntroToMonoGame/IntroToMonoGame/Content/bin/DesktopGL/Content/characters.xnb</DestFile>
-  <DestTime>2026-01-28T18:07:06.7277357-05:00</DestTime>
+  <SourceFile>C:/Users/jhuanglululu/Documents/cse3902/MagicBrosMario/IntroToMonoGame/Content/characters.gif</SourceFile>
+  <SourceTime>2026-02-06T16:30:06.3819187-05:00</SourceTime>
+  <DestFile>C:/Users/jhuanglululu/Documents/cse3902/MagicBrosMario/IntroToMonoGame/Content/bin/DesktopGL/Content/characters.xnb</DestFile>
+  <DestTime>2026-02-06T16:40:55.9307555-05:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2025-10-20T10:25:32-04:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

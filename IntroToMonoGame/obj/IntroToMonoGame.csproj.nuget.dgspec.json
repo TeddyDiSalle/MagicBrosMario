@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\v1nc4\\source\\repos\\IntroToMonoGame\\IntroToMonoGame\\IntroToMonoGame.csproj": {}
+    "C:\\Users\\jhuanglululu\\Documents\\cse3902\\MagicBrosMario\\IntroToMonoGame\\IntroToMonoGame.csproj": {}
   },
   "projects": {
-    "C:\\Users\\v1nc4\\source\\repos\\IntroToMonoGame\\IntroToMonoGame\\IntroToMonoGame.csproj": {
+    "C:\\Users\\jhuanglululu\\Documents\\cse3902\\MagicBrosMario\\IntroToMonoGame\\IntroToMonoGame.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\v1nc4\\source\\repos\\IntroToMonoGame\\IntroToMonoGame\\IntroToMonoGame.csproj",
+        "projectUniqueName": "C:\\Users\\jhuanglululu\\Documents\\cse3902\\MagicBrosMario\\IntroToMonoGame\\IntroToMonoGame.csproj",
         "projectName": "IntroToMonoGame",
-        "projectPath": "C:\\Users\\v1nc4\\source\\repos\\IntroToMonoGame\\IntroToMonoGame\\IntroToMonoGame.csproj",
-        "packagesPath": "C:\\Users\\v1nc4\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\v1nc4\\source\\repos\\IntroToMonoGame\\IntroToMonoGame\\obj\\",
+        "projectPath": "C:\\Users\\jhuanglululu\\Documents\\cse3902\\MagicBrosMario\\IntroToMonoGame\\IntroToMonoGame.csproj",
+        "packagesPath": "C:\\Users\\jhuanglululu\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\jhuanglululu\\Documents\\cse3902\\MagicBrosMario\\IntroToMonoGame\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\v1nc4\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\jhuanglululu\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,7 +26,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {

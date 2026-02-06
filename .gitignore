@@ -1,0 +1,6 @@
+# skip jetbrain files
+**/.idea
+
+# skip build caches
+**/bin
+**/obj
