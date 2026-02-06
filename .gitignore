@@ -1,0 +1,13 @@
+# skip editor config files
+**/.idea
+**/.vs
+**/.vscode
+**/.zed
+
+# weird mac file
+**/.DS_Store
+
+# skip build caches
+**/bin/
+**/obj/
+**/.mgstats
