@@ -5,9 +5,9 @@ using System;
 using System.Diagnostics;
 
 
-namespace IntroToMonoGame;
+namespace MagicBrosMario.Source;
 
-public class Game1 : Game
+public class MagicBrosMario : Game
 {
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
@@ -26,7 +26,7 @@ public class Game1 : Game
     private int halfX;
     private int halfY;
 
-    public Game1()
+    public MagicBrosMario()
     {
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";

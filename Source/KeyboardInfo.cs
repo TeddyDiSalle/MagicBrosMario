@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Input;
 
-namespace IntroToMonoGame;
+namespace MagicBrosMario.Source;
 
 public class KeyboardInfo : IController
 {

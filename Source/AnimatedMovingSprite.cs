@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System.Runtime.CompilerServices;
 
-namespace IntroToMonoGame;
+namespace MagicBrosMario.Source;
 
 public class AnimatedMovingSprite : ISprite
 {

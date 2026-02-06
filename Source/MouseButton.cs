@@ -1,4 +1,4 @@
-﻿namespace IntroToMonoGame;
+﻿namespace MagicBrosMario.Source;
 public enum MouseButton
 {
     Left,

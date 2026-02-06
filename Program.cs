@@ -1,2 +1,2 @@
-﻿using var game = new IntroToMonoGame.Game1();
+﻿using var game = new MagicBrosMario.Source.MagicBrosMario();
 game.Run();
