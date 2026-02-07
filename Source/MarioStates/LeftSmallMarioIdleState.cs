@@ -1,12 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace MagicBrosMario.Source.MarioStates;
 
-public class LeftSmallMarioIdle : IPlayerState
+public class LeftSmallMarioIdleState : IPlayerState
 {
     private Player Mario;
 
-    public LeftSmallMarioIdle(Player Mario)
+    public LeftSmallMarioIdleState(Player Mario)
     {
         this.Mario = Mario;
     }
@@ -39,6 +40,10 @@ public class LeftSmallMarioIdle : IPlayerState
 
     }
     public void Update(GameTime gameTime)
+    {
+
+    }
+    public void Draw(SpriteBatch spriteBatch)
     {
 
     }

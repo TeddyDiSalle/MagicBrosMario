@@ -1,14 +1,19 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace MagicBrosMario.Source.MarioStates;
 
 public class Player
 {
-    private IPlayerState PlayerState;
+    private IPlayerState PlayerState { get; set; }
+
+    private Vector2 Position { get; set; }
+
+    private const float MovementSpeed = 5.0f;
     
     public Player()
     {
-        PlayerState = new LeftSmallMarioIdle();
+        PlayerState = new LeftSmallMarioIdleState(this);
     }
     public void Left()
     {
@@ -41,6 +46,25 @@ public class Player
     public void Update(GameTime gameTime)
     {
         PlayerState.Update(gameTime);
+    }
+
+    public void Draw(SpriteBatch spriteBatch)
+    {
+        PlayerState.Draw(spriteBatch);
+    }
+
+    public void MoveLeft(GameTime gameTime)
+    {
+        Vector2 pos = Position;
+        float distanceMoved = (float)gameTime.ElapsedGameTime.TotalSeconds * MovementSpeed;
+        pos.X -= distanceMoved;
+    }
+
+    public void MoveRight(GameTime gameTime)
+    {
+        Vector2 pos = Position;
+        float distanceMoved = (float)gameTime.ElapsedGameTime.TotalSeconds * MovementSpeed;
+        pos.X += distanceMoved;
     }
 
 }
