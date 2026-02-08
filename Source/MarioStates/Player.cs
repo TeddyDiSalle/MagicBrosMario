@@ -8,28 +8,31 @@ public class Player
     private IPlayerState PlayerState { get; set; }
 
     private Vector2 Position { get; set; }
+    private Vector2 Velocity { get; set; }
 
     private const float MovementSpeed = 5.0f;
+    private const float Gravity = 5.0f;
+    private bool InAir = false;
     
     public Player()
     {
         PlayerState = new LeftSmallMarioIdleState(this);
     }
-    public void Left()
+    public void Left(GameTime gameTime)
     {
-        PlayerState.Left();
+        PlayerState.Left(gameTime);
     }
-    public void Right()
+    public void Right(GameTime gameTime)
     {
-        PlayerState.Right();
+        PlayerState.Right(gameTime);
     }
-    public void Jump()
+    public void Jump(GameTime gameTime)
     {
-        PlayerState.Jump();
+        PlayerState.Jump(gameTime);
     }
-    public void Crouch()
+    public void Crouch(GameTime gameTime)
     {
-        PlayerState.Crouch();
+        PlayerState.Crouch(gameTime);
     }
     public void Attack()
     {
@@ -46,6 +49,11 @@ public class Player
     public void Update(GameTime gameTime)
     {
         PlayerState.Update(gameTime);
+        if (InAir)
+        {
+            Velocity = new Vector2(Velocity.X, Velocity.Y + Gravity);
+        }
+        Position += Velocity;
     }
 
     public void Draw(SpriteBatch spriteBatch)
@@ -55,16 +63,32 @@ public class Player
 
     public void MoveLeft(GameTime gameTime)
     {
-        Vector2 pos = Position;
         float distanceMoved = (float)gameTime.ElapsedGameTime.TotalSeconds * MovementSpeed;
-        pos.X -= distanceMoved;
+        Velocity = new Vector2(Velocity.X - distanceMoved, Velocity.Y);
     }
 
     public void MoveRight(GameTime gameTime)
     {
-        Vector2 pos = Position;
         float distanceMoved = (float)gameTime.ElapsedGameTime.TotalSeconds * MovementSpeed;
-        pos.X += distanceMoved;
+        Velocity = new Vector2(Velocity.X + distanceMoved, Velocity.Y);
     }
+
+    public void Idle()
+    {
+        Velocity = Vector2.Zero;
+    }
+
+    public void OnGround()
+    {
+        InAir = false;
+        Velocity = new Vector2(Velocity.X, 0);
+    }
+    public void MoveUp(GameTime gameTime)
+    {
+        InAir = true;
+        Velocity = new Vector2(Velocity.X, Velocity.Y);
+    }
+
+
 
 }

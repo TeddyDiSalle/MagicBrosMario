@@ -11,21 +11,23 @@ public class LeftSmallMarioIdleState : IPlayerState
     {
         this.Mario = Mario;
     }
-    public void Left()
+    public void Left(GameTime gameTime)
+    {
+        Mario.MoveLeft(gameTime);
+        //Mario = new LeftSmallMarioMoveState(Mario);
+    }
+    public void Right(GameTime gameTime)
+    {
+        Mario.MoveRight(gameTime);
+        //Mario = new RightSmallMarioMoveState(Mario);
+    }
+    public void Jump(GameTime gameTime)
     {
 
     }
-    public void Right()
+    public void Crouch(GameTime gameTime)
     {
-
-    }
-    public void Jump()
-    {
-
-    }
-    public void Crouch()
-    {
-
+        //Nothing
     }
     public void Attack()
     {
