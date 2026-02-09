@@ -2,13 +2,41 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MagicBrosMario.Source.Block;
-
+/// <summary>
+/// block implementation for non-animated and non-updatable blocks
+///
+/// <example>
+/// creating a simple block
+/// <code lang="csharp">
+/// <![CDATA[
+/// var sharedTexture = null;
+/// 
+/// new StaticBlock(
+///     new Rectangle(100, 100, 50, 50),    // textureRect
+///     (block) => {                        // initializer
+///         block.Scale = 2.0;              // set scale to 2
+///         return sharedTexture;           // return the texture reference
+///     }
+/// );
+/// 
+/// // initialize the texture after the block has been created
+/// var sharedTexture = Content.Load<Texture2d>("shared_texture);
+/// 
+/// // correct texture is loaded
+/// block.LoadContent();
+/// ]]>
+/// </code>
+/// </example>
+/// </summary>
+/// <param name="textureRect">the x, y, width and height of the block on the texture</param>
+/// <param name="initializer"><see cref="StaticBlockInitializer"/></param>
 public class StaticBlock(Rectangle textureRect, StaticBlock.StaticBlockInitializer initializer) : IBlock
 {
     /// <summary>
-    /// lambda function that get called when load content is called.
-    /// this function allow for referencing global texture before it is created
-    ///
+    /// lambda function that get called when load content is called<br/>
+    /// 
+    /// this function allow for referencing global texture before it is created<br/>
+    /// 
     /// set initial position, scale, texture and other with this function 
     /// </summary>
     public delegate Texture2D StaticBlockInitializer(StaticBlock block);
