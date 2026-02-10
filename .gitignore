@@ -3,6 +3,7 @@
 **/.vs
 **/.vscode
 **/.zed
+**/Folder.DotSettings.user
 
 # weird mac file
 **/.DS_Store
