@@ -27,25 +27,38 @@ public class AnimatedSprite(
 {
     public bool IsAnimated => true;
 
-    public int X { get; set; }
-
-    public int Y { get; set; }
-
-    public Rectangle DestRect { get; private set; }
+    public Point Position
+    {
+        get;
+        set
+        {
+            field = value;
+            UpdateSize();
+        }
+    }
 
     public float Scale
     {
         get;
         set
         {
-            // update field and destination rectangle
             field = value;
-            DestRect = new Rectangle(X, Y, (int)(value * frameWidth), (int)(value * frameHeight));
+            UpdateSize();
         }
     } = 1;
 
+    public Point Size { get; private set; }
+    
+    private Rectangle destRect = new(0, 0, frameWidth, frameHeight);
+
     private int frame = 0;
     private float timer = 0;
+
+    private void UpdateSize()
+    {
+        Size = new Point((int)(Scale * frameWidth), (int)(Scale * frameHeight));
+        destRect = new Rectangle(Position.X, Position.Y, Size.X, Size.Y);
+    }
 
     public void Update(GameTime gameTime)
     {
@@ -63,6 +76,6 @@ public class AnimatedSprite(
     public void Draw(SpriteBatch spriteBatch)
     {
         var sourceRect = new Rectangle(offsetX + frameWidth * frame, offsetY, frameWidth, frameHeight);
-        spriteBatch.Draw(texture.Texture, DestRect, sourceRect, Color.White);
+        spriteBatch.Draw(texture.Texture, destRect, sourceRect, Color.White);
     }
 }
