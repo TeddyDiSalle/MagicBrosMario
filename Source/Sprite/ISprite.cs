@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MagicBrosMario.Source.Sprite;
@@ -14,24 +15,19 @@ public interface ISprite
     public bool IsAnimated { get; }
 
     /// <summary>
-    /// x position of sprite
+    /// position of sprite
     /// </summary>
-    public int X { get; set; }
-
-    /// <summary>
-    /// y position of sprite
-    /// </summary>
-    public int Y { get; set; }
-
-    /// <summary>
-    /// destination rectangle, contains the drawing width and height
-    /// </summary>
-    public Rectangle DestRect { get; }
+    public Point Position { get; set; }
 
     /// <summary>
     /// scale of sprite
     /// </summary>
     public float Scale { get; set; }
+
+    /// <summary>
+    /// size of sprite
+    /// </summary>
+    public Point Size { get; }
 
     /// <summary>
     /// update function for sprite, currently only used by AnimatedSprite
