@@ -13,7 +13,8 @@ namespace MagicBrosMario.Source.Block;
 /// var sharedTexture = null;
 /// 
 /// new StaticBlock(
-///     
+///     // this creates a new sprite for the block
+///     sharedTexture.NewSprite(100, 100, 50, 50);
 /// );
 /// 
 /// /* in LoadContent */
