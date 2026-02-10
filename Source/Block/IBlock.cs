@@ -19,22 +19,16 @@ public interface IBlock
     bool IsVisible { get; set; }
 
     /// <summary>
-    /// x coordinate of the block
+    /// position of this block
     /// </summary>
-    /// <value>x coordinate of the block</value>
-    int X { get; set; }
-
-    /// <summary>
-    /// y coordinate of the block
-    /// </summary>
-    /// <value>y coordinate of the block</value>
-    int Y { get; set; }
+    /// <value>x coordinate of this block</value>
+    Point Position { get; set; }
 
     /// <summary>
     /// size of this block 
     /// </summary>
     /// <value>size of this block</value>
-    Vector2 Size { get; }
+    Point Size { get; }
 
     /// <summary>
     /// scale of this block 

@@ -1,6 +1,5 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MagicBrosMario.Source.Sprite;
 
 namespace MagicBrosMario.Source.Block;
 
@@ -31,25 +30,19 @@ public class StaticBlock(Sprite.Sprite sprite) : IBlock
     public bool IsSolid { get; set; } = false;
     public bool IsVisible { get; set; } = true;
 
-    public int X
+    public Point Position
     {
-        get => sprite.X;
-        set => sprite.X = value;
+        get => sprite.Position;
+        set => sprite.Position = value;
     }
 
-    public int Y
-    {
-        get => sprite.Y;
-        set => sprite.Y = value;
-    }
-
-    public Vector2 Size => new(sprite.DestRect.Width, sprite.DestRect.Height);
+    public Point Size => sprite.Size;
 
     public float Scale
     {
         get => sprite.Scale;
         set => sprite.Scale = value;
-    };
+    }
 
     public void Update(GameTime gameTime)
     {
