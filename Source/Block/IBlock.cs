@@ -19,10 +19,16 @@ public interface IBlock
     bool IsVisible { get; set; }
 
     /// <summary>
-    /// position of this block relative to the absolute origin(ignoring offset due to camera)
+    /// x coordinate of the block
     /// </summary>
-    /// <value>position of this block</value>
-    Vector2 Position { get; set; }
+    /// <value>x coordinate of the block</value>
+    int X { get; set; }
+
+    /// <summary>
+    /// y coordinate of the block
+    /// </summary>
+    /// <value>y coordinate of the block</value>
+    int Y { get; set; }
 
     /// <summary>
     /// size of this block 
@@ -37,18 +43,16 @@ public interface IBlock
     float Scale { get; set; }
 
     /// <summary>
-    /// load content function for blocks
-    ///
-    /// all property of the block should be valid after this function
+    /// update function for blocks
     /// </summary>
-    void LoadContent();
-    
+    /// <param name="gameTime">gameTime</param>
+    void Update(GameTime gameTime);
+
     /// <summary>
     /// draw function for blocks
     ///
     /// function implementation should check IsVisible before drawing
     /// </summary>
     /// <param name="spriteBatch">spriteBatch</param>
-    /// <param name="gameTime">gameTime</param>
-    void Draw(SpriteBatch spriteBatch, GameTime gameTime);
+    void Draw(SpriteBatch spriteBatch);
 }
