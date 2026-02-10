@@ -20,6 +20,7 @@ public class Goomba : IEnemy
     private Boolean movingRight = true;
 
     private Vector2 destination;
+    private Boolean isAlive;
 
     public Goomba(Texture2D texture, Rectangle sourceRectangle1, Rectangle sourceRectangle2, 
         Rectangle sourceRectangle3, Vector2 destinationVector, int boundWidth)
@@ -32,13 +33,13 @@ public class Goomba : IEnemy
         sources[2] = sourceRectangle3;//Dead
 
         bound = boundWidth;
-        
+        this.isAlive = true;
 
     }
     public void Update(GameTime gametime)
     {
         timer += gametime.ElapsedGameTime.TotalSeconds;
-        if (true) // Replace later with condition to check if Goomba is alive or not
+        if (isAlive) // Replace later with condition to check if Goomba is alive or not
         {
             Walking();
         }
@@ -81,7 +82,10 @@ public class Goomba : IEnemy
         }
     }
 
-
+    public void Kill()
+    {
+        this.isAlive = false;
+    }
 
     public void Draw(SpriteBatch _spriteBatch)
     {

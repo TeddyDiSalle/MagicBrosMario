@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Runtime.CompilerServices;
 
 namespace MagicBrosMario.Source;
@@ -16,8 +17,10 @@ public class Koopa : IEnemy
     private double duration = 0.04;
 
     private int bound;
+    private Boolean movingRight = true;
 
     private Vector2 destination;
+    private Boolean isAlive;
 
     public Koopa(Texture2D texture, Rectangle sourceRectangle1, Rectangle sourceRectangle2, 
         Rectangle sourceRectangle3, Vector2 destinationVector, int boundWidth)
@@ -25,43 +28,82 @@ public class Koopa : IEnemy
         destination = destinationVector;
         _texture = texture;
 
-        sources[0] = sourceRectangle1;//Alive Walking
-        sources[1] = sourceRectangle2;//Alive Walking
-        sources[2] = sourceRectangle3;//Dead
+        sources[0] = sourceRectangle1;//Walking right1
+        sources[1] = sourceRectangle2;//Walking right2
+        sources[2] = sourceRectangle3;//Walking left1
+        sources[3] = sourceRectangle3;//Walking left2
+        sources[4] = sourceRectangle1;//Hit1
+        sources[5] = sourceRectangle2;//Hit2
+        sources[6] = sourceRectangle3;//Dead1
+        sources[7] = sourceRectangle3;//Dead2
 
         bound = boundWidth;
-        
+        this.isAlive = true;
 
     }
     public void Update(GameTime gametime)
     {
         timer += gametime.ElapsedGameTime.TotalSeconds;
-        if (true) // Replace later with condition to check if Goomba is alive or not
+        if (isAlive) // Replace later with condition to check if Koopa is alive or not or is hit or not
         {
             Walking();
         }
-        else
+        else //Koopa is Dead
         {
-            currentFrame = 2; // Set to dead frame if killed
+            currentFrame = 6; // Set to dead frame if killed
         }
     }
+
+    //This method also updates the current frame of the Koopa's animation and moves left or right
+    //Right now its set on bound(which is screen width)
     public void Walking()
     {
-        if (timer >= duration)
+        if (movingRight)
         {
-            currentFrame++;
-            if (currentFrame == 1)
-            {
-                currentFrame = 0;
-            }
-
             destination.X += 5;
-            if (destination.X > bound)
+            if (destination.X >= bound)
+            {
+                destination.X = bound;
+                movingRight = false;
+            }
+            if(timer >= duration){
+                if(currentFrame == 0)
+                {
+                    currentFrame = 1;
+                }
+                else
+                {
+                    currentFrame = 0;
+                }
+                timer = 0.0;
+            }
+        }
+        else
+        {
+            destination.X -= 5;
+            if (destination.X <= 0)
             {
                 destination.X = 0;
+                movingRight = true;
             }
-            timer = 0.0;
+            if(timer >= duration)
+            {
+                if(currentFrame == 2)
+                {
+                    currentFrame = 3;
+                }
+                else
+                {
+                    currentFrame = 2;
+                }
+                timer = 0.0;
+            }
         }
+    }
+
+    public void Kill()
+    {
+        this.isAlive = false;
     }
 
     public void Draw(SpriteBatch _spriteBatch)
