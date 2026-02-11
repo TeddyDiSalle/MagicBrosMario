@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Runtime.CompilerServices;
 
 namespace MagicBrosMario.Source.MarioStates;
 
@@ -7,16 +8,17 @@ public class Player
 {
     private IPlayerState PlayerState { get; set; }
 
+
     private Vector2 Position { get; set; }
     private Vector2 Velocity { get; set; }
 
-    private const float MovementSpeed = 5.0f;
-    private const float Gravity = 5.0f;
-    private bool InAir = false;
+    private const float MovementSpeed = 8.0f;
+    private const float Gravity = 10.0f;
+    private float GroundY = 50; //Temporary for Sprint2
     
-    public Player()
+    public Player(SharedTexture texture)
     {
-        PlayerState = new LeftSmallMarioIdleState(this);
+        PlayerState = new LeftSmallMarioIdleState(this, texture);
     }
     public void Left(GameTime gameTime)
     {
@@ -49,11 +51,16 @@ public class Player
     public void Update(GameTime gameTime)
     {
         PlayerState.Update(gameTime);
-        if (InAir)
+        if (Position.Y < GroundY)
         {
-            Velocity = new Vector2(Velocity.X, Velocity.Y + Gravity);
+            Velocity += new Vector2(0, Gravity);
         }
         Position += Velocity;
+        if (Position.Y > GroundY)
+        {
+            Position = new Vector2(Position.X, GroundY);
+            Velocity -= new Vector2(0, Velocity.Y);
+        }
     }
 
     public void Draw(SpriteBatch spriteBatch)
@@ -64,31 +71,34 @@ public class Player
     public void MoveLeft(GameTime gameTime)
     {
         float distanceMoved = (float)gameTime.ElapsedGameTime.TotalSeconds * MovementSpeed;
-        Velocity = new Vector2(Velocity.X - distanceMoved, Velocity.Y);
+        Velocity -= new Vector2(distanceMoved, 0);
     }
 
     public void MoveRight(GameTime gameTime)
     {
         float distanceMoved = (float)gameTime.ElapsedGameTime.TotalSeconds * MovementSpeed;
-        Velocity = new Vector2(Velocity.X + distanceMoved, Velocity.Y);
+        Velocity += new Vector2(distanceMoved, 0);
     }
 
     public void Idle()
     {
-        Velocity = Vector2.Zero;
+        if (Velocity.X > 0)
+        {
+            Velocity -= new Vector2(MovementSpeed, 0);
+        }
+        else if (Velocity.X < 0)
+        {
+            Velocity += new Vector2(MovementSpeed, 0);
+        }
     }
 
-    public void OnGround()
+    public void OnGround(float NewGroundY)
     {
-        InAir = false;
-        Velocity = new Vector2(Velocity.X, 0);
+        GroundY = NewGroundY;
     }
     public void MoveUp(GameTime gameTime)
     {
-        InAir = true;
-        Velocity = new Vector2(Velocity.X, Velocity.Y);
+        float distanceMoved = (float)(gameTime.ElapsedGameTime.TotalSeconds * 3 * MovementSpeed);
+        Velocity += new Vector2(0, distanceMoved);
     }
-
-
-
 }

@@ -3,17 +3,17 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MagicBrosMario.Source.MarioStates;
 
-public class LeftSmallMarioIdleState : IPlayerState
+public class RightSmallMarioIdleState : IPlayerState
 {
     private Player Mario;
     private SharedTexture texture;
     private Sprite sprite;
 
-    public LeftSmallMarioIdleState(Player Mario, SharedTexture texture)
+    public RightSmallMarioIdleState(Player Mario, SharedTexture texture)
     {
         this.Mario = Mario;
         this.texture = texture;
-        sprite = new Sprite(texture, 224, 44, 11, 15);
+        sprite = new Sprite(texture, 277, 44, 11, 15);
     }
     public void Left(GameTime gameTime)
     {
@@ -27,7 +27,7 @@ public class LeftSmallMarioIdleState : IPlayerState
     }
     public void Jump(GameTime gameTime)
     {
-        //Mario = new LeftJumpSmallMarioState(Mario);
+        //Mario = new RightJumpSmallMarioState(Mario);
     }
     public void Crouch(GameTime gameTime)
     {
@@ -46,10 +46,10 @@ public class LeftSmallMarioIdleState : IPlayerState
         switch (power)
         {
             case Power.FireFlower:
-                //Mario = new LeftFireMarioState(Mario);
+                //Mario = new RightFireMarioState(Mario);
                 break;
             case Power.Mushroom:
-                //Mario = new LeftBigMarioState(Mario);
+                //Mario = new RightBigMarioState(Mario);
                 break;
             case Power.Star:
                 //RainbowState?

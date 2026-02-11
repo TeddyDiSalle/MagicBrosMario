@@ -3,22 +3,22 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MagicBrosMario.Source.MarioStates;
 
-public class LeftSmallMarioIdleState : IPlayerState
+public class LeftSmallMarioMoveState : IPlayerState
 {
     private Player Mario;
     private SharedTexture texture;
-    private Sprite sprite;
+    private AnimatedSprite sprite;
 
-    public LeftSmallMarioIdleState(Player Mario, SharedTexture texture)
+    public LeftSmallMarioMoveState(Player Mario, SharedTexture texture)
     {
         this.Mario = Mario;
         this.texture = texture;
-        sprite = new Sprite(texture, 224, 44, 11, 15);
+        sprite = new AnimatedSprite(texture);
     }
     public void Left(GameTime gameTime)
     {
         Mario.MoveLeft(gameTime);
-        //Mario = new LeftSmallMarioMoveState(Mario);
+        
     }
     public void Right(GameTime gameTime)
     {
