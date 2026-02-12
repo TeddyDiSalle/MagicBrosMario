@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using System;
 using System.Diagnostics;
 
@@ -12,34 +11,32 @@ public class MagicBrosMario : Game
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
 
-    private KeyboardInfo keyboardInput;
-    private MouseInfo mouseInput;
-
     private ISprite currentSprite;
     private StandstillSprite sprite1;
     private AnimatedSprite sprite2;
     private MovingSprite sprite3;
     private AnimatedMovingSprite sprite4;
 
-    private Font font;
+    private ISprite[] Sprites;
+    private IController Controller;
 
-    private int halfX;
-    private int halfY;
+    private Font font;
 
     public MagicBrosMario()
     {
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
-        halfX = Window.ClientBounds.Width / 2;
-        halfY = Window.ClientBounds.Height / 2;
+        
     }
 
     protected override void Initialize()
     {
 
-        keyboardInput = new KeyboardInfo();
-        mouseInput = new MouseInfo();
+        Sprites = new ISprite[] {sprite1, sprite2, sprite3, sprite4};
+        IController[] controllers =  {new KeyboardInfo(), new MouseInfo()};
+        int[] cords = {Window.ClientBounds.Width / 2, Window.ClientBounds.Height / 2};
+        Controller = new MarioGameController(this, Sprites, controllers, cords);
 
         base.Initialize();
     }
@@ -66,7 +63,7 @@ public class MagicBrosMario : Game
 
     protected override void Update(GameTime gameTime)
     {
-        InputCheck();
+        Controller.Update();
 
         currentSprite.Update(gameTime);
 
@@ -88,34 +85,9 @@ public class MagicBrosMario : Game
         base.Draw(gameTime);
     }
 
-    private void InputCheck()
+    public void SetCurrentSprite(ISprite sprite)
     {
-        keyboardInput.Update();
-        mouseInput.Update();
-        Point position = mouseInput.Position;
-
-
-        if (keyboardInput.IsKeyDown(Keys.D0) || mouseInput.IsButtonDown(MouseButton.Right))
-        {
-            Exit();
-        }
-        else if (keyboardInput.IsKeyDown(Keys.D1) || (mouseInput.IsButtonDown(MouseButton.Left) && position.X < halfX && position.Y < halfY))
-        {
-            currentSprite = sprite1;
-        }
-        else if (keyboardInput.IsKeyDown(Keys.D2) || (mouseInput.IsButtonDown(MouseButton.Left) && position.X > halfX && position.Y < halfY))
-        {
-            currentSprite = sprite2;
-        }
-        else if (keyboardInput.IsKeyDown(Keys.D3) || (mouseInput.IsButtonDown(MouseButton.Left) && position.X < halfX && position.Y > halfY))
-        {
-            currentSprite = sprite3;
-
-        }
-        else if (keyboardInput.IsKeyDown(Keys.D4) || (mouseInput.IsButtonDown(MouseButton.Left) && position.X > halfX && position.Y > halfY))
-        {
-            currentSprite = sprite4;
-        }
+        currentSprite = sprite;
     }
 }
 
