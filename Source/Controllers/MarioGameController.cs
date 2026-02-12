@@ -11,7 +11,7 @@ namespace MagicBrosMario.Source;
 public class MarioGameController : IController{
     //Classes should only worry about game actions not if "w" is pressed
     // This class will call the other's cllasses move functions and such
-    private KeyCommandMapper inputMap;
+    private KeysNMouseCommandMapper inputMap;
 
     private ISprite[] sprites;
     private IController[] keyboardNMouse;
@@ -29,12 +29,13 @@ public class MarioGameController : IController{
     public void Initialize()
     {
         
-        inputMap = new KeyCommandMapper();
+        inputMap = new KeysNMouseCommandMapper();
         SetSprint2KeyBinds();
     }
 
     public void SetSprint2KeyBinds()
     {
+        //Keyboard inputs
         inputMap.Bind(Keys.D0,() => game.Exit());
         inputMap.Bind(Keys.D1, () => game.SetCurrentSprite(sprites[0]));
         inputMap.Bind(Keys.D2, () => game.SetCurrentSprite(sprites[1]));
@@ -59,6 +60,13 @@ public class MarioGameController : IController{
         inputMap.Bind(Keys.P, () => game.Exit()); //TO DO cycle enemy right/next
         inputMap.Bind(Keys.Q, () => game.Exit()); 
         inputMap.Bind(Keys.R, () => game.Exit()); //TO DO reset game
+
+        // mouse inputs
+        inputMap.Bind(m => m.IsButtonDown(MouseButton.Right), () => game.Exit());
+        inputMap.Bind(m => m.WasButtonJustPressed(MouseButton.Left) && m.Position.X < cords[0] && m.Position.Y < cords[1], () => game.SetCurrentSprite(sprites[0]));
+        inputMap.Bind(m => m.IsButtonDown(MouseButton.Left) && m.Position.X > cords[0] && m.Position.Y < cords[1], () => game.SetCurrentSprite(sprites[1]));
+        inputMap.Bind(m => m.IsButtonDown(MouseButton.Left) && m.Position.X < cords[0] && m.Position.Y > cords[1], () => game.SetCurrentSprite(sprites[2]));
+        inputMap.Bind(m => m.IsButtonDown(MouseButton.Left) && m.Position.X > cords[0] && m.Position.Y > cords[1], () => game.SetCurrentSprite(sprites[3]));
     }
     public void Update()
     {
@@ -66,32 +74,8 @@ public class MarioGameController : IController{
         MouseInfo mouseInput = (MouseInfo)keyboardNMouse[1];
         keyboardInput.Update();
         mouseInput.Update();
-        Point position = mouseInput.Position;
         
-        inputMap.ProcessInput(keyboardInput);
-
-
-        if (mouseInput.IsButtonDown(MouseButton.Right))
-        {
-            game.Exit();
-        }
-        else if (mouseInput.IsButtonDown(MouseButton.Left) && position.X < cords[0] && position.Y < cords[1])
-        {
-            game.SetCurrentSprite(sprites[0]);
-        }
-        else if (mouseInput.IsButtonDown(MouseButton.Left) && position.X > cords[0] && position.Y < cords[1])
-        {
-            game.SetCurrentSprite(sprites[1]);
-        }
-        else if (mouseInput.IsButtonDown(MouseButton.Left) && position.X < cords[0] && position.Y > cords[1])
-        {
-            game.SetCurrentSprite(sprites[2]);
-
-        }
-        else if (mouseInput.IsButtonDown(MouseButton.Left) && position.X > cords[0] && position.Y > cords[1])
-        {
-            game.SetCurrentSprite(sprites[3]);
-        }
+        inputMap.ProcessInput(keyboardInput, mouseInput);
     }
     
 }
