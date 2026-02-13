@@ -61,6 +61,6 @@ public class Sprite(
 
     public void Draw(SpriteBatch spriteBatch)
     {
-        spriteBatch.Draw(texture.Texture, sourceRect, destRect, Color.White);
+        spriteBatch.Draw(texture.Texture, destRect, sourceRect, Color.White);
     }
 }
