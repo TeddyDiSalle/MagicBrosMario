@@ -7,10 +7,10 @@ using System.Diagnostics;
 
 namespace MagicBrosMario.Source;
 
-//For sprint2
 public class MarioGameController : IController{
-    //Classes should only worry about game actions not if "w" is pressed
-    // This class will call the other's cllasses move functions and such
+    // Classes should not worry about game actions not if "w" is pressed or mouse is over here or over there.
+    // This allows the game to work whether the player is using a keyboard or a potato
+    // This class will call the other's classes move functions and damage functions and such
     private KeysNMouseCommandMapper inputMap;
 
     private ISprite[] sprites;
@@ -30,10 +30,11 @@ public class MarioGameController : IController{
     {
         
         inputMap = new KeysNMouseCommandMapper();
-        SetSprint2KeyBinds();
+        SetSprint2Binds();
     }
 
-    public void SetSprint2KeyBinds()
+    // All the binds specified for sprint 2
+    public void SetSprint2Binds()
     {
         //Keyboard inputs
         inputMap.Bind(Keys.D0,() => game.Exit());
@@ -75,7 +76,7 @@ public class MarioGameController : IController{
         keyboardInput.Update();
         mouseInput.Update();
         
-        inputMap.ProcessInput(keyboardInput, mouseInput);
+        inputMap.ProcessInput(keyboardInput, mouseInput);// check all the inputs of the mouse and keyboard and run their corresponding function
     }
     
 }
