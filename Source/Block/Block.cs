@@ -43,62 +43,22 @@ namespace MagicBrosMario.Source.Block;
 /// </example>
 /// </summary>
 /// <param name="sprite">sprite object from shared texture, both sprite and animated sprite works</param>
-public class Block(Sprite.ISprite sprite) : IBlock
+public class Block(Sprite.ISprite sprite) : BlockBase<Block>(sprite)
 {
-    public bool IsSolid { get; set; } = false;
-    public bool IsVisible { get; set; } = true;
-
-    public Point Position
+    public override void Update(GameTime gameTime)
     {
-        get => sprite.Position;
-        set => sprite.Position = value;
-    }
-
-    /// <summary>
-    /// this utility method allow giving block a initial position by chaining with constructor
-    /// </summary>
-    /// <param name="x">x position</param>
-    /// <param name="y">y position</param>
-    /// <returns></returns>
-    public Block WithPosition(int x, int y)
-    {
-        Position = new Point(x, y);
-        return this;
-    }
-
-    public Point Size => sprite.Size;
-
-    public float Scale
-    {
-        get => sprite.Scale;
-        set => sprite.Scale = value;
-    }
-
-    /// <summary>
-    /// this utility method allow giving block a initial scale by chaining with constructor
-    /// </summary>
-    /// <param name="scale">scale</param>
-    /// <returns></returns>
-    public Block WithScale(float scale)
-    {
-        Scale = scale;
-        return this;
-    }
-
-    public void Update(GameTime gameTime)
-    {
-        if (sprite.IsAnimated)
+        if (Sprite.IsAnimated)
         {
-            sprite.Update(gameTime);
+            Sprite.Update(gameTime);
         }
     }
 
-    public void Draw(SpriteBatch spriteBatch)
+    public override void Draw(SpriteBatch spriteBatch)
     {
         if (!IsVisible) return;
 
         // we could add check for out of screen if needed 
 
-        sprite.Draw(spriteBatch);
+        Sprite.Draw(spriteBatch);
     }
 }
