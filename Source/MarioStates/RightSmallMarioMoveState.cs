@@ -4,19 +4,19 @@ using System;
 
 namespace MagicBrosMario.Source.MarioStates;
 //Vincent Do
-public class LeftSmallMarioMoveState : IPlayerState
+public class RightSmallMarioMoveState : IPlayerState
 {
     private Player Mario;
     private Sprite.SharedTexture texture;
     private Sprite.Sprite sprite;
-    private readonly Point[] XYOffset = [new Point(209, 45), new Point(195, 44), new Point(177, 44), new Point(161, 44)];
+    private readonly Point[] XYOffset = [new Point(292, 45), new Point(307, 44), new Point(321, 44), new Point(339, 44)];
     private readonly Point[] WidthHeight = [new Point(12, 15), new Point(11, 16), new Point(15, 16), new Point(13, 16)];
     private int Frame = 0;
     private int nextFrame = -1;
     private double timeFrame = 0.15;
     private double timer = 0;
-   
-    public LeftSmallMarioMoveState(Player Mario, Sprite.SharedTexture texture)
+
+    public RightSmallMarioMoveState(Player Mario, Sprite.SharedTexture texture)
     {
         this.Mario = Mario;
         this.texture = texture;
@@ -24,16 +24,17 @@ public class LeftSmallMarioMoveState : IPlayerState
     public void Left(GameTime gameTime)
     {
         Mario.MoveLeft(gameTime);
+        Mario.ChangeState(new LeftSmallMarioMoveState(Mario, texture));
+        
     }
     public void Right(GameTime gameTime)
     {
         Mario.MoveRight(gameTime);
-        Mario.ChangeState(new RightSmallMarioMoveState(Mario, texture));
     }
     public void Jump(GameTime gameTime)
     {
         Mario.MoveUp(gameTime);
-        Mario.ChangeState(new LeftJumpSmallMarioState(Mario, texture));
+        Mario.ChangeState(new RightJumpSmallMarioState(Mario, texture));
     }
     public void Crouch(GameTime gameTime)
     {
@@ -52,10 +53,10 @@ public class LeftSmallMarioMoveState : IPlayerState
         //switch (power)
         //{
         //    case Power.FireFlower:
-        //        Mario.ChangeState(new LeftFireMarioMoveState(Mario, texture));
+        //        Mario.ChangeState(new RightFireMarioMoveState(Mario, texture));
         //        break;
         //    case Power.Mushroom:
-        //        Mario.ChangeState(new LeftBigMarioMoveState(Mario, texture));
+        //        Mario.ChangeState(new RightBigMarioMoveState(Mario, texture));
         //        break;
         //    case Power.Star:
         //        //RainbowState?
@@ -64,23 +65,23 @@ public class LeftSmallMarioMoveState : IPlayerState
     }
     public void Idle()
     {
-        Mario.ChangeState(new LeftSmallMarioIdleState(Mario, texture));
+        Mario.ChangeState(new RightSmallMarioIdleState(Mario, texture));
     }
     public void Update(GameTime gameTime, Vector2 Velocity)
     {
         timer += gameTime.ElapsedGameTime.TotalSeconds;
-        if (timer > timeFrame && Velocity.X > 0)
+        if (timer > timeFrame && Velocity.X < 0)
         {
             Frame = 3;
             timer = 0;
-            Mario.BreakLeft(gameTime);
+            Mario.BreakRight(gameTime);
         }
-        else if(timer > timeFrame)
+        else if (timer > timeFrame)
         {
             if (Frame == 3)
             {
                 Frame = 0;
-            } 
+            }
             else if (Frame == 0 || Frame == 2)
             {
                 nextFrame = -nextFrame;

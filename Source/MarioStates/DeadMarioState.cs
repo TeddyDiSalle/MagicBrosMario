@@ -3,33 +3,30 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MagicBrosMario.Source.MarioStates;
 //Vincent Do
-public class LeftSmallMarioIdleState : IPlayerState
+public class DeadMarioState : IPlayerState
 {
     private Player Mario;
     private Sprite.SharedTexture texture;
     private Sprite.Sprite sprite;
 
-    public LeftSmallMarioIdleState(Player Mario, Sprite.SharedTexture texture)
+    public DeadMarioState(Player Mario, Sprite.SharedTexture texture)
     {
         this.Mario = Mario;
         this.texture = texture;
-        sprite = new Sprite.Sprite(texture, 224, 44, 12, 16);
+        sprite = new Sprite.Sprite(texture, 13, 46, 14, 14);
     }
     public void Left(GameTime gameTime)
     {
-        Mario.MoveLeft(gameTime);
-        Mario.ChangeState(new LeftSmallMarioMoveState(Mario, texture));
+        //Nothing
 
     }
     public void Right(GameTime gameTime)
     {
-        Mario.MoveRight(gameTime);
-        Mario.ChangeState(new RightSmallMarioMoveState(Mario, texture));
+        //Nothing
     }
     public void Jump(GameTime gameTime)
     {
-        Mario.MoveUp(gameTime);
-        Mario.ChangeState(new LeftJumpSmallMarioState(Mario, texture));
+        //Nothing
     }
     public void Crouch(GameTime gameTime)
     {
@@ -41,22 +38,11 @@ public class LeftSmallMarioIdleState : IPlayerState
     }
     public void TakeDamage()
     {
-        Mario.ChangeState(new DeadMarioState(Mario, texture));
+        //Nothing
     }
     public void PowerUp(Power power)
     {
-        //switch (power)
-        //{
-        //    case Power.FireFlower:
-        //        Mario.ChangeState(new LeftFireMarioIdleState(Mario, texture));
-        //        break;
-        //    case Power.Mushroom:
-        //        Mario.ChangeState(new LeftBigMarioIdleState(Mario, texture));
-        //        break;
-        //    case Power.Star:
-        //        //RainbowState?
-        //        break;
-        //}
+        //Nothing
     }
     public void Idle()
     {
