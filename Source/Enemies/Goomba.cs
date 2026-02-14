@@ -7,91 +7,88 @@ namespace MagicBrosMario.Source;
 
 public class Goomba : IEnemy
 {
-    private Texture2D _texture;
+    private const int VELOCITY = 5;
+    private readonly int leftBound;
+    private readonly int rightBound;
+    private Sprite.ISprite[] sprites;
 
-    private Rectangle[] sources = new Rectangle[3];
+    private Sprite.ISprite CurrentSprite()
+    {
+        if (isAlive)
+        {
+            return sprites[0]; // Alive sprite
+        }
+        else
+        {
+            return sprites[1]; // Dead sprite
+        }
+    }
 
-    private int currentFrame = 0;
-
-    private double timer = 0.0;
-    private double duration = 0.04;
-
-    private int bound;
     private Boolean movingRight = true;
 
-    private Vector2 destination;
+    public Point Position
+    {
+        get { return CurrentSprite().Position; }
+        private set { CurrentSprite().Position = value; }
+    }
     private Boolean isAlive;
 
-    public Goomba(Texture2D texture, Rectangle sourceRectangle1, Rectangle sourceRectangle2, 
-        Rectangle sourceRectangle3, Vector2 destinationVector, int boundWidth)
+    public Goomba(Sprite.AnimatedSprite aliveSprite, Sprite.Sprite deaedSprite, int Y, int leftBound, int rightBound)
     {
-        destination = destinationVector;
-        _texture = texture;
-
-        sources[0] = sourceRectangle1;//Alive Walking
-        sources[1] = sourceRectangle2;//Alive Walking
-        sources[2] = sourceRectangle3;//Dead
-
-        bound = boundWidth;
-        this.isAlive = true;
-
+        this.leftBound = leftBound;
+        this.rightBound = rightBound;
+        aliveSprite.Position = new Point(leftBound, Y);
+        deaedSprite.Position = new Point(leftBound, Y);
+        sprites = [aliveSprite, deaedSprite];
     }
+
     public void Update(GameTime gametime)
     {
-        timer += gametime.ElapsedGameTime.TotalSeconds;
         if (isAlive) // Replace later with condition to check if Goomba is alive or not
         {
-            Walking();
+            Walking(gametime);
         }
-        else //Goomba is Dead
-        {
-            currentFrame = 2; // Set to dead frame if killed
-        }
+
+        CurrentSprite().Update(gametime);
     }
 
     //This method also updates the current frame of the Goomba's animation and moves left or right
     //Right now its set on bound(which is screen width)
-    public void Walking()
+    public void Walking(GameTime gameTime)
     {
+        var sec = (double)gameTime.ElapsedGameTime.Milliseconds / 1000.0;
+        var dx = (int)(sec * VELOCITY);
+
         if (movingRight)
         {
-            destination.X += 5;
-            if (destination.X >= bound)
+            Position = new Point(Position.X + dx, Position.Y);
+
+            if (Position.X >= rightBound)
             {
-                destination.X = bound;
+                Position = new Point(rightBound, Position.Y);
                 movingRight = false;
             }
         }
         else
         {
-            destination.X -= 5;
-            if (destination.X <= 0)
+            Position = new Point(Position.X - dx, Position.Y);
+
+            if (Position.X <= leftBound)
             {
-                destination.X = 0;
+                Position = new Point(leftBound, Position.Y);
                 movingRight = true;
             }
-        }
-        if (timer >= duration)
-        {
-            currentFrame++;
-            if (currentFrame == 1)
-            {
-                currentFrame = 0;
-            }
-            timer = 0.0;
         }
     }
 
     public void Kill()
     {
         this.isAlive = false;
+        sprites[1].Position = sprites[0].Position; // Set the dead sprite's position to the current position of the alive sprite
     }
 
     public void Draw(SpriteBatch _spriteBatch)
     {
-        
-        _spriteBatch.Draw(_texture, destination, sources[currentFrame], Color.White, 0.0f, 
-            new Vector2(sources[currentFrame].Width / 2, sources[currentFrame].Height / 2), 
-            2.0f, SpriteEffects.None, 0.0f);
+        CurrentSprite().Draw(_spriteBatch);
     }
 }
