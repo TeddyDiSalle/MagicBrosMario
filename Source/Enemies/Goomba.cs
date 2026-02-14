@@ -7,7 +7,7 @@ namespace MagicBrosMario.Source;
 
 public class Goomba : IEnemy
 {
-    private const int VELOCITY = 5;
+    private const int VELOCITY = 100;
     private readonly int leftBound;
     private readonly int rightBound;
     private Sprite.ISprite[] sprites;
@@ -33,13 +33,14 @@ public class Goomba : IEnemy
     }
     private Boolean isAlive;
 
-    public Goomba(Sprite.AnimatedSprite aliveSprite, Sprite.Sprite deaedSprite, int Y, int leftBound, int rightBound)
+    public Goomba(Sprite.AnimatedSprite aliveSprite, Sprite.Sprite deadSprite, int Y, int leftBound, int rightBound)
     {
         this.leftBound = leftBound;
         this.rightBound = rightBound;
         aliveSprite.Position = new Point(leftBound, Y);
-        deaedSprite.Position = new Point(leftBound, Y);
-        sprites = [aliveSprite, deaedSprite];
+        deadSprite.Position = new Point(leftBound, Y);
+        sprites = [aliveSprite, deadSprite];
+        this.isAlive = true;
     }
 
     public void Update(GameTime gametime)
@@ -56,7 +57,7 @@ public class Goomba : IEnemy
     //Right now its set on bound(which is screen width)
     public void Walking(GameTime gameTime)
     {
-        var sec = (double)gameTime.ElapsedGameTime.Milliseconds / 1000.0;
+        var sec = (double)gameTime.ElapsedGameTime.TotalMilliseconds / 1000.0;
         var dx = (int)(sec * VELOCITY);
 
         if (movingRight)
@@ -79,6 +80,7 @@ public class Goomba : IEnemy
                 movingRight = true;
             }
         }
+        
     }
 
     public void Kill()

@@ -1,116 +1,183 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Runtime.CompilerServices;
 
 namespace MagicBrosMario.Source;
 
 public class Koopa : IEnemy
 {
-    private Texture2D _texture;
+    private const int VELOCITY = 100;
+    private const int SHELL_VELOCITY = 200;
+    private const float RECOVERY_TIME = 3.0f;
+    
+    private readonly int leftBound;
+    private readonly int rightBound;
+    private Sprite.ISprite[] sprites;
 
-    private Rectangle[] sources = new Rectangle[3];
+    private const int WALKING_RIGHT = 0;
+    private const int WALKING_LEFT = 1;
+    private const int SHELL_IDLE = 2;
+    private const int SHELL_MOVING = 3;
+    private const int STOMPED = 4;
+    private const int SHELL_DEATH = 5;
 
-    private int currentFrame = 0;
-
-    private double timer = 0.0;
-    private double duration = 0.04;
-
-    private int bound;
-    private Boolean movingRight = true;
-
-    private Vector2 destination;
-    private Boolean isAlive;
-
-    public Koopa(Texture2D texture, Rectangle sourceRectangle1, Rectangle sourceRectangle2, 
-        Rectangle sourceRectangle3, Vector2 destinationVector, int boundWidth)
+    private enum KoopaState
     {
-        destination = destinationVector;
-        _texture = texture;
-
-        sources[0] = sourceRectangle1;//Walking right1
-        sources[1] = sourceRectangle2;//Walking right2
-        sources[2] = sourceRectangle3;//Walking left1
-        sources[3] = sourceRectangle3;//Walking left2
-        sources[4] = sourceRectangle1;//Hit1
-        sources[5] = sourceRectangle2;//Hit2
-        sources[6] = sourceRectangle3;//Dead1
-        sources[7] = sourceRectangle3;//Dead2
-
-        bound = boundWidth;
-        this.isAlive = true;
-
+        WalkingAlive,
+        ShellIdle,
+        ShellMoving,
+        Stomped,
+        Dead
     }
+
+    private KoopaState state;
+    private Boolean movingRight = true;
+    private float shellTimer = 0f;
+
+    private Sprite.ISprite CurrentSprite()
+    {
+        switch (state)
+        {
+            case KoopaState.WalkingAlive:
+                return movingRight ? sprites[WALKING_RIGHT] : sprites[WALKING_LEFT];
+            case KoopaState.ShellIdle:
+                return sprites[SHELL_IDLE];
+            case KoopaState.ShellMoving:
+                return sprites[SHELL_MOVING];
+            case KoopaState.Stomped:
+                return sprites[STOMPED];
+            case KoopaState.Dead:
+                return sprites[SHELL_DEATH];
+            default:
+                return sprites[WALKING_RIGHT];
+        }
+    }
+
+    public Point Position
+    {
+        get { return CurrentSprite().Position; }
+        private set 
+        { 
+            foreach (var sprite in sprites)
+            {
+                sprite.Position = value;
+            }
+        }
+    }
+
+    public Koopa(
+        Sprite.AnimatedSprite walkingRightSprite,
+        Sprite.AnimatedSprite walkingLeftSprite,
+        Sprite.Sprite shellIdleSprite,
+        Sprite.Sprite shellMovingSprite,
+        Sprite.Sprite stompedSprite,
+        Sprite.Sprite shellDeathSprite,
+        int Y, 
+        int leftBound, 
+        int rightBound)
+    {
+        this.leftBound = leftBound;
+        this.rightBound = rightBound;
+        
+        sprites = [
+            walkingRightSprite,
+            walkingLeftSprite,
+            shellIdleSprite,
+            shellMovingSprite,
+            stompedSprite,
+            shellDeathSprite
+        ];
+
+        Position = new Point(leftBound, Y);
+        this.state = KoopaState.WalkingAlive;
+    }
+
     public void Update(GameTime gametime)
     {
-        timer += gametime.ElapsedGameTime.TotalSeconds;
-        if (isAlive) // Replace later with condition to check if Koopa is alive or not or is hit or not
+        if (state == KoopaState.ShellIdle)
         {
-            Walking();
+            shellTimer += (float)gametime.ElapsedGameTime.TotalSeconds;
+            
+            if (shellTimer >= RECOVERY_TIME)
+            {
+                state = KoopaState.Stomped;
+            }
         }
-        else //Koopa is Dead
+        else if (state == KoopaState.Stomped)
         {
-            currentFrame = 6; // Set to dead frame if killed
+            shellTimer += (float)gametime.ElapsedGameTime.TotalSeconds;
+            
+            if (shellTimer >= RECOVERY_TIME + 0.5f)
+            {
+                state = KoopaState.WalkingAlive;
+                shellTimer = 0f;
+            }
         }
+
+        if (state == KoopaState.WalkingAlive)
+        {
+            Move(gametime, VELOCITY);
+        }
+        else if (state == KoopaState.ShellMoving)
+        {
+            Move(gametime, SHELL_VELOCITY);
+        }
+
+        CurrentSprite().Update(gametime);
     }
 
-    //This method also updates the current frame of the Koopa's animation and moves left or right
-    //Right now its set on bound(which is screen width)
-    public void Walking()
+    private void Move(GameTime gameTime, int velocity)
     {
+        var sec = (double)gameTime.ElapsedGameTime.TotalMilliseconds / 1000.0;
+        var dx = (int)(sec * velocity);
+
         if (movingRight)
         {
-            destination.X += 5;
-            if (destination.X >= bound)
+            Position = new Point(Position.X + dx, Position.Y);
+
+            if (Position.X >= rightBound)
             {
-                destination.X = bound;
+                Position = new Point(rightBound, Position.Y);
                 movingRight = false;
-            }
-            if(timer >= duration){
-                if(currentFrame == 0)
-                {
-                    currentFrame = 1;
-                }
-                else
-                {
-                    currentFrame = 0;
-                }
-                timer = 0.0;
             }
         }
         else
         {
-            destination.X -= 5;
-            if (destination.X <= 0)
+            Position = new Point(Position.X - dx, Position.Y);
+
+            if (Position.X <= leftBound)
             {
-                destination.X = 0;
+                Position = new Point(leftBound, Position.Y);
                 movingRight = true;
-            }
-            if(timer >= duration)
-            {
-                if(currentFrame == 2)
-                {
-                    currentFrame = 3;
-                }
-                else
-                {
-                    currentFrame = 2;
-                }
-                timer = 0.0;
             }
         }
     }
 
     public void Kill()
     {
-        this.isAlive = false;
+        if (state == KoopaState.WalkingAlive)
+        {
+            state = KoopaState.ShellIdle;
+            shellTimer = 0f;
+        }
+        else if (state == KoopaState.ShellIdle || state == KoopaState.ShellMoving || state == KoopaState.Stomped)
+        {
+            state = KoopaState.Dead;
+        }
+    }
+
+    public void KickShell(bool kickRight)
+    {
+        if (state == KoopaState.ShellIdle)
+        {
+            state = KoopaState.ShellMoving;
+            movingRight = kickRight;
+            shellTimer = 0f;
+        }
     }
 
     public void Draw(SpriteBatch _spriteBatch)
     {
-        
-        _spriteBatch.Draw(_texture, destination, sources[currentFrame], Color.White, 0.0f, 
-            new Vector2(sources[currentFrame].Width / 2, sources[currentFrame].Height / 2), 
-            2.0f, SpriteEffects.None, 0.0f);
+        CurrentSprite().Draw(_spriteBatch);
     }
 }
