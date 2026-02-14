@@ -28,6 +28,11 @@ public interface ISprite
     /// size of sprite
     /// </summary>
     public Point Size { get; }
+    
+    /// <summary>
+    /// color used for spriteBatch.Draw function
+    /// </summary>
+    public Color Color { get; set; }
 
     /// <summary>
     /// update function for sprite, currently only used by AnimatedSprite
