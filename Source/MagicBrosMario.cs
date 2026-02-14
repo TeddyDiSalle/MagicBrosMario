@@ -74,7 +74,9 @@ public class MagicBrosMario : Game
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
         //Code
+        _spriteBatch.Begin();
         Mario.Draw(_spriteBatch);
+        _spriteBatch.End();
 
         base.Draw(gameTime);
     }
@@ -109,9 +111,10 @@ public class MagicBrosMario : Game
         else if (keyboardInput.IsKeyDown(Keys.X))
         {
             Mario.TakeDamage();
-        }else if (keyboardInput.IsKeyDown(Keys.R))
+        }
+        else if (keyboardInput.IsKeyDown(Keys.R))
         {
-            Mario.ChangeState(new RightSmallMarioIdleState(Mario, texture));
+            Mario.ChangeState(new RightSmallMarioIdleState(Mario, texture, 0.15, 1));
         }
         else
         {

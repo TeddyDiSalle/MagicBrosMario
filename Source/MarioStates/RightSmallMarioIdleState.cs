@@ -5,32 +5,35 @@ namespace MagicBrosMario.Source.MarioStates;
 //Vincent Do
 public class RightSmallMarioIdleState : IPlayerState
 {
-    private Player Mario;
+    private readonly Player Mario;
     private Sprite.SharedTexture texture;
     private Sprite.Sprite sprite;
-
-    public RightSmallMarioIdleState(Player Mario, Sprite.SharedTexture texture)
+    private readonly double timeFrame;
+    private readonly int scaleFactor;
+    public RightSmallMarioIdleState(Player Mario, Sprite.SharedTexture texture, double timeFrame, int scaleFactor)
     {
         this.Mario = Mario;
         this.texture = texture;
-        sprite = new Sprite.Sprite(texture, 277, 44, 12, 16);
-        sprite.Scale = 5;
+        this.timeFrame = timeFrame;
+        this.scaleFactor = scaleFactor;
+        sprite = texture.NewSprite(277, 44, 12, 16);
+        sprite.Scale = scaleFactor;
     }
     public void Left(GameTime gameTime)
     {
-        Mario.MoveLeft(gameTime);
-        Mario.ChangeState(new LeftSmallMarioMoveState(Mario, texture));
+        Mario.MoveLeft(gameTime, 1);
+        Mario.ChangeState(new LeftSmallMarioMoveState(Mario, texture, timeFrame, scaleFactor));
     }
     public void Right(GameTime gameTime)
     {
-        Mario.MoveRight(gameTime);
-        Mario.ChangeState(new RightSmallMarioMoveState(Mario, texture));
+        Mario.MoveRight(gameTime, 1);
+        Mario.ChangeState(new RightSmallMarioMoveState(Mario, texture, timeFrame, scaleFactor));
     }
 
     public void Jump(GameTime gameTime)
     {
         Mario.MoveUp(gameTime);
-        Mario.ChangeState(new RightJumpSmallMarioState(Mario, texture));
+        Mario.ChangeState(new RightJumpSmallMarioState(Mario, texture, timeFrame, scaleFactor));
     }
     public void Crouch(GameTime gameTime)
     {
@@ -42,22 +45,22 @@ public class RightSmallMarioIdleState : IPlayerState
     }
     public void TakeDamage()
     {
-        Mario.ChangeState(new DeadMarioState(Mario, texture));
+        Mario.ChangeState(new DeadMarioState(Mario, texture, timeFrame, scaleFactor));
     }
     public void PowerUp(Power power)
     {
-    //    switch (power)
-    //    {
-    //        case Power.FireFlower:
-    //            Mario.ChangeState(new RightFireMarioIdleState(Mario, texture));
-    //            break;
-    //        case Power.Mushroom:
-    //            Mario.ChangeState(new RightBigMarioIdleState(Mario, texture));
-    //            break;
-    //        case Power.Star:
-    //            //RainbowState?
-    //            break;
-    //    }
+        switch (power)
+        {
+            case Power.FireFlower:
+                Mario.ChangeState(new RightFireMarioIdleState(Mario, texture, timeFrame, scaleFactor));
+                break;
+            case Power.Mushroom:
+                Mario.ChangeState(new RightBigMarioIdleState(Mario, texture, timeFrame, scaleFactor));
+                break;
+            case Power.Star:
+                //RainbowState?
+                break;
+        }
     }
     public void Idle()
     {

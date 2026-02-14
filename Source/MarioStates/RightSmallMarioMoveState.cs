@@ -6,35 +6,44 @@ namespace MagicBrosMario.Source.MarioStates;
 //Vincent Do
 public class RightSmallMarioMoveState : IPlayerState
 {
-    private Player Mario;
-    private Sprite.SharedTexture texture;
-    private Sprite.Sprite sprite;
-    private readonly Point[] XYOffset = [new Point(292, 45), new Point(307, 44), new Point(321, 44), new Point(339, 44)];
-    private readonly Point[] WidthHeight = [new Point(12, 15), new Point(11, 16), new Point(15, 16), new Point(13, 16)];
+    private readonly Player Mario;
+    private readonly Sprite.SharedTexture texture;
+
+    private readonly Sprite.ISprite[] Frames;
+    private Sprite.ISprite currentSprite;
+
     private int Frame = 0;
     private int nextFrame = -1;
-    private double timeFrame = 0.15;
+    private readonly double timeFrame;
     private double timer = 0;
+    private readonly int scaleFactor;
 
-    public RightSmallMarioMoveState(Player Mario, Sprite.SharedTexture texture)
+    public RightSmallMarioMoveState(Player Mario, Sprite.SharedTexture texture, double timeFrame, int scaleFactor)
     {
         this.Mario = Mario;
         this.texture = texture;
+        this.timeFrame = timeFrame;
+        this.scaleFactor = scaleFactor;
+        Frames = [texture.NewSprite(292, 45, 12, 15), texture.NewSprite(307, 44, 11, 16), texture.NewSprite(321, 44, 15, 16), texture.NewSprite(339, 44, 13, 16)];
+        for (int i = 0; i < Frames.Length; i++)
+        {
+            Frames[i].Scale = scaleFactor;
+        }
     }
     public void Left(GameTime gameTime)
     {
-        Mario.MoveLeft(gameTime);
-        Mario.ChangeState(new LeftSmallMarioMoveState(Mario, texture));
+        Mario.MoveLeft(gameTime, 1);
+        Mario.ChangeState(new LeftSmallMarioMoveState(Mario, texture, timeFrame, scaleFactor));
         
     }
     public void Right(GameTime gameTime)
     {
-        Mario.MoveRight(gameTime);
+        Mario.MoveRight(gameTime, 1);
     }
     public void Jump(GameTime gameTime)
     {
         Mario.MoveUp(gameTime);
-        Mario.ChangeState(new RightJumpSmallMarioState(Mario, texture));
+        Mario.ChangeState(new RightJumpSmallMarioState(Mario, texture, timeFrame, scaleFactor));
     }
     public void Crouch(GameTime gameTime)
     {
@@ -46,26 +55,26 @@ public class RightSmallMarioMoveState : IPlayerState
     }
     public void TakeDamage()
     {
-        Mario.ChangeState(new DeadMarioState(Mario, texture));
+        Mario.ChangeState(new DeadMarioState(Mario, texture, timeFrame, scaleFactor));
     }
     public void PowerUp(Power power)
     {
-        //switch (power)
-        //{
-        //    case Power.FireFlower:
-        //        Mario.ChangeState(new RightFireMarioMoveState(Mario, texture));
-        //        break;
-        //    case Power.Mushroom:
-        //        Mario.ChangeState(new RightBigMarioMoveState(Mario, texture));
-        //        break;
-        //    case Power.Star:
-        //        //RainbowState?
-        //        break;
-        //}
+        switch (power)
+        {
+            case Power.FireFlower:
+                Mario.ChangeState(new RightFireMarioMoveState(Mario, texture, timeFrame, scaleFactor));
+                break;
+            case Power.Mushroom:
+                Mario.ChangeState(new RightBigMarioMoveState(Mario, texture, timeFrame, scaleFactor));
+                break;
+            case Power.Star:
+                //RainbowState?
+                break;
+        }
     }
     public void Idle()
     {
-        Mario.ChangeState(new RightSmallMarioIdleState(Mario, texture));
+        Mario.ChangeState(new RightSmallMarioIdleState(Mario, texture, timeFrame, scaleFactor));
     }
     public void Update(GameTime gameTime, Vector2 Velocity)
     {
@@ -74,7 +83,7 @@ public class RightSmallMarioMoveState : IPlayerState
         {
             Frame = 3;
             timer = 0;
-            Mario.BreakRight(gameTime);
+            Mario.MoveRight(gameTime, 8);
         }
         else if (timer > timeFrame)
         {
@@ -93,12 +102,12 @@ public class RightSmallMarioMoveState : IPlayerState
             }
             timer = 0;
         }
-        sprite = new Sprite.Sprite(texture, XYOffset[Frame].X, XYOffset[Frame].Y, WidthHeight[Frame].X, WidthHeight[Frame].Y);
+        currentSprite = Frames[Frame];
     }
     public void Draw(SpriteBatch spriteBatch, Vector2 Position)
     {
-        sprite.Position = new Point((int)Position.X, (int)Position.Y);
-        sprite.Draw(spriteBatch);
+        currentSprite.Position = new Point((int)Position.X, (int)Position.Y);
+        currentSprite.Draw(spriteBatch);
     }
 
 }

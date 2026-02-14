@@ -61,10 +61,6 @@ public class Sprite(
 
     public void Draw(SpriteBatch spriteBatch)
     {
-        spriteBatch.Begin();
-        //spriteBatch.Draw(texture.Texture, destRect, sourceRect, Color.White);
-       // spriteBatch.Draw(texture.Texture, new Vector2(Position.X, Position.Y), sourceRect, Color.White);
-        spriteBatch.Draw(texture.Texture, new Vector2(Position.X, Position.Y), sourceRect, Color.White, 0.0f,Vector2.Zero, 3.0f, SpriteEffects.None, 0.0f);
-        spriteBatch.End();
+        spriteBatch.Draw(texture.Texture, destRect, sourceRect, Color.White);
     }
 }

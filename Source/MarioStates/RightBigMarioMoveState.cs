@@ -1,30 +1,33 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.ObjectModel;
 
 namespace MagicBrosMario.Source.MarioStates;
 //Vincent Do
-public class LeftSmallMarioMoveState : IPlayerState
+public class RightBigMarioMoveState : IPlayerState
 {
     private readonly Player Mario;
     private readonly Sprite.SharedTexture texture;
 
     private readonly Sprite.ISprite[] Frames;
     private Sprite.ISprite currentSprite;
+
     private int Frame = 0;
     private int nextFrame = -1;
     private readonly double timeFrame;
     private double timer = 0;
     private readonly int scaleFactor;
 
-    public LeftSmallMarioMoveState(Player Mario, Sprite.SharedTexture texture, double timeFrame, int scaleFactor)
+    public RightBigMarioMoveState(Player Mario, Sprite.SharedTexture texture, double timeFrame, int scaleFactor)
     {
         this.Mario = Mario;
         this.texture = texture;
         this.timeFrame = timeFrame;
         this.scaleFactor = scaleFactor;
-        Frames = [texture.NewSprite(209, 45, 12 ,15), texture.NewSprite(195, 44, 11, 16), texture.NewSprite(177, 44, 15, 16), texture.NewSprite(161, 44, 13, 16)];
+        Frames = [texture.NewSprite(296, 3, 16, 30), //Walking1
+            texture.NewSprite(315, 2, 14, 31), //Walking2
+            texture.NewSprite(331, 1, 16, 32), //Walking3
+            texture.NewSprite(350, 1, 16, 32)];//Brake
         for (int i = 0; i < Frames.Length; i++)
         {
             Frames[i].Scale = scaleFactor;
@@ -33,16 +36,17 @@ public class LeftSmallMarioMoveState : IPlayerState
     public void Left(GameTime gameTime)
     {
         Mario.MoveLeft(gameTime, 1);
+        Mario.ChangeState(new LeftBigMarioMoveState(Mario, texture, timeFrame, scaleFactor));
+        
     }
     public void Right(GameTime gameTime)
     {
         Mario.MoveRight(gameTime, 1);
-        Mario.ChangeState(new RightSmallMarioMoveState(Mario, texture, timeFrame, scaleFactor));
     }
     public void Jump(GameTime gameTime)
     {
         Mario.MoveUp(gameTime);
-        Mario.ChangeState(new LeftJumpSmallMarioState(Mario, texture, timeFrame, scaleFactor));
+        Mario.ChangeState(new RightJumpBigMarioState(Mario, texture, timeFrame, scaleFactor));
     }
     public void Crouch(GameTime gameTime)
     {
@@ -54,17 +58,17 @@ public class LeftSmallMarioMoveState : IPlayerState
     }
     public void TakeDamage()
     {
-        Mario.ChangeState(new DeadMarioState(Mario, texture, timeFrame, scaleFactor));
+        Mario.ChangeState(new RightSmallMarioMoveState(Mario, texture, timeFrame, scaleFactor));
     }
     public void PowerUp(Power power)
     {
         switch (power)
         {
             case Power.FireFlower:
-                Mario.ChangeState(new LeftFireMarioMoveState(Mario, texture, timeFrame, scaleFactor));
+                Mario.ChangeState(new RightFireMarioMoveState(Mario, texture, timeFrame, scaleFactor));
                 break;
             case Power.Mushroom:
-                Mario.ChangeState(new LeftBigMarioMoveState(Mario, texture, timeFrame, scaleFactor));
+                //Nothing
                 break;
             case Power.Star:
                 //RainbowState?
@@ -73,23 +77,23 @@ public class LeftSmallMarioMoveState : IPlayerState
     }
     public void Idle()
     {
-        Mario.ChangeState(new LeftSmallMarioIdleState(Mario, texture, timeFrame, scaleFactor));
+        Mario.ChangeState(new RightBigMarioIdleState(Mario, texture, timeFrame, scaleFactor));
     }
     public void Update(GameTime gameTime, Vector2 Velocity)
     {
         timer += gameTime.ElapsedGameTime.TotalSeconds;
-        if (timer > timeFrame && Velocity.X > 0)
+        if (timer > timeFrame && Velocity.X < 0)
         {
             Frame = 3;
             timer = 0;
-            Mario.MoveLeft(gameTime, 8);
+            Mario.MoveRight(gameTime, 8);
         }
-        else if(timer > timeFrame)
+        else if (timer > timeFrame)
         {
             if (Frame == 3)
             {
                 Frame = 0;
-            } 
+            }
             else if (Frame == 0 || Frame == 2)
             {
                 nextFrame = -nextFrame;

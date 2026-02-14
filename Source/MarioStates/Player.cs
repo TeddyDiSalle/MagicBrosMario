@@ -11,14 +11,19 @@ public class Player
     private Vector2 Position { get; set; } = new Vector2(400, 240);
     private Vector2 Velocity { get; set; }
 
+    private const double timeFrame = 0.15;
+    private const int scaleFactor = 3;
+
     private const float MovementSpeed = 3.0f;
     private const float Gravity = 0.35f;
     private float GroundY = 260; //Temporary for Sprint2
-    private const float MaxSpeed = 20.0f;
-    
+    private const float MaxSpeed = 15.0f;
+
+    public readonly Color[] rainbow = [Color.Red, Color.Orange, Color.Yellow, Color.Green, Color.Blue, Color.Purple];
+
     public Player(Sprite.SharedTexture texture)
     {
-        PlayerState = new RightSmallMarioIdleState(this, texture);
+        PlayerState = new RightSmallMarioIdleState(this, texture, timeFrame, scaleFactor);
     }
     public void Left(GameTime gameTime)
     {
@@ -35,6 +40,10 @@ public class Player
     public void Crouch(GameTime gameTime)
     {
         PlayerState.Crouch(gameTime);
+    }
+    public static bool ReleaseCrouch()
+    {
+        return true;
     }
     public void Attack()
     {
@@ -54,14 +63,10 @@ public class Player
         PlayerState = state;
     }
 
-    public void MoveLeft(GameTime gameTime)
+    public void MoveLeft(GameTime gameTime, int factor)
     {
-        float distanceMoved = (float)gameTime.ElapsedGameTime.TotalSeconds * MovementSpeed;
+        float distanceMoved = (float)gameTime.ElapsedGameTime.TotalSeconds * MovementSpeed * factor;
 
-        //if (-Velocity.X < MaxSpeed)
-        //{
-        //    Velocity -= new Vector2(distanceMoved, 0);
-        //}
         Velocity -= new Vector2(distanceMoved, 0);
         if(-Velocity.X > MaxSpeed)
         {
@@ -69,13 +74,9 @@ public class Player
         }
     }
 
-    public void MoveRight(GameTime gameTime)
+    public void MoveRight(GameTime gameTime, int factor)
     {
-        float distanceMoved = (float)gameTime.ElapsedGameTime.TotalSeconds * MovementSpeed;
-        //if (Velocity.X < MaxSpeed) 
-        //{ 
-        //    Velocity += new Vector2(distanceMoved, 0);
-        //}
+        float distanceMoved = (float)gameTime.ElapsedGameTime.TotalSeconds * MovementSpeed * factor;
 
         Velocity += new Vector2(distanceMoved, 0);
         if (Velocity.X > MaxSpeed)
@@ -83,28 +84,11 @@ public class Player
             Velocity = new Vector2(MaxSpeed, Velocity.Y);
         }
     }
-    public void BreakLeft(GameTime gameTime)
+    public void MoveUp(GameTime gameTime)
     {
-        float distanceMoved = (float)gameTime.ElapsedGameTime.TotalSeconds * MovementSpeed*8;
-
-        Velocity -= new Vector2(distanceMoved, 0);
-        if (-Velocity.X > MaxSpeed)
-        {
-            Velocity = new Vector2(-MaxSpeed, Velocity.Y);
-        }
+        float distanceMoved = (float)(gameTime.ElapsedGameTime.TotalSeconds * 100 * MovementSpeed);
+        Velocity -= new Vector2(0, distanceMoved);
     }
-
-    public void BreakRight(GameTime gameTime)
-    {
-        float distanceMoved = (float)gameTime.ElapsedGameTime.TotalSeconds * MovementSpeed*8;
-
-        Velocity += new Vector2(distanceMoved, 0);
-        if (Velocity.X > MaxSpeed)
-        {
-            Velocity = new Vector2(MaxSpeed, Velocity.Y);
-        }
-    }
-
     public void Idle()
     {
         PlayerState.Idle();
@@ -130,10 +114,9 @@ public class Player
     {
         GroundY = NewGroundY;
     }
-    public void MoveUp(GameTime gameTime)
+    public void SetPositon(Vector2 pos)
     {
-        float distanceMoved = (float)(gameTime.ElapsedGameTime.TotalSeconds * 100 * MovementSpeed);
-        Velocity -= new Vector2(0, distanceMoved);
+        Position = pos;
     }
     public void Update(GameTime gameTime)
     {

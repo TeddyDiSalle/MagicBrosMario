@@ -5,20 +5,23 @@ namespace MagicBrosMario.Source.MarioStates;
 //Vincent Do
 public class DeadMarioState : IPlayerState
 {
-    private Player Mario;
-    private Sprite.SharedTexture texture;
+    private readonly Player Mario;
+    private readonly Sprite.SharedTexture texture;
     private Sprite.Sprite sprite;
-
-    public DeadMarioState(Player Mario, Sprite.SharedTexture texture)
+    private readonly double timeFrame;
+    private readonly int scaleFactor;
+    public DeadMarioState(Player Mario, Sprite.SharedTexture texture, double timeFrame, int scaleFactor)
     {
         this.Mario = Mario;
         this.texture = texture;
-        sprite = new Sprite.Sprite(texture, 13, 46, 14, 14);
+        this.timeFrame = timeFrame;
+        this.scaleFactor = scaleFactor;
+        sprite = texture.NewSprite(13, 46, 14, 14);
+        sprite.Scale = scaleFactor;
     }
     public void Left(GameTime gameTime)
     {
         //Nothing
-
     }
     public void Right(GameTime gameTime)
     {

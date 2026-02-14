@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 
 namespace MagicBrosMario.Source.MarioStates;
 //Vincent Do
-public class LeftSmallMarioMoveState : IPlayerState
+public class LeftBigMarioMoveState : IPlayerState
 {
     private readonly Player Mario;
     private readonly Sprite.SharedTexture texture;
@@ -18,13 +18,16 @@ public class LeftSmallMarioMoveState : IPlayerState
     private double timer = 0;
     private readonly int scaleFactor;
 
-    public LeftSmallMarioMoveState(Player Mario, Sprite.SharedTexture texture, double timeFrame, int scaleFactor)
+    public LeftBigMarioMoveState(Player Mario, Sprite.SharedTexture texture, double timeFrame, int scaleFactor)
     {
         this.Mario = Mario;
         this.texture = texture;
         this.timeFrame = timeFrame;
         this.scaleFactor = scaleFactor;
-        Frames = [texture.NewSprite(209, 45, 12 ,15), texture.NewSprite(195, 44, 11, 16), texture.NewSprite(177, 44, 15, 16), texture.NewSprite(161, 44, 13, 16)];
+        Frames = [texture.NewSprite(201, 3, 16, 30), //Walking1
+            texture.NewSprite(184, 2, 14, 31), //Walking2
+            texture.NewSprite(166, 1, 16, 32), //Walking3
+            texture.NewSprite(147, 1, 16, 32)];//Brake
         for (int i = 0; i < Frames.Length; i++)
         {
             Frames[i].Scale = scaleFactor;
@@ -37,12 +40,12 @@ public class LeftSmallMarioMoveState : IPlayerState
     public void Right(GameTime gameTime)
     {
         Mario.MoveRight(gameTime, 1);
-        Mario.ChangeState(new RightSmallMarioMoveState(Mario, texture, timeFrame, scaleFactor));
+        Mario.ChangeState(new RightBigMarioMoveState(Mario, texture, timeFrame, scaleFactor));
     }
     public void Jump(GameTime gameTime)
     {
         Mario.MoveUp(gameTime);
-        Mario.ChangeState(new LeftJumpSmallMarioState(Mario, texture, timeFrame, scaleFactor));
+        Mario.ChangeState(new LeftJumpBigMarioState(Mario, texture, timeFrame, scaleFactor));
     }
     public void Crouch(GameTime gameTime)
     {
@@ -54,7 +57,7 @@ public class LeftSmallMarioMoveState : IPlayerState
     }
     public void TakeDamage()
     {
-        Mario.ChangeState(new DeadMarioState(Mario, texture, timeFrame, scaleFactor));
+        Mario.ChangeState(new LeftSmallMarioMoveState(Mario, texture, timeFrame, scaleFactor));
     }
     public void PowerUp(Power power)
     {
@@ -64,7 +67,7 @@ public class LeftSmallMarioMoveState : IPlayerState
                 Mario.ChangeState(new LeftFireMarioMoveState(Mario, texture, timeFrame, scaleFactor));
                 break;
             case Power.Mushroom:
-                Mario.ChangeState(new LeftBigMarioMoveState(Mario, texture, timeFrame, scaleFactor));
+                //Nothing
                 break;
             case Power.Star:
                 //RainbowState?
@@ -73,7 +76,7 @@ public class LeftSmallMarioMoveState : IPlayerState
     }
     public void Idle()
     {
-        Mario.ChangeState(new LeftSmallMarioIdleState(Mario, texture, timeFrame, scaleFactor));
+        Mario.ChangeState(new LeftBigMarioIdleState(Mario, texture, timeFrame, scaleFactor));
     }
     public void Update(GameTime gameTime, Vector2 Velocity)
     {
