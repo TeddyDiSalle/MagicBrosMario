@@ -14,10 +14,13 @@ public class MagicBrosMario : Game
     private SpriteBatch _spriteBatch;
 
     private SharedTexture sharedTexture;
+    private SharedTexture fireSharedTexture;
 
     private Goomba goomba;
     private Koopa koopa;
     private PiranhaPlant piranhaPlant;
+    private RotatingFireBar rotatingFireBar;
+    private Bowser bowser;
     private KeyboardState previousKeyboardState;
 
     public MagicBrosMario()
@@ -27,6 +30,7 @@ public class MagicBrosMario : Game
         IsMouseVisible = true;
 
         sharedTexture = new SharedTexture();
+        fireSharedTexture = new SharedTexture();
         // Goomba
         var aliveSprite = sharedTexture.NewAnimatedSprite(295, 187, 18, 18, 2, 0.2f);
         var deadSprite = sharedTexture.NewSprite(276, 187, 18, 18);
@@ -74,6 +78,39 @@ public class MagicBrosMario : Game
             250,  // X position (pipe location)
             200   // Y position (top of pipe - adjust based on your screen)
         );
+        // Rotating Fire Bar
+        rotatingFireBar = new RotatingFireBar(
+            fireSharedTexture,
+            364,    // Fireball X position in sprite sheet
+            188,    // Fireball Y position in sprite sheet
+            8,    // Fireball width
+            8,    // Fireball height
+            400,  // Center X position on screen
+            300,  // Center Y position on screen
+            6,    // Number of fireballs
+            24    // Spacing between fireballs
+        );
+        // Bowser
+        var bowserWalkingRight = sharedTexture.NewAnimatedSprite(255, 368, 35, 32, 4, 0.2f);
+        var bowserWalkingLeft = sharedTexture.NewAnimatedSprite(116, 368, 35, 32, 2, 0.2f);  // Left animation
+
+        bowserWalkingRight.Scale = 3f;
+        bowserWalkingLeft.Scale = 3f;
+
+        bowser = new Bowser(
+            bowserWalkingRight,
+            bowserWalkingLeft,
+            fireSharedTexture,
+            161,   // Fire moving right - X coordinate (2 frames)
+            253,   // Fire moving right - Y coordinate
+            101,    // Fire moving left - X coordinate (2 frames)
+            253,    // Fire moving left - Y coordinate
+            24,             // Fire width
+            8,             // Fire height
+            100,            // Bowser Y position
+            50,             // Left bound
+            750             // Right bound
+        );
     }
 
     protected override void LoadContent()
@@ -81,8 +118,11 @@ public class MagicBrosMario : Game
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
         Texture2D _texture = Content.Load<Texture2D>("characters");
+        Texture2D _fireTexture = Content.Load<Texture2D>("enemies");
 
         sharedTexture.BindTexture(_texture);
+        
+        fireSharedTexture.BindTexture(_fireTexture);
     }
 
     protected override void Update(GameTime gameTime)
@@ -95,6 +135,7 @@ public class MagicBrosMario : Game
         goomba.Kill();
         koopa.Kill();
         piranhaPlant.Kill();
+        bowser.Kill();
     }
 
     // Check if M was just pressed (not held)
@@ -106,6 +147,8 @@ public class MagicBrosMario : Game
     goomba.Update(gameTime);
     koopa.Update(gameTime);
     piranhaPlant.Update(gameTime);
+    rotatingFireBar.Update(gameTime);
+    bowser.Update(gameTime);
 
     previousKeyboardState = currentKeyboardState;
 
@@ -121,6 +164,8 @@ public class MagicBrosMario : Game
         goomba.Draw(_spriteBatch);
         koopa.Draw(_spriteBatch);
         piranhaPlant.Draw(_spriteBatch);
+        rotatingFireBar.Draw(_spriteBatch);
+        bowser.Draw(_spriteBatch);
 
         _spriteBatch.End();
 
