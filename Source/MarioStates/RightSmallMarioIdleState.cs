@@ -10,6 +10,10 @@ public class RightSmallMarioIdleState : IPlayerState
     private Sprite.Sprite sprite;
     private readonly double timeFrame;
     private readonly int scaleFactor;
+
+    private bool StarMode = false;
+    private float StarDuration = 10;
+    private float StarTimeRemaining = 0;
     public RightSmallMarioIdleState(Player Mario, Sprite.SharedTexture texture, double timeFrame, int scaleFactor)
     {
         this.Mario = Mario;
@@ -45,20 +49,24 @@ public class RightSmallMarioIdleState : IPlayerState
     }
     public void TakeDamage()
     {
-        Mario.ChangeState(new DeadMarioState(Mario, texture, timeFrame, scaleFactor));
+        if (!StarMode)
+        {
+            Mario.ChangeState(new DeadMarioState(Mario, texture, timeFrame, scaleFactor));
+        }
     }
     public void PowerUp(Power power)
     {
         switch (power)
         {
             case Power.FireFlower:
-                Mario.ChangeState(new RightFireMarioIdleState(Mario, texture, timeFrame, scaleFactor));
+              //  Mario.ChangeState(new RightFireMarioIdleState(Mario, texture, timeFrame, scaleFactor));
                 break;
             case Power.Mushroom:
                 Mario.ChangeState(new RightBigMarioIdleState(Mario, texture, timeFrame, scaleFactor));
                 break;
             case Power.Star:
-                //RainbowState?
+                StarMode = true;
+                StarTimeRemaining = 0;
                 break;
         }
     }
@@ -68,7 +76,17 @@ public class RightSmallMarioIdleState : IPlayerState
     }
     public void Update(GameTime gameTime, Vector2 Velocity)
     {
-        //Nothing
+        if (StarMode && StarTimeRemaining <= StarDuration)
+        {
+            float time = gameTime.ElapsedGameTime.Milliseconds;
+            StarTimeRemaining += time / 1000.0f;
+            sprite.Color = Mario.rainbow[(int)StarTimeRemaining % Mario.rainbow.Length];
+        }
+        else
+        {
+            StarMode = false;
+            sprite.Color = Color.White;
+        }
     }
     public void Draw(SpriteBatch spriteBatch, Vector2 Position)
     {

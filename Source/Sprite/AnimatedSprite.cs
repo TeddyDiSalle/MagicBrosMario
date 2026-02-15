@@ -49,6 +49,8 @@ public class AnimatedSprite(
 
     public Point Size { get; private set; }
     
+    public Color Color { get; set; } = Color.White;
+
     private Rectangle destRect = new(0, 0, frameWidth, frameHeight);
 
     private int frame = 0;
@@ -76,6 +78,6 @@ public class AnimatedSprite(
     public void Draw(SpriteBatch spriteBatch)
     {
         var sourceRect = new Rectangle(offsetX + frameWidth * frame, offsetY, frameWidth, frameHeight);
-        spriteBatch.Draw(texture.Texture, destRect, sourceRect, Color.White);
+        spriteBatch.Draw(texture.Texture, destRect, sourceRect, Color);
     }
 }

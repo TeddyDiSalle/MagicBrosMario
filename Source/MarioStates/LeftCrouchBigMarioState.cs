@@ -10,6 +10,10 @@ public class LeftCrouchBigMarioState : IPlayerState
     private Sprite.Sprite sprite;
     private readonly double timeFrame;
     private readonly int scaleFactor;
+
+    private bool StarMode = false;
+    private float StarDuration = 10;
+    private float StarTimeRemaining = 0;
     public LeftCrouchBigMarioState(Player Mario, Sprite.SharedTexture texture, double timeFrame, int scaleFactor)
     {
         this.Mario = Mario;
@@ -41,20 +45,24 @@ public class LeftCrouchBigMarioState : IPlayerState
     }
     public void TakeDamage()
     {
-        Mario.ChangeState(new LeftSmallMarioIdleState(Mario, texture, timeFrame, scaleFactor));
+        if (!StarMode)
+        {
+            Mario.ChangeState(new LeftSmallMarioIdleState(Mario, texture, timeFrame, scaleFactor));
+        }
     }
     public void PowerUp(Power power)
     {
         switch (power)
         {
             case Power.FireFlower:
-                Mario.ChangeState(new LeftCrouchFireMarioState(Mario, texture, timeFrame, scaleFactor));
+                //Mario.ChangeState(new LeftCrouchFireMarioState(Mario, texture, timeFrame, scaleFactor));
                 break;
             case Power.Mushroom:
                 //Nothing
                 break;
             case Power.Star:
-                //RainbowState?
+                StarMode = true;
+                StarTimeRemaining = 0;
                 break;
         }
     }
@@ -64,13 +72,25 @@ public class LeftCrouchBigMarioState : IPlayerState
     }
     public void Update(GameTime gameTime, Vector2 Velocity)
     {
-        if (Player.ReleaseCrouch())
+        if (StarMode && StarTimeRemaining <= StarDuration)
+        {
+            float time = gameTime.ElapsedGameTime.Milliseconds;
+            StarTimeRemaining += time / 1000.0f;
+            sprite.Color = Mario.rainbow[(int)StarTimeRemaining % Mario.rainbow.Length];
+        }
+        else
+        {
+            StarMode = false;
+            sprite.Color = Color.White;
+        }
+        if (!Mario.IsCrouching)
         {
             Mario.ChangeState(new LeftBigMarioIdleState(Mario, texture, timeFrame, scaleFactor));
         }
     }
     public void Draw(SpriteBatch spriteBatch, Vector2 Position)
     {
+
         sprite.Position = new Point((int)Position.X, (int)Position.Y);
         sprite.Draw(spriteBatch);
     }

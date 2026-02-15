@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MagicBrosMario.Source.Sprite;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.ObjectModel;
@@ -18,6 +19,10 @@ public class LeftBigMarioMoveState : IPlayerState
     private double timer = 0;
     private readonly int scaleFactor;
 
+    private bool StarMode = false;
+    private float StarDuration = 10;
+    private float StarTimeRemaining = 0;
+
     public LeftBigMarioMoveState(Player Mario, Sprite.SharedTexture texture, double timeFrame, int scaleFactor)
     {
         this.Mario = Mario;
@@ -32,6 +37,7 @@ public class LeftBigMarioMoveState : IPlayerState
         {
             Frames[i].Scale = scaleFactor;
         }
+        currentSprite = Frames[Frame];
     }
     public void Left(GameTime gameTime)
     {
@@ -49,7 +55,7 @@ public class LeftBigMarioMoveState : IPlayerState
     }
     public void Crouch(GameTime gameTime)
     {
-        //Nothing
+        Mario.ChangeState(new LeftCrouchBigMarioState(Mario, texture, timeFrame, scaleFactor));
     }
     public void Attack()
     {
@@ -57,20 +63,24 @@ public class LeftBigMarioMoveState : IPlayerState
     }
     public void TakeDamage()
     {
-        Mario.ChangeState(new LeftSmallMarioMoveState(Mario, texture, timeFrame, scaleFactor));
+        if (!StarMode)
+        {
+            Mario.ChangeState(new LeftSmallMarioMoveState(Mario, texture, timeFrame, scaleFactor));
+        }
     }
     public void PowerUp(Power power)
     {
         switch (power)
         {
             case Power.FireFlower:
-                Mario.ChangeState(new LeftFireMarioMoveState(Mario, texture, timeFrame, scaleFactor));
+             //   Mario.ChangeState(new LeftFireMarioMoveState(Mario, texture, timeFrame, scaleFactor));
                 break;
             case Power.Mushroom:
                 //Nothing
                 break;
             case Power.Star:
-                //RainbowState?
+                StarMode = true;
+                StarTimeRemaining = 0;
                 break;
         }
     }
@@ -80,6 +90,17 @@ public class LeftBigMarioMoveState : IPlayerState
     }
     public void Update(GameTime gameTime, Vector2 Velocity)
     {
+        if (StarMode && StarTimeRemaining <= StarDuration)
+        {
+            float time = gameTime.ElapsedGameTime.Milliseconds;
+            StarTimeRemaining += time / 1000.0f;
+            currentSprite.Color = Mario.rainbow[(int)time % Mario.rainbow.Length];
+        }
+        else
+        {
+            StarMode = false;
+            currentSprite.Color = Color.White;
+        }
         timer += gameTime.ElapsedGameTime.TotalSeconds;
         if (timer > timeFrame && Velocity.X > 0)
         {

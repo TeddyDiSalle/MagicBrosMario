@@ -18,6 +18,7 @@ public class Player
     private const float Gravity = 0.35f;
     private float GroundY = 260; //Temporary for Sprint2
     private const float MaxSpeed = 15.0f;
+    public bool IsCrouching { get; private set; } = false;
 
     public readonly Color[] rainbow = [Color.Red, Color.Orange, Color.Yellow, Color.Green, Color.Blue, Color.Purple];
 
@@ -39,11 +40,13 @@ public class Player
     }
     public void Crouch(GameTime gameTime)
     {
+        IsCrouching = true;
+        Idle();
         PlayerState.Crouch(gameTime);
     }
-    public static bool ReleaseCrouch()
+    public void ReleaseCrouch()
     {
-        return true;
+        IsCrouching = false;
     }
     public void Attack()
     {

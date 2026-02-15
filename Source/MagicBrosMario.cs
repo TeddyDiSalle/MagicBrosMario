@@ -19,7 +19,7 @@ public class MagicBrosMario : Game
 
     private MarioStates.Player Mario;
     private SharedTexture texture;
-    private int inputCount = 0;
+
 
     private int halfX;
     private int halfY;
@@ -60,11 +60,9 @@ public class MagicBrosMario : Game
     protected override void Update(GameTime gameTime)
     {
         //Code
-        if (inputCount < 2)
-        {
-            inputCount++;
+
             InputCheck(gameTime);
-        }
+
         Mario.Update(gameTime);
         base.Update(gameTime);
     }
@@ -116,11 +114,20 @@ public class MagicBrosMario : Game
         {
             Mario.ChangeState(new RightSmallMarioIdleState(Mario, texture, 0.15, 1));
         }
+        else if (keyboardInput.IsKeyDown(Keys.D1))
+        {
+            Mario.ChangeState(new RightBigMarioIdleState(Mario, texture, 0.15, 1));
+        }
+        else if (keyboardInput.IsKeyDown(Keys.D3))
+        {
+            Mario.PowerUp(Power.Star);
+        }
         else
         {
+            Mario.ReleaseCrouch();
             Mario.Idle();
         }
-        inputCount--;
+       
     }
 }
 

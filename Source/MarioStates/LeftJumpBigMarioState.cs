@@ -10,6 +10,10 @@ public class LeftJumpBigMarioState : IPlayerState
     private Sprite.Sprite sprite;
     private readonly double timeFrame;
     private readonly int scaleFactor;
+
+    private bool StarMode = false;
+    private float StarDuration = 10;
+    private float StarTimeRemaining = 0;
     public LeftJumpBigMarioState(Player Mario, Sprite.SharedTexture texture, double timeFrame, int scaleFactor)
     {
         this.Mario = Mario;
@@ -33,7 +37,7 @@ public class LeftJumpBigMarioState : IPlayerState
     }
     public void Crouch(GameTime gameTime)
     {
-        //Nothing
+        Mario.ChangeState(new LeftCrouchBigMarioState(Mario, texture, timeFrame, scaleFactor));
     }
     public void Attack()
     {
@@ -41,20 +45,24 @@ public class LeftJumpBigMarioState : IPlayerState
     }
     public void TakeDamage()
     {
-        Mario.ChangeState(new LeftJumpSmallMarioState(Mario, texture, timeFrame, scaleFactor));
+        if (!StarMode)
+        {
+            Mario.ChangeState(new LeftJumpSmallMarioState(Mario, texture, timeFrame, scaleFactor));
+        }
     }
     public void PowerUp(Power power)
     {
         switch (power)
         {
             case Power.FireFlower:
-                Mario.ChangeState(new LeftJumpFireMarioState(Mario, texture, timeFrame, scaleFactor));
+              //  Mario.ChangeState(new LeftJumpFireMarioState(Mario, texture, timeFrame, scaleFactor));
                 break;
             case Power.Mushroom:
                 //Nothing
                 break;
             case Power.Star:
-                //RainbowState?
+                StarMode = true;
+                StarTimeRemaining = 0;
                 break;
         }
     }
@@ -64,7 +72,18 @@ public class LeftJumpBigMarioState : IPlayerState
     }
     public void Update(GameTime gameTime, Vector2 Velocity)
     {
-        if(Velocity.Y == 0)
+        if (StarMode && StarTimeRemaining <= StarDuration)
+        {
+            float time = gameTime.ElapsedGameTime.Milliseconds;
+            StarTimeRemaining += time / 1000.0f;
+            sprite.Color = Mario.rainbow[(int)StarTimeRemaining % Mario.rainbow.Length];
+        }
+        else
+        {
+            StarMode = false;
+            sprite.Color = Color.White;
+        }
+        if (Velocity.Y == 0)
         {
             Mario.ChangeState(new LeftBigMarioIdleState(Mario, texture, timeFrame, scaleFactor));
         }
