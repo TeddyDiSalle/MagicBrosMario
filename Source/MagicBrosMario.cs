@@ -17,6 +17,7 @@ public class MagicBrosMario : Game
 
     private Goomba goomba;
     private Koopa koopa;
+    private PiranhaPlant piranhaPlant;
     private KeyboardState previousKeyboardState;
 
     public MagicBrosMario()
@@ -64,6 +65,15 @@ public class MagicBrosMario : Game
             50,
             750
         );
+        // Piranha Plant
+        var piranhaAliveSprite = sharedTexture.NewAnimatedSprite(125, 180, 16, 23, 2, 0.2f);
+        piranhaAliveSprite.Scale = 3f;
+
+        piranhaPlant = new PiranhaPlant(
+            piranhaAliveSprite,
+            250,  // X position (pipe location)
+            200   // Y position (top of pipe - adjust based on your screen)
+        );
     }
 
     protected override void LoadContent()
@@ -84,6 +94,7 @@ public class MagicBrosMario : Game
     {
         goomba.Kill();
         koopa.Kill();
+        piranhaPlant.Kill();
     }
 
     // Check if M was just pressed (not held)
@@ -94,6 +105,7 @@ public class MagicBrosMario : Game
 
     goomba.Update(gameTime);
     koopa.Update(gameTime);
+    piranhaPlant.Update(gameTime);
 
     previousKeyboardState = currentKeyboardState;
 
@@ -108,6 +120,7 @@ public class MagicBrosMario : Game
 
         goomba.Draw(_spriteBatch);
         koopa.Draw(_spriteBatch);
+        piranhaPlant.Draw(_spriteBatch);
 
         _spriteBatch.End();
 

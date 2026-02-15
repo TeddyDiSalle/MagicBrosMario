@@ -13,4 +13,7 @@ public interface IEnemy
     // 5. State transitions
     public void Update(GameTime gametime);
     public void Draw(SpriteBatch spriteBatch);
+    public void Kill();
+    
+    public Point Position { get; }
 }
