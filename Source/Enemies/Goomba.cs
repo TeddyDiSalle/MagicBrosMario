@@ -53,8 +53,7 @@ public class Goomba : IEnemy
         CurrentSprite().Update(gametime);
     }
 
-    //This method also updates the current frame of the Goomba's animation and moves left or right
-    //Right now its set on bound(which is screen width)
+    
     public void Walking(GameTime gameTime)
     {
         var sec = (double)gameTime.ElapsedGameTime.TotalMilliseconds / 1000.0;

@@ -14,6 +14,5 @@ public interface IEnemy
     public void Update(GameTime gametime);
     public void Draw(SpriteBatch spriteBatch);
     public void Kill();
-    
     public Point Position { get; }
 }
