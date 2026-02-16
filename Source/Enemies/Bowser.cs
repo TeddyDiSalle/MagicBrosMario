@@ -70,7 +70,7 @@ public class Bowser : IEnemy
     {
         if (!isAlive)
         {
-            return; // Don't update if dead
+            return; // Dead
         }
 
         float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -180,6 +180,5 @@ public class Bowser : IEnemy
                 fireball.Draw(_spriteBatch);
             }
         }
-        // Don't draw anything if dead (like Piranha Plant)
     }
 }
