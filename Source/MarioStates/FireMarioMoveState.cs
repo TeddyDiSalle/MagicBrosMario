@@ -1,6 +1,7 @@
 ﻿using MagicBrosMario.Source.Sprite;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Diagnostics;
 
 namespace MagicBrosMario.Source.MarioStates;
 //Vincent Do
@@ -18,10 +19,12 @@ public class FireMarioMoveState : IPlayerState
     private readonly int scaleFactor;
 
     private readonly Sprite.Sprite[] Sprites;
+    private readonly Sprite.Sprite[] AttackingSprites;
     private int StarFrame = 0;
     private double StarTimer = 0;
 
     private bool Braking;
+    private bool IsAttacking = false;
     public FireMarioMoveState(Player Mario, Sprite.SharedTexture texture, double timeFrame, int scaleFactor)
     {
         this.Mario = Mario;
@@ -45,9 +48,28 @@ public class FireMarioMoveState : IPlayerState
         texture.NewSprite(148, 192, 16, 32),
         texture.NewSprite(148, 255, 16, 32),
         texture.NewSprite(148, 318, 16, 32)];
+        AttackingSprites = [
+        texture.NewSprite(352, 129, 16, 32), //WalkingAttack1
+        texture.NewSprite(352, 192, 16, 32),
+        texture.NewSprite(352, 255, 16, 32),
+        texture.NewSprite(352, 318, 16, 32),
+        texture.NewSprite(369, 129, 14, 31), //WalkingAttack2
+        texture.NewSprite(369, 192, 16, 32),
+        texture.NewSprite(369, 255, 16, 32),
+        texture.NewSprite(369, 318, 16, 32),
+        texture.NewSprite(386, 129, 16, 32), //WalkingAttack3
+        texture.NewSprite(386, 192, 16, 32),
+        texture.NewSprite(386, 255, 16, 32),
+        texture.NewSprite(386, 318, 16, 32),
+        texture.NewSprite(403, 129, 16, 32), //BrakeAttack
+        texture.NewSprite(403, 192, 16, 32),
+        texture.NewSprite(403, 255, 16, 32),
+        texture.NewSprite(403, 318, 16, 32)
+            ];
         for (int i = 0; i < Sprites.Length; i++)
         {
             Sprites[i].Scale = scaleFactor;
+            AttackingSprites[i].Scale = scaleFactor;
         }
         CurrentSprite = Sprites[Frame];
     }
@@ -70,7 +92,7 @@ public class FireMarioMoveState : IPlayerState
     }
     public void Attack()
     {
-        //Nothing
+        IsAttacking = false;
     }
     public void TakeDamage()
     {
@@ -172,7 +194,6 @@ public class FireMarioMoveState : IPlayerState
         }
         StarTimer = 0;
         
-        CurrentSprite = Sprites[StarFrame];
     }
     public void Update(GameTime gameTime, Vector2 Velocity, bool Flipped)
     {
@@ -181,8 +202,15 @@ public class FireMarioMoveState : IPlayerState
         
         UpdateMovementAnimations(gameTime, Velocity, Flipped);
         UpdateStarAnimations(time);
-
-        CurrentSprite = (Mario.Invincible) ? Sprites[StarFrame] : Sprites[Frame*4];
+        if (IsAttacking)
+        {
+            Debug.Write("Attacking");
+            CurrentSprite = (Mario.Invincible) ? AttackingSprites[StarFrame] : AttackingSprites[Frame * 4];
+        }
+        else
+        {
+            CurrentSprite = (Mario.Invincible) ? Sprites[StarFrame] : Sprites[Frame * 4];
+        }
         CurrentSprite.Flipped = Flipped;
     }
     public void Draw(SpriteBatch spriteBatch, Vector2 Position)
