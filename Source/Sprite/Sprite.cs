@@ -47,6 +47,8 @@ public class Sprite(
 
     public Color Color { get; set; } = Color.White;
 
+    public SpriteEffects Effect { get; set; } = SpriteEffects.None;
+
     private readonly Rectangle sourceRect = new(offsetX, offsetY, width, height);
     private Rectangle destRect = new(0, 0, width, height);
 
@@ -63,6 +65,7 @@ public class Sprite(
 
     public void Draw(SpriteBatch spriteBatch)
     {
-        spriteBatch.Draw(texture.Texture, destRect, sourceRect, Color);
+        //spriteBatch.Draw(texture.Texture, destRect, sourceRect, Color);
+        spriteBatch.Draw(texture.Texture, destRect, sourceRect, Color, 0.0f, Vector2.Zero, Effect, 0.0f);
     }
 }

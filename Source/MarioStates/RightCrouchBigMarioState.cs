@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Diagnostics;
 
 namespace MagicBrosMario.Source.MarioStates;
 //Vincent Do
@@ -7,21 +8,29 @@ public class RightCrouchBigMarioState : IPlayerState
 {
     private readonly Player Mario;
     private Sprite.SharedTexture texture;
-    private Sprite.Sprite sprite;
+    private Sprite.Sprite CurrentSprite;
     private readonly double timeFrame;
     private readonly int scaleFactor;
 
-    private bool StarMode = false;
-    private float StarDuration = 10;
-    private float StarTimeRemaining = 0;
+    private Sprite.Sprite[] Sprites;
+    private int StarFrame = 0;
+    private double StarTimer = 0;
+
     public RightCrouchBigMarioState(Player Mario, Sprite.SharedTexture texture, double timeFrame, int scaleFactor)
     {
         this.Mario = Mario;
         this.texture = texture;
         this.timeFrame = timeFrame;
         this.scaleFactor = scaleFactor;
-        sprite = texture.NewSprite(277, 11, 16, 22);
-        sprite.Scale = scaleFactor;
+        Sprites = [texture.NewSprite(182, 11, 16, 22),
+            texture.NewSprite(182, 202, 16, 22),
+            texture.NewSprite(182, 265, 16, 22),
+            texture.NewSprite(182, 328, 16, 22)];
+        CurrentSprite = Sprites[0];
+        for (int i = 1; i < Sprites.Length; i++)
+        {
+            Sprites[i].Scale = scaleFactor;
+        }
     }
     public void Left(GameTime gameTime)
     {
@@ -45,7 +54,7 @@ public class RightCrouchBigMarioState : IPlayerState
     }
     public void TakeDamage()
     {
-        if (!StarMode)
+        if (!Mario.Invincible)
         {
             Mario.ChangeState(new RightSmallMarioIdleState(Mario, texture, timeFrame, scaleFactor));
         }
@@ -61,8 +70,8 @@ public class RightCrouchBigMarioState : IPlayerState
                 //Nothing
                 break;
             case Power.Star:
-                StarMode = true;
-                StarTimeRemaining = 0;
+                Mario.Invincible = true;
+                Mario.StarTimeRemaining = 0;
                 break;
         }
     }
@@ -72,17 +81,28 @@ public class RightCrouchBigMarioState : IPlayerState
     }
     public void Update(GameTime gameTime, Vector2 Velocity)
     {
-        if (StarMode && StarTimeRemaining <= StarDuration)
+        if (Mario.Invincible && Mario.StarTimeRemaining <= Mario.StarDuration)
         {
-            float time = gameTime.ElapsedGameTime.Milliseconds;
-            StarTimeRemaining += time / 1000.0f;
-            sprite.Color = Mario.rainbow[(int)StarTimeRemaining % Mario.rainbow.Length];
+            double time = gameTime.ElapsedGameTime.TotalSeconds;
+            Mario.StarTimeRemaining += time;
+            StarTimer += time;
+            if (StarTimer > timeFrame / 4)
+            {
+                StarFrame++;
+                if (StarFrame == Sprites.Length)
+                {
+                    StarFrame = 0;
+                }
+                StarTimer = 0;
+            }
+            CurrentSprite = Sprites[StarFrame];
         }
         else
         {
-            StarMode = false;
-            sprite.Color = Color.White;
+            CurrentSprite = Sprites[0];
         }
+        CurrentSprite.Effect = Mario.FacingRight ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+
         if (!Mario.IsCrouching)
         {
             Mario.ChangeState(new RightBigMarioIdleState(Mario, texture, timeFrame, scaleFactor));
@@ -90,8 +110,8 @@ public class RightCrouchBigMarioState : IPlayerState
     }
     public void Draw(SpriteBatch spriteBatch, Vector2 Position)
     {
-        sprite.Position = new Point((int)Position.X, (int)Position.Y);
-        sprite.Draw(spriteBatch);
+        CurrentSprite.Position = new Point((int)Position.X, (int)Position.Y);
+        CurrentSprite.Draw(spriteBatch);
     }
 
 }

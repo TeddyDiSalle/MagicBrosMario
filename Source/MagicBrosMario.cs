@@ -49,8 +49,9 @@ public class MagicBrosMario : Game
 
         SpriteFont fontDesc = Content.Load<SpriteFont>("font");
         Texture2D characterSheet = Content.Load<Texture2D>("characters");
+        Texture2D MarioSheet = Content.Load<Texture2D>("MarioStarSheet");
         texture = new SharedTexture();
-        texture.BindTexture(characterSheet);
+        texture.BindTexture(MarioSheet);
 
         Mario = new Player(texture);
         Debug.WriteLine(halfX +  " " + halfY);

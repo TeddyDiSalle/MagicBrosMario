@@ -34,6 +34,8 @@ public interface ISprite
     /// </summary>
     public Color Color { get; set; }
 
+    public SpriteEffects Effect { get; set; }
+
     /// <summary>
     /// update function for sprite, currently only used by AnimatedSprite
     /// </summary>

@@ -26,7 +26,7 @@ public class AnimatedSprite(
 ) : ISprite
 {
     public bool IsAnimated => true;
-
+    public SpriteEffects Effect {  get; set; } = SpriteEffects.None;
     public Point Position
     {
         get;

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MagicBrosMario.Source.Sprite;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Runtime.CompilerServices;
 
@@ -19,8 +20,13 @@ public class Player
     private float GroundY = 260; //Temporary for Sprint2
     private const float MaxSpeed = 15.0f;
     public bool IsCrouching { get; private set; } = false;
+    public bool FacingRight { get; set; } = true;
+    public bool Invincible { get; set; } = false;
+    public double StarDuration { get; private set; } = 10;
+    public double StarTimeRemaining { get; set; } = 0;
 
-    public readonly Color[] rainbow = [Color.Red, Color.Orange, Color.Yellow, Color.Green, Color.Blue, Color.Purple];
+    public readonly Color[] rainbow = [Color.Red];
+
 
     public Player(Sprite.SharedTexture texture)
     {
@@ -28,10 +34,12 @@ public class Player
     }
     public void Left(GameTime gameTime)
     {
+        FacingRight = false;
         PlayerState.Left(gameTime);
     }
     public void Right(GameTime gameTime)
     {
+        FacingRight = true;
         PlayerState.Right(gameTime);
     }
     public void Jump(GameTime gameTime)
@@ -132,6 +140,11 @@ public class Player
         {
             Position = new Vector2(Position.X, GroundY);
             Velocity -= new Vector2(0, Velocity.Y);
+        }
+        if(StarTimeRemaining >= StarDuration)
+        {
+            StarTimeRemaining = 0;
+            Invincible = false;
         }
         PlayerState.Update(gameTime, Velocity);
     }
