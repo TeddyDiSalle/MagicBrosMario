@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 ﻿using MagicBrosMario.Source.Sprite;
+=======
+﻿using MagicBrosMario.Source.MarioStates;
+using MagicBrosMario.Source.Sprite;
+>>>>>>> WorkingOnPlayerState
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -13,6 +18,7 @@ public class MagicBrosMario : Game
     private SpriteBatch _spriteBatch;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     private ISprite currentSprite;
     private StandstillSprite sprite1;
     private AnimatedSprite sprite2;
@@ -21,6 +27,14 @@ public class MagicBrosMario : Game
 
     private ISprite[] Sprites;
     private IController Controller;
+=======
+    private KeyboardInfo keyboardInput;
+    private MouseInfo mouseInput;
+
+    private MarioStates.Player Mario;
+    private SharedTexture texture;
+
+>>>>>>> WorkingOnPlayerState
 
     private Font font;
 =======
@@ -69,6 +83,7 @@ public class MagicBrosMario : Game
         var koopaShellDeath = sharedTexture.NewSprite(334, 215, 16, 15);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         Sprites = new ISprite[] {sprite1, sprite2, sprite3, sprite4};
         IController[] controllers =  {new KeyboardInfo(), new MouseInfo()};
         int[] cords = {Window.ClientBounds.Width / 2, Window.ClientBounds.Height / 2};
@@ -81,6 +96,11 @@ public class MagicBrosMario : Game
         koopaStomped.Scale = 3f;
         koopaShellDeath.Scale = 3f;
 >>>>>>> WorkingOnEnemies
+=======
+        keyboardInput = new KeyboardInfo();
+        mouseInput = new MouseInfo();
+        
+>>>>>>> WorkingOnPlayerState
 
         koopa = new Koopa(
             koopaWalkingRight,
@@ -141,12 +161,24 @@ public class MagicBrosMario : Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
+<<<<<<< HEAD
         Texture2D _texture = Content.Load<Texture2D>("characters");
         Texture2D _fireTexture = Content.Load<Texture2D>("enemies");
 
         sharedTexture.BindTexture(_texture);
         
         fireSharedTexture.BindTexture(_fireTexture);
+=======
+        SpriteFont fontDesc = Content.Load<SpriteFont>("font");
+        Texture2D characterSheet = Content.Load<Texture2D>("characters");
+        Texture2D MarioSheet = Content.Load<Texture2D>("MarioStarSheet");
+        texture = new SharedTexture();
+        texture.BindTexture(MarioSheet);
+
+        Mario = new Player(texture);
+        Debug.WriteLine(halfX +  " " + halfY);
+
+>>>>>>> WorkingOnPlayerState
     }
 
     protected override void Update(GameTime gameTime)
@@ -157,10 +189,15 @@ public class MagicBrosMario : Game
     if (currentKeyboardState.IsKeyDown(Keys.K) && previousKeyboardState.IsKeyUp(Keys.K))
     {
 <<<<<<< HEAD
+<<<<<<< HEAD
         Controller.Update();
+=======
+        //Code
+>>>>>>> WorkingOnPlayerState
 
-        currentSprite.Update(gameTime);
+            InputCheck(gameTime);
 
+        Mario.Update(gameTime);
         base.Update(gameTime);
 =======
         goomba.Kill();
@@ -191,6 +228,7 @@ public class MagicBrosMario : Game
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
+<<<<<<< HEAD
         _spriteBatch.Begin();
 
         goomba.Draw(_spriteBatch);
@@ -199,6 +237,11 @@ public class MagicBrosMario : Game
         rotatingFireBar.Draw(_spriteBatch);
         bowser.Draw(_spriteBatch);
 
+=======
+        //Code
+        _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+        Mario.Draw(_spriteBatch);
+>>>>>>> WorkingOnPlayerState
         _spriteBatch.End();
 
         base.Draw(gameTime);
