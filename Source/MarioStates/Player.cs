@@ -1,6 +1,7 @@
 ﻿using MagicBrosMario.Source.Sprite;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace MagicBrosMario.Source.MarioStates;
@@ -49,7 +50,6 @@ public class Player
     public void Crouch(GameTime gameTime)
     {
         IsCrouching = true;
-        Idle();
         PlayerState.Crouch(gameTime);
     }
     public void ReleaseCrouch()
@@ -145,6 +145,10 @@ public class Player
         {
             StarTimeRemaining = 0;
             Invincible = false;
+        }
+        if (IsCrouching)
+        {
+            Idle();
         }
         PlayerState.Update(gameTime, Velocity, Flipped);
     }

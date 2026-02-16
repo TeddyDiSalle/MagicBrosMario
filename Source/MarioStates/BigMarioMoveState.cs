@@ -1,9 +1,6 @@
 ﻿using MagicBrosMario.Source.Sprite;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Diagnostics;
-using System.Transactions;
 
 namespace MagicBrosMario.Source.MarioStates;
 //Vincent Do
@@ -57,8 +54,6 @@ public class BigMarioMoveState : IPlayerState
     public void Left(GameTime gameTime)
     {
         Mario.MoveLeft(gameTime, 1);
-        //Mario.ChangeState(new LeftBigMarioMoveState(Mario, texture, timeFrame, scaleFactor));
-        
     }
     public void Right(GameTime gameTime)
     {
@@ -195,5 +190,4 @@ public class BigMarioMoveState : IPlayerState
         CurrentSprite.Position = new Point((int)Position.X, (int)Position.Y);
         CurrentSprite.Draw(spriteBatch);
     }
-
 }

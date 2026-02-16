@@ -36,27 +36,22 @@ public class BigMarioIdleState : IPlayerState
     public void Left(GameTime gameTime)
     {
         Mario.MoveLeft(gameTime, 1);
-        //Mario.ChangeState(new LeftBigMarioMoveState(Mario, texture, timeFrame, scaleFactor));
-        //Mario.ChangeState(new BigMarioMoveState(Mario, texture, timeFrame, scaleFactor));
         Mario.ChangeState(new BigMarioMoveState(Mario, texture, timeFrame, scaleFactor));
     }
     public void Right(GameTime gameTime)
     {
         Mario.MoveRight(gameTime, 1);
         Mario.ChangeState(new BigMarioMoveState(Mario, texture, timeFrame, scaleFactor));
-        //Mario.ChangeState(new BigMarioMoveState(Mario, texture, timeFrame, scaleFactor));
     }
 
     public void Jump(GameTime gameTime)
     {
         Mario.MoveUp(gameTime);
         Mario.ChangeState(new BigMarioJumpState(Mario, texture, timeFrame, scaleFactor));
-        //Mario.ChangeState(new BigMarioJumpState(Mario, texture, timeFrame, scaleFactor));
     }
     public void Crouch(GameTime gameTime)
     {
         Mario.ChangeState(new BigMarioCrouchState(Mario, texture, timeFrame, scaleFactor));
-        //Mario.ChangeState(new BigMarioCrouchState(Mario, texture, timeFrame, scaleFactor));
     }
     public void Attack()
     {
@@ -67,7 +62,6 @@ public class BigMarioIdleState : IPlayerState
         if (!Mario.Invincible)
         {
             Mario.ChangeState(new RightSmallMarioIdleState(Mario, texture, timeFrame, scaleFactor));
-            //Mario.ChangeState(new SmallMarioIdleState(Mario, texture, timeFrame, scaleFactor));
         }
     }
     public void PowerUp(Power power)
