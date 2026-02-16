@@ -88,17 +88,6 @@ public class RightSmallMarioMoveState : IPlayerState
     }
     public void Update(GameTime gameTime, Vector2 Velocity, bool Flipped)
     {
-        if (StarMode && StarTimeRemaining <= StarDuration)
-        {
-            float time = gameTime.ElapsedGameTime.Milliseconds;
-            StarTimeRemaining += time / 1000.0f;
-            currentSprite.Color = Mario.rainbow[(int)StarTimeRemaining % Mario.rainbow.Length];
-        }
-        else
-        {
-            StarMode = false;
-            currentSprite.Color = Color.White;
-        }
 
         timer += gameTime.ElapsedGameTime.TotalSeconds;
         if (timer > timeFrame && Velocity.X < 0)
