@@ -14,6 +14,8 @@ public class FireMarioJumpState : IPlayerState
     private readonly Sprite.Sprite[] Sprites;
     private int StarFrame = 0;
     private double StarTimer = 0;
+
+    private bool IsAttacking = false;
     public FireMarioJumpState(Player Mario, Sprite.SharedTexture texture, double timeFrame, int scaleFactor)
     {
         this.Mario = Mario;
@@ -23,7 +25,11 @@ public class FireMarioJumpState : IPlayerState
         Sprites = [texture.NewSprite(165, 129, 16, 32),
             texture.NewSprite(165, 192, 16, 32),
             texture.NewSprite(165, 255, 16, 32),
-            texture.NewSprite(165, 318, 16, 32)];
+            texture.NewSprite(165, 318, 16, 32),
+            texture.NewSprite(420, 129, 16, 32),
+            texture.NewSprite(420, 192, 16, 32),
+            texture.NewSprite(420, 255, 16, 32),
+            texture.NewSprite(420, 318, 16, 32)];
         CurrentSprite = Sprites[0];
         for (int i = 0; i < Sprites.Length; i++)
         {
@@ -48,7 +54,7 @@ public class FireMarioJumpState : IPlayerState
     }
     public void Attack()
     {
-        //Nothing
+        IsAttacking = true;
     }
     public void TakeDamage()
     {
@@ -87,17 +93,17 @@ public class FireMarioJumpState : IPlayerState
             if (StarTimer > timeFrame / 3)
             {
                 StarFrame++;
-                if (StarFrame == Sprites.Length)
+                if (StarFrame == Sprites.Length-4)
                 {
                     StarFrame = 0;
                 }
                 StarTimer = 0;
             }
-            CurrentSprite = Sprites[StarFrame];
+            CurrentSprite = (IsAttacking) ? Sprites[StarFrame + 4] : Sprites[StarFrame];
         }
         else
         {
-            CurrentSprite = Sprites[0];
+            CurrentSprite = (IsAttacking) ? Sprites[4] : Sprites[0];
         }
         CurrentSprite.Flipped = Flipped;
 
@@ -105,6 +111,7 @@ public class FireMarioJumpState : IPlayerState
         {
             Mario.ChangeState(new FireMarioIdleState(Mario, texture, timeFrame, scaleFactor));
         }
+        IsAttacking = false;
     }
     public void Draw(SpriteBatch spriteBatch, Vector2 Position)
     {

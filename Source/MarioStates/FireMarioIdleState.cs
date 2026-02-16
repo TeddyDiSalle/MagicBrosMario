@@ -16,6 +16,8 @@ public class FireMarioIdleState : IPlayerState
     private int StarFrame = 0;
     private double StarTimer = 0;
 
+    private bool IsAttacking = false;
+
     public FireMarioIdleState(Player Mario, Sprite.SharedTexture texture, double timeFrame, int scaleFactor)
     {
         this.Mario = Mario;
@@ -26,7 +28,11 @@ public class FireMarioIdleState : IPlayerState
         Sprites = [texture.NewSprite(80, 129, 16, 32),
         texture.NewSprite(80, 192, 16, 32),
         texture.NewSprite(80, 255, 16, 32),
-        texture.NewSprite(80, 318, 16, 32)];
+        texture.NewSprite(80, 318, 16, 32),
+        texture.NewSprite(352, 129, 16, 32),
+        texture.NewSprite(352, 192, 16, 32),
+        texture.NewSprite(352, 255, 16, 32),
+        texture.NewSprite(352, 318, 16, 32)];
         CurrentSprite = Sprites[0];
         for (int i = 0; i < Sprites.Length; i++)
         {
@@ -55,7 +61,7 @@ public class FireMarioIdleState : IPlayerState
     }
     public void Attack()
     {
-        //Nothing
+        IsAttacking = true;
     }
     public void TakeDamage()
     {
@@ -94,19 +100,20 @@ public class FireMarioIdleState : IPlayerState
             if(StarTimer > timeFrame / 4)
             {
                 StarFrame++;
-                if(StarFrame == Sprites.Length)
+                if(StarFrame == Sprites.Length-4)
                 {
                     StarFrame = 0;
                 }
                 StarTimer = 0;
             }
-            CurrentSprite = Sprites[StarFrame];
+            CurrentSprite = (IsAttacking) ? Sprites[StarFrame + 4] : Sprites[StarFrame];
         }
         else
         {
-            CurrentSprite = Sprites[0];
+            CurrentSprite = (IsAttacking) ? Sprites[4] : Sprites[0];
         }
         CurrentSprite.Flipped = Flipped;
+        IsAttacking = false;
     }
     public void Draw(SpriteBatch spriteBatch, Vector2 Position)
     {

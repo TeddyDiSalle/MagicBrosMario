@@ -111,6 +111,10 @@ public class MagicBrosMario : Game
         {
             Mario.TakeDamage();
         }
+        else if (keyboardInput.IsKeyDown(Keys.F))
+        {
+            Mario.Attack();
+        }
         else if (keyboardInput.IsKeyDown(Keys.D1))
         {
             Mario.ChangeState(new SmallMarioIdleState(Mario, texture, 0.15, 3));
