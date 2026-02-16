@@ -11,6 +11,15 @@
     <LangVersion>preview</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Source\MarioStates\LeftBigMarioIdleState.cs" />
+    <Compile Remove="Source\MarioStates\LeftBigMarioMoveState.cs" />
+    <Compile Remove="Source\MarioStates\LeftCrouchBigMarioState.cs" />
+    <Compile Remove="Source\MarioStates\LeftJumpBigMarioState.cs" />
+    <Compile Remove="Source\MarioStates\LeftJumpSmallMarioState.cs" />
+    <Compile Remove="Source\MarioStates\LeftSmallMarioIdleState.cs" />
+    <Compile Remove="Source\MarioStates\LeftSmallMarioMoveState.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.*" />
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.*" />
   </ItemGroup>

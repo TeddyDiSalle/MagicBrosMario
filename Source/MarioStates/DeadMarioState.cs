@@ -51,7 +51,7 @@ public class DeadMarioState : IPlayerState
     {
         //Nothing
     }
-    public void Update(GameTime gameTime, Vector2 Velocity)
+    public void Update(GameTime gameTime, Vector2 Velocity, bool Flipped)
     {
         //Nothing
     }

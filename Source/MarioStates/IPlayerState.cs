@@ -13,7 +13,7 @@ public interface IPlayerState
     void TakeDamage();
     void PowerUp(Power power);
     void Idle();
-    void Update(GameTime gameTime, Vector2 Velocity);
+    void Update(GameTime gameTime, Vector2 Velocity, bool Flipped);
     void Draw(SpriteBatch spriteBatch, Vector2 Position);
 
 }

@@ -20,7 +20,7 @@ public class Player
     private float GroundY = 260; //Temporary for Sprint2
     private const float MaxSpeed = 15.0f;
     public bool IsCrouching { get; private set; } = false;
-    public bool FacingRight { get; set; } = true;
+    public bool Flipped { get; set; } = false;
     public bool Invincible { get; set; } = false;
     public double StarDuration { get; private set; } = 10;
     public double StarTimeRemaining { get; set; } = 0;
@@ -30,16 +30,16 @@ public class Player
 
     public Player(Sprite.SharedTexture texture)
     {
-        PlayerState = new RightSmallMarioIdleState(this, texture, timeFrame, scaleFactor);
+        PlayerState = new BigMarioIdleState(this, texture, timeFrame, scaleFactor);
     }
     public void Left(GameTime gameTime)
     {
-        FacingRight = false;
+        Flipped = true;
         PlayerState.Left(gameTime);
     }
     public void Right(GameTime gameTime)
     {
-        FacingRight = true;
+        Flipped = false;
         PlayerState.Right(gameTime);
     }
     public void Jump(GameTime gameTime)
@@ -146,7 +146,7 @@ public class Player
             StarTimeRemaining = 0;
             Invincible = false;
         }
-        PlayerState.Update(gameTime, Velocity);
+        PlayerState.Update(gameTime, Velocity, Flipped);
     }
 
     public void Draw(SpriteBatch spriteBatch)

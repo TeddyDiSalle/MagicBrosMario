@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MagicBrosMario.Source.MarioStates;
 //Vincent Do
-public class RightJumpBigMarioState : IPlayerState
+public class BigMarioJumpState : IPlayerState
 {
     private readonly Player Mario;
     private Sprite.SharedTexture texture;
@@ -14,7 +14,7 @@ public class RightJumpBigMarioState : IPlayerState
     private Sprite.Sprite[] Sprites;
     private int StarFrame = 0;
     private double StarTimer = 0;
-    public RightJumpBigMarioState(Player Mario, Sprite.SharedTexture texture, double timeFrame, int scaleFactor)
+    public BigMarioJumpState(Player Mario, Sprite.SharedTexture texture, double timeFrame, int scaleFactor)
     {
         this.Mario = Mario;
         this.texture = texture;
@@ -25,7 +25,7 @@ public class RightJumpBigMarioState : IPlayerState
             texture.NewSprite(165, 255, 16, 32),
             texture.NewSprite(165, 318, 16, 32)];
         CurrentSprite = Sprites[0];
-        for (int i = 1; i < Sprites.Length; i++)
+        for (int i = 0; i < Sprites.Length; i++)
         {
             Sprites[i].Scale = scaleFactor;
         }
@@ -44,7 +44,7 @@ public class RightJumpBigMarioState : IPlayerState
     }
     public void Crouch(GameTime gameTime)
     {
-        Mario.ChangeState(new RightCrouchBigMarioState(Mario, texture, timeFrame, scaleFactor));
+        Mario.ChangeState(new BigMarioCrouchState(Mario, texture, timeFrame, scaleFactor));
     }
     public void Attack()
     {
@@ -77,9 +77,9 @@ public class RightJumpBigMarioState : IPlayerState
     {
         //Nothing
     }
-    public void Update(GameTime gameTime, Vector2 Velocity)
+    public void Update(GameTime gameTime, Vector2 Velocity, bool Flipped)
     {
-        if (Mario.Invincible && Mario.StarTimeRemaining <= Mario.StarDuration)
+        if (Mario.Invincible)
         {
             double time = gameTime.ElapsedGameTime.TotalSeconds;
             Mario.StarTimeRemaining += time;
@@ -99,11 +99,11 @@ public class RightJumpBigMarioState : IPlayerState
         {
             CurrentSprite = Sprites[0];
         }
-        CurrentSprite.Effect = Mario.FacingRight ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+        CurrentSprite.Flipped = Flipped;
 
         if (Velocity.Y == 0)
         {
-            Mario.ChangeState(new RightBigMarioIdleState(Mario, texture, timeFrame, scaleFactor));
+            Mario.ChangeState(new BigMarioIdleState(Mario, texture, timeFrame, scaleFactor));
         }
     }
     public void Draw(SpriteBatch spriteBatch, Vector2 Position)

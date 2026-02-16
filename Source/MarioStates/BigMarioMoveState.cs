@@ -2,10 +2,12 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Diagnostics;
+using System.Transactions;
 
 namespace MagicBrosMario.Source.MarioStates;
 //Vincent Do
-public class RightBigMarioMoveState : IPlayerState
+public class BigMarioMoveState : IPlayerState
 {
     private readonly Player Mario;
     private readonly Sprite.SharedTexture texture;
@@ -23,7 +25,7 @@ public class RightBigMarioMoveState : IPlayerState
     private int StarFrame = 0;
     private double StarTimer = 0;
 
-    public RightBigMarioMoveState(Player Mario, Sprite.SharedTexture texture, double timeFrame, int scaleFactor)
+    public BigMarioMoveState(Player Mario, Sprite.SharedTexture texture, double timeFrame, int scaleFactor)
     {
         this.Mario = Mario;
         this.texture = texture;
@@ -54,12 +56,16 @@ public class RightBigMarioMoveState : IPlayerState
         {
             Frames[i].Scale = scaleFactor;
         }
+        for (int i = 0; i < Sprites.Length; i++)
+        {
+            Sprites[i].Scale = scaleFactor;
+        }
         CurrentSprite = Frames[Frame];
     }
     public void Left(GameTime gameTime)
     {
         Mario.MoveLeft(gameTime, 1);
-        Mario.ChangeState(new LeftBigMarioMoveState(Mario, texture, timeFrame, scaleFactor));
+        //Mario.ChangeState(new LeftBigMarioMoveState(Mario, texture, timeFrame, scaleFactor));
         
     }
     public void Right(GameTime gameTime)
@@ -69,11 +75,11 @@ public class RightBigMarioMoveState : IPlayerState
     public void Jump(GameTime gameTime)
     {
         Mario.MoveUp(gameTime);
-        Mario.ChangeState(new RightJumpBigMarioState(Mario, texture, timeFrame, scaleFactor));
+        Mario.ChangeState(new BigMarioJumpState(Mario, texture, timeFrame, scaleFactor));
     }
     public void Crouch(GameTime gameTime)
     {
-        Mario.ChangeState(new RightCrouchBigMarioState(Mario, texture, timeFrame, scaleFactor));
+        Mario.ChangeState(new BigMarioCrouchState(Mario, texture, timeFrame, scaleFactor));
     }
     public void Attack()
     {
@@ -99,56 +105,91 @@ public class RightBigMarioMoveState : IPlayerState
             case Power.Star:
                 Mario.Invincible = true;
                 Mario.StarTimeRemaining = 0;
+                StarFrame = Frame * 4;
                 break;
         }
     }
     public void Idle()
     {
-        Mario.ChangeState(new RightBigMarioIdleState(Mario, texture, timeFrame, scaleFactor));
+        Mario.ChangeState(new BigMarioIdleState(Mario, texture, timeFrame, scaleFactor));
     }
-    public void Update(GameTime gameTime, Vector2 Velocity)
+    private bool IsBraking(GameTime gameTime, Vector2 Velocity, bool Flipped)
     {
-        timer += gameTime.ElapsedGameTime.TotalSeconds;
-        if (timer > timeFrame && Velocity.X < 0)
+        bool braking = false;
+        if (!Flipped & timer > timeFrame && Velocity.X < 0)
         {
             Frame = 3;
             timer = 0;
             Mario.MoveRight(gameTime, 8);
+            braking = true;
         }
-        else if (timer > timeFrame)
+        else if (Flipped & timer > timeFrame && Velocity.X > 0)
         {
-            if(Frame == 3)
+            Frame = 3;
+            timer = 0;
+            Mario.MoveLeft(gameTime, 8);
+            braking = true;
+        }
+        return braking;
+    }
+    public void Update(GameTime gameTime, Vector2 Velocity, bool Flipped)
+    {
+        double time = gameTime.ElapsedGameTime.TotalSeconds;
+        timer += time;
+        bool Braking = IsBraking(gameTime, Velocity, Flipped);
+        if (timer > timeFrame)
+        {
+            if (Frame == 3)
             {
                 Frame = 0;
+                nextFrame = 1;
             }
             Frame += nextFrame;
-            if(Frame == 0 || Frame == Frames.Length - 2)
+            if (Frame == 0 || Frame == Frames.Length - 2)
             {
                 nextFrame *= -1;
             }
             timer = 0;
         }
-        if (Mario.Invincible && Mario.StarTimeRemaining <= Mario.StarDuration)
+        if (Mario.Invincible)
         {
-            double time = gameTime.ElapsedGameTime.TotalSeconds;
             Mario.StarTimeRemaining += time;
             StarTimer += time;
-            if (StarTimer > timeFrame / 3)
+            
+            if (StarTimer > timeFrame / 4)
             {
                 StarFrame++;
-                if (StarFrame == Sprites.Length)
+
+                if(Braking)
                 {
-                    StarFrame = 0;
+                    while(StarFrame + 4 < Sprites.Length)
+                    {
+                        StarFrame += 4;
+                    }
+                    if (StarFrame >= Sprites.Length)
+                    {
+                        StarFrame = 12;
+                    }
                 }
-                StarTimer = 0;
+                else
+                {
+                    if (StarFrame >= Sprites.Length - 4)
+                    {
+                        StarFrame = 0;
+                    }
+                }
+                    StarTimer = 0;
             }
+            CurrentSprite = Sprites[StarFrame];
+            if (Braking) { Debug.Write("Braking: " + StarFrame + " "); }
+            else { Debug.Write("NOT Braking: " + StarFrame + " "); }
         }
         else
         {
             CurrentSprite = Frames[Frame];
         }
-        CurrentSprite.Effect = Mario.FacingRight ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
         
+        CurrentSprite.Flipped = Flipped;
     }
     public void Draw(SpriteBatch spriteBatch, Vector2 Position)
     {

@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace MagicBrosMario.Source.MarioStates;
 //Vincent Do
-public class RightCrouchBigMarioState : IPlayerState
+public class BigMarioCrouchState : IPlayerState
 {
     private readonly Player Mario;
     private Sprite.SharedTexture texture;
@@ -16,7 +16,7 @@ public class RightCrouchBigMarioState : IPlayerState
     private int StarFrame = 0;
     private double StarTimer = 0;
 
-    public RightCrouchBigMarioState(Player Mario, Sprite.SharedTexture texture, double timeFrame, int scaleFactor)
+    public BigMarioCrouchState(Player Mario, Sprite.SharedTexture texture, double timeFrame, int scaleFactor)
     {
         this.Mario = Mario;
         this.texture = texture;
@@ -27,7 +27,7 @@ public class RightCrouchBigMarioState : IPlayerState
             texture.NewSprite(182, 265, 16, 22),
             texture.NewSprite(182, 328, 16, 22)];
         CurrentSprite = Sprites[0];
-        for (int i = 1; i < Sprites.Length; i++)
+        for (int i = 0; i < Sprites.Length; i++)
         {
             Sprites[i].Scale = scaleFactor;
         }
@@ -79,9 +79,9 @@ public class RightCrouchBigMarioState : IPlayerState
     {
         //Nothing
     }
-    public void Update(GameTime gameTime, Vector2 Velocity)
+    public void Update(GameTime gameTime, Vector2 Velocity, bool Flipped)
     {
-        if (Mario.Invincible && Mario.StarTimeRemaining <= Mario.StarDuration)
+        if (Mario.Invincible)
         {
             double time = gameTime.ElapsedGameTime.TotalSeconds;
             Mario.StarTimeRemaining += time;
@@ -101,11 +101,11 @@ public class RightCrouchBigMarioState : IPlayerState
         {
             CurrentSprite = Sprites[0];
         }
-        CurrentSprite.Effect = Mario.FacingRight ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+        CurrentSprite.Flipped = Flipped;
 
         if (!Mario.IsCrouching)
         {
-            Mario.ChangeState(new RightBigMarioIdleState(Mario, texture, timeFrame, scaleFactor));
+            Mario.ChangeState(new BigMarioIdleState(Mario, texture, timeFrame, scaleFactor));
         }
     }
     public void Draw(SpriteBatch spriteBatch, Vector2 Position)

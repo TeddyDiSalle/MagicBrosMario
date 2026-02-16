@@ -39,7 +39,7 @@ public class RightSmallMarioMoveState : IPlayerState
     public void Left(GameTime gameTime)
     {
         Mario.MoveLeft(gameTime, 1);
-        Mario.ChangeState(new LeftSmallMarioMoveState(Mario, texture, timeFrame, scaleFactor));
+        //Mario.ChangeState(new LeftSmallMarioMoveState(Mario, texture, timeFrame, scaleFactor));
         
     }
     public void Right(GameTime gameTime)
@@ -74,7 +74,7 @@ public class RightSmallMarioMoveState : IPlayerState
                 //Mario.ChangeState(new RightFireMarioMoveState(Mario, texture, timeFrame, scaleFactor));
                 break;
             case Power.Mushroom:
-                Mario.ChangeState(new RightBigMarioMoveState(Mario, texture, timeFrame, scaleFactor));
+                Mario.ChangeState(new BigMarioMoveState(Mario, texture, timeFrame, scaleFactor));
                 break;
             case Power.Star:
                 StarMode = true;
@@ -86,7 +86,7 @@ public class RightSmallMarioMoveState : IPlayerState
     {
         Mario.ChangeState(new RightSmallMarioIdleState(Mario, texture, timeFrame, scaleFactor));
     }
-    public void Update(GameTime gameTime, Vector2 Velocity)
+    public void Update(GameTime gameTime, Vector2 Velocity, bool Flipped)
     {
         if (StarMode && StarTimeRemaining <= StarDuration)
         {
