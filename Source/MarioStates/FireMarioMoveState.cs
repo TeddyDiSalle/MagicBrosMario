@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MagicBrosMario.Source.MarioStates;
 //Vincent Do
-public class BigMarioMoveState : IPlayerState
+public class FireMarioMoveState : IPlayerState
 {
     private readonly Player Mario;
     private readonly Sprite.SharedTexture texture;
@@ -22,26 +22,26 @@ public class BigMarioMoveState : IPlayerState
     private double StarTimer = 0;
 
     private bool Braking;
-    public BigMarioMoveState(Player Mario, Sprite.SharedTexture texture, double timeFrame, int scaleFactor)
+    public FireMarioMoveState(Player Mario, Sprite.SharedTexture texture, double timeFrame, int scaleFactor)
     {
         this.Mario = Mario;
         this.texture = texture;
         this.timeFrame = timeFrame;
         this.scaleFactor = scaleFactor;
         Sprites = [
-        texture.NewSprite(97, 3, 16, 30), //Walking1 Invincible
-        texture.NewSprite(97, 194, 16, 30),
-        texture.NewSprite(97, 257, 16, 30),
-        texture.NewSprite(97, 320, 16, 30),
-        texture.NewSprite(115, 2, 14, 31), //Walking2 Invincible
-        texture.NewSprite(115, 193, 14, 31),
-        texture.NewSprite(115, 256, 14, 31),
-        texture.NewSprite(115, 319, 14, 31),
-        texture.NewSprite(131, 1, 16, 32), //Walking3 Invincible
+        texture.NewSprite(97, 129, 16, 32), //Walking1
+        texture.NewSprite(97, 192, 16, 32),
+        texture.NewSprite(97, 255, 16, 32),
+        texture.NewSprite(97, 318, 16, 32),
+        texture.NewSprite(114, 129, 14, 31), //Walking2
+        texture.NewSprite(114, 192, 16, 32),
+        texture.NewSprite(114, 255, 16, 32),
+        texture.NewSprite(114, 318, 16, 32),
+        texture.NewSprite(131, 129, 16, 32), //Walking3 
         texture.NewSprite(131, 192, 16, 32),
         texture.NewSprite(131, 255, 16, 32),
         texture.NewSprite(131, 318, 16, 32),
-        texture.NewSprite(148, 1, 16, 32), //Brake Invincible
+        texture.NewSprite(148, 129, 16, 32), //Brake 
         texture.NewSprite(148, 192, 16, 32),
         texture.NewSprite(148, 255, 16, 32),
         texture.NewSprite(148, 318, 16, 32)];
@@ -62,11 +62,11 @@ public class BigMarioMoveState : IPlayerState
     public void Jump(GameTime gameTime)
     {
         Mario.MoveUp(gameTime);
-        Mario.ChangeState(new BigMarioJumpState(Mario, texture, timeFrame, scaleFactor));
+        Mario.ChangeState(new FireMarioJumpState(Mario, texture, timeFrame, scaleFactor));
     }
     public void Crouch(GameTime gameTime)
     {
-        Mario.ChangeState(new BigMarioCrouchState(Mario, texture, timeFrame, scaleFactor));
+        Mario.ChangeState(new FireMarioCrouchState(Mario, texture, timeFrame, scaleFactor));
     }
     public void Attack()
     {
@@ -84,10 +84,10 @@ public class BigMarioMoveState : IPlayerState
         switch (power)
         {
             case Power.FireFlower:
-                Mario.ChangeState(new FireMarioMoveState(Mario, texture, timeFrame, scaleFactor));
+                //Nothing
                 break;
             case Power.Mushroom:
-                //Nothing
+                Mario.ChangeState(new BigMarioMoveState(Mario, texture, timeFrame, scaleFactor));
                 break;
             case Power.Star:
                 Mario.Invincible = true;
@@ -98,7 +98,7 @@ public class BigMarioMoveState : IPlayerState
     }
     public void Idle()
     {
-        Mario.ChangeState(new BigMarioIdleState(Mario, texture, timeFrame, scaleFactor));
+        Mario.ChangeState(new FireMarioIdleState(Mario, texture, timeFrame, scaleFactor));
     }
     private void IsBraking(GameTime gameTime, Vector2 Velocity, bool Flipped)
     {

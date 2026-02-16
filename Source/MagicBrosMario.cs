@@ -111,15 +111,19 @@ public class MagicBrosMario : Game
         {
             Mario.TakeDamage();
         }
-        else if (keyboardInput.IsKeyDown(Keys.R))
-        {
-            Mario.ChangeState(new RightSmallMarioIdleState(Mario, texture, 0.15, 1));
-        }
         else if (keyboardInput.IsKeyDown(Keys.D1))
         {
-            Mario.ChangeState(new BigMarioIdleState(Mario, texture, 0.15, 1));
+            Mario.ChangeState(new SmallMarioIdleState(Mario, texture, 0.15, 3));
+        }
+        else if (keyboardInput.IsKeyDown(Keys.D2))
+        {
+            Mario.ChangeState(new BigMarioIdleState(Mario, texture, 0.15, 3));
         }
         else if (keyboardInput.IsKeyDown(Keys.D3))
+        {
+            Mario.PowerUp(Power.FireFlower);
+        }
+        else if (keyboardInput.IsKeyDown(Keys.D4))
         {
             Mario.PowerUp(Power.Star);
         }

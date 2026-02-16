@@ -3,20 +3,20 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MagicBrosMario.Source.MarioStates;
 //Vincent Do
-public class DeadMarioState : IPlayerState
+public class MarioDeadState : IPlayerState
 {
     private readonly Player Mario;
     private readonly Sprite.SharedTexture texture;
-    private Sprite.Sprite sprite;
+    private readonly Sprite.Sprite sprite;
     private readonly double timeFrame;
     private readonly int scaleFactor;
-    public DeadMarioState(Player Mario, Sprite.SharedTexture texture, double timeFrame, int scaleFactor)
+    public MarioDeadState(Player Mario, Sprite.SharedTexture texture, double timeFrame, int scaleFactor)
     {
         this.Mario = Mario;
         this.texture = texture;
         this.timeFrame = timeFrame;
         this.scaleFactor = scaleFactor;
-        sprite = texture.NewSprite(13, 46, 14, 14);
+        sprite = texture.NewSprite(182, 34, 16, 16);
         sprite.Scale = scaleFactor;
     }
     public void Left(GameTime gameTime)

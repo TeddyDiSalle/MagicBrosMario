@@ -7,12 +7,12 @@ namespace MagicBrosMario.Source.MarioStates;
 public class BigMarioIdleState : IPlayerState
 {
     private readonly Player Mario;
-    private Sprite.SharedTexture texture;
+    private readonly Sprite.SharedTexture texture;
     private Sprite.Sprite CurrentSprite;
     private readonly double timeFrame;
     private readonly int scaleFactor;
 
-    private Sprite.Sprite[] Sprites;
+    private readonly Sprite.Sprite[] Sprites;
     private int StarFrame = 0;
     private double StarTimer = 0;
 
@@ -61,7 +61,7 @@ public class BigMarioIdleState : IPlayerState
     {
         if (!Mario.Invincible)
         {
-            Mario.ChangeState(new RightSmallMarioIdleState(Mario, texture, timeFrame, scaleFactor));
+            Mario.ChangeState(new SmallMarioIdleState(Mario, texture, timeFrame, scaleFactor));
         }
     }
     public void PowerUp(Power power)
@@ -69,7 +69,7 @@ public class BigMarioIdleState : IPlayerState
         switch (power)
         {
             case Power.FireFlower:
-               // Mario.ChangeState(new FireMarioIdleState(Mario, texture, timeFrame, scaleFactor));
+                Mario.ChangeState(new FireMarioIdleState(Mario, texture, timeFrame, scaleFactor));
                 break;
             case Power.Mushroom:
                 //Nothing
@@ -113,5 +113,4 @@ public class BigMarioIdleState : IPlayerState
         CurrentSprite.Position = new Point((int)Position.X, (int)Position.Y);
         CurrentSprite.Draw(spriteBatch);
     }
-
 }

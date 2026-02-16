@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MagicBrosMario.Source.MarioStates;
 //Vincent Do
-public class BigMarioJumpState : IPlayerState
+public class FireMarioJumpState : IPlayerState
 {
     private readonly Player Mario;
     private readonly Sprite.SharedTexture texture;
@@ -14,13 +14,13 @@ public class BigMarioJumpState : IPlayerState
     private readonly Sprite.Sprite[] Sprites;
     private int StarFrame = 0;
     private double StarTimer = 0;
-    public BigMarioJumpState(Player Mario, Sprite.SharedTexture texture, double timeFrame, int scaleFactor)
+    public FireMarioJumpState(Player Mario, Sprite.SharedTexture texture, double timeFrame, int scaleFactor)
     {
         this.Mario = Mario;
         this.texture = texture;
         this.timeFrame = timeFrame;
         this.scaleFactor = scaleFactor;
-        Sprites = [texture.NewSprite(165, 1, 16, 32),
+        Sprites = [texture.NewSprite(165, 129, 16, 32),
             texture.NewSprite(165, 192, 16, 32),
             texture.NewSprite(165, 255, 16, 32),
             texture.NewSprite(165, 318, 16, 32)];
@@ -44,7 +44,7 @@ public class BigMarioJumpState : IPlayerState
     }
     public void Crouch(GameTime gameTime)
     {
-        Mario.ChangeState(new BigMarioCrouchState(Mario, texture, timeFrame, scaleFactor));
+        Mario.ChangeState(new FireMarioCrouchState(Mario, texture, timeFrame, scaleFactor));
     }
     public void Attack()
     {
@@ -62,10 +62,10 @@ public class BigMarioJumpState : IPlayerState
         switch (power)
         {
             case Power.FireFlower:
-                Mario.ChangeState(new FireMarioJumpState(Mario, texture, timeFrame, scaleFactor));
+                //Nothing
                 break;
             case Power.Mushroom:
-                //Nothing
+                Mario.ChangeState(new BigMarioJumpState(Mario, texture, timeFrame, scaleFactor));
                 break;
             case Power.Star:
                 Mario.Invincible = true;
@@ -103,7 +103,7 @@ public class BigMarioJumpState : IPlayerState
 
         if (Velocity.Y == 0)
         {
-            Mario.ChangeState(new BigMarioIdleState(Mario, texture, timeFrame, scaleFactor));
+            Mario.ChangeState(new FireMarioIdleState(Mario, texture, timeFrame, scaleFactor));
         }
     }
     public void Draw(SpriteBatch spriteBatch, Vector2 Position)

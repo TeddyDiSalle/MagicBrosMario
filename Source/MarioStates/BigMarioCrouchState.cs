@@ -7,12 +7,12 @@ namespace MagicBrosMario.Source.MarioStates;
 public class BigMarioCrouchState : IPlayerState
 {
     private readonly Player Mario;
-    private Sprite.SharedTexture texture;
+    private readonly Sprite.SharedTexture texture;
     private Sprite.Sprite CurrentSprite;
     private readonly double timeFrame;
     private readonly int scaleFactor;
 
-    private Sprite.Sprite[] Sprites;
+    private readonly Sprite.Sprite[] Sprites;
     private int StarFrame = 0;
     private double StarTimer = 0;
 
@@ -22,10 +22,10 @@ public class BigMarioCrouchState : IPlayerState
         this.texture = texture;
         this.timeFrame = timeFrame;
         this.scaleFactor = scaleFactor;
-        Sprites = [texture.NewSprite(182, 11, 16, 22),
-            texture.NewSprite(182, 202, 16, 22),
-            texture.NewSprite(182, 265, 16, 22),
-            texture.NewSprite(182, 328, 16, 22)];
+        Sprites = [texture.NewSprite(182, 1, 16, 32),
+            texture.NewSprite(182, 192, 16, 32),
+            texture.NewSprite(182, 255, 16, 32),
+            texture.NewSprite(182, 318, 16, 32)];
         CurrentSprite = Sprites[0];
         for (int i = 0; i < Sprites.Length; i++)
         {
@@ -56,7 +56,7 @@ public class BigMarioCrouchState : IPlayerState
     {
         if (!Mario.Invincible)
         {
-            Mario.ChangeState(new RightSmallMarioIdleState(Mario, texture, timeFrame, scaleFactor));
+            Mario.ChangeState(new SmallMarioIdleState(Mario, texture, timeFrame, scaleFactor));
         }
     }
     public void PowerUp(Power power)
@@ -64,7 +64,7 @@ public class BigMarioCrouchState : IPlayerState
         switch (power)
         {
             case Power.FireFlower:
-               // Mario.ChangeState(new RightCrouchFireMarioState(Mario, texture, timeFrame, scaleFactor));
+                Mario.ChangeState(new FireMarioCrouchState(Mario, texture, timeFrame, scaleFactor));
                 break;
             case Power.Mushroom:
                 //Nothing
