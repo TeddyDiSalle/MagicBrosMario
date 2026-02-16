@@ -205,9 +205,69 @@ public class MagicBrosMario : Game
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     public void SetCurrentSprite(ISprite sprite)
     {
         currentSprite = sprite;
+=======
+    private void InputCheck(GameTime gameTime)
+    {
+        keyboardInput.Update();
+        mouseInput.Update();
+        Point position = mouseInput.Position;
+
+
+        if (keyboardInput.IsKeyDown(Keys.D0))
+        {
+            Exit();
+        }
+        else if (keyboardInput.IsKeyDown(Keys.W))
+        {
+            Mario.Jump(gameTime);
+        }
+        else if (keyboardInput.IsKeyDown(Keys.A))
+        {
+            Mario.Left(gameTime);
+        }
+        else if (keyboardInput.IsKeyDown(Keys.D))
+        {
+            Mario.Right(gameTime);
+        }
+        else if (keyboardInput.IsKeyDown(Keys.S))
+        {
+            Mario.Crouch(gameTime);
+        }
+        else if (keyboardInput.IsKeyDown(Keys.X))
+        {
+            Mario.TakeDamage();
+        }
+        else if (keyboardInput.IsKeyDown(Keys.F))
+        {
+            Mario.Attack();
+        }
+        else if (keyboardInput.IsKeyDown(Keys.D1))
+        {
+            Mario.ChangeState(new SmallMarioIdleState(Mario, texture, 0.15, 3));
+        }
+        else if (keyboardInput.IsKeyDown(Keys.D2))
+        {
+            Mario.ChangeState(new BigMarioIdleState(Mario, texture, 0.15, 3));
+        }
+        else if (keyboardInput.IsKeyDown(Keys.D3))
+        {
+            Mario.PowerUp(Power.FireFlower);
+        }
+        else if (keyboardInput.IsKeyDown(Keys.D4))
+        {
+            Mario.PowerUp(Power.Star);
+        }
+        else
+        {
+            Mario.ReleaseCrouch();
+            Mario.Idle();
+        }
+       
+>>>>>>> WorkingOnPlayerState
     }
 }
 
