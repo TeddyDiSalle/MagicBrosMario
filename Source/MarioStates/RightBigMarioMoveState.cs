@@ -19,7 +19,7 @@ public class RightBigMarioMoveState : IPlayerState
     private double timer = 0;
     private readonly int scaleFactor;
 
-    private Sprite.Sprite[] Sprites;
+    private readonly Sprite.Sprite[] Sprites;
     private int StarFrame = 0;
     private double StarTimer = 0;
 
