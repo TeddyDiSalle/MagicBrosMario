@@ -22,6 +22,7 @@ public class Sprite(
 ) : ISprite
 {
     public bool IsAnimated => false;
+    public bool Flipped { get; set; } = false;
 
     public Point Position
     {
@@ -63,6 +64,14 @@ public class Sprite(
 
     public void Draw(SpriteBatch spriteBatch)
     {
-        spriteBatch.Draw(texture.Texture, destRect, sourceRect, Color);
+        if (Flipped)
+        {
+            spriteBatch.Draw(texture.Texture, destRect, sourceRect, Color, 0f, Vector2.Zero,
+                SpriteEffects.FlipHorizontally, 0f);
+        }
+        else
+        {
+            spriteBatch.Draw(texture.Texture, destRect, sourceRect, Color);
+        }
     }
 }
