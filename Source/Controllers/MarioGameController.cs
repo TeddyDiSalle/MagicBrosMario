@@ -56,8 +56,8 @@ public class MarioGameController{
         inputMap.Bind(Keys.D4, gt => game.displayPowerUp(3));
         inputMap.Bind(Keys.W, gt => player.Jump(gt));
         inputMap.Bind(Keys.Up, gt => player.Jump(gt));
-        inputMap.Bind(Keys.A, gt => player.Jump(gt));
-        inputMap.Bind(Keys.Left, gt => player.Jump(gt));
+        inputMap.Bind(Keys.A, gt => player.Left(gt));
+        inputMap.Bind(Keys.Left, gt => player.Left(gt));
         inputMap.Bind(Keys.S, gt => player.Crouch(gt));
         inputMap.Bind(Keys.Down, gt => player.Crouch(gt));
         inputMap.Bind(Keys.D, gt => player.Right(gt));

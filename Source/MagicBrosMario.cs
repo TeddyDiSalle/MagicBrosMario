@@ -1,6 +1,5 @@
 ﻿using MagicBrosMario.Source.Sprite;
-﻿using MagicBrosMario.Source.MarioStates;
-using MagicBrosMario.Source.Sprite;
+using MagicBrosMario.Source.MarioStates;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
