@@ -1,0 +1,22 @@
+goombaaliveSprite = sharedTexture.NewAnimatedSprite(295, 187, 18, 18, 2, 0.2f);
+goombadeadSprite = sharedTexture.NewSprite(276, 187, 18, 18);
+koopaWalkingRight = sharedTexture.NewAnimatedSprite(296, 206, 18, 25, 2, 0.2f);
+koopaWalkingLeft = sharedTexture.NewAnimatedSprite(182, 206, 18, 25, 2, 0.2f);
+koopaShellIdle = sharedTexture.NewSprite(144, 216, 16, 14);
+koopaShellMoving = sharedTexture.NewSprite(144, 216, 16, 14);//same as shellIdle for now but it moves
+koopaStomped = sharedTexture.NewSprite(163, 215, 16, 15);
+koopaShellDeath = sharedTexture.NewSprite(334, 215, 16, 15);
+piranhaAliveSprite = sharedTexture.NewAnimatedSprite(125, 180, 16, 23, 2, 0.2f);
+rotatingFireBar = new RotatingFireBar(
+    fireSharedTexture,
+    364,    // Fireball X position in sprite sheet
+    188,    // Fireball Y position in sprite sheet
+    8,    // Fireball width
+    8,    // Fireball height
+
+bowserWalkingRight = sharedTexture.NewAnimatedSprite(255, 368, 35, 32, 4, 0.2f);
+bowserWalkingLeft = sharedTexture.NewAnimatedSprite(116, 368, 35, 32, 2, 0.2f);  // Left animation
+    161,   // Fire moving right - X coordinate (2 frames)
+    253,   // Fire moving right - Y coordinate
+    101,    // Fire moving left - X coordinate (2 frames)
+    253,    // Fire moving left - Y coordinate
