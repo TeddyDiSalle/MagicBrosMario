@@ -1,7 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MagicBrosMario.Source.Block;
+namespace MagicBrosMario.Source;
 
 /// <summary>
 /// block implementation for non-animated and non-updatable blocks
