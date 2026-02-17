@@ -1,16 +1,17 @@
 // Made by Teddy DiSalle
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 namespace MagicBrosMario.Source;
 public class KeysNMouseCommandMapper
 {
-    private Dictionary<Keys, Action> bindings =
-        new Dictionary<Keys, Action>();
+    private Dictionary<Keys, Action<GameTime>> bindings =
+        new Dictionary<Keys, Action<GameTime>>();
     private Dictionary<Func<MouseInfo,bool>, Action> clicks =
         new Dictionary<Func<MouseInfo,bool>, Action>();
     
-    public void Bind(Keys key, Action command){// keyboard binding
+    public void Bind(Keys key, Action<GameTime> command){// keyboard binding
         bindings[key] = command;
     }
 
@@ -18,10 +19,10 @@ public class KeysNMouseCommandMapper
         clicks[condition] = command;
     }
 
-    public void ProcessInput(KeyboardInfo keyboard, MouseInfo mouse){
+    public void ProcessInput(GameTime time, KeyboardInfo keyboard, MouseInfo mouse){
         foreach (var binding in bindings){ // check keyboard
             if (keyboard.IsKeyDown(binding.Key)){
-                binding.Value.Invoke();
+                binding.Value.Invoke(time);
             }
         }
 
