@@ -85,7 +85,10 @@ public class MarioGameController{
     {
         keyboard.Update();
         mouse.Update();
-        
+        if(keyboard.IsKeyUp(Keys.S) || keyboard.IsKeyUp(Keys.Down))
+        {
+            player.ReleaseCrouch();
+        }
         inputMap.ProcessInput(gameTime, keyboard, mouse);// check all the inputs of the mouse and keyboard and run their corresponding function
     }
 
