@@ -1,9 +1,10 @@
 ﻿using MagicBrosMario.Source.Sprite;
+using MagicBrosMario.Source.MarioStates;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 
 namespace MagicBrosMario.Source;
@@ -12,94 +13,87 @@ public class MagicBrosMario : Game
 {
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
+    private MarioGameController Controller;
 
-    private SharedTexture sharedTexture;
-    private SharedTexture fireSharedTexture;
+    public MarioStates.Player Mario;
+    private SharedTexture texture;
 
-    private Goomba goomba;
-    private Koopa koopa;
-    private PiranhaPlant piranhaPlant;
-    private RotatingFireBar rotatingFireBar;
-    private Bowser bowser;
-    private KeyboardState previousKeyboardState;
+    private int enemyArraySize = 6;
+    private int blockArraySize = 4;
+    private int enemyIndex = 0;
+    private int blockIndex = 0;
+    private IEnemy[] enemy;
+    private IBlock[] block;
 
     public MagicBrosMario()
     {
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
+       enemy = new IEnemy[enemyArraySize];
+       block = new IBlock[blockArraySize];
+    }
 
-        sharedTexture = new SharedTexture();
-        fireSharedTexture = new SharedTexture();
-        // Goomba
-        var aliveSprite = sharedTexture.NewAnimatedSprite(295, 187, 18, 18, 2, 0.2f);
-        var deadSprite = sharedTexture.NewSprite(276, 187, 18, 18);
-        aliveSprite.Scale = 3f;  
-        deadSprite.Scale = 3f;
-        goomba = new Goomba(
-            aliveSprite,
-            deadSprite,
-            400,    // Y position (moved down from 300)
-            50,     // Left bound (added margin)
-            750     // Right bound (window width minus margin)
+    protected override void LoadContent(){
+
+        _spriteBatch = new SpriteBatch(GraphicsDevice);
+        
+        LoadEnemies();
+        LoadBlocks();
+
+        Content.Load<SpriteFont>("font");
+        Content.Load<Texture2D>("characters");
+        Texture2D MarioSheet = Content.Load<Texture2D>("MarioStarSheet");
+        texture = new SharedTexture();
+        texture.BindTexture(MarioSheet);
+
+        Mario = new Player(texture);
+
+        MarioGameController.Sprint2Controller data = new MarioGameController.Sprint2Controller{
+            player = Mario,
+            mouse = new MouseInfo(),
+            keyb = new KeyboardInfo(),
+            halfX = _graphics.PreferredBackBufferWidth / 2,
+            halfY = _graphics.PreferredBackBufferHeight / 2
+            };
+        Controller = new MarioGameController(this, ref data);
+    }
+
+// Make sure texture is set to characters
+    private void LoadEnemies()
+    {   
+        texture = new SharedTexture();
+        texture.BindTexture(Content.Load<Texture2D>("characters"));
+        SharedTexture fireSharedTexture = new SharedTexture();
+        fireSharedTexture.BindTexture(Content.Load<Texture2D>("enemies"));
+        // initialize enemies
+        // all the sprite scales have to be set to 3f, bruh hooooooow
+        enemy[0] = new Goomba(
+            texture.NewAnimatedSprite(295, 187, 18, 18, 2, 0.2f), // alive
+            texture.NewSprite(276, 187, 18, 18), // or maybe dead
+            400,
+            50,
+            750
         );
-        // Koopa
-        var koopaWalkingRight = sharedTexture.NewAnimatedSprite(296, 206, 18, 25, 2, 0.2f);
-        var koopaWalkingLeft = sharedTexture.NewAnimatedSprite(182, 206, 18, 25, 2, 0.2f);
-        var koopaShellIdle = sharedTexture.NewSprite(144, 216, 16, 14);
-        var koopaShellMoving = sharedTexture.NewSprite(144, 216, 16, 14);//same as shellIdle for now but it moves
-        var koopaStomped = sharedTexture.NewSprite(163, 215, 16, 15);
-        var koopaShellDeath = sharedTexture.NewSprite(334, 215, 16, 15);
-
-        koopaWalkingRight.Scale = 3f;
-        koopaWalkingLeft.Scale = 3f;
-        koopaShellIdle.Scale = 3f;
-        koopaShellMoving.Scale = 3f;
-        koopaStomped.Scale = 3f;
-        koopaShellDeath.Scale = 3f;
-
-        koopa = new Koopa(
-            koopaWalkingRight,
-            koopaWalkingLeft,
-            koopaShellIdle,
-            koopaShellMoving,
-            koopaStomped,
-            koopaShellDeath,
+        enemy[1] = new Koopa(
+            texture.NewAnimatedSprite(296, 206, 18, 25, 2, 0.2f), // walkling right
+            texture.NewAnimatedSprite(182, 206, 18, 25, 2, 0.2f), // walking left
+            texture.NewSprite(144, 216, 16, 14), //  shell idle
+            texture.NewSprite(144, 216, 16, 14), // repeate of shell idle
+            texture.NewSprite(163, 215, 16, 15), // stomped
+            texture.NewSprite(334, 215, 16, 15), // shell dead
             200,
             50,
             750
         );
-        // Piranha Plant
-        var piranhaAliveSprite = sharedTexture.NewAnimatedSprite(125, 180, 16, 23, 2, 0.2f);
-        piranhaAliveSprite.Scale = 3f;
-
-        piranhaPlant = new PiranhaPlant(
-            piranhaAliveSprite,
+        enemy[2] = new PiranhaPlant(
+            texture.NewAnimatedSprite(125, 180, 16, 23, 2, 0.2f),
             250,  // X position (pipe location)
             200   // Y position (top of pipe - adjust based on your screen)
         );
-        // Rotating Fire Bar
-        rotatingFireBar = new RotatingFireBar(
-            fireSharedTexture,
-            364,    // Fireball X position in sprite sheet
-            188,    // Fireball Y position in sprite sheet
-            8,    // Fireball width
-            8,    // Fireball height
-            400,  // Center X position on screen
-            300,  // Center Y position on screen
-            6,    // Number of fireballs
-            24    // Spacing between fireballs
-        );
-        // Bowser
-        var bowserWalkingRight = sharedTexture.NewAnimatedSprite(255, 368, 35, 32, 4, 0.2f);
-        var bowserWalkingLeft = sharedTexture.NewAnimatedSprite(116, 368, 35, 32, 2, 0.2f);  // Left animation
-
-        bowserWalkingRight.Scale = 3f;
-        bowserWalkingLeft.Scale = 3f;
-
-        bowser = new Bowser(
-            bowserWalkingRight,
-            bowserWalkingLeft,
+        enemy[3] = new Bowser(
+            texture.NewAnimatedSprite(255, 368, 35, 32, 4, 0.2f),
+            texture.NewAnimatedSprite(116, 368, 35, 32, 2, 0.2f),
             fireSharedTexture,
             161,   // Fire moving right - X coordinate (2 frames)
             253,   // Fire moving right - Y coordinate
@@ -111,65 +105,84 @@ public class MagicBrosMario : Game
             50,             // Left bound
             750             // Right bound
         );
+        enemy[5] = new RotatingFireBar(
+            fireSharedTexture,
+            364,    // Fireball X position in sprite sheet
+            188,    // Fireball Y position in sprite sheet
+            8,    // Fireball width
+            8,    // Fireball height
+            400,  // Center X position on screen
+            300,  // Center Y position on screen
+            6,    // Number of fireballs
+            24    // Spacing between fireballs
+        );
     }
 
-    protected override void LoadContent()
+    private void LoadBlocks()
     {
-        _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-        Texture2D _texture = Content.Load<Texture2D>("characters");
-        Texture2D _fireTexture = Content.Load<Texture2D>("enemies");
-
-        sharedTexture.BindTexture(_texture);
-        
-        fireSharedTexture.BindTexture(_fireTexture);
     }
 
-    protected override void Update(GameTime gameTime)
-{
-    KeyboardState currentKeyboardState = Keyboard.GetState();
-
-    // Check if K was just pressed (not held)
-    if (currentKeyboardState.IsKeyDown(Keys.K) && previousKeyboardState.IsKeyUp(Keys.K))
-    {
-        goomba.Kill();
-        koopa.Kill();
-        piranhaPlant.Kill();
-        bowser.Kill();
+    protected override void Update(GameTime gameTime){
+        Controller.Update(gameTime); // IControllers update function doesn't take parameters
+        Mario.Update(gameTime);
+        enemy[enemyIndex].Update(gameTime);
+        // block[blockIndex].Update(gameTime);
     }
-
-    // Check if M was just pressed (not held)
-    if (currentKeyboardState.IsKeyDown(Keys.M) && previousKeyboardState.IsKeyUp(Keys.M))
-    {
-        koopa.KickShell(true);
-    }
-
-    goomba.Update(gameTime);
-    koopa.Update(gameTime);
-    piranhaPlant.Update(gameTime);
-    rotatingFireBar.Update(gameTime);
-    bowser.Update(gameTime);
-
-    previousKeyboardState = currentKeyboardState;
-
-    base.Update(gameTime);
-}
 
     protected override void Draw(GameTime gameTime)
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
-        _spriteBatch.Begin();
+        _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
 
-        goomba.Draw(_spriteBatch);
-        koopa.Draw(_spriteBatch);
-        piranhaPlant.Draw(_spriteBatch);
-        rotatingFireBar.Draw(_spriteBatch);
-        bowser.Draw(_spriteBatch);
-
+        enemy[enemyIndex].Draw(_spriteBatch);
+        // lblock[blockIndex].Draw(_spriteBatch);
+        Mario.Draw(_spriteBatch);
         _spriteBatch.End();
 
         base.Draw(gameTime);
     }
 
+    public void incrementEnemy(){
+        enemyIndex = (enemyIndex + 1) % enemyArraySize;
+    }
+    public void decrementEnemy(){
+        enemyIndex = (enemyIndex - 1 + enemyArraySize) % enemyArraySize;
+    }
+    public void incrementBlock(){
+        blockIndex = (blockIndex + 1) % blockArraySize;
+    }
+    public void decrementBlock(){
+        blockIndex = (blockIndex - 1 + blockArraySize) % blockArraySize;
+    }
+    public void incrementItem(){
+        //TO DO
+    }
+    public void decrementItem(){
+        //TO DO
+    }
+    public void displayPowerUp(int index){
+        switch (index)
+        {
+            case 0:
+                Mario.ChangeState(new SmallMarioIdleState(Mario, texture, 0.15, 3));
+                break;
+            case 1:
+                Mario.ChangeState(new BigMarioIdleState(Mario, texture, 0.15, 3));
+                break;
+            case 2:
+                Mario.PowerUp(Power.FireFlower);
+                break;
+            case 3:
+                Mario.PowerUp(Power.Star);
+                break;
+        }
+    }
+    public void resetGame(){
+        displayPowerUp(0);
+        enemyIndex = 0;
+        blockIndex = 0;
+    }
 }
+

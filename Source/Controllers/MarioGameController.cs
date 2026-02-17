@@ -1,53 +1,92 @@
+// Made by Teddy DiSalle
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Diagnostics;
+using MagicBrosMario.Source.MarioStates;
+
 
 namespace MagicBrosMario.Source;
 
-//For sprint2
 public class MarioGameController{
-    //Classes should only worry about game actions not if "w" is pressed
-    // This class will call the other's cllasses move functions and such
+    // Classes should not worry about game actions not if "w" is pressed or mouse is over here or over there.
+    // This allows the game to work whether the player is using a keyboard or a potato
+    // This class will call the other's classes move functions and damage functions and such
+    private KeysNMouseCommandMapper inputMap;
 
-    
-    /* Player Controls */
-    void moveDirection(){
-        // wasd and arrows
-    }
+    private KeyboardInfo keyboard;
+    private MouseInfo mouse;
 
-    void attack()
+    private int x;
+    private int y;
+    private Player player;
+    private MagicBrosMario game;
+    public MarioGameController(MagicBrosMario g, ref Sprint2Controller data)
     {
-        // mario shoots a fireball with z or n
+        player = data.player;
+        game =g;
+        keyboard = data.keyb;
+        mouse = data.mouse;
+        x = data.halfX;
+        y = data.halfY;
+        Initialize();
     }
 
-    void takeDamage()
+    public void Initialize()
     {
-        // mario is damaged with e
+        inputMap = new KeysNMouseCommandMapper();
+        SetSprint2Binds();
     }
-    /* Block/obstacle controls */
-    void rotateBlock()
+    public struct Sprint2Controller {
+        public MarioStates.Player player;
+        public MouseInfo mouse;
+        public  KeyboardInfo keyb;
+        public int halfX;
+        public int halfY;
+    }
+    // All the binds specified for sprint 2
+    public void SetSprint2Binds()
     {
-        // t is previous, y is next
-    }
+        //Keyboard inputs
+        inputMap.Bind(Keys.D0,gt => game.Exit());
+        inputMap.Bind(Keys.D1, gt => game.displayPowerUp(0));
+        inputMap.Bind(Keys.D2, gt => game.displayPowerUp(1));
+        inputMap.Bind(Keys.D3, gt => game.displayPowerUp(2));
+        inputMap.Bind(Keys.D4, gt => game.displayPowerUp(3));
+        inputMap.Bind(Keys.W, gt => player.Jump(gt));
+        inputMap.Bind(Keys.Up, gt => player.Jump(gt));
+        inputMap.Bind(Keys.A, gt => player.Left(gt));
+        inputMap.Bind(Keys.Left, gt => player.Left(gt));
+        inputMap.Bind(Keys.S, gt => player.Crouch(gt));
+        inputMap.Bind(Keys.Down, gt => player.Crouch(gt));
+        inputMap.Bind(Keys.D, gt => player.Right(gt));
+        inputMap.Bind(Keys.Right, gt => player.Right(gt));
+        inputMap.Bind(Keys.Z, gt => player.Attack());
+        inputMap.Bind(Keys.N, gt =>  player.Attack());
+        inputMap.Bind(Keys.E, gt =>  player.TakeDamage());
+        inputMap.Bind(Keys.T, gt => game.incrementBlock());
+        inputMap.Bind(Keys.Y, gt => game.decrementBlock());
+        inputMap.Bind(Keys.U, gt => game.incrementItem()); 
+        inputMap.Bind(Keys.I, gt => game.decrementItem()); 
+        inputMap.Bind(Keys.O, gt => game.incrementEnemy());
+        inputMap.Bind(Keys.P, gt => game.decrementEnemy());
+        inputMap.Bind(Keys.Q, gt => game.Exit()); 
+        inputMap.Bind(Keys.R, gt => game.resetGame());
 
-    /* Item Controls */
-    void rotateItem(){
-        // press u for previous, 
-        // press i for next
+        // mouse inputs
+        inputMap.Bind(m => m.IsButtonDown(MouseButton.Right), () => game.Exit());
+        inputMap.Bind(m => m.WasButtonJustPressed(MouseButton.Left) && m.Position.X < x && m.Position.Y < y, () => game.displayPowerUp(0));
+        inputMap.Bind(m => m.IsButtonDown(MouseButton.Left) && m.Position.X > x && m.Position.Y < y, () => game.displayPowerUp(1));
+        inputMap.Bind(m => m.IsButtonDown(MouseButton.Left) && m.Position.X < x && m.Position.Y > y, () => game.displayPowerUp(2));
+        inputMap.Bind(m => m.IsButtonDown(MouseButton.Left) && m.Position.X > x && m.Position.Y > y, () => game.displayPowerUp(3));
     }
-
-    /* Enemy/NPC (other chartacter) controls */
-    void rotateEnemy(){
-        //press o for previous
-        //press p for next
-    }
-
-    /* Other controls */
-    void quit()
+    public void Update(GameTime gameTime)
     {
-        // q
+        keyboard.Update();
+        mouse.Update();
+        
+        inputMap.ProcessInput(gameTime, keyboard, mouse);// check all the inputs of the mouse and keyboard and run their corresponding function
     }
 
-    void reset()
-    {
-        // r
-    }
 }
