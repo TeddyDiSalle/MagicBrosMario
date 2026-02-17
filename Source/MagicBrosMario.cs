@@ -5,6 +5,8 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Runtime.ConstrainedExecution;
+using System.Reflection.Metadata;
 
 
 namespace MagicBrosMario.Source;
@@ -22,8 +24,9 @@ public class MagicBrosMario : Game
     private int blockArraySize = 4;
     private int enemyIndex = 0;
     private int blockIndex = 0;
-    private int enemyPos = 300;
-    private int blockPos = 200;
+    private const int enemyPos = 300;
+    private const int blockPos = 200;
+    private float[] MarioStartPos = {100,300};
     private IEnemy[] enemy;
     private IBlock[] block;
 
@@ -50,7 +53,7 @@ public class MagicBrosMario : Game
         texture.BindTexture(MarioSheet);
 
         Mario = new Player(texture);
-
+        Mario.SetPositon(new Vector2(MarioStartPos[0],MarioStartPos[1]));
         MarioGameController.Sprint2Controller data = new MarioGameController.Sprint2Controller{
             player = Mario,
             mouse = new MouseInfo(),
@@ -191,6 +194,15 @@ public class MagicBrosMario : Game
     }
     public void resetGame(){
         displayPowerUp(0);
+        Mario.SetPositon(new Vector2(MarioStartPos[0],MarioStartPos[1]));
+        for(int i = 0; i <enemyArraySize; i++)
+        {
+            //enemy[i].setPostion(enemyPos);
+            if(i < blockArraySize) // because blockArraySize < enemyArraySize
+            {
+                // block[i].setPosition(blockPos);
+            }
+        }
         enemyIndex = 0;
         blockIndex = 0;
     }
