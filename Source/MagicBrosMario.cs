@@ -605,6 +605,7 @@ public class MagicBrosMario : Game
 		base.Draw(gameTime);
 	}
 
+	//We need to add a cooldown of some sort, things change too fast
 	public void incrementEnemy()
 	{
 		enemyIndex = (enemyIndex + 1) % enemyArraySize;
