@@ -10,11 +10,14 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Runtime.ConstrainedExecution;
 using System.Reflection.Metadata;
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======
@@ -32,6 +35,7 @@ public class MagicBrosMario : Game
 	public MarioStates.Player Mario;
 	private SharedTexture texture;
 
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
     private int enemyArraySize = 5;
@@ -52,6 +56,11 @@ public class MagicBrosMario : Game
 	private int blockArraySize = 4;
 	private int itemArraySize = 16;
 >>>>>>> Stashed changes
+=======
+	private int enemyArraySize = 5;
+	private int blockArraySize = 4;
+	private int itemArraySize = 16;
+>>>>>>> Stashed changes
 	private int enemyIndex = 0;
 	private int blockIndex = 0;
 	private int itemIndex = 0;
@@ -62,6 +71,9 @@ public class MagicBrosMario : Game
 	private IBlock[] block;
 	private IItems[] items;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -85,6 +97,7 @@ public class MagicBrosMario : Game
 		LoadBlocks();
 		LoadItems();
 
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
         Mario = new Player(texture);
@@ -446,6 +459,125 @@ public class MagicBrosMario : Game
 =======
 =======
 >>>>>>> Stashed changes
+=======
+		Content.Load<SpriteFont>("font");
+		Content.Load<Texture2D>("characters");
+		Texture2D itemsTexture = Content.Load<Texture2D>("items");
+		Texture2D MarioSheet = Content.Load<Texture2D>("MarioStarSheet");
+		texture = new SharedTexture();
+		texture.BindTexture(MarioSheet);
+
+		Mario = new Player(texture);
+		Mario.SetPositon(new Vector2(MarioStartPos[0], MarioStartPos[1]));
+		MarioGameController.Sprint2Controller data = new MarioGameController.Sprint2Controller
+		{
+			player = Mario,
+			mouse = new MouseInfo(),
+			keyb = new KeyboardInfo(),
+			halfX = _graphics.PreferredBackBufferWidth / 2,
+			halfY = _graphics.PreferredBackBufferHeight / 2
+		};
+		Controller = new MarioGameController(this, ref data);
+	}
+
+	// Make sure texture is set to characters
+	private void LoadEnemies()
+	{
+		texture = new SharedTexture();
+		texture.BindTexture(Content.Load<Texture2D>("characters"));
+		SharedTexture fireSharedTexture = new SharedTexture();
+		fireSharedTexture.BindTexture(Content.Load<Texture2D>("enemies"));
+		// initialize enemies
+		// all the sprite scales have to be set to 3f, bruh hooooooow
+		enemy[0] = new Goomba(
+			texture.NewAnimatedSprite(295, 187, 18, 18, 2, 0.2f), // alive
+			texture.NewSprite(276, 187, 18, 18), // or maybe dead
+			enemyPos,
+			50,
+			750
+		);
+		enemy[1] = new Koopa(
+			texture.NewAnimatedSprite(296, 206, 18, 25, 2, 0.2f), // walkling right
+			texture.NewAnimatedSprite(182, 206, 18, 25, 2, 0.2f), // walking left
+			texture.NewSprite(144, 216, 16, 14), //  shell idle
+			texture.NewSprite(144, 216, 16, 14), // repeate of shell idle
+			texture.NewSprite(163, 215, 16, 15), // stomped
+			texture.NewSprite(334, 215, 16, 15), // shell dead
+			enemyPos,
+			50,
+			750
+		);
+		enemy[2] = new PiranhaPlant(
+			texture.NewAnimatedSprite(125, 180, 16, 23, 2, 0.2f),
+			enemyPos,  // X position (pipe location)
+			enemyPos - 50   // Y position (top of pipe - adjust based on your screen)
+		);
+		enemy[3] = new Bowser(
+			texture.NewAnimatedSprite(255, 368, 35, 32, 4, 0.2f),
+			texture.NewAnimatedSprite(116, 368, 35, 32, 2, 0.2f),
+			fireSharedTexture,
+			161,   // Fire moving right - X coordinate (2 frames)
+			253,   // Fire moving right - Y coordinate
+			101,    // Fire moving left - X coordinate (2 frames)
+			253,    // Fire moving left - Y coordinate
+			24,             // Fire width
+			8,             // Fire height
+			enemyPos,            // Bowser Y position
+			50,             // Left bound
+			750             // Right bound
+		);
+		enemy[4] = new RotatingFireBar(
+			fireSharedTexture,
+			364,    // Fireball X position in sprite sheet
+			188,    // Fireball Y position in sprite sheet
+			8,    // Fireball width
+			8,    // Fireball height
+			enemyPos,  // Center X position on screen
+			enemyPos,  // Center Y position on screen
+			6,    // Number of fireballs
+			24    // Spacing between fireballs
+		);
+	}
+
+	private void LoadItems()
+	{
+		SharedTexture itemsTexture = new SharedTexture();
+		itemsTexture.BindTexture(Content.Load<Texture2D>("items"));
+
+
+		items[0] = new Coin(itemsTexture);
+		items[1] = new Fireflower_Underground(itemsTexture);
+		items[2] = new QuestionBlock(itemsTexture);
+		items[3] = new Coin(itemsTexture);
+		items[4] = new Mushroom(itemsTexture);
+		items[5] = new OneUp(itemsTexture);
+		items[6] = new Star(itemsTexture);
+		items[7] = new Spring_Start(itemsTexture);
+		items[8] = new Spring_Compressed(itemsTexture);
+		items[9] = new Spring_Stretched(itemsTexture);
+		items[10] = new MovingPlatform_Size1(itemsTexture);
+		items[11] = new MovingPlatform_Size2(itemsTexture);
+		items[12] = new MovingPlatform_Size3(itemsTexture);
+		items[13] = new Cloud(itemsTexture);
+		items[14] = new PrincessPeach(itemsTexture);
+		items[15] = new Toad(itemsTexture);
+
+	}
+
+	private void LoadBlocks()
+	{
+
+	}
+
+	private static long nanoTime()
+	{
+		long nano = 10000L * Stopwatch.GetTimestamp();
+		nano /= TimeSpan.TicksPerMillisecond;
+		nano *= 100L;
+		return nano;
+	}
+
+>>>>>>> Stashed changes
 	protected override void Update(GameTime gameTime)
 	{
 		Controller.Update(gameTime);
@@ -531,6 +663,9 @@ public class MagicBrosMario : Game
 		blockIndex = 0;
 	}
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
