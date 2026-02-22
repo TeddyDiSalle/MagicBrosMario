@@ -41,7 +41,7 @@ public class MagicBrosMario : Game
         LoadEnemies();
         LoadBlocks();
 
-        Content.Load<SpriteFont>("font");
+        //Content.Load<SpriteFont>("font");
         Content.Load<Texture2D>("characters");
         Texture2D MarioSheet = Content.Load<Texture2D>("MarioStarSheet");
         texture = new SharedTexture();

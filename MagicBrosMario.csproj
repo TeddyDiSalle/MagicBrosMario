@@ -12,6 +12,7 @@
   <ItemGroup>
     <Compile Remove="Source\MarioStates\LeftSmallMarioIdleState.cs" />
     <Compile Remove="Source\MarioStates\LeftSmallMarioMoveState.cs" />
+    <Compile Remove="Source\MarioStates\RightSmallMarioIdleState.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.*" />
