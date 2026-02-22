@@ -172,7 +172,6 @@ public class BigMarioMoveState : IPlayerState
         }
         StarTimer = 0;
         
-        CurrentSprite = Sprites[StarFrame];
     }
     public void Update(GameTime gameTime, Vector2 Velocity, bool Flipped)
     {
