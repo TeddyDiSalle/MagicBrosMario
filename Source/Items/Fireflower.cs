@@ -7,15 +7,14 @@ namespace MagicBrosMario.Source.Items
 {
 	public class Fireflower : IItems
 	{
-		private AnimatedSprite sprite;
-		private Point position = new Point(100, 100);
+		private AnimatedSprite sprite; 
 
 
-		public Fireflower(SharedTexture texture)
+		public Fireflower(SharedTexture texture, int screenWidth, int screenHeight, int positionX, int positionY)
 		{
 			sprite = new AnimatedSprite(texture, 4, 64, 16, 16, 4, 0.025f);
 
-			sprite.Position = position;
+			sprite.Position = new Point(positionX, positionY);
 			sprite.Scale = 3f;
 
 		}
