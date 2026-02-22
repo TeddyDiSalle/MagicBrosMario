@@ -25,6 +25,8 @@ public class FireMarioMoveState : IPlayerState
 
     private bool Braking;
     private bool IsAttacking = false;
+    private double AttackTimer = 0;
+    private double AttackTime = 0.15;
     public FireMarioMoveState(Player Mario, Sprite.SharedTexture texture, double timeFrame, int scaleFactor)
     {
         this.Mario = Mario;
@@ -92,7 +94,8 @@ public class FireMarioMoveState : IPlayerState
     }
     public void Attack()
     {
-        IsAttacking = false;
+        if(!IsAttacking)
+        IsAttacking = true;
     }
     public void TakeDamage()
     {
@@ -199,6 +202,7 @@ public class FireMarioMoveState : IPlayerState
     {
         double time = gameTime.ElapsedGameTime.TotalSeconds;
         timer += time;
+        AttackTimer += time;
         
         UpdateMovementAnimations(gameTime, Velocity, Flipped);
         UpdateStarAnimations(time);
@@ -206,6 +210,10 @@ public class FireMarioMoveState : IPlayerState
         {
             Debug.Write("Attacking");
             CurrentSprite = (Mario.Invincible) ? AttackingSprites[StarFrame] : AttackingSprites[Frame * 4];
+            if(AttackTimer > AttackTime)
+            {
+                IsAttacking = false;
+            }
         }
         else
         {
