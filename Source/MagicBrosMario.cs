@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Reflection.Metadata;
+using System.Runtime.CompilerServices;
 using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
 using MagicBrosMario.Source.Items;
@@ -136,24 +137,28 @@ public class MagicBrosMario : Game
 	{
 		SharedTexture itemsTexture = new SharedTexture();
 		itemsTexture.BindTexture(Content.Load<Texture2D>("items"));
+		int screenWidth = GraphicsDevice.Viewport.Width;
+	    int screenHeight = GraphicsDevice.Viewport.Height;
+		int positionX = 100;
+		int positionY = 100;
 
 
-		items[0] = new Coin(itemsTexture);
-		items[1] = new Fireflower_Underground(itemsTexture);
-		items[2] = new QuestionBlock(itemsTexture);
-		items[3] = new Coin(itemsTexture);
-		items[4] = new Mushroom(itemsTexture);
-		items[5] = new OneUp(itemsTexture);
-		items[6] = new Star(itemsTexture);
-		items[7] = new Spring_Start(itemsTexture);
-		items[8] = new Spring_Compressed(itemsTexture);
-		items[9] = new Spring_Stretched(itemsTexture);
-		items[10] = new MovingPlatform_Size1(itemsTexture);
-		items[11] = new MovingPlatform_Size2(itemsTexture);
-		items[12] = new MovingPlatform_Size3(itemsTexture);
-		items[13] = new Cloud(itemsTexture);
-		items[14] = new PrincessPeach(itemsTexture);
-		items[15] = new Toad(itemsTexture);
+		items[0] = new Fireflower(itemsTexture, screenWidth, screenHeight, positionX, positionY);
+		items[1] = new Fireflower_Underground(itemsTexture, screenWidth, screenHeight, positionX, positionY);
+		items[2] = new QuestionBlock(itemsTexture, screenWidth, screenHeight, positionX, positionY); 
+		items[3] = new Coin(itemsTexture, screenWidth, screenHeight, positionX, positionY); // Mostly Done, may add movement later if necessary
+		items[4] = new Mushroom(itemsTexture, screenWidth, screenHeight, positionX, positionY);
+		items[5] = new OneUp(itemsTexture, screenWidth, screenHeight, positionX, positionY);
+		items[6] = new Star(itemsTexture, screenWidth, screenHeight, positionX, positionY);
+		items[7] = new Spring_Start(itemsTexture, screenWidth, screenHeight, positionX, positionY); 
+		items[8] = new Spring_Compressed(itemsTexture, screenWidth, screenHeight, positionX, positionY);
+		items[9] = new Spring_Stretched(itemsTexture, screenWidth, screenHeight, positionX, positionY); 
+		items[10] = new MovingPlatform_Size1(itemsTexture, screenWidth, screenHeight, positionX, positionY); 
+		items[11] = new MovingPlatform_Size2(itemsTexture, screenWidth, screenHeight, positionX, positionY);
+		items[12] = new MovingPlatform_Size3(itemsTexture, screenWidth, screenHeight, positionX, positionY); 
+		items[13] = new Cloud(itemsTexture, screenWidth, screenHeight, positionX, positionY); 
+		items[14] = new PrincessPeach(itemsTexture, screenWidth, screenHeight, positionX, positionY);
+		items[15] = new Toad(itemsTexture, screenWidth, screenHeight, positionX, positionY); 
 
 	}
 

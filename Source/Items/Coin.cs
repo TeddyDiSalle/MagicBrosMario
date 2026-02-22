@@ -7,15 +7,14 @@ namespace MagicBrosMario.Source.Items
 {
 	public class Coin : IItems
 	{
-		private AnimatedSprite sprite;
-		private Point position = new Point(100, 100);
+		private AnimatedSprite sprite; 
 
 
-		public Coin(SharedTexture texture)
+		public Coin(SharedTexture texture, int screenWidth, int screenHeight, int positionX, int positionY)
 		{
 			sprite = new AnimatedSprite(texture, 128, 95, 8, 16, 4, 0.05f);
 
-			sprite.Position = position;
+			sprite.Position = new Point(positionX, positionY);
 			sprite.Scale = 3f;
 
 		}

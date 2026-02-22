@@ -11,14 +11,13 @@ namespace MagicBrosMario.Source.Items
 	{
 
 		private AnimatedSprite sprite;
-		private Point position = new Point(100, 100);
 
 
-		public QuestionBlock(SharedTexture texture)
+		public QuestionBlock(SharedTexture texture, int screenWidth, int screenHeight, int positionX, int positionY)
 		{
 			sprite = new AnimatedSprite(texture, 4, 4, 16, 16, 3, 0.1f);
 
-			sprite.Position = position;
+			sprite.Position = new Point(positionX, positionY);
 			sprite.Scale = 3f;
 
 		}
