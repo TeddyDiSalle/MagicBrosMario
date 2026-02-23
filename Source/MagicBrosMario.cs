@@ -43,7 +43,7 @@ public class MagicBrosMario : Game
 
         //Content.Load<SpriteFont>("font");
         Content.Load<Texture2D>("characters");
-        Texture2D MarioSheet = Content.Load<Texture2D>("MarioStarSheet");
+        Texture2D MarioSheet = Content.Load<Texture2D>("MarioSpriteSheet");
         texture = new SharedTexture();
         texture.BindTexture(MarioSheet);
 
@@ -166,10 +166,10 @@ public class MagicBrosMario : Game
         switch (index)
         {
             case 0:
-                Mario.ChangeState(new SmallMarioIdleState(Mario, texture, 0.15, 3));
+                Mario.ChangeState(new SmallMarioIdleState(Mario, texture, 0.15f, 3));
                 break;
             case 1:
-                Mario.ChangeState(new BigMarioIdleState(Mario, texture, 0.15, 3));
+                Mario.ChangeState(new BigMarioIdleState(Mario, texture, 0.15f, 3));
                 break;
             case 2:
                 Mario.PowerUp(Power.FireFlower);

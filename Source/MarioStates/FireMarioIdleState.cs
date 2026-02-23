@@ -8,31 +8,27 @@ public class FireMarioIdleState : IPlayerState
 {
     private readonly Player Mario;
     private readonly Sprite.SharedTexture texture;
-    private Sprite.Sprite CurrentSprite;
-    private readonly double timeFrame;
+    private Sprite.ISprite CurrentSprite;
+    private readonly float timeFrame;
     private readonly int scaleFactor;
 
-    private readonly Sprite.Sprite[] Sprites;
-    private int StarFrame = 0;
-    private double StarTimer = 0;
+    private readonly Sprite.ISprite[] Sprites;
 
     private bool IsAttacking = false;
 
-    public FireMarioIdleState(Player Mario, Sprite.SharedTexture texture, double timeFrame, int scaleFactor)
+    public FireMarioIdleState(Player Mario, Sprite.SharedTexture texture, float timeFrame, int scaleFactor)
     {
         this.Mario = Mario;
         this.texture = texture;
         this.timeFrame = timeFrame;
         this.scaleFactor = scaleFactor;
         
-        Sprites = [texture.NewSprite(80, 129, 16, 32),
-        texture.NewSprite(80, 192, 16, 32),
-        texture.NewSprite(80, 255, 16, 32),
-        texture.NewSprite(80, 318, 16, 32),
-        texture.NewSprite(352, 129, 16, 32),
-        texture.NewSprite(352, 192, 16, 32),
-        texture.NewSprite(352, 255, 16, 32),
-        texture.NewSprite(352, 318, 16, 32)];
+        Sprites = [
+            texture.NewSprite(2, 164, 16, 32),
+            texture.NewAnimatedSprite(2, 164, 16, 32, 4, timeFrame/4),
+            texture.NewSprite(136, 164, 16, 32),
+            texture.NewAnimatedSprite(136, 164, 16, 32, 4, timeFrame / 4),
+        ];
         CurrentSprite = Sprites[0];
         for (int i = 0; i < Sprites.Length; i++)
         {
@@ -92,26 +88,16 @@ public class FireMarioIdleState : IPlayerState
     }
     public void Update(GameTime gameTime, Vector2 Velocity, bool Flipped)
     {
-        if (Mario.Invincible && Mario.StarTimeRemaining <= Mario.StarDuration)
+        if (Mario.Invincible)
         {
-            double time = gameTime.ElapsedGameTime.TotalSeconds;
-            Mario.StarTimeRemaining += time;
-            StarTimer += time;
-            if(StarTimer > timeFrame / 4)
-            {
-                StarFrame++;
-                if(StarFrame == Sprites.Length-4)
-                {
-                    StarFrame = 0;
-                }
-                StarTimer = 0;
-            }
-            CurrentSprite = (IsAttacking) ? Sprites[StarFrame + 4] : Sprites[StarFrame];
+            Mario.StarTimeRemaining += gameTime.ElapsedGameTime.TotalSeconds;
+            CurrentSprite = (IsAttacking) ? Sprites[3] : Sprites[1];
         }
         else
         {
-            CurrentSprite = (IsAttacking) ? Sprites[4] : Sprites[0];
+            CurrentSprite = (IsAttacking) ? Sprites[2] : Sprites[0];
         }
+        CurrentSprite.Update(gameTime);
         CurrentSprite.Flipped = Flipped;
         IsAttacking = false;
     }

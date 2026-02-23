@@ -16,7 +16,7 @@ public class MarioDeadState : IPlayerState
         this.texture = texture;
         this.timeFrame = timeFrame;
         this.scaleFactor = scaleFactor;
-        sprite = texture.NewSprite(182, 34, 16, 16);
+        sprite = texture.NewSprite(136, 2, 16, 16);
         sprite.Scale = scaleFactor;
     }
     public void Left(GameTime gameTime)

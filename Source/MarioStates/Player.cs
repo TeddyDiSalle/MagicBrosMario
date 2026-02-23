@@ -13,7 +13,7 @@ public class Player
     private Vector2 Position { get; set; } = new Vector2(400, 240);
     private Vector2 Velocity { get; set; }
 
-    private const double timeFrame = 0.15;
+    private const float timeFrame = 0.15f;
     private const int scaleFactor = 3;
 
     private const float MovementSpeed = 3.0f;
@@ -26,12 +26,10 @@ public class Player
     public double StarDuration { get; private set; } = 10;
     public double StarTimeRemaining { get; set; } = 0;
 
-    public readonly Color[] rainbow = [Color.Red];
-
 
     public Player(Sprite.SharedTexture texture)
     {
-        PlayerState = new BigMarioIdleState(this, texture, timeFrame, scaleFactor);
+        PlayerState = new SmallMarioIdleState(this, texture, timeFrame, scaleFactor);
     }
     public void Left(GameTime gameTime)
     {

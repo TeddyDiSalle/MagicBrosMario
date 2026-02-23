@@ -8,24 +8,22 @@ public class BigMarioCrouchState : IPlayerState
 {
     private readonly Player Mario;
     private readonly Sprite.SharedTexture texture;
-    private Sprite.Sprite CurrentSprite;
-    private readonly double timeFrame;
+    private Sprite.ISprite CurrentSprite;
+    private readonly float timeFrame;
     private readonly int scaleFactor;
 
-    private readonly Sprite.Sprite[] Sprites;
-    private int StarFrame = 0;
-    private double StarTimer = 0;
+    private readonly Sprite.ISprite[] Sprites;
 
-    public BigMarioCrouchState(Player Mario, Sprite.SharedTexture texture, double timeFrame, int scaleFactor)
+    public BigMarioCrouchState(Player Mario, Sprite.SharedTexture texture, float timeFrame, int scaleFactor)
     {
         this.Mario = Mario;
         this.texture = texture;
         this.timeFrame = timeFrame;
         this.scaleFactor = scaleFactor;
-        Sprites = [texture.NewSprite(182, 1, 16, 32),
-            texture.NewSprite(182, 192, 16, 32),
-            texture.NewSprite(182, 255, 16, 32),
-            texture.NewSprite(182, 318, 16, 32)];
+        Sprites = [
+            texture.NewSprite(136, 94, 16, 32),
+            texture.NewAnimatedSprite(136, 94, 16, 32, 4, timeFrame/4)
+        ];
         CurrentSprite = Sprites[0];
         for (int i = 0; i < Sprites.Length; i++)
         {
@@ -83,24 +81,14 @@ public class BigMarioCrouchState : IPlayerState
     {
         if (Mario.Invincible)
         {
-            double time = gameTime.ElapsedGameTime.TotalSeconds;
-            Mario.StarTimeRemaining += time;
-            StarTimer += time;
-            if (StarTimer > timeFrame / 4)
-            {
-                StarFrame++;
-                if (StarFrame == Sprites.Length)
-                {
-                    StarFrame = 0;
-                }
-                StarTimer = 0;
-            }
-            CurrentSprite = Sprites[StarFrame];
+            CurrentSprite = Sprites[1];
+            Mario.StarTimeRemaining += gameTime.ElapsedGameTime.TotalSeconds;
         }
         else
         {
             CurrentSprite = Sprites[0];
         }
+        CurrentSprite.Update(gameTime);
         CurrentSprite.Flipped = Flipped;
 
         if (!Mario.IsCrouching)
@@ -113,5 +101,4 @@ public class BigMarioCrouchState : IPlayerState
         CurrentSprite.Position = new Point((int)Position.X, (int)Position.Y);
         CurrentSprite.Draw(spriteBatch);
     }
-
 }
