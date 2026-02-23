@@ -6,7 +6,7 @@ namespace MagicBrosMario.Source;
 
 public class Fireball
 {
-    private const int VELOCITY = 150;
+    private const int VELOCITY = 15;
     private const float LIFETIME = 3.0f;
 
     private Sprite.AnimatedSprite spriteRight;
