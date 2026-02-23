@@ -57,7 +57,11 @@ public class FireMarioIdleState : IPlayerState
     }
     public void Attack()
     {
-        IsAttacking = true;
+        if (!IsAttacking)
+        {
+            IsAttacking = true;
+            Mario.CreateFireball();
+        }
     }
     public void TakeDamage()
     {

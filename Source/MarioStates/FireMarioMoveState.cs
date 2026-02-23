@@ -63,8 +63,11 @@ public class FireMarioMoveState : IPlayerState
     }
     public void Attack()
     {
-        if(!IsAttacking)
-        IsAttacking = true;
+        if (!IsAttacking)
+        {
+            IsAttacking = true;
+            Mario.CreateFireball();
+        }
     }
     public void TakeDamage()
     {
