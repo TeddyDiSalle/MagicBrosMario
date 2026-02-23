@@ -14,22 +14,12 @@ public class MarioGameController{
     // This allows the game to work whether the player is using a keyboard or a potato
     // This class will call the other's classes move functions and damage functions and such
     private KeysNMouseCommandMapper inputMap;
-
-    private KeyboardInfo keyboard;
-    private MouseInfo mouse;
-
-    private int x;
-    private int y;
-    private Player player;
     private MagicBrosMario game;
+    private Sprint2Controller gameData;
     public MarioGameController(MagicBrosMario g, ref Sprint2Controller data)
     {
-        player = data.player;
         game =g;
-        keyboard = data.keyb;
-        mouse = data.mouse;
-        x = data.halfX;
-        y = data.halfY;
+        gameData = data;
         Initialize();
     }
 
@@ -39,7 +29,7 @@ public class MarioGameController{
         SetSprint2Binds();
     }
     public struct Sprint2Controller {
-        public MarioStates.Player player;
+        public Player player;
         public MouseInfo mouse;
         public  KeyboardInfo keyb;
         public int halfX;
@@ -54,17 +44,17 @@ public class MarioGameController{
         inputMap.Bind(Keys.D2, gt => game.displayPowerUp(1));
         inputMap.Bind(Keys.D3, gt => game.displayPowerUp(2));
         inputMap.Bind(Keys.D4, gt => game.displayPowerUp(3));
-        inputMap.Bind(Keys.W, gt => player.Jump(gt));
-        inputMap.Bind(Keys.Up, gt => player.Jump(gt));
-        inputMap.Bind(Keys.A, gt => player.Left(gt));
-        inputMap.Bind(Keys.Left, gt => player.Left(gt));
-        inputMap.Bind(Keys.S, gt => player.Crouch(gt));
-        inputMap.Bind(Keys.Down, gt => player.Crouch(gt));
-        inputMap.Bind(Keys.D, gt => player.Right(gt));
-        inputMap.Bind(Keys.Right, gt => player.Right(gt));
-        inputMap.Bind(Keys.Z, gt => player.Attack());
-        inputMap.Bind(Keys.N, gt =>  player.Attack());
-        inputMap.Bind(Keys.E, gt =>  player.TakeDamage());
+        inputMap.Bind(Keys.W, gt => gameData.player.Jump(gt));
+        inputMap.Bind(Keys.Up, gt => gameData.player.Jump(gt));
+        inputMap.Bind(Keys.A, gt => gameData.player.Left(gt));
+        inputMap.Bind(Keys.Left, gt => gameData.player.Left(gt));
+        inputMap.Bind(Keys.S, gt => gameData.player.Crouch(gt));
+        inputMap.Bind(Keys.Down, gt => gameData.player.Crouch(gt));
+        inputMap.Bind(Keys.D, gt => gameData.player.Right(gt));
+        inputMap.Bind(Keys.Right, gt => gameData.player.Right(gt));
+        inputMap.Bind(Keys.Z, gt => gameData.player.Attack());
+        inputMap.Bind(Keys.N, gt =>  gameData.player.Attack());
+        inputMap.Bind(Keys.E, gt =>  gameData.player.TakeDamage());
         inputMap.Bind(Keys.T, gt => game.incrementBlock());
         inputMap.Bind(Keys.Y, gt => game.decrementBlock());
         inputMap.Bind(Keys.U, gt => game.incrementItem()); 
@@ -76,21 +66,22 @@ public class MarioGameController{
 
         // mouse inputs
         inputMap.Bind(m => m.IsButtonDown(MouseButton.Right), () => game.Exit());
-        inputMap.Bind(m => m.WasButtonJustPressed(MouseButton.Left) && m.Position.X < x && m.Position.Y < y, () => game.displayPowerUp(0));
-        inputMap.Bind(m => m.IsButtonDown(MouseButton.Left) && m.Position.X > x && m.Position.Y < y, () => game.displayPowerUp(1));
-        inputMap.Bind(m => m.IsButtonDown(MouseButton.Left) && m.Position.X < x && m.Position.Y > y, () => game.displayPowerUp(2));
-        inputMap.Bind(m => m.IsButtonDown(MouseButton.Left) && m.Position.X > x && m.Position.Y > y, () => game.displayPowerUp(3));
+        inputMap.Bind(m => m.WasButtonJustPressed(MouseButton.Left) && m.Position.X < gameData.halfX && m.Position.Y < gameData.halfY, () => game.displayPowerUp(0));
+        inputMap.Bind(m => m.IsButtonDown(MouseButton.Left) && m.Position.X > gameData.halfX && m.Position.Y < gameData.halfY, () => game.displayPowerUp(1));
+        inputMap.Bind(m => m.IsButtonDown(MouseButton.Left) && m.Position.X < gameData.halfX && m.Position.Y > gameData.halfY, () => game.displayPowerUp(2));
+        inputMap.Bind(m => m.IsButtonDown(MouseButton.Left) && m.Position.X > gameData.halfX && m.Position.Y > gameData.halfY, () => game.displayPowerUp(3));
     }
     public void Update(GameTime gameTime)
     {
-        keyboard.Update();
-        mouse.Update();
+        gameData.keyb.Update();
+        gameData.mouse.Update();
         
-        if(keyboard.IsKeyUp(Keys.S) || keyboard.IsKeyUp(Keys.Down))
+        if(gameData.keyb.IsKeyUp(Keys.S) || gameData.keyb.IsKeyUp(Keys.Down))
         {
-            player.ReleaseCrouch();
+            gameData.player.ReleaseCrouch();
         }
-        inputMap.ProcessInput(gameTime, keyboard, mouse);// check all the inputs of the mouse and keyboard and run their corresponding function
+        inputMap.ProcessInput(gameTime, gameData.keyb, gameData.mouse);// check all the inputs of the mouse and keyboard and run their corresponding function
+    
     }
 
 }
