@@ -1,0 +1,16 @@
+Author of code review (Readability): Vincent Do
+Date: 2.23.2026
+Sprint 2
+Bowser.cs
+Author of class: Roshan
+Time to review: 3 minutes
+Comments: Everything is readable and easy to understand.
+
+Author of code review (Maintainability): Vincent Do
+Date: 2.23.2026
+Sprint 2
+BlockFactory.cs
+Author of class: Chuang
+Comments: Methods to create each block are identical except 
+for xy offset. Methods are as simple as it can get and you can 
+easily add more blocks using the same format since all of the blocks are static.
