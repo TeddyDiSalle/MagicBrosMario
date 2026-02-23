@@ -10,70 +10,45 @@ public class FireMarioMoveState : IPlayerState
     private readonly Player Mario;
     private readonly Sprite.SharedTexture texture;
 
-    private Sprite.Sprite CurrentSprite;
+    private Sprite.ISprite CurrentSprite;
 
     private int Frame = 0;
     private int nextFrame = 1;
-    private readonly double timeFrame;
+    private readonly float timeFrame;
     private double timer = 0;
     private readonly int scaleFactor;
 
-    private readonly Sprite.Sprite[] Sprites;
-    private readonly Sprite.Sprite[] AttackingSprites;
+    private readonly Sprite.ISprite[] Sprites;
+
     private int StarFrame = 0;
     private double StarTimer = 0;
 
     private bool Braking;
     private bool IsAttacking = false;
     private double AttackTimer = 0;
-    private double AttackTime = 0.15;
-    public FireMarioMoveState(Player Mario, Sprite.SharedTexture texture, double timeFrame, int scaleFactor)
+
+    public FireMarioMoveState(Player Mario, Sprite.SharedTexture texture, float timeFrame, int scaleFactor)
     {
         this.Mario = Mario;
         this.texture = texture;
         this.timeFrame = timeFrame;
         this.scaleFactor = scaleFactor;
         Sprites = [
-        texture.NewSprite(97, 129, 16, 32), //Walking1
-        texture.NewSprite(97, 192, 16, 32),
-        texture.NewSprite(97, 255, 16, 32),
-        texture.NewSprite(97, 318, 16, 32),
-        texture.NewSprite(114, 129, 14, 31), //Walking2
-        texture.NewSprite(114, 192, 16, 32),
-        texture.NewSprite(114, 255, 16, 32),
-        texture.NewSprite(114, 318, 16, 32),
-        texture.NewSprite(131, 129, 16, 32), //Walking3 
-        texture.NewSprite(131, 192, 16, 32),
-        texture.NewSprite(131, 255, 16, 32),
-        texture.NewSprite(131, 318, 16, 32),
-        texture.NewSprite(148, 129, 16, 32), //Brake 
-        texture.NewSprite(148, 192, 16, 32),
-        texture.NewSprite(148, 255, 16, 32),
-        texture.NewSprite(148, 318, 16, 32)];
-        AttackingSprites = [
-        texture.NewSprite(352, 129, 16, 32), //WalkingAttack1
-        texture.NewSprite(352, 192, 16, 32),
-        texture.NewSprite(352, 255, 16, 32),
-        texture.NewSprite(352, 318, 16, 32),
-        texture.NewSprite(369, 129, 14, 31), //WalkingAttack2
-        texture.NewSprite(369, 192, 16, 32),
-        texture.NewSprite(369, 255, 16, 32),
-        texture.NewSprite(369, 318, 16, 32),
-        texture.NewSprite(386, 129, 16, 32), //WalkingAttack3
-        texture.NewSprite(386, 192, 16, 32),
-        texture.NewSprite(386, 255, 16, 32),
-        texture.NewSprite(386, 318, 16, 32),
-        texture.NewSprite(403, 129, 16, 32), //BrakeAttack
-        texture.NewSprite(403, 192, 16, 32),
-        texture.NewSprite(403, 255, 16, 32),
-        texture.NewSprite(403, 318, 16, 32)
-            ];
+        texture.NewAnimatedSprite(2, 199, 16, 32, 4, timeFrame), //Normal Walking
+        texture.NewAnimatedSprite(2, 234, 16, 32, 16, timeFrame/4),//Rainbow Walking
+        texture.NewSprite(69, 199, 16, 32), //Normal Braking
+        texture.NewAnimatedSprite(69, 199, 16, 32, 4, timeFrame/4), //Rainbow Braking
+        texture.NewAnimatedSprite(2, 269, 16, 32, 4, timeFrame), //Attack Walking
+        texture.NewAnimatedSprite(2, 304, 16, 32, 16, timeFrame/4), //Rainbow Attack Walking
+        texture.NewSprite(69, 269, 16, 32), //Attack Braking
+        texture.NewAnimatedSprite(69, 269, 16, 32, 4, timeFrame/4) //Rainbow Attack Braking
+        ];
         for (int i = 0; i < Sprites.Length; i++)
         {
             Sprites[i].Scale = scaleFactor;
-            AttackingSprites[i].Scale = scaleFactor;
+            
         }
-        CurrentSprite = Sprites[Frame];
+        CurrentSprite = Sprites[0];
     }
     public void Left(GameTime gameTime)
     {
@@ -131,7 +106,7 @@ public class FireMarioMoveState : IPlayerState
         bool BrakingLeft = Flipped && Velocity.X > 0;
         if (BrakingRight || BrakingLeft)
         {
-            Frame = 3;
+            Frame = 2;
             timer = 0;
             Braking = true;
             if (BrakingRight)
@@ -154,15 +129,13 @@ public class FireMarioMoveState : IPlayerState
     {
         if (timer <= timeFrame) { return; }
 
-        if (Frame == 3)
+        if (Frame == 2)
         {
             Frame = 0;
-            nextFrame = 1;
         }
-        Frame += nextFrame;
-        if (Frame == 0 || Frame == Sprites.Length/4 - 2)
+        else if (Frame == 3)
         {
-            nextFrame *= -1;
+            Frame = 1;
         }
         IsBraking(gameTime, Velocity, Flipped);
         timer = 0;
@@ -172,31 +145,14 @@ public class FireMarioMoveState : IPlayerState
     {
         if (!Mario.Invincible) { return; }
         Mario.StarTimeRemaining += time;
-        StarTimer += time;
-
-        if (StarTimer <= timeFrame / 4) { return; }
-        
-        StarFrame++;
         if (Braking)
         {
-            while (StarFrame + 4 < Sprites.Length)
-            {
-                StarFrame += 4;
-            }
-            if (StarFrame >= Sprites.Length)
-            {
-                StarFrame = 12;
-            }
+            Frame = 3;
         }
         else
         {
-            if (StarFrame >= Sprites.Length - 4)
-            {
-                StarFrame = 0;
-            }
-        }
-        StarTimer = 0;
-        
+            Frame = 1;
+        }    
     }
     public void Update(GameTime gameTime, Vector2 Velocity, bool Flipped)
     {
@@ -208,17 +164,17 @@ public class FireMarioMoveState : IPlayerState
         UpdateStarAnimations(time);
         if (IsAttacking)
         {
-            Debug.Write("Attacking");
-            CurrentSprite = (Mario.Invincible) ? AttackingSprites[StarFrame] : AttackingSprites[Frame * 4];
-            if(AttackTimer > AttackTime)
+            CurrentSprite = Sprites[Frame + 4];
+            if(AttackTimer > timeFrame)
             {
                 IsAttacking = false;
             }
         }
         else
         {
-            CurrentSprite = (Mario.Invincible) ? Sprites[StarFrame] : Sprites[Frame * 4];
+            CurrentSprite = Sprites[Frame];
         }
+        CurrentSprite.Update(gameTime);
         CurrentSprite.Flipped = Flipped;
     }
     public void Draw(SpriteBatch spriteBatch, Vector2 Position)
