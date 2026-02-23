@@ -19,8 +19,6 @@ public class SmallMarioMoveState : IPlayerState
     private readonly int scaleFactor;
 
     private readonly Sprite.ISprite[] Sprites;
-
-
     private bool Braking;
 
     public SmallMarioMoveState(Player Mario, Sprite.SharedTexture texture, float timeFrame, int scaleFactor)

@@ -10,15 +10,12 @@ public class BigMarioMoveState : IPlayerState
     private readonly Sprite.SharedTexture texture;
 
     private Sprite.ISprite CurrentSprite;
-
     private int Frame = 0;
     private readonly float timeFrame;
     private double timer = 0;
     private readonly int scaleFactor;
 
     private readonly Sprite.ISprite[] Sprites;
-
-
     private bool Braking;
     public BigMarioMoveState(Player Mario, Sprite.SharedTexture texture, float timeFrame, int scaleFactor)
     {
@@ -139,7 +136,6 @@ public class BigMarioMoveState : IPlayerState
         {
             Frame = 1;
         }
-
     }
     public void Update(GameTime gameTime, Vector2 Velocity, bool Flipped)
     {

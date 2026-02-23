@@ -13,20 +13,15 @@ public class FireMarioMoveState : IPlayerState
     private Sprite.ISprite CurrentSprite;
 
     private int Frame = 0;
-    private int nextFrame = 1;
     private readonly float timeFrame;
     private double timer = 0;
     private readonly int scaleFactor;
 
     private readonly Sprite.ISprite[] Sprites;
 
-    private int StarFrame = 0;
-    private double StarTimer = 0;
-
     private bool Braking;
     private bool IsAttacking = false;
     private double AttackTimer = 0;
-
     public FireMarioMoveState(Player Mario, Sprite.SharedTexture texture, float timeFrame, int scaleFactor)
     {
         this.Mario = Mario;
@@ -46,7 +41,6 @@ public class FireMarioMoveState : IPlayerState
         for (int i = 0; i < Sprites.Length; i++)
         {
             Sprites[i].Scale = scaleFactor;
-            
         }
         CurrentSprite = Sprites[0];
     }
@@ -92,7 +86,6 @@ public class FireMarioMoveState : IPlayerState
             case Power.Star:
                 Mario.Invincible = true;
                 Mario.StarTimeRemaining = 0;
-                StarFrame = Frame * 4;
                 break;
         }
     }
@@ -168,6 +161,7 @@ public class FireMarioMoveState : IPlayerState
             if(AttackTimer > timeFrame)
             {
                 IsAttacking = false;
+                AttackTimer = 0;
             }
         }
         else

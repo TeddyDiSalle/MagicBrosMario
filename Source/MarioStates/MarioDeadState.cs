@@ -8,9 +8,9 @@ public class MarioDeadState : IPlayerState
     private readonly Player Mario;
     private readonly Sprite.SharedTexture texture;
     private readonly Sprite.Sprite sprite;
-    private readonly double timeFrame;
+    private readonly float timeFrame;
     private readonly int scaleFactor;
-    public MarioDeadState(Player Mario, Sprite.SharedTexture texture, double timeFrame, int scaleFactor)
+    public MarioDeadState(Player Mario, Sprite.SharedTexture texture, float timeFrame, int scaleFactor)
     {
         this.Mario = Mario;
         this.texture = texture;
