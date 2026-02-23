@@ -85,6 +85,7 @@ public class MarioGameController{
     {
         keyboard.Update();
         mouse.Update();
+        
         if(keyboard.IsKeyUp(Keys.S) || keyboard.IsKeyUp(Keys.Down))
         {
             player.ReleaseCrouch();

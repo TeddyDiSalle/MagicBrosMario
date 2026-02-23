@@ -1,7 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MagicBrosMario.Source.Block;
+namespace MagicBrosMario.Source;
 
 /// <summary>
 /// abstract block class with useful utility methods

@@ -37,6 +37,7 @@
 /processorParam:TextureFormat=Color
 /build:enemies.png
 
+#begin MarioSpriteSheet.png
 #begin enemies.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -83,5 +84,5 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:MarioStarSheet.png
+/build:MarioSpriteSheet.png
 

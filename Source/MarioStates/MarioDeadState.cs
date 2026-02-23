@@ -8,15 +8,15 @@ public class MarioDeadState : IPlayerState
     private readonly Player Mario;
     private readonly Sprite.SharedTexture texture;
     private readonly Sprite.Sprite sprite;
-    private readonly double timeFrame;
+    private readonly float timeFrame;
     private readonly int scaleFactor;
-    public MarioDeadState(Player Mario, Sprite.SharedTexture texture, double timeFrame, int scaleFactor)
+    public MarioDeadState(Player Mario, Sprite.SharedTexture texture, float timeFrame, int scaleFactor)
     {
         this.Mario = Mario;
         this.texture = texture;
         this.timeFrame = timeFrame;
         this.scaleFactor = scaleFactor;
-        sprite = texture.NewSprite(182, 34, 16, 16);
+        sprite = texture.NewSprite(136, 2, 16, 16);
         sprite.Scale = scaleFactor;
     }
     public void Left(GameTime gameTime)
