@@ -1,10 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.Reflection.Metadata;
-using System.Runtime.CompilerServices;
-using System.Runtime.ConstrainedExecution;
-using System.Runtime.InteropServices;
-using MagicBrosMario.Source.Items;
+﻿using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.MarioStates;
 using MagicBrosMario.Source.Sprite;
 using Microsoft.Xna.Framework;
@@ -19,7 +13,7 @@ public class MagicBrosMario : Game
 	private SpriteBatch _spriteBatch;
 	private MarioGameController Controller;
 
-	public MarioStates.Player Mario;
+	public Player Mario;
 	private SharedTexture texture;
 
 	private int enemyArraySize = 5;
@@ -167,14 +161,6 @@ public class MagicBrosMario : Game
 
 	}
 
-	private static long nanoTime()
-	{
-		long nano = 10000L * Stopwatch.GetTimestamp();
-		nano /= TimeSpan.TicksPerMillisecond;
-		nano *= 100L;
-		return nano;
-	}
-
 	protected override void Update(GameTime gameTime)
 	{
 		Controller.Update(gameTime);
@@ -192,7 +178,7 @@ public class MagicBrosMario : Game
 		_spriteBatch.Begin(samplerState: SamplerState.PointClamp);
 
 		enemy[enemyIndex].Draw(_spriteBatch);
-		// lblock[blockIndex].Draw(_spriteBatch);
+		// block[blockIndex].Draw(_spriteBatch);
 
 		items[itemIndex].Draw(_spriteBatch);
 
@@ -257,6 +243,7 @@ public class MagicBrosMario : Game
 			}
 		}
 		enemyIndex = 0;
+		itemIndex = 0;
 		blockIndex = 0;
 	}
 }
