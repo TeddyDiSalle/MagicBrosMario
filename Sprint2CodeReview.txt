@@ -12,5 +12,29 @@ Sprint 2
 BlockFactory.cs
 Author of class: Chuang
 Comments: Methods to create each block are identical except 
-for xy offset. Methods are as simple as it can get and you can 
-easily add more blocks using the same format since all of the blocks are static.
+    for xy offset. Methods are as simple as it can get and you can 
+    easily add more blocks using the same format since all of the blocks are static.
+
+Author of code review (Readability): Teddy DiSalle
+Date: 2.23.2026
+Sprint 2
+Mushroom.cs
+Author of class: Brian
+Time to review: 3 minutes
+Comments: Pretty short class, most is easy to understand. The cordinates of the
+    Sprite object are unlabeled so you would have to have an understanding of Sprite's
+    parameters to understand those magic numbers.
+
+Author of code review (Maintainability): Teddy DiSalle
+Date: 2.23.2026
+Sprint 2
+FireMarioMoveState.cs
+Author of class: Vincent Do
+Comments: Very large class. The frame data for this class is in the form of magic
+    numbers. A lot of these classes set the Frame varaible to 0 if it == 3 or
+    sets it to 2 if it equals 0. It is very difficult to understand and will hard
+    to maintain what these frames do. More magic numbers in the creation of the Sprite.
+    Then no standardization of the speed mario goes or brakes. Every call in this
+    class has 1 or 8 repeated over and over again. Could be centralized to one spot
+    to control the change. This class is broken up into many functions with descriptive names
+    This makes it easy to follow that.
