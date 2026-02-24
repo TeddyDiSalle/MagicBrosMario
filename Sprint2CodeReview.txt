@@ -19,7 +19,7 @@ Author of code review (Readability): Brian Perusek
 Date: 2.23.2026
 Sprint 2
 SharedTexture.cs
-Author of class: Teddy
+Author of class: Chuang
 Time to review: 2 minutes
 Comments: Everything is readable and easy to understand. 
     All variables were given names that made it super easy to tell what they were and their purpose.
@@ -49,6 +49,7 @@ Date: 2.23.2026
 Sprint 2
 FireMarioMoveState.cs
 Author of class: Vincent Do
+Time to review: 5 minutes
 Comments: Very large class. The frame data for this class is in the form of magic
     numbers. A lot of these classes set the Frame varaible to 0 if it == 3 or
     sets it to 2 if it equals 0. It is very difficult to understand and will hard
