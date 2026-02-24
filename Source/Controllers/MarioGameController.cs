@@ -80,6 +80,10 @@ public class MarioGameController{
         {
             gameData.player.ReleaseCrouch();
         }
+        if(gameData.keyb.CurrentState.GetPressedKeyCount() == 0 || (gameData.keyb.IsKeyDown(Keys.Z) || gameData.keyb.IsKeyDown(Keys.N)))
+        {
+            gameData.player.Idle();
+        }
         inputMap.ProcessInput(gameTime, gameData.keyb, gameData.mouse);// check all the inputs of the mouse and keyboard and run their corresponding function
     
     }
