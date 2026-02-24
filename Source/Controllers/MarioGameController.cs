@@ -55,12 +55,12 @@ public class MarioGameController{
         inputMap.Bind(Keys.Z, gt => gameData.player.Attack());
         inputMap.Bind(Keys.N, gt =>  gameData.player.Attack());
         inputMap.Bind(Keys.E, gt =>  gameData.player.TakeDamage());
-        inputMap.Bind(Keys.T, gt => game.incrementBlock());
-        inputMap.Bind(Keys.Y, gt => game.decrementBlock());
-        inputMap.Bind(Keys.U, gt => game.incrementItem()); 
-        inputMap.Bind(Keys.I, gt => game.decrementItem()); 
-        inputMap.Bind(Keys.O, gt => game.incrementEnemy());
-        inputMap.Bind(Keys.P, gt => game.decrementEnemy());
+        inputMap.Bind(Keys.T, gt => game.incrementBlock()); // needs to be fixed so that it only runs once per key press
+        inputMap.Bind(Keys.Y, gt => game.decrementBlock());// needs to be fixed so that it only runs once per key press
+        inputMap.Bind(Keys.U, gt => game.incrementItem()); // needs to be fixed so that it only runs once per key press
+        inputMap.Bind(Keys.I, gt => game.decrementItem()); // needs to be fixed so that it only runs once per key press
+        inputMap.Bind(Keys.O, gt => game.incrementEnemy());// needs to be fixed so that it only runs once per key press
+        inputMap.Bind(Keys.P, gt => game.decrementEnemy());// needs to be fixed so that it only runs once per key press
         inputMap.Bind(Keys.Q, gt => game.Exit()); 
         inputMap.Bind(Keys.R, gt => game.resetGame());
 
@@ -76,11 +76,11 @@ public class MarioGameController{
         gameData.keyb.Update();
         gameData.mouse.Update();
         
-        if(gameData.keyb.IsKeyUp(Keys.S) || gameData.keyb.IsKeyUp(Keys.Down))
+        if(gameData.keyb.IsKeyUp(Keys.S) || gameData.keyb.IsKeyUp(Keys.Down)) // needs to go into input map
         {
             gameData.player.ReleaseCrouch();
         }
-        if(gameData.keyb.CurrentState.GetPressedKeyCount() == 0 || (gameData.keyb.IsKeyDown(Keys.Z) || gameData.keyb.IsKeyDown(Keys.N)))
+        if(gameData.keyb.CurrentState.GetPressedKeyCount() == 0 || (gameData.keyb.IsKeyDown(Keys.Z) || gameData.keyb.IsKeyDown(Keys.N))) // needs to be fixed so that it runs only after movement is not pressed
         {
             gameData.player.Idle();
         }

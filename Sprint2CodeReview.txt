@@ -12,6 +12,7 @@ Sprint 2
 BlockFactory.cs
 Author of class: Chuang
 Comments: Methods to create each block are identical except 
+<<<<<<< HEAD
 for xy offset. Methods are as simple as it can get and you can 
 easily add more blocks using the same format since all of the blocks are static.
 -------------------------------------------------------------------------------------------------------
@@ -35,3 +36,8 @@ Mario can crouch while being small. This would work fairly easy with the player 
 basically all there and the sprite would just need to be added and the condition to change to that sprite.
 
 
+=======
+    for xy offset. Methods are as simple as it can get and you can 
+    easily add more blocks using the same format since all of the blocks are static.
+
+>>>>>>> WorkingOnControllers

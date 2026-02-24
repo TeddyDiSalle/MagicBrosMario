@@ -1,7 +1,6 @@
 ﻿using MagicBrosMario.Source.Sprite;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Diagnostics;
 
 namespace MagicBrosMario.Source.MarioStates;
 //Vincent Do
@@ -10,14 +9,14 @@ public class FireMarioMoveState : IPlayerState
     private readonly Player Mario;
     private readonly Sprite.SharedTexture texture;
 
-    private Sprite.ISprite CurrentSprite;
+    private ISprite CurrentSprite;
 
     private int Frame = 0;
     private readonly float timeFrame;
     private double timer = 0;
     private readonly int scaleFactor;
 
-    private readonly Sprite.ISprite[] Sprites;
+    private readonly ISprite[] Sprites;
 
     private bool Braking;
     private bool IsAttacking = false;
