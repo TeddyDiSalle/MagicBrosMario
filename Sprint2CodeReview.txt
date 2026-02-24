@@ -14,3 +14,24 @@ Author of class: Chuang
 Comments: Methods to create each block are identical except 
 for xy offset. Methods are as simple as it can get and you can 
 easily add more blocks using the same format since all of the blocks are static.
+-------------------------------------------------------------------------------------------------------
+Author of code review (Readability): Brian Perusek
+Date: 2.23.2026
+Sprint 2
+SharedTexture.cs
+Author of class: Teddy
+Time to review: 2 minutes
+Comments: Everything is readable and easy to understand. 
+All variables were given names that made it super easy to tell what they were and their purpose.
+
+Author of code review (Maintainability): Brian Perusek
+Date: 2.23.2026
+Sprint 2
+Player.cs
+Author of class: Vincent
+Comments: The code quality seems really good. Everything seems pretty simple and I don't 
+think there can be much done to improve it.  A change we can make would be to add a state where 
+Mario can crouch while being small. This would work fairly easy with the player class, as the code is 
+basically all there and the sprite would just need to be added and the condition to change to that sprite.
+
+
