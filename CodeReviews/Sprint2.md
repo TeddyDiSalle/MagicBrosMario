@@ -90,3 +90,26 @@
 
 ### Comments
 > The class looks fine for most part. However it lacks some features that future us might need. Including getting the position and size of the star for collision detecting and instead of referncing the position of the sprite directly, it creates an internal position and updates the sprite every frame. Overall a solid implemetation.
+
+---
+
+## Readability Review by Roshan Ramamurthy
+
+[MarioGameController.cs](../Source/Controllers/KeysNMouseCommandMapper.cs) by Teddy
+- Date: 02.23.2026
+- Time: 2 minutes
+
+### Comments
+
+> The class has a lot of information jumbled together, but once you take a minute to read it, it becomes very clear and easy to understand. Still has comments saying things need to be fixed even thought they were already fixed, so that may need to be updated.
+
+---
+
+## Maintainability Review by Roshan Ramamurthy
+
+[Star.cs](../Source/Items/Mushroom.cs) by Brian
+- Date: 02.23.2026
+- Time: 5 minutes
+
+### Comments
+> The class generally looks fine, but the way the star moves is a little confusing and could be more clear. Additionally, the way the star moves needs to be fixed, it should look like its bouncing and not moving in a straight diagonal path. You should change the y velocity as it moves, similar to how it works for Mario when he jumps.
