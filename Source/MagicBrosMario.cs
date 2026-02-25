@@ -29,6 +29,7 @@ public class MagicBrosMario : Game
     private IEnemy[] enemy;
     private IBlock[] blocks;
     private IItems[] items;
+    private SpriteFont _font;
     private int flagIndex = -1;
 
     public MagicBrosMario()
@@ -48,7 +49,7 @@ public class MagicBrosMario : Game
         LoadEnemies();
         LoadBlocks();
         LoadItems();
-
+        _font = Content.Load<SpriteFont>("Font");
         Texture2D MarioSheet = Content.Load<Texture2D>("MarioSpriteSheet");
         texture = new SharedTexture();
         texture.BindTexture(MarioSheet);
@@ -196,6 +197,8 @@ public class MagicBrosMario : Game
         items[itemIndex].Draw(_spriteBatch);
 
         Mario.Draw(_spriteBatch);
+
+        _spriteBatch.DrawString(_font, "Super Mario Bros", new Vector2(150, 100), Color.White); //SAMPLE USAGE
         _spriteBatch.End();
 
         base.Draw(gameTime);
