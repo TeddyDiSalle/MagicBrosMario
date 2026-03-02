@@ -7,7 +7,7 @@ namespace MagicBrosMario.Source.Collision;
 
 public interface ICollidable
 {
-    Rectangle CollisionArea { get; }
+    Rectangle CollisionBox { get; }
     void OnCollidePlayer(Player player, CollideDirection direction); 
     void OnCollideItem(IItems item, CollideDirection direction); 
     void OnCollideEnemy(IEnemy enemy, CollideDirection direction); 
