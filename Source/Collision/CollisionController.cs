@@ -52,19 +52,21 @@ public class CollisionController {
         var limitX = (a.CollisionBox.Width + b.CollisionBox.Width) / 2;
         var limitY = (a.CollisionBox.Height + b.CollisionBox.Height) / 2;
 
-        if (Math.Abs(dx) >= limitX) return null;
-        if (Math.Abs(dy) >= limitY) return null;
+        // return if no overlap
+        if (Math.Abs(dx) > limitX) return null;
+        if (Math.Abs(dy) > limitY) return null;
 
-        if (Math.Abs(dx) > Math.Abs(dy)) {
+        // if normalized dx is greater than normalized dy
+        if (Math.Abs(dx) / limitX > Math.Abs(dy) / limitY) {
             if (dx > 0) {
                 return (CollideDirection.Right, CollideDirection.Left);
             } else
                 return (CollideDirection.Left, CollideDirection.Right);
         } else {
             if (dy > 0) {
-                return (CollideDirection.Top, CollideDirection.Down);
-            } else {
                 return (CollideDirection.Down, CollideDirection.Top);
+            } else {
+                return (CollideDirection.Top, CollideDirection.Down);
             }
         }
     }
