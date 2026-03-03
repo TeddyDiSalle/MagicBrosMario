@@ -29,7 +29,7 @@ public class MagicBrosMario : Game
     private IEnemy[] enemy;
     private IBlock[] blocks;
     private IItems[] items;
-    private int flagIndex = -1;
+    private SpriteFont _font;
 
     public MagicBrosMario()
     {
@@ -48,7 +48,7 @@ public class MagicBrosMario : Game
         LoadEnemies();
         LoadBlocks();
         LoadItems();
-
+        _font = Content.Load<SpriteFont>("Font");
         Texture2D MarioSheet = Content.Load<Texture2D>("MarioSpriteSheet");
         texture = new SharedTexture();
         texture.BindTexture(MarioSheet);
@@ -178,10 +178,7 @@ public class MagicBrosMario : Game
         enemy[enemyIndex].Update(gameTime);
         items[itemIndex].Update(gameTime);
         blocks[blockIndex].Update(gameTime);
-        if(gameTime.TotalGameTime.TotalSeconds % 1 < 0.0001) // every second, with a small buffer to ensure it triggers
-        {
-            flagIndex = -1; // reset flag index every second to allow input changes
-        }
+
     }
 
     protected override void Draw(GameTime gameTime)
@@ -196,6 +193,8 @@ public class MagicBrosMario : Game
         items[itemIndex].Draw(_spriteBatch);
 
         Mario.Draw(_spriteBatch);
+
+        _spriteBatch.DrawString(_font, "Super Mario Bros", new Vector2(150, 100), Color.White); //SAMPLE USAGE
         _spriteBatch.End();
 
         base.Draw(gameTime);
@@ -203,50 +202,38 @@ public class MagicBrosMario : Game
 
     public void incrementEnemy()
     {
-        if(flagIndex != 0){
             enemyIndex = (enemyIndex + 1) % enemyArraySize;
-            flagIndex = 0;
-        }
+
     }
 
     public void decrementEnemy(){
-        
-        if(flagIndex != 1){
+
             enemyIndex = (enemyIndex - 1 + enemyArraySize) % enemyArraySize;
-            flagIndex = 1;
-        }
+
     }
 
     public void incrementBlock()
     {
-        if(flagIndex != 2){
             blockIndex = (blockIndex + 1) % blockArraySize;
-            flagIndex = 2;
-        }
+
     }
 
     public void decrementBlock()
     {
-        if(flagIndex != 3){
             blockIndex = (blockIndex - 1 + blockArraySize) % blockArraySize;
-            flagIndex = 3;
-        }
+
     }
 
     public void incrementItem()
     {
-        if(flagIndex != 4){
             itemIndex = (itemIndex + 1) % itemArraySize;
-            flagIndex = 4;
-        }
+
     }
 
     public void decrementItem()
     {
-        if(flagIndex != 5){
             itemIndex = (itemIndex - 1 + itemArraySize) % itemArraySize;
-            flagIndex = 5;
-        }
+
     }
 
     public void displayPowerUp(int index)
