@@ -60,6 +60,11 @@ public class CollisionController {
                 b.OnCollideBlock(a as IBlock, bDir);
             });
 
+            CheckCollisions(block, blocks, (a, b, aDir, bDir) => {
+                a.OnCollideBlock(b as IBlock, aDir);
+                b.OnCollideBlock(a as IBlock, bDir);
+            });
+
             CheckCollisions(block, items, (a, b, aDir, bDir) => {
                 a.OnCollideItem(b as IItems, aDir);
                 b.OnCollideBlock(a as IBlock, bDir);
@@ -79,6 +84,11 @@ public class CollisionController {
 
             CheckCollisions(item, blocks, (a, b, aDir, bDir) => {
                 a.OnCollideBlock(b as IBlock, aDir);
+                b.OnCollideItem(a as IItems, bDir);
+            });
+
+            CheckCollisions(item, items, (a, b, aDir, bDir) => {
+                a.OnCollideItem(b as IItems, aDir);
                 b.OnCollideItem(a as IItems, bDir);
             });
 
@@ -103,6 +113,11 @@ public class CollisionController {
                 a.OnCollideItem(b as IItems, aDir);
                 b.OnCollideEnemy(a as IEnemy, bDir);
             });
+
+            CheckCollisions(enemy, enemies, (a, b, aDir, bDir) => {
+                a.OnCollideEnemy(b as IEnemy, aDir);
+                b.OnCollideEnemy(a as IEnemy, bDir);
+            });
         }
     }
 
@@ -111,6 +126,7 @@ public class CollisionController {
         Action<ICollidable, ICollidable, CollideDirection, CollideDirection> onCollide
     ) {
         foreach (var b in others) {
+            if (a == b) continue;
             var collide = IsColliding(a, b);
             if (collide.HasValue) {
                 var (dirA, dirB) = collide.Value;
