@@ -9,15 +9,9 @@ namespace MagicBrosMario.Source.Collision;
 
 public class CollisionController {
     private ICollidable player;
-    private readonly List<ICollidable> items;
-    private readonly List<ICollidable> enemies;
-    private readonly List<ICollidable> blocks;
-
-    public CollisionController() {
-        items = [];
-        enemies = [];
-        blocks = [];
-    }
+    private readonly List<ICollidable> items = [];
+    private readonly List<ICollidable> enemies = [];
+    private readonly List<ICollidable> blocks = [];
 
     public CollisionController Instance { get; } = new CollisionController();
 
@@ -41,8 +35,88 @@ public class CollisionController {
     }
 
     public void Update(GameTime gameTime) {
-        // loop through each player, items, block and enemies
-        // send OnPlayerCollide/OnEnemyCollide/OnBlockCollide
+        {
+            // player
+            CheckCollisions(player, blocks, (a, b, aDir, bDir) => {
+                a.OnCollideBlock(b as IBlock, aDir);
+                b.OnCollidePlayer(a as Player, bDir);
+            });
+
+            CheckCollisions(player, items, (a, b, aDir, bDir) => {
+                a.OnCollideItem(b as IItems, aDir);
+                b.OnCollidePlayer(a as Player, bDir);
+            });
+
+            CheckCollisions(player, enemies, (a, b, aDir, bDir) => {
+                a.OnCollideEnemy(b as IEnemy, aDir);
+                b.OnCollidePlayer(a as Player, bDir);
+            });
+        }
+
+        foreach (var block in blocks) {
+            // block
+            CheckCollisions(block, [player], (a, b, aDir, bDir) => {
+                a.OnCollidePlayer(b as Player, aDir);
+                b.OnCollideBlock(a as IBlock, bDir);
+            });
+
+            CheckCollisions(block, items, (a, b, aDir, bDir) => {
+                a.OnCollideItem(b as IItems, aDir);
+                b.OnCollideBlock(a as IBlock, bDir);
+            });
+
+            CheckCollisions(block, enemies, (a, b, aDir, bDir) => {
+                a.OnCollideEnemy(b as IEnemy, aDir);
+                b.OnCollideBlock(a as IBlock, bDir);
+            });
+        }
+
+        foreach (var item in items) {
+            CheckCollisions(item, [player], (a, b, aDir, bDir) => {
+                a.OnCollidePlayer(b as Player, aDir);
+                b.OnCollideItem(a as IItems, bDir);
+            });
+
+            CheckCollisions(item, blocks, (a, b, aDir, bDir) => {
+                a.OnCollideBlock(b as IBlock, aDir);
+                b.OnCollideItem(a as IItems, bDir);
+            });
+
+            CheckCollisions(item, enemies, (a, b, aDir, bDir) => {
+                a.OnCollideEnemy(b as IEnemy, aDir);
+                b.OnCollideItem(a as IItems, bDir);
+            });
+        }
+        
+        foreach (var enemy in enemies) {
+            CheckCollisions(enemy, [player], (a, b, aDir, bDir) => {
+                a.OnCollidePlayer(b as Player, aDir);
+                b.OnCollideEnemy(a as IEnemy, bDir);
+            });
+
+            CheckCollisions(enemy, blocks, (a, b, aDir, bDir) => {
+                a.OnCollideBlock(b as IBlock, aDir);
+                b.OnCollideEnemy(a as IEnemy, bDir);
+            });
+
+            CheckCollisions(enemy, items, (a, b, aDir, bDir) => {
+                a.OnCollideItem(b as IItems, aDir);
+                b.OnCollideEnemy(a as IEnemy, bDir);
+            });
+        }
+    }
+
+    private static void CheckCollisions(
+        ICollidable a, IEnumerable<ICollidable> others,
+        Action<ICollidable, ICollidable, CollideDirection, CollideDirection> onCollide
+    ) {
+        foreach (var b in others) {
+            var collide = IsColliding(a, b);
+            if (collide.HasValue) {
+                var (dirA, dirB) = collide.Value;
+                onCollide(a, b, dirA, dirB);
+            }
+        }
     }
 
     private static (CollideDirection, CollideDirection)? IsColliding(ICollidable a, ICollidable b) {
