@@ -1,9 +1,6 @@
 // Made by Teddy DiSalle
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Diagnostics;
 using MagicBrosMario.Source.MarioStates;
 
 
@@ -38,23 +35,24 @@ public class MarioGameController{
     // All the binds specified for sprint 2
     public void SetSprint2Binds()
     {
+        Player player = gameData.player; 
         //Keyboard inputs
         inputMap.Bind(Keys.D0,gt => game.Exit());
         inputMap.Bind(Keys.D1, gt => game.displayPowerUp(0));
         inputMap.Bind(Keys.D2, gt => game.displayPowerUp(1));
         inputMap.Bind(Keys.D3, gt => game.displayPowerUp(2));
         inputMap.Bind(Keys.D4, gt => game.displayPowerUp(3));
-        inputMap.Bind(Keys.W, gt => gameData.player.Jump(gt));
-        inputMap.Bind(Keys.Up, gt => gameData.player.Jump(gt));
-        inputMap.Bind(Keys.A, gt => gameData.player.Left(gt));
-        inputMap.Bind(Keys.Left, gt => gameData.player.Left(gt));
-        inputMap.Bind(Keys.S, gt => gameData.player.Crouch(gt));
-        inputMap.Bind(Keys.Down, gt => gameData.player.Crouch(gt));
-        inputMap.Bind(Keys.D, gt => gameData.player.Right(gt));
-        inputMap.Bind(Keys.Right, gt => gameData.player.Right(gt));
-        inputMap.Bind(Keys.Z, gt => gameData.player.Attack());
-        inputMap.Bind(Keys.N, gt =>  gameData.player.Attack());
-        inputMap.Bind(Keys.E, gt =>  gameData.player.TakeDamage());
+        inputMap.Bind(Keys.W, gt => player.Jump(gt));
+        inputMap.Bind(Keys.Up, gt => player.Jump(gt));
+        inputMap.Bind(Keys.A, gt => player.Left(gt));
+        inputMap.Bind(Keys.Left, gt => player.Left(gt));
+        inputMap.Bind(Keys.S, gt => player.Crouch(gt));
+        inputMap.Bind(Keys.Down, gt => player.Crouch(gt));
+        inputMap.Bind(Keys.D, gt => player.Right(gt));
+        inputMap.Bind(Keys.Right, gt => player.Right(gt));
+        inputMap.Bind(Keys.Z, gt => player.Attack());
+        inputMap.Bind(Keys.N, gt =>  player.Attack());
+        inputMap.Bind(Keys.E, gt =>  player.TakeDamage());
         inputMap.Bind(Keys.T, gt => game.incrementBlock()); // needs to be fixed so that it only runs once per key press
         inputMap.Bind(Keys.Y, gt => game.decrementBlock());// needs to be fixed so that it only runs once per key press
         inputMap.Bind(Keys.U, gt => game.incrementItem()); // needs to be fixed so that it only runs once per key press
@@ -73,18 +71,27 @@ public class MarioGameController{
     }
     public void Update(GameTime gameTime)
     {
-        gameData.keyb.Update();
-        gameData.mouse.Update();
+        KeyboardInfo keyb = gameData.keyb;
+        MouseInfo mouse = gameData.mouse;
+        keyb.Update();
+        mouse.Update();
         
-        if(gameData.keyb.IsKeyUp(Keys.S) || gameData.keyb.IsKeyUp(Keys.Down)) // needs to go into input map
+        inputMap.ProcessInput(gameTime, keyb, mouse);// check all the inputs of the mouse and keyboard and run their corresponding function
+
+        if (!keyb.IsKeyDown(Keys.S) && !keyb.IsKeyDown(Keys.Down))
         {
             gameData.player.ReleaseCrouch();
         }
-        if(gameData.keyb.CurrentState.GetPressedKeyCount() == 0 || (gameData.keyb.IsKeyDown(Keys.Z) || gameData.keyb.IsKeyDown(Keys.N))) // needs to be fixed so that it runs only after movement is not pressed
+
+        bool moving =
+            keyb.IsKeyDown(Keys.A) || keyb.IsKeyDown(Keys.Left) ||
+            keyb.IsKeyDown(Keys.D) || keyb.IsKeyDown(Keys.Right) ||
+            keyb.IsKeyDown(Keys.S) || keyb.IsKeyDown(Keys.Down) ||
+            keyb.IsKeyDown(Keys.W) || keyb.IsKeyDown(Keys.Up);
+        if(!moving)
         {
             gameData.player.Idle();
         }
-        inputMap.ProcessInput(gameTime, gameData.keyb, gameData.mouse);// check all the inputs of the mouse and keyboard and run their corresponding function
     
     }
 
