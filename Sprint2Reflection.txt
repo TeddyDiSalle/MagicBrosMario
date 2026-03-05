@@ -1,0 +1,9 @@
+﻿Overall, the team performed well during sprint 2. We started out by assigning tasks to each group member, trying our best to divide the difficulty evenly. The very first thing done was create a texture and sprite classes 
+to ensure all other classes follow the same implementation. Next, all group members went on their own and completed their individual tasks, such as the Mario states, items, blocks, enemies, and controls for the game. Once 
+finished, everyone committed their implementations and changed game1.cs(called MagicBrosMario.cs) in order to get everything working. All group members tested out each others' implementations in order to spot any bugs 
+there could be. Once a bug was spotted, we immediately sent a notification in our Discord server and worked on fixing it. Since sprint 2 is mostly a testing sprint to make sure we had everything that worked, there really 
+wasn't much that we changed. A change we did make though was removing the animations for when Mario powers up. This was done to make things more simpler. It would have taken a lot of time to implement the many sprites 
+that would be needed and take way more time than we had, so that needed to be sacrificed. It was definitely a good thing in retrospect, but it would have been nice to have the animations to make it more detailed, so we 
+may go back later and add them in the future if we have the time. Something we may do differently next sprint would be to document our changes more often. For the most part, each group member waited until they were done 
+to commit their changes. While this meant nothing was broken for the other group members, it made syncing everyone's code to make it fit on the same screen a little annoying. Other than that, we felt like we communicated 
+well and did a good job for this sprint.

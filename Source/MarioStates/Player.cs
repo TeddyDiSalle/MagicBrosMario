@@ -1,6 +1,7 @@
 ﻿using MagicBrosMario.Source.Sprite;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
@@ -13,7 +14,7 @@ public class Player
     private Vector2 Position { get; set; } = new Vector2(400, 240);
     private Vector2 Velocity { get; set; }
 
-    private const double timeFrame = 0.15;
+    private const float timeFrame = 0.15f;
     private const int scaleFactor = 3;
 
     private const float MovementSpeed = 3.0f;
@@ -26,12 +27,29 @@ public class Player
     public double StarDuration { get; private set; } = 10;
     public double StarTimeRemaining { get; set; } = 0;
 
-    public readonly Color[] rainbow = [Color.Red];
+    private List<MarioFireball> fireballs = new List<MarioFireball>();
+    private const float fireballCooldown = 0.2f;
+    private float fireballTimeRemaining = 0;
 
+    private readonly Sprite.SharedTexture texture;
 
     public Player(Sprite.SharedTexture texture)
     {
-        PlayerState = new BigMarioIdleState(this, texture, timeFrame, scaleFactor);
+        PlayerState = new SmallMarioIdleState(this, texture, timeFrame, scaleFactor);
+        this.texture = texture;
+    }
+    public void CreateFireball()
+    {
+        if(fireballTimeRemaining < fireballCooldown) { return; }
+        fireballTimeRemaining = 0;
+        AnimatedSprite movingFireball = new(texture, 207, 168, 8, 8, 4, timeFrame);
+        Sprite.Sprite explosion = new(texture, 239, 168, 8, 8);
+        movingFireball.Scale = scaleFactor;
+        explosion.Scale = scaleFactor;
+        movingFireball.Flipped = Flipped;
+        explosion.Flipped = Flipped;
+        MarioFireball fireball = new(movingFireball, explosion, Position + new Vector2(16, 0), !Flipped, GroundY);
+        fireballs.Add(fireball);
     }
     public void Left(GameTime gameTime)
     {
@@ -150,11 +168,28 @@ public class Player
         {
             Idle();
         }
+        if(fireballTimeRemaining < fireballCooldown)
+        {
+            fireballTimeRemaining += (float)gameTime.ElapsedGameTime.TotalSeconds;
+        }
+        for (int i = 0; i < fireballs.Count; i++)
+        {
+            fireballs[i].Update(gameTime);
+
+            if (fireballs[i].IsExpired())
+            {
+                fireballs.RemoveAt(i);
+            }
+        }
         PlayerState.Update(gameTime, Velocity, Flipped);
     }
 
     public void Draw(SpriteBatch spriteBatch)
     {
         PlayerState.Draw(spriteBatch, Position);
+        foreach(MarioFireball fireball in fireballs)
+        {
+            fireball.Draw(spriteBatch);
+        }
     }
 }

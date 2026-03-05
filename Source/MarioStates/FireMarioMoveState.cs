@@ -9,47 +9,39 @@ public class FireMarioMoveState : IPlayerState
     private readonly Player Mario;
     private readonly Sprite.SharedTexture texture;
 
-    private Sprite.Sprite CurrentSprite;
+    private ISprite CurrentSprite;
 
     private int Frame = 0;
-    private int nextFrame = 1;
-    private readonly double timeFrame;
+    private readonly float timeFrame;
     private double timer = 0;
     private readonly int scaleFactor;
 
-    private readonly Sprite.Sprite[] Sprites;
-    private int StarFrame = 0;
-    private double StarTimer = 0;
+    private readonly ISprite[] Sprites;
 
     private bool Braking;
-    public FireMarioMoveState(Player Mario, Sprite.SharedTexture texture, double timeFrame, int scaleFactor)
+    private bool IsAttacking = false;
+    private double AttackTimer = 0;
+    public FireMarioMoveState(Player Mario, Sprite.SharedTexture texture, float timeFrame, int scaleFactor)
     {
         this.Mario = Mario;
         this.texture = texture;
         this.timeFrame = timeFrame;
         this.scaleFactor = scaleFactor;
         Sprites = [
-        texture.NewSprite(97, 129, 16, 32), //Walking1
-        texture.NewSprite(97, 192, 16, 32),
-        texture.NewSprite(97, 255, 16, 32),
-        texture.NewSprite(97, 318, 16, 32),
-        texture.NewSprite(114, 129, 14, 31), //Walking2
-        texture.NewSprite(114, 192, 16, 32),
-        texture.NewSprite(114, 255, 16, 32),
-        texture.NewSprite(114, 318, 16, 32),
-        texture.NewSprite(131, 129, 16, 32), //Walking3 
-        texture.NewSprite(131, 192, 16, 32),
-        texture.NewSprite(131, 255, 16, 32),
-        texture.NewSprite(131, 318, 16, 32),
-        texture.NewSprite(148, 129, 16, 32), //Brake 
-        texture.NewSprite(148, 192, 16, 32),
-        texture.NewSprite(148, 255, 16, 32),
-        texture.NewSprite(148, 318, 16, 32)];
+        texture.NewAnimatedSprite(2, 199, 16, 32, 4, timeFrame), //Normal Walking
+        texture.NewAnimatedSprite(2, 234, 16, 32, 16, timeFrame/4),//Rainbow Walking
+        texture.NewSprite(69, 199, 16, 32), //Normal Braking
+        texture.NewAnimatedSprite(69, 199, 16, 32, 4, timeFrame/4), //Rainbow Braking
+        texture.NewAnimatedSprite(2, 269, 16, 32, 4, timeFrame), //Attack Walking
+        texture.NewAnimatedSprite(2, 304, 16, 32, 16, timeFrame/4), //Rainbow Attack Walking
+        texture.NewSprite(69, 269, 16, 32), //Attack Braking
+        texture.NewAnimatedSprite(69, 269, 16, 32, 4, timeFrame/4) //Rainbow Attack Braking
+        ];
         for (int i = 0; i < Sprites.Length; i++)
         {
             Sprites[i].Scale = scaleFactor;
         }
-        CurrentSprite = Sprites[Frame];
+        CurrentSprite = Sprites[0];
     }
     public void Left(GameTime gameTime)
     {
@@ -70,7 +62,11 @@ public class FireMarioMoveState : IPlayerState
     }
     public void Attack()
     {
-        //Nothing
+        if (!IsAttacking)
+        {
+            IsAttacking = true;
+            Mario.CreateFireball();
+        }
     }
     public void TakeDamage()
     {
@@ -92,7 +88,6 @@ public class FireMarioMoveState : IPlayerState
             case Power.Star:
                 Mario.Invincible = true;
                 Mario.StarTimeRemaining = 0;
-                StarFrame = Frame * 4;
                 break;
         }
     }
@@ -106,7 +101,7 @@ public class FireMarioMoveState : IPlayerState
         bool BrakingLeft = Flipped && Velocity.X > 0;
         if (BrakingRight || BrakingLeft)
         {
-            Frame = 3;
+            Frame = 2;
             timer = 0;
             Braking = true;
             if (BrakingRight)
@@ -129,15 +124,13 @@ public class FireMarioMoveState : IPlayerState
     {
         if (timer <= timeFrame) { return; }
 
-        if (Frame == 3)
+        if (Frame == 2)
         {
             Frame = 0;
-            nextFrame = 1;
         }
-        Frame += nextFrame;
-        if (Frame == 0 || Frame == Sprites.Length/4 - 2)
+        else if (Frame == 3)
         {
-            nextFrame *= -1;
+            Frame = 1;
         }
         IsBraking(gameTime, Velocity, Flipped);
         timer = 0;
@@ -147,42 +140,37 @@ public class FireMarioMoveState : IPlayerState
     {
         if (!Mario.Invincible) { return; }
         Mario.StarTimeRemaining += time;
-        StarTimer += time;
-
-        if (StarTimer <= timeFrame / 4) { return; }
-        
-        StarFrame++;
         if (Braking)
         {
-            while (StarFrame + 4 < Sprites.Length)
-            {
-                StarFrame += 4;
-            }
-            if (StarFrame >= Sprites.Length)
-            {
-                StarFrame = 12;
-            }
+            Frame = 3;
         }
         else
         {
-            if (StarFrame >= Sprites.Length - 4)
-            {
-                StarFrame = 0;
-            }
-        }
-        StarTimer = 0;
-        
-        CurrentSprite = Sprites[StarFrame];
+            Frame = 1;
+        }    
     }
     public void Update(GameTime gameTime, Vector2 Velocity, bool Flipped)
     {
         double time = gameTime.ElapsedGameTime.TotalSeconds;
         timer += time;
+        AttackTimer += time;
         
         UpdateMovementAnimations(gameTime, Velocity, Flipped);
         UpdateStarAnimations(time);
-
-        CurrentSprite = (Mario.Invincible) ? Sprites[StarFrame] : Sprites[Frame*4];
+        if (IsAttacking)
+        {
+            CurrentSprite = Sprites[Frame + 4];
+            if(AttackTimer > timeFrame)
+            {
+                IsAttacking = false;
+                AttackTimer = 0;
+            }
+        }
+        else
+        {
+            CurrentSprite = Sprites[Frame];
+        }
+        CurrentSprite.Update(gameTime);
         CurrentSprite.Flipped = Flipped;
     }
     public void Draw(SpriteBatch spriteBatch, Vector2 Position)

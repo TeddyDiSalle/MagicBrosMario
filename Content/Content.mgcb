@@ -13,6 +13,18 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin blocks.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:blocks.png
+
 #begin characters.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -37,12 +49,12 @@
 /processorParam:TextureFormat=Color
 /build:enemies.png
 
-#begin font.spritefont
+#begin Font.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
-/build:font.spritefont
+/build:Font.spritefont
 
 #begin items.png
 /importer:TextureImporter
@@ -56,7 +68,7 @@
 /processorParam:TextureFormat=Color
 /build:items.png
 
-#begin MarioStarSheet.png
+#begin MarioSpriteSheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -66,5 +78,5 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:MarioStarSheet.png
+/build:MarioSpriteSheet.png
 

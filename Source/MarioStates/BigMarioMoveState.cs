@@ -9,42 +9,26 @@ public class BigMarioMoveState : IPlayerState
     private readonly Player Mario;
     private readonly Sprite.SharedTexture texture;
 
-    private Sprite.Sprite CurrentSprite;
-
+    private Sprite.ISprite CurrentSprite;
     private int Frame = 0;
-    private int nextFrame = 1;
-    private readonly double timeFrame;
+    private readonly float timeFrame;
     private double timer = 0;
     private readonly int scaleFactor;
 
-    private readonly Sprite.Sprite[] Sprites;
-    private int StarFrame = 0;
-    private double StarTimer = 0;
-
+    private readonly Sprite.ISprite[] Sprites;
     private bool Braking;
-    public BigMarioMoveState(Player Mario, Sprite.SharedTexture texture, double timeFrame, int scaleFactor)
+    public BigMarioMoveState(Player Mario, Sprite.SharedTexture texture, float timeFrame, int scaleFactor)
     {
         this.Mario = Mario;
         this.texture = texture;
         this.timeFrame = timeFrame;
         this.scaleFactor = scaleFactor;
         Sprites = [
-        texture.NewSprite(97, 3, 16, 30), //Walking1 Invincible
-        texture.NewSprite(97, 194, 16, 30),
-        texture.NewSprite(97, 257, 16, 30),
-        texture.NewSprite(97, 320, 16, 30),
-        texture.NewSprite(115, 2, 14, 31), //Walking2 Invincible
-        texture.NewSprite(115, 193, 14, 31),
-        texture.NewSprite(115, 256, 14, 31),
-        texture.NewSprite(115, 319, 14, 31),
-        texture.NewSprite(131, 1, 16, 32), //Walking3 Invincible
-        texture.NewSprite(131, 192, 16, 32),
-        texture.NewSprite(131, 255, 16, 32),
-        texture.NewSprite(131, 318, 16, 32),
-        texture.NewSprite(148, 1, 16, 32), //Brake Invincible
-        texture.NewSprite(148, 192, 16, 32),
-        texture.NewSprite(148, 255, 16, 32),
-        texture.NewSprite(148, 318, 16, 32)];
+            texture.NewAnimatedSprite(2, 94, 16, 32, 4, timeFrame),
+            texture.NewAnimatedSprite(2, 129, 16, 32, 16, timeFrame/4),
+            texture.NewSprite(69, 94, 16, 32),
+            texture.NewAnimatedSprite(69, 94, 16, 32, 4, timeFrame/4)
+        ];
         for (int i = 0; i < Sprites.Length; i++)
         {
             Sprites[i].Scale = scaleFactor;
@@ -92,7 +76,6 @@ public class BigMarioMoveState : IPlayerState
             case Power.Star:
                 Mario.Invincible = true;
                 Mario.StarTimeRemaining = 0;
-                StarFrame = Frame * 4;
                 break;
         }
     }
@@ -106,7 +89,7 @@ public class BigMarioMoveState : IPlayerState
         bool BrakingLeft = Flipped && Velocity.X > 0;
         if (BrakingRight || BrakingLeft)
         {
-            Frame = 3;
+            Frame = 2;
             timer = 0;
             Braking = true;
             if (BrakingRight)
@@ -129,15 +112,13 @@ public class BigMarioMoveState : IPlayerState
     {
         if (timer <= timeFrame) { return; }
 
-        if (Frame == 3)
+        if (Frame == 2)
         {
             Frame = 0;
-            nextFrame = 1;
         }
-        Frame += nextFrame;
-        if (Frame == 0 || Frame == Sprites.Length/4 - 2)
+        else if (Frame == 3)
         {
-            nextFrame *= -1;
+            Frame = 1;
         }
         IsBraking(gameTime, Velocity, Flipped);
         timer = 0;
@@ -147,32 +128,14 @@ public class BigMarioMoveState : IPlayerState
     {
         if (!Mario.Invincible) { return; }
         Mario.StarTimeRemaining += time;
-        StarTimer += time;
-
-        if (StarTimer <= timeFrame / 4) { return; }
-        
-        StarFrame++;
         if (Braking)
         {
-            while (StarFrame + 4 < Sprites.Length)
-            {
-                StarFrame += 4;
-            }
-            if (StarFrame >= Sprites.Length)
-            {
-                StarFrame = 12;
-            }
+            Frame = 3;
         }
         else
         {
-            if (StarFrame >= Sprites.Length - 4)
-            {
-                StarFrame = 0;
-            }
+            Frame = 1;
         }
-        StarTimer = 0;
-        
-        CurrentSprite = Sprites[StarFrame];
     }
     public void Update(GameTime gameTime, Vector2 Velocity, bool Flipped)
     {
@@ -182,7 +145,8 @@ public class BigMarioMoveState : IPlayerState
         UpdateMovementAnimations(gameTime, Velocity, Flipped);
         UpdateStarAnimations(time);
 
-        CurrentSprite = (Mario.Invincible) ? Sprites[StarFrame] : Sprites[Frame*4];
+        CurrentSprite = Sprites[Frame];
+        CurrentSprite.Update(gameTime);
         CurrentSprite.Flipped = Flipped;
     }
     public void Draw(SpriteBatch spriteBatch, Vector2 Position)

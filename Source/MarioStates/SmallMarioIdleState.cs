@@ -7,23 +7,20 @@ public class SmallMarioIdleState : IPlayerState
 {
     private readonly Player Mario;
     private readonly Sprite.SharedTexture texture;
-    private Sprite.Sprite CurrentSprite;
-    private readonly double timeFrame;
+    private Sprite.ISprite CurrentSprite;
+    private readonly float timeFrame;
     private readonly int scaleFactor;
 
-    private readonly Sprite.Sprite[] Sprites;
-    private int StarFrame = 0;
-    private double StarTimer = 0;
-    public SmallMarioIdleState(Player Mario, Sprite.SharedTexture texture, double timeFrame, int scaleFactor)
+    private readonly Sprite.ISprite[] Sprites;
+
+    public SmallMarioIdleState(Player Mario, Sprite.SharedTexture texture, float timeFrame, int scaleFactor)
     {
         this.Mario = Mario;
         this.texture = texture;
         this.timeFrame = timeFrame;
         this.scaleFactor = scaleFactor;
-        Sprites = [texture.NewSprite(80, 34, 16, 16),
-            texture.NewSprite(80, 225, 16, 16),
-            texture.NewSprite(80, 288, 16, 16),
-            texture.NewSprite(80, 351, 16, 16)];
+        Sprites = [texture.NewSprite(2, 2, 16, 16),
+            texture.NewAnimatedSprite(2, 2, 16, 16, 4, timeFrame/4)];
         CurrentSprite = Sprites[0];
         for (int i = 0; i < Sprites.Length; i++)
         {
@@ -83,26 +80,16 @@ public class SmallMarioIdleState : IPlayerState
     }
     public void Update(GameTime gameTime, Vector2 Velocity, bool Flipped)
     {
-        if (Mario.Invincible && Mario.StarTimeRemaining <= Mario.StarDuration)
+        if (Mario.Invincible)
         {
-            double time = gameTime.ElapsedGameTime.TotalSeconds;
-            Mario.StarTimeRemaining += time;
-            StarTimer += time;
-            if (StarTimer > timeFrame / 4)
-            {
-                StarFrame++;
-                if (StarFrame == Sprites.Length)
-                {
-                    StarFrame = 0;
-                }
-                StarTimer = 0;
-            }
-            CurrentSprite = Sprites[StarFrame];
+            CurrentSprite = Sprites[1];
+            Mario.StarTimeRemaining += gameTime.ElapsedGameTime.TotalSeconds;
         }
         else
         {
             CurrentSprite = Sprites[0];
         }
+        CurrentSprite.Update(gameTime);
         CurrentSprite.Flipped = Flipped;
     }
     public void Draw(SpriteBatch spriteBatch, Vector2 Position)
