@@ -16,13 +16,15 @@ namespace MagicBrosMario.Source.Items
 		private int direction = -1;
 		private int xLimit;
 		private int yLimit;
+		private int yDifference = 0;
 
-		public MovingPlatform_Size2(SharedTexture texture, int screenWidth, int screenHeight, int positionX, int positionY)
+		public MovingPlatform_Size2(SharedTexture texture, int screenWidth, int screenHeight, int positionX, int positionY, int d)
 		{
 
 			sprite = new Sprite.Sprite(texture, 26, 38, 32, 8);
 			yLimit = screenHeight;
 			xLimit = screenWidth;
+			direction = d;
 
 			position = new Point(positionX, positionY);
 			sprite.Scale = 3f;
@@ -32,7 +34,9 @@ namespace MagicBrosMario.Source.Items
 		{
 			float time = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-			position.Y += (int)(direction * speed * time);
+			yDifference = (int)(direction * speed * time);
+
+			position.Y += yDifference;
 
 			if (position.Y <= 0 || position.Y + sprite.Size.Y >= yLimit)
 			{
@@ -46,6 +50,11 @@ namespace MagicBrosMario.Source.Items
 		public void Draw(SpriteBatch spriteBatch)
 		{
 			sprite.Draw(spriteBatch);
+		}
+
+		public int getY()
+		{
+			return yDifference;
 		}
 
 	}
