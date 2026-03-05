@@ -26,6 +26,8 @@ public class SmallMarioJumpState : IPlayerState
         {
             Sprites[i].Scale = scaleFactor;
         }
+        Rectangle currentHitBox = Mario.collision.CollisionBox;
+        Mario.collision.CollisionBox = new Rectangle(currentHitBox.X, currentHitBox.Y, 16, 16);
     }
     public void Left(GameTime gameTime)
     {

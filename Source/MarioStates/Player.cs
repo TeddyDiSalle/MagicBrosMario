@@ -11,32 +11,28 @@ public class Player
 {
     private IPlayerState PlayerState { get; set; }
 
-    private Vector2 Position { get; set; } = new Vector2(400, 240);
-    private Vector2 Velocity { get; set; }
-
-    private const float timeFrame = 0.15f;
+    public Vector2 Position { get; private set; } = new Vector2(400, 240);
+    public Vector2 Velocity { get; private set; }
     private const int scaleFactor = 3;
-
-    private const float MovementSpeed = 3.0f;
-    private const float Gravity = 0.35f;
     private float GroundY = 260; //Temporary for Sprint2
-    private const float MaxSpeed = 15.0f;
+    private const float timeFrame = 0.15f, MovementSpeed = 3.0f, Gravity = 0.35f, MaxSpeed = 15.0f, fireballCooldown = 0.2f;
     public bool IsCrouching { get; private set; } = false;
     public bool Flipped { get; set; } = false;
     public bool Invincible { get; set; } = false;
-    public double StarDuration { get; private set; } = 10;
+    private double StarDuration { get; set; } = 10;
     public double StarTimeRemaining { get; set; } = 0;
-
-    private List<MarioFireball> fireballs = new List<MarioFireball>();
-    private const float fireballCooldown = 0.2f;
+    private List<MarioFireball> fireballs = [];
     private float fireballTimeRemaining = 0;
-
+    private int lives = 3;
     private readonly Sprite.SharedTexture texture;
+
+    public MarioCollision collision { get; private set; } 
 
     public Player(Sprite.SharedTexture texture)
     {
         PlayerState = new SmallMarioIdleState(this, texture, timeFrame, scaleFactor);
         this.texture = texture;
+        collision = new MarioCollision(this);
     }
     public void CreateFireball()
     {
@@ -76,11 +72,20 @@ public class Player
     }
     public void Attack()
     {
-        PlayerState.Attack();
+        if(fireballs.Count < 3)
+            PlayerState.Attack();
     }
     public void TakeDamage()
     {
         PlayerState.TakeDamage();
+    }
+    public void KillMario()
+    {
+        lives--;
+    }
+    public bool IsAlive()
+    {
+        return lives != 0;
     }
     public void PowerUp(Power power)
     {
@@ -102,7 +107,6 @@ public class Player
             Velocity = new Vector2(-MaxSpeed, Velocity.Y);
         }
     }
-
     public void MoveRight(GameTime gameTime, int factor)
     {
         float distanceMoved = (float)gameTime.ElapsedGameTime.TotalSeconds * MovementSpeed * factor;
@@ -147,6 +151,15 @@ public class Player
     {
         Position = pos;
     }
+    public void AddToPositon(Vector2 dxdy)
+    {
+        Position += dxdy;
+    }
+    public void AddToVelocity(Vector2 dxdy)
+    {
+        Velocity += dxdy;
+    }
+
     public void Update(GameTime gameTime)
     {
         if (Position.Y < GroundY)
@@ -181,6 +194,7 @@ public class Player
                 fireballs.RemoveAt(i);
             }
         }
+        collision.CollisionBox = new Rectangle((int)Position.X, (int)Position.Y, collision.CollisionBox.Width, collision.CollisionBox.Height);
         PlayerState.Update(gameTime, Velocity, Flipped);
     }
 

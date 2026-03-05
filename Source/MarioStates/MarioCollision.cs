@@ -7,14 +7,15 @@ using System.Runtime.CompilerServices;
 
 namespace MagicBrosMario.Source.MarioStates;
 //Vincent Do
-public class MarioCollision(Player player) : ICollidable
+public class MarioCollision(Player player) : Collision.ICollidable
 {
-    Rectangle CollisionBox { get; }
-    void OnPlayerCollide(IPlayer player, CollideDirection direction)
+    public Rectangle CollisionBox { get; set; }
+
+    public void OnCollidePlayer(Player player, Collision.CollideDirection direction)
     {
         //Nothing
     }
-    void OnItemCollide(IItems item, CollideDirection direction)
+    public void OnCollideItem(IItems item, Collision.CollideDirection direction)
     {
         switch (item)
         {
@@ -23,15 +24,23 @@ public class MarioCollision(Player player) : ICollidable
                 player.PowerUp(Power.FireFlower);
                 break;
             case MovingPlatform_Size1:
+                //Uncollide
+                //Add dx and dy of platform to player position
+                break;
             case MovingPlatform_Size2:
+                //Uncollide
+                //Add dx and dy of platform to player position
+                break;
             case MovingPlatform_Size3:
+                //Uncollide
                 //Add dx and dy of platform to player position
                 break;
             case Mushroom:
                 player.PowerUp(Power.Mushroom);
                 break;
             case Spring_Stretched:
-                player.MoveUp();
+                
+                player.AddToVelocity(new Vector2(0, 70));
                 break;
             case Star:
                 player.PowerUp(Power.Star);
@@ -41,17 +50,21 @@ public class MarioCollision(Player player) : ICollidable
                 break;
         }
     }
-    void OnEnemyCollide(IEnemy enemy, CollideDirection direction)
+    public void OnCollideEnemy(IEnemy enemy, Collision.CollideDirection direction)
     {
-        switch (enemy) {
+        switch (enemy)
+        {
             case Fireball:
             case Bowser:
+                //Uncollide
             case PiranhaPlant:
                 player.TakeDamage();
                 break;
             case Goomba:
+                //Uncollide
             case Koopa:
-                if (direction != CollideDirection.Top)
+                //Uncollide
+                if (direction != Collision.CollideDirection.Top)
                 {
                     player.TakeDamage();
                 }
@@ -63,9 +76,34 @@ public class MarioCollision(Player player) : ICollidable
                 //Nothing
                 break;
 
+        }
     }
-    void OnBlockCollide(IBlock block, CollideDirection direction)
+    public void OnCollideBlock(IBlock block, Collision.CollideDirection direction)
     {
+        if (!block.IsSolid) return;
+        //Uncollide
+    }
 
+    public void UnCollide(Rectangle intersect, Collision.CollideDirection direction)
+    {
+        switch (direction)
+        {
+            case Collision.CollideDirection.Top:
+                player.AddToPositon(new Vector2(0, intersect.Height));
+                player.AddToVelocity(new Vector2(0, -player.Velocity.Y));
+                break;
+            case Collision.CollideDirection.Down:
+                player.AddToPositon(new Vector2(0, -intersect.Height));
+                player.AddToVelocity(new Vector2(0, -player.Velocity.Y));
+                break;
+            case Collision.CollideDirection.Left:
+                player.AddToPositon(new Vector2(intersect.X, 0));
+                player.AddToVelocity(new Vector2(-player.Velocity.X, 0));
+                break;
+            case Collision.CollideDirection.Right:
+                player.AddToPositon(new Vector2(-intersect.X, 0));
+                player.AddToVelocity(new Vector2(-player.Velocity.X, 0));
+                break;
+        }
     }
 }
