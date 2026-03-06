@@ -68,6 +68,10 @@ public class Player : ICollidable
         IsCrouching = true;
         PlayerState.Crouch(gameTime);
     }
+    public void SetPositon(Vector2 pos)
+    {
+        Position = pos;
+    }
     public void ReleaseCrouch()
     {
         IsCrouching = false;
@@ -80,10 +84,6 @@ public class Player : ICollidable
     public void TakeDamage()
     {
         PlayerState.TakeDamage();
-    }
-    public void AddLife()
-    {
-        lives++;
     }
     public void KillMario()
     {
@@ -153,23 +153,6 @@ public class Player : ICollidable
         }
     }
 
-    public void OnGround(float NewGroundY)
-    {
-        GroundY = NewGroundY;
-    }
-    public void SetPositon(Vector2 pos)
-    {
-        Position = pos;
-    }
-    public void AddToPositon(Vector2 dxdy)
-    {
-        Position += dxdy;
-    }
-    public void AddToVelocity(Vector2 dxdy)
-    {
-        Velocity += dxdy;
-    }
-
     //Collision Handling Methods
     public void OnCollidePlayer(Player player, Collision.CollideDirection direction)
     {
@@ -210,7 +193,7 @@ public class Player : ICollidable
                 PlayerState.PowerUp(Power.Mushroom);
                 break;
             case OneUp:
-                AddLife();
+                lives++;
                 break;
             case Spring_Stretched:
                 //Uncollide

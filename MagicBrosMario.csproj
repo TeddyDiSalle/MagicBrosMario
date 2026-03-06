@@ -13,6 +13,7 @@
   <ItemGroup>
     <Compile Remove="Source\MarioStates\LeftSmallMarioIdleState.cs" />
     <Compile Remove="Source\MarioStates\LeftSmallMarioMoveState.cs" />
+    <Compile Remove="Source\MarioStates\MarioCollision.cs" />
     <Compile Remove="Source\MarioStates\RightSmallMarioIdleState.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -24,7 +24,7 @@ public class MagicBrosMario : Game
     private ILevel lvl;
     private SpriteFont _font;
 
-    private Fireflower fireflower;
+    private IItems[] CollectableItems;
     private int ScreenWidth;
     private int ScreenHeight;
 
@@ -70,10 +70,17 @@ public class MagicBrosMario : Game
             halfY = _graphics.PreferredBackBufferHeight / 2
         };
         Controller = new MarioGameController(this, ref data);
-        fireflower = new Fireflower(ItemTexture, ScreenWidth, ScreenHeight, 600, 200);
+        CollectableItems = [
+            new Fireflower(ItemTexture, ScreenWidth, ScreenHeight, 700, 150),
+            new Fireflower_Underground(ItemTexture, ScreenWidth, ScreenHeight, 600, 150),
+            new Mushroom(ItemTexture, ScreenWidth, ScreenHeight, 100, 150),
+            new OneUp(ItemTexture, ScreenWidth, ScreenHeight, 0, 150),
+            new Star(ItemTexture, ScreenWidth, ScreenHeight, 50, 150),
+        ];
 
         CollisionController.Instance.BindPlayer(Mario);
-        CollisionController.Instance.AddItem(fireflower);
+        foreach(IItems item in CollectableItems)
+            CollisionController.Instance.AddItem(item);
     }
 
     protected override void Update(GameTime gameTime)
@@ -82,7 +89,10 @@ public class MagicBrosMario : Game
         lvl.Update(gameTime);
         Mario.Update(gameTime);
         CollisionController.Instance.Update(gameTime);
-
+        foreach (IItems item in CollectableItems)
+        {
+            item.Update(gameTime);
+        }
     }
 
     protected override void Draw(GameTime gameTime)
@@ -94,7 +104,9 @@ public class MagicBrosMario : Game
         lvl.Draw(_spriteBatch);
 
         Mario.Draw(_spriteBatch);
-        fireflower.Draw(_spriteBatch);
+        foreach (IItems item in CollectableItems)
+            item.Draw(_spriteBatch);
+
         _spriteBatch.DrawString(_font, "Super Mario Bros", new Vector2(150, 100), Color.White); //SAMPLE USAGE
         _spriteBatch.End();
 
