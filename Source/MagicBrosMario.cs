@@ -137,7 +137,7 @@ public class MagicBrosMario : Game
 
 
 		items[0] = new Fireflower(itemsTexture, screenWidth, screenHeight, positionX, positionY);
-		//CollisionController.Instance.AddItem((Fireflower)items[0]);
+		CollisionController.Instance.AddItem((Fireflower)items[0]);
 		items[1] = new Fireflower_Underground(itemsTexture, screenWidth, screenHeight, positionX, positionY);
         items[2] = new QuestionBlock(itemsTexture, screenWidth, screenHeight, positionX, positionY);
         items[3] = new Coin(itemsTexture, screenWidth, screenHeight, positionX, positionY); 
