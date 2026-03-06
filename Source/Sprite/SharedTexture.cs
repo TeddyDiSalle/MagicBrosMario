@@ -72,7 +72,9 @@ public class SharedTexture
     /// <returns>a new non-animated sprite using this shared texture</returns>
     public Sprite NewSprite(int offsetX, int offsetY, int width, int height)
     {
-        return new Sprite(this, offsetX, offsetY, width, height);
+        var sprite = new Sprite(this, offsetX, offsetY, width, height);
+        Camera.Instance.Sprites.Add(sprite);
+        return sprite;
     }
 
     /// <summary>
@@ -90,6 +92,8 @@ public class SharedTexture
         int width, int height,
         int frameCount, float secPerFrame)
     {
-        return new AnimatedSprite(this, offsetX, offsetY, width, height, frameCount, secPerFrame);
+        var sprite = new AnimatedSprite(this, offsetX, offsetY, width, height, frameCount, secPerFrame);
+        Camera.Instance.Sprites.Add(sprite);
+        return sprite;
     }
 }

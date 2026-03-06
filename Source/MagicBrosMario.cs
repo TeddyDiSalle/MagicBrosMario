@@ -17,7 +17,7 @@ public class MagicBrosMario : Game
 
     public Player Mario;
     private SharedTexture texture;
-
+    private Camera cam;
     private int enemyArraySize = 5;
     private int blockArraySize = 9;
     private int itemArraySize = 16;
@@ -36,6 +36,7 @@ public class MagicBrosMario : Game
     public MagicBrosMario()
     {
         _graphics = new GraphicsDeviceManager(this);
+        cam = new Camera(_graphics);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
         enemy = new IEnemy[enemyArraySize];

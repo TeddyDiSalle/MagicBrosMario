@@ -13,7 +13,7 @@ public class CollisionController {
     private readonly List<ICollidable> enemies = [];
     private readonly List<ICollidable> blocks = [];
 
-	public static CollisionController Instance { get; } = new CollisionController();
+    public static CollisionController Instance { get; } = new CollisionController();
 
 	public void BindPlayer<TCollidablePlayer>(TCollidablePlayer collidablePlayer)
         where TCollidablePlayer : Player, ICollidable {

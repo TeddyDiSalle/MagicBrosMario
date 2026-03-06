@@ -7,6 +7,7 @@
 
 # weird mac file
 **/.DS_Store
+**/MagicBrosMario.sln.DotSettings.user
 
 # skip build caches
 **/bin/
