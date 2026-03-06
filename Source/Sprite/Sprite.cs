@@ -50,11 +50,18 @@ public class Sprite(
 
     private readonly Rectangle sourceRect = new(offsetX, offsetY, width, height);
     private Rectangle destRect = new(0, 0, width, height);
+    private bool shouldDraw = true;
 
     private void UpdateSize()
     {
         Size = new Point((int)(Scale * width), (int)(Scale * height));
-        destRect = new Rectangle(Position.X, Position.Y, Size.X, Size.Y);
+        UpdateDestRect();
+    }
+
+    public void UpdateDestRect() {
+        var screenPosition = Camera.Instance.Position;
+        destRect = new Rectangle(Position.X - screenPosition.X, Position.Y - screenPosition.Y, Size.X, Size.Y);
+        shouldDraw = Camera.Instance.ShouldDraw(destRect);
     }
 
     public void Update(GameTime gameTime)
@@ -62,8 +69,9 @@ public class Sprite(
         // no update for non-animated sprite
     }
 
-    public void Draw(SpriteBatch spriteBatch)
-    {
+    public void Draw(SpriteBatch spriteBatch) {
+        if (!shouldDraw) return;
+        
         if (Flipped)
         {
             spriteBatch.Draw(texture.Texture, destRect, sourceRect, Color, 0f, Vector2.Zero,
