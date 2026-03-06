@@ -38,9 +38,13 @@ namespace MagicBrosMario.Source.Items
 
 			position.Y += yDifference;
 
-			if (position.Y <= 0 || position.Y + sprite.Size.Y >= yLimit)
+			if (position.Y + sprite.Size.Y < 0) 
 			{
-				direction *= -1;
+				position.Y = yLimit;
+			}
+			else if (position.Y > yLimit)
+			{
+				position.Y = -sprite.Size.Y;
 			}
 
 			sprite.Position = position;
