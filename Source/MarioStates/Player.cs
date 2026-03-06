@@ -182,6 +182,7 @@ public class Player : ICollidable
             case Cloud cloud:
                 UnCollide(Rectangle.Intersect(CollisionBox, cloud.CollisionBox), direction);
                 Position += new Vector2(cloud.getX(), 0);
+                Velocity = new Vector2(Velocity.X, 0);
                 break;
             case Fireflower:
             case Fireflower_Underground:
@@ -190,14 +191,17 @@ public class Player : ICollidable
             case MovingPlatform_Size1 plat:
                 UnCollide(Rectangle.Intersect(CollisionBox, plat.CollisionBox), direction);
                 Position += new Vector2(0, plat.getY());
+                Velocity = new Vector2(Velocity.X, 0);
                 break;
             case MovingPlatform_Size2 plat:
                 UnCollide(Rectangle.Intersect(CollisionBox, plat.CollisionBox), direction);
                 Position += new Vector2(0, plat.getY());
+                Velocity = new Vector2(Velocity.X, 0);
                 break;
             case MovingPlatform_Size3 plat:
                 UnCollide(Rectangle.Intersect(CollisionBox, plat.CollisionBox), direction);
                 Position += new Vector2(0, plat.getY());
+                Velocity = new Vector2(Velocity.X, 0);
                 break;
             case Mushroom:
                 PlayerState.PowerUp(Power.Mushroom);
