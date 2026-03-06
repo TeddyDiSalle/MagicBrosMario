@@ -197,7 +197,7 @@ public class Player : ICollidable
                 break;
             case Spring_Stretched:
                 //Uncollide
-                Velocity = new Vector2(Velocity.X, 10);
+                Velocity -= new Vector2(Velocity.X, 10);
                 break;
             case Star:
                 PlayerState.PowerUp(Power.Star);
@@ -212,16 +212,32 @@ public class Player : ICollidable
         switch (enemy)
         {
             case Fireball:
-            case Bowser:
-            //Uncollide
+                PlayerState.TakeDamage();
+                break;
+            case Bowser bowser:
+                UnCollide(Rectangle.Intersect(CollisionBox, bowser.CollisionBox), direction);
+                break;
             case PiranhaPlant:
                 PlayerState.TakeDamage();
                 break;
-            case Goomba:
-            //Uncollide
-            case Koopa:
-                //Uncollide
-                if (direction != Collision.CollideDirection.Top)
+            case Goomba goomba:
+                UnCollide(Rectangle.Intersect(CollisionBox, goomba.CollisionBox), direction);
+                if (direction == CollideDirection.Down) 
+                {
+                    Velocity -= new Vector2(0, 10);
+                }
+                else
+                {
+                    PlayerState.TakeDamage();
+                }
+                break;
+            case Koopa koopa:
+                UnCollide(Rectangle.Intersect(CollisionBox, koopa.CollisionBox), direction);
+                if (direction == CollideDirection.Down)
+                {
+                    Velocity -= new Vector2(0, 10);
+                }
+                else
                 {
                     PlayerState.TakeDamage();
                 }
