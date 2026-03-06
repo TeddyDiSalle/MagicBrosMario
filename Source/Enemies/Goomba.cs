@@ -1,11 +1,14 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Runtime.CompilerServices;
+using MagicBrosMario.Source.Collision;
+using MagicBrosMario.Source.Block;
+using MagicBrosMario.Source.Items;
+using MagicBrosMario.Source.MarioStates;
 
 namespace MagicBrosMario.Source;
 
-public class Goomba : IEnemy
+public class Goomba : IEnemy, ICollidable
 {
     private const int VELOCITY = 100;
     private readonly int leftBound;
@@ -31,7 +34,22 @@ public class Goomba : IEnemy
         get { return CurrentSprite().Position; }
         private set { CurrentSprite().Position = value; }
     }
+    
     private Boolean isAlive;
+
+    // ICollidable implementation
+    public Rectangle CollisionBox
+    {
+        get
+        {
+            return new Rectangle(
+                CurrentSprite().Position.X,
+                CurrentSprite().Position.Y,
+                CurrentSprite().Size.X,
+                CurrentSprite().Size.Y
+            );
+        }
+    }
 
     public Goomba(Sprite.AnimatedSprite aliveSprite, Sprite.Sprite deadSprite, int Y, int leftBound, int rightBound)
     {
@@ -45,7 +63,7 @@ public class Goomba : IEnemy
 
     public void Update(GameTime gametime)
     {
-        if (isAlive) // Replace later with condition to check if Goomba is alive or not
+        if (isAlive)
         {
             Walking(gametime);
         }
@@ -53,7 +71,6 @@ public class Goomba : IEnemy
         CurrentSprite().Update(gametime);
     }
 
-    
     public void Walking(GameTime gameTime)
     {
         var sec = (double)gameTime.ElapsedGameTime.TotalMilliseconds / 1000.0;
@@ -79,17 +96,51 @@ public class Goomba : IEnemy
                 movingRight = true;
             }
         }
-        
     }
 
     public void Kill()
     {
         this.isAlive = false;
-        sprites[1].Position = sprites[0].Position; // Set the dead sprite's position to the current position of the alive sprite
+        sprites[1].Position = sprites[0].Position;
     }
 
     public void Draw(SpriteBatch _spriteBatch)
     {
         CurrentSprite().Draw(_spriteBatch);
+    }
+
+    // ICollidable methods
+    public void OnCollidePlayer(Player player, CollideDirection direction)
+    {
+        if (direction == CollideDirection.Down)
+        {
+            // Player stomped on Goomba from above
+            Kill();
+        }
+        else
+        {
+            // Goomba hits player from side - player takes damage
+            // Handle player damage here if needed
+        }
+    }
+
+    public void OnCollideItem(IItems item, CollideDirection direction)
+    {
+        // Goomba doesn't interact with items
+    }
+
+    public void OnCollideEnemy(IEnemy enemy, CollideDirection direction)
+    {
+        // Goomba hits another enemy - turn around
+        movingRight = !movingRight;
+    }
+
+    public void OnCollideBlock(IBlock block, CollideDirection direction)
+    {
+        // Goomba hits a block - turn around
+        if (direction == CollideDirection.Left || direction == CollideDirection.Right)
+        {
+            movingRight = !movingRight;
+        }
     }
 }
