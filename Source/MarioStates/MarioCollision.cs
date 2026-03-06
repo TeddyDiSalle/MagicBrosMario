@@ -27,17 +27,17 @@ public class MarioCollision(Player player) : Collision.ICollidable
             case Fireflower_Underground:
                 player.PowerUp(Power.FireFlower);
                 break;
-            case MovingPlatform_Size1:
+            case MovingPlatform_Size1 plat:
                 //Uncollide
-                //Add dx and dy of platform to player position
+                player.AddToPositon(new Vector2(0, plat.getY()));
                 break;
-            case MovingPlatform_Size2:
+            case MovingPlatform_Size2 plat:
                 //Uncollide
-                //Add dx and dy of platform to player position
+                player.AddToPositon(new Vector2(0, plat.getY()));
                 break;
-            case MovingPlatform_Size3:
+            case MovingPlatform_Size3 plat:
                 //Uncollide
-                //Add dx and dy of platform to player position
+                player.AddToPositon(new Vector2(0, plat.getY()));
                 break;
             case Mushroom:
                 player.PowerUp(Power.Mushroom);
