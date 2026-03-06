@@ -179,7 +179,7 @@ public class Koopa : IEnemy, ICollidable
             // Only turn if walking or a moving shell
             if (state == KoopaState.WalkingAlive || state == KoopaState.ShellMoving)
             {
-                int pushDistance = 5;
+                int pushDistance = 15;
 
                 if (direction == CollideDirection.Left)
                 {

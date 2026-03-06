@@ -123,7 +123,7 @@ public class Goomba : IEnemy, ICollidable
         if (direction == CollideDirection.Left || direction == CollideDirection.Right)
         {
             
-            int pushDistance = 5; 
+            int pushDistance = 15; 
 
             if (direction == CollideDirection.Left)
             {
