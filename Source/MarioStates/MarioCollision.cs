@@ -19,6 +19,10 @@ public class MarioCollision(Player player) : Collision.ICollidable
     {
         switch (item)
         {
+            case Cloud:
+                //Uncollide
+                //Add dxdy to player pos
+                break;
             case Fireflower:
             case Fireflower_Underground:
                 player.PowerUp(Power.FireFlower);
@@ -38,8 +42,11 @@ public class MarioCollision(Player player) : Collision.ICollidable
             case Mushroom:
                 player.PowerUp(Power.Mushroom);
                 break;
+            case OneUp:
+                player.AddLife();
+                break;
             case Spring_Stretched:
-                
+                //Uncollide
                 player.AddToVelocity(new Vector2(0, 70));
                 break;
             case Star:

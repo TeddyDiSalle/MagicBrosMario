@@ -30,9 +30,9 @@ public class Player
 
     public Player(Sprite.SharedTexture texture)
     {
-        PlayerState = new SmallMarioIdleState(this, texture, timeFrame, scaleFactor);
         this.texture = texture;
         collision = new MarioCollision(this);
+        PlayerState = new SmallMarioIdleState(this, texture, timeFrame, scaleFactor);
     }
     public void CreateFireball()
     {
@@ -72,12 +72,16 @@ public class Player
     }
     public void Attack()
     {
-        if(fireballs.Count < 3)
+        if(fireballs.Count < 2)
             PlayerState.Attack();
     }
     public void TakeDamage()
     {
         PlayerState.TakeDamage();
+    }
+    public void AddLife()
+    {
+        lives++;
     }
     public void KillMario()
     {
