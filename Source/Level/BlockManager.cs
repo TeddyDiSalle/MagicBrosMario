@@ -1,6 +1,7 @@
 // Made By Teddy
 using System;
 using System.Collections.Generic;
+using System.Runtime.ConstrainedExecution;
 using System.Xml.Linq;
 using MagicBrosMario.Source.Block;
 using Microsoft.Xna.Framework.Graphics;
@@ -9,8 +10,10 @@ namespace MagicBrosMario.Source.Level;
 
 public class BlockManager
 {
-    private  readonly Dictionary<string, Func<IBlock>> BlockConstructors = new();
+    private readonly Dictionary<string, Func<int, int, IBlock>> BlockConstructors = new();
     private string xmlPath = "Content/LevelData/Blocks.xml";
+    private readonly int _scale = 4;
+
     public void Initialize(Texture2D texture)
     {
         BlockConstructors.Clear();
@@ -21,7 +24,7 @@ public class BlockManager
             var id = blockElement.Attribute("id")?.Value;
             var function = blockElement.Attribute("function")?.Value;
 
-            if (id != null && function != null)
+            if (!string.IsNullOrEmpty(id) && !string.IsNullOrEmpty(function))
             {
                 BlockConstructors[id] = GetBlockConstructor(function);
             }
@@ -29,29 +32,29 @@ public class BlockManager
         BlockFactory.BindTexture(texture);
     }
 
-    public IBlock CreateBlock(string blockId)
+    public IBlock CreateBlock(string blockId, int x, int y)
     {
         if (BlockConstructors.TryGetValue(blockId, out var constructor))
         {
-            return constructor.Invoke();
+             return constructor(x, y);
         }
 
         throw new KeyNotFoundException($"Block with ID '{blockId}' not found.");
     }
 
-    private Func<IBlock> GetBlockConstructor(string functionName)
+    private Func<int, int, IBlock> GetBlockConstructor(string functionName)
     {
         return functionName switch
         {
-            "VoidBlock" => BlockFactory.VoidBlock,
-            "SkyBlock" => BlockFactory.SkyBlock,
-            "GroundBlock" => BlockFactory.GroundBlock,
-            "BlueGroundBlock" => BlockFactory.BlueGroundBlock,
-            "Bricks" => BlockFactory.Bricks,
-            "BlueBricks" => BlockFactory.BlueBricks,
-            "BaseBlock" => BlockFactory.BaseBlock,
-            "QuestionMarkBlock" => BlockFactory.QuestionMarkBlock,
-            "EmptyQuestionMarkBlock" => BlockFactory.EmptyQuestionMarkBlock,
+            "VoidBlock" => (x, y) => BlockFactory.VoidBlock().WithPosition(x, y).WithScale(_scale),
+            "SkyBlock" => (x, y) => BlockFactory.SkyBlock().WithPosition(x, y).WithScale(_scale),
+            "GroundBlock" => (x, y) => BlockFactory.GroundBlock().WithPosition(x, y).WithScale(_scale),
+            "BlueGroundBlock" => (x, y) => BlockFactory.BlueGroundBlock().WithPosition(x, y).WithScale(_scale),
+            "Bricks" => (x, y) => BlockFactory.Bricks().WithPosition(x, y).WithScale(_scale),
+            "BlueBricks" => (x, y) => BlockFactory.BlueBricks().WithPosition(x, y).WithScale(_scale),
+            "BaseBlock" => (x, y) => BlockFactory.BaseBlock().WithPosition(x, y).WithScale(_scale),
+            "QuestionMarkBlock" => (x, y) => BlockFactory.QuestionMarkBlock().WithPosition(x, y).WithScale(_scale),
+            "EmptyQuestionMarkBlock" => (x, y) => BlockFactory.EmptyQuestionMarkBlock().WithPosition(x, y).WithScale(_scale),
             _ => throw new ArgumentException($"Unknown block function: {functionName}")
         };
     }
