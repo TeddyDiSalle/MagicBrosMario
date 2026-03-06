@@ -1,4 +1,5 @@
 ﻿using MagicBrosMario.Source.Block;
+using MagicBrosMario.Source.Collision;
 using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.MarioStates;
 using MagicBrosMario.Source.Sprite;
@@ -55,7 +56,7 @@ public class MagicBrosMario : Game
 
         Mario = new Player(texture);
         Mario.SetPositon(new Vector2(MarioStartPos[0], MarioStartPos[1]));
-        MarioGameController.Sprint2Controller data = new MarioGameController.Sprint2Controller
+		MarioGameController.Sprint2Controller data = new MarioGameController.Sprint2Controller
         {
             player = Mario,
             mouse = new MouseInfo(),
@@ -131,24 +132,27 @@ public class MagicBrosMario : Game
         itemsTexture.BindTexture(Content.Load<Texture2D>("items"));
         int screenWidth = GraphicsDevice.Viewport.Width;
         int screenHeight = GraphicsDevice.Viewport.Height;
-        int positionX = 100;
-        int positionY = 100;
+        int positionX = 400;
+        int positionY = 265;
 
 
-        items[0] = new Fireflower(itemsTexture, screenWidth, screenHeight, positionX, positionY);
-        items[1] = new Fireflower_Underground(itemsTexture, screenWidth, screenHeight, positionX, positionY);
+		items[0] = new Fireflower(itemsTexture, screenWidth, screenHeight, positionX, positionY);
+		//CollisionController.Instance.AddItem((Fireflower)items[0]);
+		items[1] = new Fireflower_Underground(itemsTexture, screenWidth, screenHeight, positionX, positionY);
         items[2] = new QuestionBlock(itemsTexture, screenWidth, screenHeight, positionX, positionY);
-        items[3] = new Coin(itemsTexture, screenWidth, screenHeight, positionX,
-            positionY); // Mostly Done, may add movement later if necessary
+        items[3] = new Coin(itemsTexture, screenWidth, screenHeight, positionX, positionY); 
         items[4] = new Mushroom(itemsTexture, screenWidth, screenHeight, positionX, positionY);
         items[5] = new OneUp(itemsTexture, screenWidth, screenHeight, positionX, positionY);
         items[6] = new Star(itemsTexture, screenWidth, screenHeight, positionX, positionY);
         items[7] = new Spring_Start(itemsTexture, screenWidth, screenHeight, positionX, positionY);
         items[8] = new Spring_Compressed(itemsTexture, screenWidth, screenHeight, positionX, positionY);
         items[9] = new Spring_Stretched(itemsTexture, screenWidth, screenHeight, positionX, positionY);
-        items[10] = new MovingPlatform_Size1(itemsTexture, screenWidth, screenHeight, positionX, positionY);
-        items[11] = new MovingPlatform_Size2(itemsTexture, screenWidth, screenHeight, positionX, positionY);
-        items[12] = new MovingPlatform_Size3(itemsTexture, screenWidth, screenHeight, positionX, positionY);
+
+        //The last parameter is for direction, -1 means up and 1 means down
+        items[10] = new MovingPlatform_Size1(itemsTexture, screenWidth, screenHeight, positionX, positionY, -1);
+        items[11] = new MovingPlatform_Size2(itemsTexture, screenWidth, screenHeight, positionX, positionY, -1);
+        items[12] = new MovingPlatform_Size3(itemsTexture, screenWidth, screenHeight, positionX, positionY, -1);
+
         items[13] = new Cloud(itemsTexture, screenWidth, screenHeight, positionX, positionY);
         items[14] = new PrincessPeach(itemsTexture, screenWidth, screenHeight, positionX, positionY);
         items[15] = new Toad(itemsTexture, screenWidth, screenHeight, positionX, positionY);
@@ -175,7 +179,8 @@ public class MagicBrosMario : Game
     {
         Controller.Update(gameTime);
         Mario.Update(gameTime);
-        enemy[enemyIndex].Update(gameTime);
+		CollisionController.Instance.Update(gameTime);
+		enemy[enemyIndex].Update(gameTime);
         items[itemIndex].Update(gameTime);
         blocks[blockIndex].Update(gameTime);
 

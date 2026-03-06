@@ -34,6 +34,8 @@ public class FireMarioIdleState : IPlayerState
         {
             Sprites[i].Scale = scaleFactor;
         }
+        Rectangle currentHitBox = Mario.collision.CollisionBox;
+        Mario.collision.CollisionBox = new Rectangle(currentHitBox.X, currentHitBox.Y, 16, 32);
     }
     public void Left(GameTime gameTime)
     {
@@ -85,6 +87,10 @@ public class FireMarioIdleState : IPlayerState
                 Mario.StarTimeRemaining = 0;
                 break;
         }
+    }
+    public Power GetCurrentPower()
+    {
+        return Power.FireFlower;
     }
     public void Idle()
     {

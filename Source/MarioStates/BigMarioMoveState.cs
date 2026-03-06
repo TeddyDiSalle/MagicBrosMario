@@ -34,6 +34,8 @@ public class BigMarioMoveState : IPlayerState
             Sprites[i].Scale = scaleFactor;
         }
         CurrentSprite = Sprites[Frame];
+        Rectangle currentHitBox = Mario.collision.CollisionBox;
+        Mario.collision.CollisionBox = new Rectangle(currentHitBox.X, currentHitBox.Y, 16, 32);
     }
     public void Left(GameTime gameTime)
     {
@@ -78,6 +80,11 @@ public class BigMarioMoveState : IPlayerState
                 Mario.StarTimeRemaining = 0;
                 break;
         }
+    }
+
+    public Power GetCurrentPower()
+    {
+        return Power.Mushroom;
     }
     public void Idle()
     {

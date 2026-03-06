@@ -12,7 +12,7 @@ namespace MagicBrosMario.Source.Items
 
 		public PrincessPeach(SharedTexture texture, int screenWidth, int screenHeight, int positionX, int positionY)
 		{
-			sprite = new Sprite.Sprite(texture, 245, 90, 14, 24);
+			sprite = texture.NewSprite(245, 90, 14, 24);
 
 			sprite.Position = new Point(positionX, positionY);
 			sprite.Scale = 3f;

@@ -26,6 +26,8 @@ public class SmallMarioIdleState : IPlayerState
         {
             Sprites[i].Scale = scaleFactor;
         }
+        Rectangle currentHitBox = Mario.collision.CollisionBox;
+        Mario.collision.CollisionBox = new Rectangle(currentHitBox.X, currentHitBox.Y, 16, 16);
     }
     public void Left(GameTime gameTime)
     {
@@ -73,6 +75,10 @@ public class SmallMarioIdleState : IPlayerState
                 Mario.StarTimeRemaining = 0;
                 break;
         }
+    }
+    public Power GetCurrentPower()
+    {
+        return Power.None;
     }
     public void Idle()
     {
