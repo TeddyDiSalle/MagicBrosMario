@@ -1,10 +1,14 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using MagicBrosMario.Source.Collision;
+using MagicBrosMario.Source.Block;
+using MagicBrosMario.Source.Items;
+using MagicBrosMario.Source.MarioStates;
 
 namespace MagicBrosMario.Source;
 
-public class Koopa : IEnemy
+public class Koopa : IEnemy, ICollidable
 {
     private const int VELOCITY = 100;
     private const int SHELL_VELOCITY = 200;
@@ -62,6 +66,20 @@ public class Koopa : IEnemy
             {
                 sprite.Position = value;
             }
+        }
+    }
+
+    // ICollidable implementation
+    public Rectangle CollisionBox
+    {
+        get
+        {
+            return new Rectangle(
+                CurrentSprite().Position.X,
+                CurrentSprite().Position.Y,
+                CurrentSprite().Size.X,
+                CurrentSprite().Size.Y
+            );
         }
     }
 
@@ -179,5 +197,88 @@ public class Koopa : IEnemy
     public void Draw(SpriteBatch _spriteBatch)
     {
         CurrentSprite().Draw(_spriteBatch);
+    }
+
+    // ICollidable methods
+    public void OnCollidePlayer(Player player, CollideDirection direction)
+    {
+        if (state == KoopaState.Dead)
+        {
+            return; // Already dead, no collision
+        }
+
+        if (direction == CollideDirection.Down)
+        {
+            // Player stomped on Koopa from above
+            if (state == KoopaState.WalkingAlive)
+            {
+                // First stomp - go into shell
+                Kill();
+            }
+            else if (state == KoopaState.ShellIdle || state == KoopaState.Stomped)
+            {
+                // Stomp on idle/wiggling shell - kick it
+                // Determine kick direction based on player position
+                bool kickRight = player.Position.X < Position.X;
+                KickShell(kickRight);
+            }
+            else if (state == KoopaState.ShellMoving)
+            {
+                // Stomp on moving shell - stop it
+                state = KoopaState.ShellIdle;
+                shellTimer = 0f;
+            }
+        }
+        else
+        {
+            // Hit from side
+            if (state == KoopaState.ShellIdle || state == KoopaState.Stomped)
+            {
+                // Player runs into idle shell - kick it
+                bool kickRight = direction == CollideDirection.Left; // Player hit from left, kick right
+                KickShell(kickRight);
+            }
+            else if (state == KoopaState.WalkingAlive || state == KoopaState.ShellMoving)
+            {
+                // Player takes damage from walking Koopa or moving shell
+                // Handle player damage here if needed
+            }
+        }
+    }
+
+    public void OnCollideItem(IItems item, CollideDirection direction)
+    {
+        // Koopa doesn't interact with items
+    }
+
+    public void OnCollideEnemy(IEnemy enemy, CollideDirection direction)
+    {
+        // Koopa hits another enemy
+        if (state == KoopaState.WalkingAlive)
+        {
+            // Turn around when walking
+            movingRight = !movingRight;
+        }
+        else if (state == KoopaState.ShellMoving)
+        {
+            // Moving shell defeats other enemies
+            if (enemy is ICollidable collidableEnemy)
+            {
+                enemy.Kill();
+            }
+        }
+    }
+
+    public void OnCollideBlock(IBlock block, CollideDirection direction)
+    {
+        // Koopa hits a block
+        if (direction == CollideDirection.Left || direction == CollideDirection.Right)
+        {
+            if (state == KoopaState.WalkingAlive || state == KoopaState.ShellMoving)
+            {
+                // Turn around
+                movingRight = !movingRight;
+            }
+        }
     }
 }

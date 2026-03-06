@@ -1,10 +1,14 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using MagicBrosMario.Source.Collision;
+using MagicBrosMario.Source.Block;
+using MagicBrosMario.Source.Items;
+using MagicBrosMario.Source.MarioStates;
 
 namespace MagicBrosMario.Source;
 
-public class PiranhaPlant : IEnemy
+public class PiranhaPlant : IEnemy, ICollidable
 {
     private const float RISE_SPEED = 100f;
     private const float PAUSE_DURATION = 0f;
@@ -29,6 +33,25 @@ public class PiranhaPlant : IEnemy
     {
         get { return aliveSprite.Position; }
         private set { aliveSprite.Position = value; }
+    }
+
+    // ICollidable implementation
+    public Rectangle CollisionBox
+    {
+        get
+        {
+            if (!isAlive)
+            {
+                return Rectangle.Empty; // No collision when dead
+            }
+
+            return new Rectangle(
+                aliveSprite.Position.X,
+                aliveSprite.Position.Y,
+                aliveSprite.Size.X,
+                aliveSprite.Size.Y
+            );
+        }
     }
 
     public PiranhaPlant(Sprite.AnimatedSprite aliveSprite, int pipeX, int pipeY)
@@ -69,7 +92,7 @@ public class PiranhaPlant : IEnemy
             {
                 Position = new Point(Position.X, visibleY);
                 state = PiranhaState.Lowering;
-                pauseTimer = PAUSE_DURATION; // Pause at top
+                pauseTimer = PAUSE_DURATION;
             }
             else
             {
@@ -83,7 +106,7 @@ public class PiranhaPlant : IEnemy
             {
                 Position = new Point(Position.X, hiddenY);
                 state = PiranhaState.Rising;
-                pauseTimer = PAUSE_DURATION; // Pause at bottom
+                pauseTimer = PAUSE_DURATION;
             }
             else
             {
@@ -106,5 +129,37 @@ public class PiranhaPlant : IEnemy
         {
             aliveSprite.Draw(_spriteBatch);
         }
+    }
+
+    // ICollidable methods
+    public void OnCollidePlayer(Player player, CollideDirection direction)
+    {
+        // Piranha Plant damages player on any collision
+        // In classic Mario, you can't stomp Piranha Plants
+        // Player takes damage regardless of direction
+        // Handle player damage here if needed
+    }
+
+    public void OnCollideItem(IItems item, CollideDirection direction)
+    {
+        // Piranha Plant can be killed by fireballs
+        if (item != null) // Check if it's a fireball or star
+        {
+            // You could add logic here to check item type
+            // For now, any item collision kills it
+            Kill();
+        }
+    }
+
+    public void OnCollideEnemy(IEnemy enemy, CollideDirection direction)
+    {
+        // Piranha Plants don't interact with other enemies
+        // They're stationary and don't affect each other
+    }
+
+    public void OnCollideBlock(IBlock block, CollideDirection direction)
+    {
+        // Piranha Plants don't collide with blocks
+        // They're inside pipes
     }
 }

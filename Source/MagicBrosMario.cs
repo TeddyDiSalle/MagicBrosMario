@@ -31,6 +31,7 @@ public class MagicBrosMario : Game
     private IBlock[] blocks;
     private IItems[] items;
     private SpriteFont _font;
+    private CollisionController collisionController;
 
     public MagicBrosMario()
     {
@@ -65,6 +66,8 @@ public class MagicBrosMario : Game
             halfY = _graphics.PreferredBackBufferHeight / 2
         };
         Controller = new MarioGameController(this, ref data);
+        collisionController = CollisionController.Instance;
+        collisionController.AddEnemy(enemy[0]);
     }
 
     // Make sure texture is set to characters

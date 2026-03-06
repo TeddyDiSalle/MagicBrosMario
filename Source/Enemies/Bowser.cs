@@ -2,10 +2,14 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using MagicBrosMario.Source.Collision;
+using MagicBrosMario.Source.Block;
+using MagicBrosMario.Source.Items;
+using MagicBrosMario.Source.MarioStates;
 
 namespace MagicBrosMario.Source;
 
-public class Bowser : IEnemy
+public class Bowser : IEnemy, ICollidable
 {
     private const int VELOCITY = 100;
     private const float FIRE_COOLDOWN = 3.0f;
@@ -22,7 +26,7 @@ public class Bowser : IEnemy
     private List<Fireball> activeFireballs = new List<Fireball>();
 
     private Boolean movingRight = true;
-    private Boolean isAlive;
+    private Boolean isAlive = true;
     private float fireCooldownTimer = 0f;
 
     public Point Position
@@ -32,6 +36,26 @@ public class Bowser : IEnemy
         {
             walkingRightSprite.Position = value;
             walkingLeftSprite.Position = value;
+        }
+    }
+
+    // ICollidable implementation
+    public Rectangle CollisionBox
+    {
+        get
+        {
+            if (!isAlive)
+            {
+                return Rectangle.Empty; // No collision when dead
+            }
+
+            var currentSprite = movingRight ? walkingRightSprite : walkingLeftSprite;
+            return new Rectangle(
+                currentSprite.Position.X,
+                currentSprite.Position.Y,
+                currentSprite.Size.X,
+                currentSprite.Size.Y
+            );
         }
     }
 
@@ -62,7 +86,6 @@ public class Bowser : IEnemy
         this.fireballHeight = fireballHeight;
 
         Position = new Point(leftBound, y);
-        this.isAlive = true;
         this.fireCooldownTimer = FIRE_COOLDOWN;
     }
 
@@ -70,7 +93,7 @@ public class Bowser : IEnemy
     {
         if (!isAlive)
         {
-            return; // Dead
+            return;
         }
 
         float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -164,7 +187,6 @@ public class Bowser : IEnemy
     {
         if (isAlive)
         {
-            // Draw the correct sprite based on direction
             if (movingRight)
             {
                 walkingRightSprite.Draw(_spriteBatch);
@@ -179,6 +201,36 @@ public class Bowser : IEnemy
             {
                 fireball.Draw(_spriteBatch);
             }
+        }
+    }
+
+    // ICollidable methods
+    public void OnCollidePlayer(Player player, CollideDirection direction)
+    {
+        // Bowser is the boss - damages player on any collision
+        // In classic Mario, you defeat Bowser by hitting an axe, not stomping
+        // Player takes damage regardless of direction
+        // Handle player damage here if needed
+    }
+
+    public void OnCollideItem(IItems item, CollideDirection direction)
+    {
+        // Bowser doesn't interact with most items
+        // Could add logic for specific items like fireballs if needed
+    }
+
+    public void OnCollideEnemy(IEnemy enemy, CollideDirection direction)
+    {
+        // Bowser doesn't interact with other enemies
+        // He's the boss!
+    }
+
+    public void OnCollideBlock(IBlock block, CollideDirection direction)
+    {
+        // Bowser hits a block - turn around
+        if (direction == CollideDirection.Left || direction == CollideDirection.Right)
+        {
+            movingRight = !movingRight;
         }
     }
 }
