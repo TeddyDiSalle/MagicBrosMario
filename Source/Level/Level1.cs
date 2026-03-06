@@ -71,6 +71,16 @@ public class Level1 : ILevel
 			}
 		}
 
-		blocks[0][0] = _bm.CreateBlock("04", 0, 0);
+		JustTheFloor();
+	}
+
+	private void JustTheFloor()
+	{
+		int tileSize = _blockSize * 4;
+		for (int c = 0; c < levWidth; c++)
+		{
+			blocks[levHeight - 1][c] = _bm.CreateBlock("04", c * tileSize, (levHeight - 10) * tileSize);
+		}
+		
 	}
 }
