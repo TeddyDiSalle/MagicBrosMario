@@ -68,6 +68,10 @@ public class MagicBrosMario : Game
         Controller = new MarioGameController(this, ref data);
         collisionController = CollisionController.Instance;
         collisionController.AddEnemy(enemy[0]);
+        collisionController.AddEnemy(enemy[1]);
+        collisionController.AddEnemy(enemy[2]);
+        collisionController.AddEnemy(enemy[3]);
+        collisionController.AddEnemy(enemy[4]);
     }
 
     // Make sure texture is set to characters
