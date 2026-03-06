@@ -1,4 +1,6 @@
-﻿using MagicBrosMario.Source.Block;
+﻿using System;
+using System.Diagnostics;
+using MagicBrosMario.Source.Block;
 using MagicBrosMario.Source.Collision;
 using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.MarioStates;
@@ -24,7 +26,7 @@ public class MagicBrosMario : Game
     private int enemyIndex = 0;
     private int blockIndex = 0;
     private int itemIndex = 0;
-    private const int enemyPos = 300;
+    private const int enemyPos = 400;
     private const int blockPos = 200;
     private float[] MarioStartPos = { 100, 300 };
     private IEnemy[] enemy;
@@ -71,6 +73,11 @@ public class MagicBrosMario : Game
         CollisionController.Instance.BindPlayer(Mario);
         foreach(IItems item in items) 
         CollisionController.Instance.AddItem(item);
+        CollisionController.Instance.AddEnemy(enemy[0]);
+        CollisionController.Instance.AddEnemy(enemy[1]);
+        /*CollisionController.Instance.AddEnemy(enemy[2]);
+        CollisionController.Instance.AddEnemy(enemy[3]);
+        CollisionController.Instance.AddEnemy(enemy[4]);*/
 
     }
 
@@ -98,7 +105,7 @@ public class MagicBrosMario : Game
             texture.NewSprite(163, 215, 16, 15), // stomped
             texture.NewSprite(334, 215, 16, 15), // shell dead
             enemyPos,
-            50,
+            200,
             750
         );
         enemy[2] = new PiranhaPlant(
@@ -188,6 +195,7 @@ public class MagicBrosMario : Game
         Mario.Update(gameTime);
 		
 		enemy[enemyIndex].Update(gameTime);
+        enemy[1].Update(gameTime);
         items[itemIndex].Update(gameTime);
         blocks[blockIndex].Update(gameTime);
         CollisionController.Instance.Update(gameTime);
@@ -200,6 +208,7 @@ public class MagicBrosMario : Game
         _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
 
         enemy[enemyIndex].Draw(_spriteBatch);
+        enemy[1].Draw(_spriteBatch);
         blocks[blockIndex].Draw(_spriteBatch);
 
         items[itemIndex].Draw(_spriteBatch);
