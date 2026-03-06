@@ -19,11 +19,14 @@ public class MarioCollision(Player player) : Collision.ICollidable
     {
         switch (item)
         {
-            case Cloud:
+            case Cloud cloud:
                 //Uncollide
                 //Add dxdy to player pos
                 break;
-            case Fireflower:
+            case Fireflower flower:
+                UnCollide(Rectangle.Intersect(CollisionBox, flower.CollisionBox), direction);
+                player.PowerUp(Power.FireFlower);
+                break;
             case Fireflower_Underground:
                 player.PowerUp(Power.FireFlower);
                 break;
