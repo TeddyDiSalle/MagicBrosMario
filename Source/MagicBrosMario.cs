@@ -68,7 +68,7 @@ public class MagicBrosMario : Game
         };
         Controller = new MarioGameController(this, ref data);
         collisionController = new CollisionController();
-        //collisionController.BindPlayer(Mario.collision);
+        collisionController.BindPlayer(Mario);
         collisionController.AddItem(items[0]);
 
     }
@@ -185,11 +185,11 @@ public class MagicBrosMario : Game
     {
         Controller.Update(gameTime);
         Mario.Update(gameTime);
-		CollisionController.Instance.Update(gameTime);
+		
 		enemy[enemyIndex].Update(gameTime);
         items[itemIndex].Update(gameTime);
         blocks[blockIndex].Update(gameTime);
-
+        CollisionController.Instance.Update(gameTime);
     }
 
     protected override void Draw(GameTime gameTime)
