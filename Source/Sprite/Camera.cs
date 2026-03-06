@@ -1,9 +1,14 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace MagicBrosMario.Source.Sprite;
 
+/// <summary>
+/// camera class for drawing all the sprites and updating position based on screen
+/// this class should be intialized right after graphics is created
+/// </summary>
 public class Camera {
     private readonly GraphicsDeviceManager graphics;
 
@@ -52,5 +57,17 @@ public class Camera {
                destRect.Y < WindowSize.Y &&
                destRect.X + destRect.Width > 0 &&
                destRect.Y + destRect.Height > 0;
+    }
+
+    public void Update(GameTime gameTime) {
+        foreach (var sprite in Sprites) {
+            sprite.Update(gameTime);
+        }
+    }
+    
+    public void Draw(SpriteBatch spriteBatch) {
+        foreach (var sprite in Sprites) {
+            sprite.Draw(spriteBatch);
+        }
     }
 }
