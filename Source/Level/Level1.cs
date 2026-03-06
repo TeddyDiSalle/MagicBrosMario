@@ -7,15 +7,11 @@ using Microsoft.Xna.Framework;
 public class Level1 : ILevel
 {
 
-	public void Update(GameTime gt)
-
-	{
+	public void Update(GameTime gt)	{
 		// TODO
 	}
 
-	public void Draw(GameTime gt)
-
-	{
+	public void Draw(GameTime gt)	{
 		// TODO
 	}
 }
