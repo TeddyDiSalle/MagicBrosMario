@@ -80,6 +80,10 @@ public class BigMarioIdleState : IPlayerState
                 break;
         }
     }
+    public Power getCurrentPower()
+    {
+        return Power.Mushroom;
+    }
     public void Idle()
     {
         //Nothing

@@ -75,6 +75,10 @@ public class BigMarioCrouchState : IPlayerState
                 break;
         }
     }
+    public Power getCurrentPower()
+    {
+        return Power.Mushroom;
+    }
     public void Idle()
     {
         //Nothing

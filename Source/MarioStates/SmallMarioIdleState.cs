@@ -76,6 +76,10 @@ public class SmallMarioIdleState : IPlayerState
                 break;
         }
     }
+    public Power getCurrentPower()
+    {
+        return Power.None;
+    }
     public void Idle()
     {
         //Nothing

@@ -142,7 +142,10 @@ public class Player
             }
         }
     }
-
+    public Power getCurrentPower()
+    {
+        return PlayerState.getCurrentPower();
+    }
     public void OnGround(float NewGroundY)
     {
         GroundY = NewGroundY;

@@ -93,6 +93,10 @@ public class FireMarioMoveState : IPlayerState
                 break;
         }
     }
+    public Power getCurrentPower()
+    {
+        return Power.FireFlower;
+    }
     public void Idle()
     {
         Mario.ChangeState(new FireMarioIdleState(Mario, texture, timeFrame, scaleFactor));

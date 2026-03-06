@@ -81,6 +81,11 @@ public class BigMarioMoveState : IPlayerState
                 break;
         }
     }
+
+    public Power getCurrentPower()
+    {
+        return Power.Mushroom;
+    }
     public void Idle()
     {
         Mario.ChangeState(new BigMarioIdleState(Mario, texture, timeFrame, scaleFactor));

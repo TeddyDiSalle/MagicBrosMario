@@ -85,6 +85,10 @@ public class SmallMarioMoveState : IPlayerState
                 break;
         }
     }
+    public Power getCurrentPower()
+    {
+        return Power.None;
+    }
     public void Idle()
     {
         Mario.ChangeState(new SmallMarioIdleState(Mario, texture, timeFrame, scaleFactor));

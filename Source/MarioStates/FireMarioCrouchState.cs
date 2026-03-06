@@ -76,6 +76,10 @@ public class FireMarioCrouchState : IPlayerState
                 break;
         }
     }
+    public Power getCurrentPower()
+    {
+        return Power.FireFlower;
+    }
     public void Idle()
     {
         //Nothing
