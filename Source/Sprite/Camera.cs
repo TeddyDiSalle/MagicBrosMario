@@ -13,10 +13,6 @@ public class Camera {
     private readonly GraphicsDeviceManager graphics;
 
     public Camera(GraphicsDeviceManager graphics) {
-        if (Instance != null) {
-            throw new Exception("camera had been created");
-        }
-
         this.graphics = graphics;
         Instance = this;
     }
