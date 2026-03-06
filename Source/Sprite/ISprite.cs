@@ -38,6 +38,12 @@ public interface ISprite
     /// </summary>
     public Color Color { get; set; }
 
+
+    /// <summary>
+    /// update function for destination rectangle, used by camera
+    /// </summary>
+    public void UpdateDestRect();
+    
     /// <summary>
     /// update function for sprite, currently only used by AnimatedSprite
     /// </summary>

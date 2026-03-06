@@ -56,11 +56,18 @@ public class AnimatedSprite(
 
     private int frame = 0;
     private float timer = 0;
+    private bool shouldDraw = true;
 
     private void UpdateSize()
     {
         Size = new Point((int)(Scale * frameWidth), (int)(Scale * frameHeight));
-        destRect = new Rectangle(Position.X, Position.Y, Size.X, Size.Y);
+        UpdateDestRect();
+    }
+
+    public void UpdateDestRect() {
+        var screenPosition = Camera.Instance.Position;
+        destRect = new Rectangle(Position.X - screenPosition.X, Position.Y - screenPosition.Y, Size.X, Size.Y);
+        shouldDraw = Camera.Instance.ShouldDraw(destRect);
     }
 
     public void Update(GameTime gameTime)
@@ -78,6 +85,8 @@ public class AnimatedSprite(
 
     public void Draw(SpriteBatch spriteBatch)
     {
+        if (!shouldDraw) return;
+        
         var sourceRect = new Rectangle(offsetX + frameWidth * frame, offsetY, frameWidth, frameHeight);
         
         if (Flipped)
