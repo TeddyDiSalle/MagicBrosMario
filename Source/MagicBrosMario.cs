@@ -69,8 +69,8 @@ public class MagicBrosMario : Game
         Controller = new MarioGameController(this, ref data);
 
         CollisionController.Instance.BindPlayer(Mario);
-        foreach(IItems item in items) 
-        CollisionController.Instance.AddItem(item);
+
+        CollisionController.Instance.AddItem(items[12]);
 
     }
 

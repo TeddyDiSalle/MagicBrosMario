@@ -17,7 +17,7 @@ public class Player : ICollidable
     public Vector2 Velocity { get; private set; }
     private const int scaleFactor = 3;
     private float GroundY = 260; //Temporary for Sprint2
-    private const float timeFrame = 0.15f, MovementSpeed = 7.0f, Gravity = 0.35f, MaxSpeed = 15.0f, fireballCooldown = 0.2f;
+    private const float timeFrame = 0.15f, MovementSpeed = 15.0f, Gravity = 0.35f, MaxSpeed = 15.0f, fireballCooldown = 0.2f;
     public bool IsCrouching { get; private set; } = false;
     public bool Flipped { get; set; } = false;
     public bool Invincible { get; set; } = false;
@@ -129,7 +129,7 @@ public class Player : ICollidable
     }
     public void MoveUp(GameTime gameTime)
     {
-        float distanceMoved = (float)(gameTime.ElapsedGameTime.TotalSeconds * 80 * MovementSpeed);
+        float distanceMoved = (float)(gameTime.ElapsedGameTime.TotalSeconds * 40 * MovementSpeed);
         Velocity -= new Vector2(0, distanceMoved);
     }
     public void Idle()
@@ -190,18 +190,21 @@ public class Player : ICollidable
                 break;
             case MovingPlatform_Size1 plat:
                 UnCollide(Rectangle.Intersect(CollisionBox, plat.CollisionBox), direction);
-                Position += new Vector2(0, plat.getY());
+                if (direction is CollideDirection.Left or CollideDirection.Right) { return; }
                 Velocity = new Vector2(Velocity.X, 0);
+                Position += new Vector2(0, plat.getY());
                 break;
             case MovingPlatform_Size2 plat:
                 UnCollide(Rectangle.Intersect(CollisionBox, plat.CollisionBox), direction);
-                Position += new Vector2(0, plat.getY());
+                if (direction is CollideDirection.Left or CollideDirection.Right) { return; }
                 Velocity = new Vector2(Velocity.X, 0);
+                Position += new Vector2(0, plat.getY());
                 break;
             case MovingPlatform_Size3 plat:
                 UnCollide(Rectangle.Intersect(CollisionBox, plat.CollisionBox), direction);
-                Position += new Vector2(0, plat.getY());
+                if (direction is CollideDirection.Left or CollideDirection.Right) { return; }
                 Velocity = new Vector2(Velocity.X, 0);
+                Position += new Vector2(0, plat.getY());
                 break;
             case Mushroom:
                 PlayerState.PowerUp(Power.Mushroom);
@@ -211,7 +214,7 @@ public class Player : ICollidable
                 break;
             case Spring_Stretched:
                 //Uncollide
-                Velocity += new Vector2(0, 70);
+                Velocity = new Vector2(Velocity.X, 10);
                 break;
             case Star:
                 PlayerState.PowerUp(Power.Star);
