@@ -35,21 +35,28 @@ public class PiranhaPlant : IEnemy, ICollidable
         private set { aliveSprite.Position = value; }
     }
 
-    // ICollidable implementation
+    
     public Rectangle CollisionBox
     {
         get
         {
-            if (!isAlive)
-            {
-                return Rectangle.Empty; // No collision when dead
-            }
+            // 1. No collision if dead
+            if (!isAlive) return Rectangle.Empty;
 
+            // 2. Calculate how much of the plant is actually above the pipe
+            // hiddenY is the "floor", Position.Y is the current top of the plant
+            int exposedHeight = hiddenY - Position.Y;
+
+            // 3. If the plant is fully inside the pipe, return no box
+            if (exposedHeight <= 0) return Rectangle.Empty;
+
+            // 4. Return a box that starts at the current Position.Y 
+            // but ends at the top of the pipe (hiddenY)
             return new Rectangle(
-                aliveSprite.Position.X,
-                aliveSprite.Position.Y,
-                aliveSprite.Size.X,
-                aliveSprite.Size.Y
+                Position.X + 4, // Slight horizontal padding
+                Position.Y, 
+                aliveSprite.Size.X - 8, 
+                exposedHeight
             );
         }
     }
@@ -135,7 +142,6 @@ public class PiranhaPlant : IEnemy, ICollidable
     public void OnCollidePlayer(Player player, CollideDirection direction)
     {
         // Piranha Plant damages player on any collision
-        // In classic Mario, you can't stomp Piranha Plants
         // Player takes damage regardless of direction
         // Handle player damage here if needed
     }
@@ -145,7 +151,7 @@ public class PiranhaPlant : IEnemy, ICollidable
         // Piranha Plant can be killed by fireballs
         if (item != null) // Check if it's a fireball or star
         {
-            // You could add logic here to check item type
+            
             // For now, any item collision kills it
             Kill();
         }

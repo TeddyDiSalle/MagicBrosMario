@@ -142,7 +142,9 @@ public class Goomba : IEnemy, ICollidable
 
     public void OnCollidePlayer(Player player, CollideDirection direction)
     {
-        if (direction == CollideDirection.Down) Kill();
+        if (direction == CollideDirection.Down){
+            Kill();
+        }
     }
 
     public void OnCollideItem(IItems item, CollideDirection direction) { }

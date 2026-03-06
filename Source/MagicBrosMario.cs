@@ -75,6 +75,7 @@ public class MagicBrosMario : Game
         CollisionController.Instance.AddItem(item);
         CollisionController.Instance.AddEnemy(enemy[0]);
         CollisionController.Instance.AddEnemy(enemy[1]);
+        //CollisionController.Instance.AddEnemy(enemy[2]);
         /*CollisionController.Instance.AddEnemy(enemy[2]);
         CollisionController.Instance.AddEnemy(enemy[3]);
         CollisionController.Instance.AddEnemy(enemy[4]);*/
@@ -124,7 +125,7 @@ public class MagicBrosMario : Game
             24, // Fire width
             8, // Fire height
             enemyPos, // Bowser Y position
-            50, // Left bound
+            300, // Left bound
             750 // Right bound
         );
         enemy[4] = new RotatingFireBar(
@@ -196,6 +197,7 @@ public class MagicBrosMario : Game
 		
 		enemy[enemyIndex].Update(gameTime);
         enemy[1].Update(gameTime);
+        //enemy[3].Update(gameTime);
         items[itemIndex].Update(gameTime);
         blocks[blockIndex].Update(gameTime);
         CollisionController.Instance.Update(gameTime);
@@ -209,6 +211,7 @@ public class MagicBrosMario : Game
 
         enemy[enemyIndex].Draw(_spriteBatch);
         enemy[1].Draw(_spriteBatch);
+        //enemy[3].Draw(_spriteBatch);
         blocks[blockIndex].Draw(_spriteBatch);
 
         items[itemIndex].Draw(_spriteBatch);
