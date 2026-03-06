@@ -1,15 +1,17 @@
+// Made By Teddy
 using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
 using MagicBrosMario.Source.Block;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace MagicBrosMario.Source.Level;
 
-public class LevelManager
+public class BlockManager
 {
-    private static readonly Dictionary<string, Func<IBlock>> BlockConstructors = new();
-
-    public static void Initialize(string xmlPath)
+    private  readonly Dictionary<string, Func<IBlock>> BlockConstructors = new();
+    private string xmlPath = "Content/LevelData/Blocks.xml";
+    public void Initialize(Texture2D texture)
     {
         BlockConstructors.Clear();
         var doc = XDocument.Load(xmlPath);
@@ -24,9 +26,10 @@ public class LevelManager
                 BlockConstructors[id] = GetBlockConstructor(function);
             }
         }
+        BlockFactory.BindTexture(texture);
     }
 
-    public static IBlock CreateBlock(string blockId)
+    public IBlock CreateBlock(string blockId)
     {
         if (BlockConstructors.TryGetValue(blockId, out var constructor))
         {
@@ -36,7 +39,7 @@ public class LevelManager
         throw new KeyNotFoundException($"Block with ID '{blockId}' not found.");
     }
 
-    private static Func<IBlock> GetBlockConstructor(string functionName)
+    private Func<IBlock> GetBlockConstructor(string functionName)
     {
         return functionName switch
         {
