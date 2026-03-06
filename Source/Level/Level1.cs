@@ -11,7 +11,8 @@ public class Level1 : ILevel
 	private BlockManager _bm;
 	private IBlock[][] blocks;
 	private string Level1CSVPath = "Content/LevelData/1-1.csv";
-	private int _blockSize = 16;
+	private static int _blockSize = 16;
+	private int tileSize = _blockSize * 4;
 	private string[] lines;
 	private int levWidth;
 	private int levHeight;
@@ -51,8 +52,6 @@ public class Level1 : ILevel
 
 	private void LoadContent(){
 		
-		int tileSize = _blockSize * 4;
-
 		for (int r = 0; r < levHeight; r++)
 		{
 			string[] blockIds = lines[r].Split(',');
@@ -60,26 +59,23 @@ public class Level1 : ILevel
 			for (int c = 0; c < levWidth; c++)
 			{
 				string id = blockIds[c].Trim();
-
 				if (string.IsNullOrEmpty(id))
 				{
 					blocks[r][c] = null;
-					continue;
+					
+				}else{
+					blocks[r][c] = _bm.CreateBlock(id, c * tileSize, r * tileSize);// x,y - columnb => x, row => y
 				}
-
-				blocks[r][c] = _bm.CreateBlock(id, c * tileSize, r * tileSize);// x,y - columnb => x, row => y
 			}
 		}
 
 		JustTheFloor();
 	}
 
-	private void JustTheFloor()
-	{
-		int tileSize = _blockSize * 4;
+	private void JustTheFloor(){
 		for (int c = 0; c < levWidth; c++)
 		{
-			blocks[levHeight - 1][c] = _bm.CreateBlock("04", c * tileSize, (levHeight - 10) * tileSize);
+			blocks[levHeight - 10][c] = _bm.CreateBlock("04", c * tileSize, (levHeight - 10) * tileSize);
 		}
 		
 	}
