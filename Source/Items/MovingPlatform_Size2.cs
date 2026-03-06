@@ -1,9 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using MagicBrosMario.Source.Block;
+using MagicBrosMario.Source.Collision;
+using MagicBrosMario.Source.MarioStates;
 using MagicBrosMario.Source.Sprite;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace MagicBrosMario.Source.Items
 {
@@ -18,7 +21,15 @@ namespace MagicBrosMario.Source.Items
 		private int yLimit;
 		private int yDifference = 0;
 
-		public MovingPlatform_Size2(SharedTexture texture, int screenWidth, int screenHeight, int positionX, int positionY, int d)
+        public Rectangle CollisionBox
+        {
+            get
+            {
+                return new Rectangle(sprite.Position.X, sprite.Position.Y, (int)(32 * sprite.Scale), (int)(8 * sprite.Scale));
+            }
+        }
+
+        public MovingPlatform_Size2(SharedTexture texture, int screenWidth, int screenHeight, int positionX, int positionY, int d)
 		{
 
 			sprite = texture.NewSprite(26, 38, 32, 8);
@@ -59,7 +70,16 @@ namespace MagicBrosMario.Source.Items
 		public int getY()
 		{
 			return yDifference;
-		}
+        }
 
-	}
+        public void OnCollidePlayer(Player player, CollideDirection direction) { }
+
+        public void OnCollideItem(IItems item, CollideDirection direction) { }
+
+        public void OnCollideEnemy(IEnemy enemy, CollideDirection direction) { }
+
+        public void OnCollideBlock(IBlock block, CollideDirection direction) { }
+
+
+    }
 }

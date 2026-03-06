@@ -31,6 +31,7 @@ public class MagicBrosMario : Game
     private IBlock[] blocks;
     private IItems[] items;
     private SpriteFont _font;
+    CollisionController collisionController;
 
     public MagicBrosMario()
     {
@@ -66,6 +67,10 @@ public class MagicBrosMario : Game
             halfY = _graphics.PreferredBackBufferHeight / 2
         };
         Controller = new MarioGameController(this, ref data);
+        collisionController = new CollisionController();
+        //collisionController.BindPlayer(Mario.collision);
+        collisionController.AddItem(items[0]);
+
     }
 
     // Make sure texture is set to characters
@@ -138,7 +143,7 @@ public class MagicBrosMario : Game
 
 
 		items[0] = new Fireflower(itemsTexture, screenWidth, screenHeight, positionX, positionY);
-		//CollisionController.Instance.AddItem((Fireflower)items[0]);
+
 		items[1] = new Fireflower_Underground(itemsTexture, screenWidth, screenHeight, positionX, positionY);
         items[2] = new QuestionBlock(itemsTexture, screenWidth, screenHeight, positionX, positionY);
         items[3] = new Coin(itemsTexture, screenWidth, screenHeight, positionX, positionY); 
