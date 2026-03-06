@@ -20,7 +20,7 @@ namespace MagicBrosMario.Source.Items
 		public OneUp(SharedTexture texture, int screenWidth, int screenHeight, int positionX, int positionY)
 		{
 
-			sprite = new Sprite.Sprite(texture, 214, 34, 16, 16);
+			sprite = texture.NewSprite(214, 34, 16, 16);
 			yLimit = screenHeight;
 			xLimit = screenWidth;
 

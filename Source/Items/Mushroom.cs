@@ -18,7 +18,7 @@ namespace MagicBrosMario.Source.Items
 		public Mushroom(SharedTexture texture, int screenWidth, int screenHeight, int positionX, int positionY)
 		{
 
-			sprite = new Sprite.Sprite(texture, 184, 34, 16, 16);
+			sprite = texture.NewSprite(184, 34, 16, 16);
 			yLimit = screenHeight;
 			xLimit = screenWidth;
 
