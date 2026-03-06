@@ -32,14 +32,20 @@ public class MagicBrosMario : Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-        lvl = new Level1();
         _font = Content.Load<SpriteFont>("Font");
-        Texture2D MarioSheet = Content.Load<Texture2D>("MarioSpriteSheet");
+
+        Texture2D marioSheet = Content.Load<Texture2D>("MarioSpriteSheet");
+        Texture2D blockTexture = Content.Load<Texture2D>("blocks");
+
         texture = new SharedTexture();
-        texture.BindTexture(MarioSheet);
+        texture.BindTexture(marioSheet);
+
+        lvl = new Level1();
+        lvl.Initialize(blockTexture);
 
         Mario = new Player(texture);
         Mario.SetPositon(new Vector2(MarioStartPos[0], MarioStartPos[1]));
+
         MarioGameController.Sprint2Controller data = new MarioGameController.Sprint2Controller
         {
             player = Mario,
@@ -48,6 +54,7 @@ public class MagicBrosMario : Game
             halfX = _graphics.PreferredBackBufferWidth / 2,
             halfY = _graphics.PreferredBackBufferHeight / 2
         };
+
         Controller = new MarioGameController(this, ref data);
     }
 
