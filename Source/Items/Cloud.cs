@@ -16,6 +16,7 @@ namespace MagicBrosMario.Source.Items
 		private int direction = 1;
 		private int xLimit;
 		private int yLimit;
+		private int xDifference = 0;
 
 		public Cloud(SharedTexture texture, int screenWidth, int screenHeight, int positionX, int positionY)
 		{
@@ -32,7 +33,9 @@ namespace MagicBrosMario.Source.Items
 		{
 			float time = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-			position.X += (int)(direction * speed * time);
+			xDifference = (int)(direction * speed * time);
+
+			position.X += xDifference;
 
 
 			sprite.Position = position;
@@ -42,6 +45,11 @@ namespace MagicBrosMario.Source.Items
 		public void Draw(SpriteBatch spriteBatch)
 		{
 			sprite.Draw(spriteBatch);
+		}
+
+		public int getX()
+		{
+			return xDifference;
 		}
 
 	}
