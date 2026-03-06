@@ -9,16 +9,6 @@ namespace MagicBrosMario.Source.Block;
 public interface IBlock
 {
     /// <summary>
-    /// whether this block is collidable
-    /// </summary>
-    bool IsSolid { get; set; }
-
-    /// <summary>
-    /// whether this block is visible
-    /// </summary>
-    bool IsVisible { get; set; }
-
-    /// <summary>
     /// position of this block
     /// </summary>
     /// <value>x coordinate of this block</value>

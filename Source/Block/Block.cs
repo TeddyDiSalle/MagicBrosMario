@@ -47,18 +47,9 @@ public class Block(Sprite.ISprite sprite) : BlockBase<Block>(sprite)
 {
     public override void Update(GameTime gameTime)
     {
-        if (Sprite.IsAnimated)
-        {
-            Sprite.Update(gameTime);
-        }
     }
 
     public override void Draw(SpriteBatch spriteBatch)
     {
-        if (!IsVisible) return;
-
-        // we could add check for out of screen if needed 
-
-        Sprite.Draw(spriteBatch);
     }
 }

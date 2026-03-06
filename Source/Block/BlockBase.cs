@@ -13,9 +13,6 @@ public abstract class BlockBase<TBlock>(Sprite.ISprite sprite) : IBlock
 {
     protected Sprite.ISprite Sprite { get; set; } = sprite;
 
-    public bool IsSolid { get; set; } = false;
-    public bool IsVisible { get; set; } = true;
-
     public Point Position
     {
         get => Sprite.Position;
@@ -28,10 +25,10 @@ public abstract class BlockBase<TBlock>(Sprite.ISprite sprite) : IBlock
     /// <param name="x">x position</param>
     /// <param name="y">y position</param>
     /// <returns></returns>
-    public BlockBase<TBlock> WithPosition(int x, int y)
+    public TBlock WithPosition(int x, int y)
     {
         Position = new Point(x, y);
-        return this;
+        return (TBlock) this;
     }
 
     public Point Size => Sprite.Size;
