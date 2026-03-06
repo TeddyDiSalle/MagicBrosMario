@@ -30,6 +30,8 @@ public class BigMarioIdleState : IPlayerState
         {
             Sprites[i].Scale = scaleFactor;
         }
+        Rectangle currentHitBox = Mario.collision.CollisionBox;
+        Mario.collision.CollisionBox = new Rectangle(currentHitBox.X, currentHitBox.Y, 16, 32);
     }
     public void Left(GameTime gameTime)
     {
@@ -78,13 +80,17 @@ public class BigMarioIdleState : IPlayerState
                 break;
         }
     }
+    public Power GetCurrentPower()
+    {
+        return Power.Mushroom;
+    }
     public void Idle()
     {
         //Nothing
     }
     public void Update(GameTime gameTime, Vector2 Velocity, bool Flipped)
     {
-        if (Mario.Invincible && Mario.StarTimeRemaining <= Mario.StarDuration)
+        if (Mario.Invincible)
         {
             CurrentSprite = Sprites[1];
             Mario.StarTimeRemaining += gameTime.ElapsedGameTime.TotalSeconds;
