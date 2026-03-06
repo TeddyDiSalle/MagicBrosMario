@@ -82,7 +82,7 @@ public class BigMarioMoveState : IPlayerState
         }
     }
 
-    public Power getCurrentPower()
+    public Power GetCurrentPower()
     {
         return Power.Mushroom;
     }

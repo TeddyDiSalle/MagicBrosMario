@@ -85,7 +85,7 @@ public class SmallMarioMoveState : IPlayerState
                 break;
         }
     }
-    public Power getCurrentPower()
+    public Power GetCurrentPower()
     {
         return Power.None;
     }

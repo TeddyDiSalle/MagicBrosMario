@@ -88,7 +88,7 @@ public class FireMarioIdleState : IPlayerState
                 break;
         }
     }
-    public Power getCurrentPower()
+    public Power GetCurrentPower()
     {
         return Power.FireFlower;
     }

@@ -72,7 +72,7 @@ public class SmallMarioJumpState : IPlayerState
                 break;
         }
     }
-    public Power getCurrentPower()
+    public Power GetCurrentPower()
     {
         return Power.None;
     }

@@ -15,7 +15,7 @@ public class Player
     public Vector2 Velocity { get; private set; }
     private const int scaleFactor = 3;
     private float GroundY = 260; //Temporary for Sprint2
-    private const float timeFrame = 0.15f, MovementSpeed = 3.0f, Gravity = 0.35f, MaxSpeed = 15.0f, fireballCooldown = 0.2f;
+    private const float timeFrame = 0.15f, MovementSpeed = 7.0f, Gravity = 0.35f, MaxSpeed = 15.0f, fireballCooldown = 0.2f;
     public bool IsCrouching { get; private set; } = false;
     public bool Flipped { get; set; } = false;
     public bool Invincible { get; set; } = false;
@@ -95,6 +95,10 @@ public class Player
     {
         PlayerState.PowerUp(power);
     }
+    public Power GetCurrentPower()
+    {
+        return PlayerState.GetCurrentPower();
+    }
 
     public void ChangeState(IPlayerState state)
     {
@@ -123,7 +127,7 @@ public class Player
     }
     public void MoveUp(GameTime gameTime)
     {
-        float distanceMoved = (float)(gameTime.ElapsedGameTime.TotalSeconds * 100 * MovementSpeed);
+        float distanceMoved = (float)(gameTime.ElapsedGameTime.TotalSeconds * 80 * MovementSpeed);
         Velocity -= new Vector2(0, distanceMoved);
     }
     public void Idle()
@@ -146,10 +150,7 @@ public class Player
             }
         }
     }
-    public Power getCurrentPower()
-    {
-        return PlayerState.getCurrentPower();
-    }
+
     public void OnGround(float NewGroundY)
     {
         GroundY = NewGroundY;

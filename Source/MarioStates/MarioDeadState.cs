@@ -49,7 +49,7 @@ public class MarioDeadState : IPlayerState
     {
         //Nothing
     }
-    public Power getCurrentPower()
+    public Power GetCurrentPower()
     {
         return Power.None;
     }
