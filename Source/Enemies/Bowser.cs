@@ -26,7 +26,7 @@ public class Bowser : IEnemy, ICollidable
     private List<Fireball> activeFireballs = new List<Fireball>();
 
     private bool movingRight = true;
-    private bool isAlive = true;
+    public bool isAlive = true;
     private float fireCooldownTimer = 0f;
 
     public Point Position

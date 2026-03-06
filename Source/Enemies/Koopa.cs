@@ -24,12 +24,14 @@ public class Koopa : IEnemy, ICollidable
     private const int SHELL_MOVING = 3;
     private const int STOMPED = 4;
     private const int SHELL_DEATH = 5;
+    public Boolean isAlive = true;
 
     private enum KoopaState { WalkingAlive, ShellIdle, ShellMoving, Stomped, Dead }
 
     private KoopaState state;
     private bool movingRight = true;
     private float shellTimer = 0f;
+
 
     private Sprite.ISprite CurrentSprite()
     {
@@ -129,7 +131,7 @@ public class Koopa : IEnemy, ICollidable
     public void Kill()
     {
         if (state == KoopaState.WalkingAlive) { state = KoopaState.ShellIdle; shellTimer = 0f; }
-        else if (state != KoopaState.Dead) { state = KoopaState.Dead; }
+        else if (state != KoopaState.Dead) { state = KoopaState.Dead; isAlive = false; }
     }
 
     public void KickShell(bool kickRight)
@@ -201,7 +203,7 @@ public class Koopa : IEnemy, ICollidable
     {
         if (state == KoopaState.Dead) return;
 
-        if (direction == CollideDirection.Down)
+        if (direction == CollideDirection.Top)
         {
             if (state == KoopaState.WalkingAlive) Kill();
             else if (state == KoopaState.ShellIdle || state == KoopaState.Stomped) KickShell(player.Position.X < Position.X);
