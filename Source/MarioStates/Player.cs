@@ -209,6 +209,7 @@ public class Player : ICollidable
     }
     public void OnCollideEnemy(IEnemy enemy, Collision.CollideDirection direction)
     {
+        if (Invincible) { return; }
         switch (enemy)
         {
             case Fireball:
