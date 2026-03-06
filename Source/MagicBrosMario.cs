@@ -31,7 +31,7 @@ public class MagicBrosMario : Game
     private IBlock[] blocks;
     private IItems[] items;
     private SpriteFont _font;
-    CollisionController collisionController;
+    //CollisionController collisionController;
 
     public MagicBrosMario()
     {
@@ -67,9 +67,9 @@ public class MagicBrosMario : Game
             halfY = _graphics.PreferredBackBufferHeight / 2
         };
         Controller = new MarioGameController(this, ref data);
-        collisionController = new CollisionController();
-        collisionController.BindPlayer(Mario);
-        collisionController.AddItem(items[0]);
+
+        CollisionController.Instance.BindPlayer(Mario);
+        CollisionController.Instance.AddItem(items[0]);
 
     }
 

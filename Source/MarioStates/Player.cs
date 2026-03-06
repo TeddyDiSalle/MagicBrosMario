@@ -309,8 +309,9 @@ public class Player : ICollidable
                 fireballs.RemoveAt(i);
             }
         }
-        CollisionBox = new Rectangle((int)Position.X, (int)Position.Y, CollisionBox.Width, CollisionBox.Height);
+        
         PlayerState.Update(gameTime, Velocity, Flipped);
+        CollisionBox = new Rectangle((int)Position.X, (int)Position.Y, CollisionBox.Width, CollisionBox.Height);
     }
 
     public void Draw(SpriteBatch spriteBatch)
