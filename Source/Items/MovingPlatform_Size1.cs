@@ -22,7 +22,7 @@ namespace MagicBrosMario.Source.Items
 		public MovingPlatform_Size1(SharedTexture texture, int screenWidth, int screenHeight, int positionX, int positionY, int d)
 		{
 
-			sprite = new Sprite.Sprite(texture, 0, 38, 24, 8);
+			sprite = texture.NewSprite(0, 38, 24, 8);
 			yLimit = screenHeight;
 			xLimit = screenWidth;
 
@@ -38,9 +38,13 @@ namespace MagicBrosMario.Source.Items
 
 			position.Y += yDifference;
 
-			if (position.Y <= 0 || position.Y + sprite.Size.Y >= yLimit)
+			if (position.Y + sprite.Size.Y < 0) 
 			{
-				direction *= -1;
+				position.Y = yLimit;
+			}
+			else if (position.Y > yLimit)
+			{
+				position.Y = -sprite.Size.Y;
 			}
 
 			sprite.Position = position;

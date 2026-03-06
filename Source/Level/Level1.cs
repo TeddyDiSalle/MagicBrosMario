@@ -1,5 +1,3 @@
-
-
 using System.Runtime.CompilerServices;
 using MagicBrosMario.Source;
 using Microsoft.Xna.Framework;
