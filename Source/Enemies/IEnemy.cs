@@ -1,9 +1,10 @@
+using MagicBrosMario.Source.Collision;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MagicBrosMario.Source;
 
-public interface IEnemy
+public interface IEnemy : ICollidable
 {
     // What does an enemy need to do?
     // 1. Move

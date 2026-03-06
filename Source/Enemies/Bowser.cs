@@ -2,10 +2,14 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using MagicBrosMario.Source.Collision;
+using MagicBrosMario.Source.Block;
+using MagicBrosMario.Source.Items;
+using MagicBrosMario.Source.MarioStates;
 
 namespace MagicBrosMario.Source;
 
-public class Bowser : IEnemy
+public class Bowser : IEnemy, ICollidable
 {
     private const int VELOCITY = 100;
     private const float FIRE_COOLDOWN = 3.0f;
@@ -21,8 +25,8 @@ public class Bowser : IEnemy
 
     private List<Fireball> activeFireballs = new List<Fireball>();
 
-    private Boolean movingRight = true;
-    private Boolean isAlive;
+    private bool movingRight = true;
+    private bool isAlive = true;
     private float fireCooldownTimer = 0f;
 
     public Point Position
@@ -32,6 +36,22 @@ public class Bowser : IEnemy
         {
             walkingRightSprite.Position = value;
             walkingLeftSprite.Position = value;
+        }
+    }
+
+    public Rectangle CollisionBox
+    {
+        get
+        {
+            if (!isAlive) return Rectangle.Empty;
+
+            var currentSprite = movingRight ? walkingRightSprite : walkingLeftSprite;
+            return new Rectangle(
+                currentSprite.Position.X,
+                currentSprite.Position.Y,
+                currentSprite.Size.X,
+                currentSprite.Size.Y
+            );
         }
     }
 
@@ -62,23 +82,16 @@ public class Bowser : IEnemy
         this.fireballHeight = fireballHeight;
 
         Position = new Point(leftBound, y);
-        this.isAlive = true;
         this.fireCooldownTimer = FIRE_COOLDOWN;
     }
 
     public void Update(GameTime gameTime)
     {
-        if (!isAlive)
-        {
-            return; // Dead
-        }
+        if (!isAlive) return;
 
         float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-        // Move Bowser
         Move(gameTime);
 
-        // Check if it's time to breathe fire
         fireCooldownTimer -= deltaTime;
         if (fireCooldownTimer <= 0)
         {
@@ -86,15 +99,10 @@ public class Bowser : IEnemy
             fireCooldownTimer = FIRE_COOLDOWN;
         }
 
-        // Update all active fireballs
         for (int i = activeFireballs.Count - 1; i >= 0; i--)
         {
             activeFireballs[i].Update(gameTime);
-
-            if (activeFireballs[i].IsExpired())
-            {
-                activeFireballs.RemoveAt(i);
-            }
+            if (activeFireballs[i].IsExpired()) activeFireballs.RemoveAt(i);
         }
 
         walkingRightSprite.Update(gameTime);
@@ -122,63 +130,100 @@ public class Bowser : IEnemy
 
     private void Move(GameTime gameTime)
     {
-        var sec = (double)gameTime.ElapsedGameTime.TotalMilliseconds / 1000.0;
+        var sec = gameTime.ElapsedGameTime.TotalSeconds;
         var dx = (int)(sec * VELOCITY);
 
         if (movingRight)
         {
-            int newX = Position.X + dx;
-
-            if (newX >= rightBound)
+            Position = new Point(Position.X + dx, Position.Y);
+            if (Position.X >= rightBound)
             {
                 Position = new Point(rightBound, Position.Y);
                 movingRight = false;
             }
-            else
-            {
-                Position = new Point(newX, Position.Y);
-            }
         }
         else
         {
-            int newX = Position.X - dx;
-
-            if (newX <= leftBound)
+            Position = new Point(Position.X - dx, Position.Y);
+            if (Position.X <= leftBound)
             {
                 Position = new Point(leftBound, Position.Y);
                 movingRight = true;
             }
-            else
+        }
+    }
+
+    public void Kill() => this.isAlive = false;
+
+    public void Draw(SpriteBatch _spriteBatch)
+    {
+        if (!isAlive) return;
+        
+        if (movingRight) walkingRightSprite.Draw(_spriteBatch);
+        else walkingLeftSprite.Draw(_spriteBatch);
+
+        foreach (var fireball in activeFireballs) fireball.Draw(_spriteBatch);
+    }
+
+    // ICollidable methods
+    public void OnCollidePlayer(Player player, CollideDirection direction)
+    {
+        // Boss logic: Player takes damage on contact
+    }
+
+    public void OnCollideItem(IItems item, CollideDirection direction)
+    {
+        // Bowser could be hurt by Mario's fireballs here if you want
+    }
+
+    public void OnCollideEnemy(IEnemy enemy, CollideDirection direction)
+    {
+
+
+        //Bowser destroys any minion in his way
+        if (direction == CollideDirection.Left || direction == CollideDirection.Right)
+        {
+            Console.WriteLine($"Bowser steamrolled a {enemy.GetType().Name}!");
+
+            // Kill the minion
+            enemy.Kill();
+
+            // 3. THE KEY: Force the enemy out of Bowser's space 
+            // We don't change Bowser's direction, but we "fling" the dead enemy
+            int flingDistance = 20; 
+
+            if (direction == CollideDirection.Left)
             {
-                Position = new Point(newX, Position.Y);
+                // Bowser hit something on HIS left, so the enemy is to his left.
+                // We don't have direct access to set enemy.Position here easily without casting,
+                // but since Bowser is the one moving, we just let him keep walking.
+                // If the enemy is still "blocking" him, we can give Bowser a tiny 2px boost.
+                Position = new Point(Position.X - 2, Position.Y); 
+            }
+            else if (direction == CollideDirection.Right)
+            {
+                // Bowser hit something on HIS right.
+                Position = new Point(Position.X + 2, Position.Y);
             }
         }
     }
 
-    public void Kill()
+    public void OnCollideBlock(IBlock block, CollideDirection direction)
     {
-        this.isAlive = false;
-    }
-
-    public void Draw(SpriteBatch _spriteBatch)
-    {
-        if (isAlive)
+        if (direction == CollideDirection.Left || direction == CollideDirection.Right)
         {
-            // Draw the correct sprite based on direction
-            if (movingRight)
+            int pushDistance = 10; // Bowser is big, needs a solid nudge
+            if (direction == CollideDirection.Left)
             {
-                walkingRightSprite.Draw(_spriteBatch);
+                movingRight = true;
+                Position = new Point(Position.X + pushDistance, Position.Y);
             }
             else
             {
-                walkingLeftSprite.Draw(_spriteBatch);
+                movingRight = false;
+                Position = new Point(Position.X - pushDistance, Position.Y);
             }
-
-            // Draw all active fireballs
-            foreach (var fireball in activeFireballs)
-            {
-                fireball.Draw(_spriteBatch);
-            }
+            Console.WriteLine("Bowser hit a wall and turned around.");
         }
     }
 }
