@@ -74,6 +74,11 @@ namespace MagicBrosMario.Source.Items
 
         public void OnCollideBlock(IBlock block, CollideDirection direction) { }
 
+        public bool getCollected()
+        {
+            return isCollected;
+        }
+
 
     }
 }
