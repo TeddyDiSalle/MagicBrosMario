@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MagicBrosMario.Source.Items
 {
-	public class Fireflower : IItems, ICollidable
+	public class Fireflower : IItems
 	{
 		private AnimatedSprite sprite;
 		private bool isCollected = false;

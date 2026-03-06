@@ -1,4 +1,5 @@
-﻿using MagicBrosMario.Source.Sprite;
+﻿using MagicBrosMario.Source.Collision;
+using MagicBrosMario.Source.Sprite;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Runtime.CompilerServices;
 
 namespace MagicBrosMario.Source.MarioStates;
 //Vincent Do
-public class Player
+public class Player : ICollidable
 {
     private IPlayerState PlayerState { get; set; }
 
@@ -214,4 +215,6 @@ public class Player
             fireball.Draw(spriteBatch);
         }
     }
+
+
 }
