@@ -55,15 +55,6 @@ public class CollisionController {
 
         foreach (var block in blocks) {
             // block
-            CheckCollisions(block, [player], (a, b, aDir, bDir) => {
-                a.OnCollidePlayer(b as Player, aDir);
-                b.OnCollideBlock(a as IBlock, bDir);
-            });
-
-            CheckCollisions(block, blocks, (a, b, aDir, bDir) => {
-                a.OnCollideBlock(b as IBlock, aDir);
-                b.OnCollideBlock(a as IBlock, bDir);
-            });
 
             CheckCollisions(block, items, (a, b, aDir, bDir) => {
                 a.OnCollideItem(b as IItems, aDir);
@@ -77,16 +68,6 @@ public class CollisionController {
         }
 
         foreach (var item in items) {
-            CheckCollisions(item, [player], (a, b, aDir, bDir) => {
-                a.OnCollidePlayer(b as Player, aDir);
-                b.OnCollideItem(a as IItems, bDir);
-            });
-
-            CheckCollisions(item, blocks, (a, b, aDir, bDir) => {
-                a.OnCollideBlock(b as IBlock, aDir);
-                b.OnCollideItem(a as IItems, bDir);
-            });
-
             CheckCollisions(item, items, (a, b, aDir, bDir) => {
                 a.OnCollideItem(b as IItems, aDir);
                 b.OnCollideItem(a as IItems, bDir);
@@ -99,21 +80,6 @@ public class CollisionController {
         }
         
         foreach (var enemy in enemies) {
-            CheckCollisions(enemy, [player], (a, b, aDir, bDir) => {
-                a.OnCollidePlayer(b as Player, aDir);
-                b.OnCollideEnemy(a as IEnemy, bDir);
-            });
-
-            CheckCollisions(enemy, blocks, (a, b, aDir, bDir) => {
-                a.OnCollideBlock(b as IBlock, aDir);
-                b.OnCollideEnemy(a as IEnemy, bDir);
-            });
-
-            CheckCollisions(enemy, items, (a, b, aDir, bDir) => {
-                a.OnCollideItem(b as IItems, aDir);
-                b.OnCollideEnemy(a as IEnemy, bDir);
-            });
-
             CheckCollisions(enemy, enemies, (a, b, aDir, bDir) => {
                 a.OnCollideEnemy(b as IEnemy, aDir);
                 b.OnCollideEnemy(a as IEnemy, bDir);
