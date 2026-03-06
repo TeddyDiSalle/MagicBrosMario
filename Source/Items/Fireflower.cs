@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MagicBrosMario.Source.Items
 {
-	public class Fireflower : IItems, ICollidable
+	public class Fireflower : IItems
 	{
 		private AnimatedSprite sprite;
 		private bool isCollected = false;
@@ -16,12 +16,7 @@ namespace MagicBrosMario.Source.Items
 		{
 			get
 			{
-				return new Rectangle(
-					sprite.Position.X,
-					sprite.Position.Y,
-					(int)(16 * sprite.Scale),
-					(int)(16 * sprite.Scale)
-				);
+				return new Rectangle(sprite.Position.X, sprite.Position.Y, (int)(16 * sprite.Scale),(int)(16 * sprite.Scale));
 			}
 		}
 
@@ -35,16 +30,18 @@ namespace MagicBrosMario.Source.Items
 
 		public void Update(GameTime gameTime)
 		{
-			if (isCollected) return;
-
-			sprite.Update(gameTime);
-		}
+            if (!isCollected)
+            {
+                sprite.Update(gameTime);
+            }
+        }
 
 		public void Draw(SpriteBatch spriteBatch)
 		{
-			if (isCollected) return;
-
-			sprite.Draw(spriteBatch);
+			if (!isCollected)
+			{
+				sprite.Draw(spriteBatch);
+			}
 		}
 
 		public void OnCollidePlayer(Player player, CollideDirection direction)

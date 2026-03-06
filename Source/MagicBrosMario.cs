@@ -31,7 +31,7 @@ public class MagicBrosMario : Game
     private IBlock[] blocks;
     private IItems[] items;
     private SpriteFont _font;
-    private CollisionController collisionController;
+    //CollisionController collisionController;
 
     public MagicBrosMario()
     {
@@ -67,12 +67,11 @@ public class MagicBrosMario : Game
             halfY = _graphics.PreferredBackBufferHeight / 2
         };
         Controller = new MarioGameController(this, ref data);
-        collisionController = CollisionController.Instance;
-        collisionController.AddEnemy(enemy[0]);
-        collisionController.AddEnemy(enemy[1]);
-        collisionController.AddEnemy(enemy[2]);
-        collisionController.AddEnemy(enemy[3]);
-        collisionController.AddEnemy(enemy[4]);
+
+        CollisionController.Instance.BindPlayer(Mario);
+        foreach(IItems item in items) 
+        CollisionController.Instance.AddItem(item);
+
     }
 
     // Make sure texture is set to characters
@@ -145,7 +144,7 @@ public class MagicBrosMario : Game
 
 
 		items[0] = new Fireflower(itemsTexture, screenWidth, screenHeight, positionX, positionY);
-		//CollisionController.Instance.AddItem((Fireflower)items[0]);
+
 		items[1] = new Fireflower_Underground(itemsTexture, screenWidth, screenHeight, positionX, positionY);
         items[2] = new QuestionBlock(itemsTexture, screenWidth, screenHeight, positionX, positionY);
         items[3] = new Coin(itemsTexture, screenWidth, screenHeight, positionX, positionY); 
@@ -187,11 +186,11 @@ public class MagicBrosMario : Game
     {
         Controller.Update(gameTime);
         Mario.Update(gameTime);
-		CollisionController.Instance.Update(gameTime);
+		
 		enemy[enemyIndex].Update(gameTime);
         items[itemIndex].Update(gameTime);
         blocks[blockIndex].Update(gameTime);
-
+        CollisionController.Instance.Update(gameTime);
     }
 
     protected override void Draw(GameTime gameTime)

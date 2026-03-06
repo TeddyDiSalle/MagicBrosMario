@@ -19,7 +19,7 @@ public class MarioDeadState : IPlayerState
         sprite = texture.NewSprite(136, 2, 16, 16);
         sprite.Scale = scaleFactor;
         Mario.KillMario();
-        Mario.collision.CollisionBox = new Rectangle(0, 0, 0, 0);
+        Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 0 * scaleFactor, 0 * scaleFactor);
     }
     public void Left(GameTime gameTime)
     {

@@ -42,8 +42,7 @@ public class FireMarioMoveState : IPlayerState
             Sprites[i].Scale = scaleFactor;
         }
         CurrentSprite = Sprites[0];
-        Rectangle currentHitBox = Mario.collision.CollisionBox;
-        Mario.collision.CollisionBox = new Rectangle(currentHitBox.X, currentHitBox.Y, 16, 32);
+        Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 16 * scaleFactor, 32 * scaleFactor);
     }
     public void Left(GameTime gameTime)
     {

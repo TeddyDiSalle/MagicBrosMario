@@ -30,8 +30,7 @@ public class FireMarioCrouchState : IPlayerState
         {
             Sprites[i].Scale = scaleFactor;
         }
-        Rectangle currentHitBox = Mario.collision.CollisionBox;
-        Mario.collision.CollisionBox = new Rectangle(currentHitBox.X, currentHitBox.Y, 16, 22);
+        Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 16 * scaleFactor, 22 * scaleFactor);
     }
     public void Left(GameTime gameTime)
     {
