@@ -41,6 +41,9 @@ public class Camera {
         set {
             graphics.PreferredBackBufferWidth = value.X;
             graphics.PreferredBackBufferHeight = value.Y;
+            foreach (var sprite in Sprites) {
+                sprite.UpdateDestRect();
+            }
             graphics.ApplyChanges();
         }
     }
