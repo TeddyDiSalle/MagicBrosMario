@@ -1,0 +1,56 @@
+using System;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+
+namespace MagicBrosMario.Source.Sprite;
+
+public class Camera {
+    private readonly GraphicsDeviceManager graphics;
+
+    public Camera(GraphicsDeviceManager graphics) {
+        if (Instance != null) {
+            throw new Exception("camera had been created");
+        }
+
+        this.graphics = graphics;
+        Instance = this;
+    }
+
+    public static Camera Instance {
+        get {
+            if (field == null) {
+                throw new
+                    Exception("camera has not been initialized, create camera should be create right after graphics");
+            }
+
+            return field;
+        }
+        private set;
+    }
+
+    public List<ISprite> Sprites { get; } = [];
+
+    public Point WindowSize {
+        get => new(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+
+        set {
+            graphics.PreferredBackBufferWidth = value.X;
+            graphics.PreferredBackBufferHeight = value.Y;
+            graphics.ApplyChanges();
+        }
+    }
+
+    /// <summary>
+    /// top-left corner of the screen.
+    /// when Position.X increases, the screen moves down, blocks move up
+    /// when Position.Y increases, the screen moves right, blocks move left
+    /// </summary>
+    public Point Position { get; set; } = Point.Zero;
+
+    public bool ShouldDraw(Rectangle destRect) {
+        return destRect.X < WindowSize.X &&
+               destRect.Y < WindowSize.Y &&
+               destRect.X + destRect.Width > 0 &&
+               destRect.Y + destRect.Height > 0;
+    }
+}
