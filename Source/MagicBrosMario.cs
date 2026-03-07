@@ -116,14 +116,14 @@ public class MagicBrosMario : Game
         {
             item.Update(gameTime);
         }
-        //for (int i = 0; i < CollectableItems.Count; i++)
-        //{
-        //    CollectableItems[i].Update(gameTime);
-        //    if (!CollectableItems[i].GetIsAlive())
-        //    {
-        //        CollectableItems.RemoveAt(i);
-        //    }
-        //}
+        for (int i = 0; i < CollectableItems.Count; i++)
+        {
+            CollectableItems[i].Update(gameTime);
+            if (CollectableItems[i].getCollected())
+            {
+                CollectableItems.RemoveAt(i);
+            }
+        }
         for (int i = 0; i < Enemies.Count; i++) {
             Enemies[i].Update(gameTime);
             if (!Enemies[i].GetIsAlive())
