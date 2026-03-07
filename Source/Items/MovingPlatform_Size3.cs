@@ -1,9 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using MagicBrosMario.Source.Block;
+using MagicBrosMario.Source.Collision;
+using MagicBrosMario.Source.MarioStates;
 using MagicBrosMario.Source.Sprite;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace MagicBrosMario.Source.Items
 {
@@ -18,10 +21,18 @@ namespace MagicBrosMario.Source.Items
 		private int yLimit;
 		private int yDifference = 0;
 
-		public MovingPlatform_Size3(SharedTexture texture, int screenWidth, int screenHeight, int positionX, int positionY, int d)
+        public Rectangle CollisionBox
+        {
+            get
+            {
+                return new Rectangle(sprite.Position.X, sprite.Position.Y, (int)(48 * sprite.Scale), (int)(8 * sprite.Scale));
+            }
+        }
+
+        public MovingPlatform_Size3(SharedTexture texture, int screenWidth, int screenHeight, int positionX, int positionY, int d)
 		{
 
-			sprite = new Sprite.Sprite(texture, 63, 38, 48, 8);
+			sprite = texture.NewSprite(63, 38, 48, 8);
 			yLimit = screenHeight;
 			xLimit = screenWidth;
 			direction = d;
@@ -38,9 +49,13 @@ namespace MagicBrosMario.Source.Items
 
 			position.Y += yDifference;
 
-			if (position.Y <= 0 || position.Y + sprite.Size.Y >= yLimit)
+			if (position.Y + sprite.Size.Y < 0) 
 			{
-				direction *= -1;
+				position.Y = yLimit;
+			}
+			else if (position.Y > yLimit) 
+			{
+				position.Y = -sprite.Size.Y;
 			}
 
 			sprite.Position = position;
@@ -55,6 +70,19 @@ namespace MagicBrosMario.Source.Items
 		public int getY()
 		{
 			return yDifference;
+        }
+
+        public void OnCollidePlayer(Player player, CollideDirection direction) { }
+
+        public void OnCollideItem(IItems item, CollideDirection direction) { }
+
+        public void OnCollideEnemy(IEnemy enemy, CollideDirection direction) { }
+
+        public void OnCollideBlock(IBlock block, CollideDirection direction) { }
+
+		public bool getCollected()
+		{
+			return false;
 		}
 
 	}
