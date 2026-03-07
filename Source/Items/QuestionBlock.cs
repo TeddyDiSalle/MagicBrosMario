@@ -50,13 +50,15 @@ namespace MagicBrosMario.Source.Items
         public void OnCollideEnemy(IEnemy enemy, CollideDirection direction) { }
 
         public void OnCollideBlock(IBlock block, CollideDirection direction) { }
+		public void spitOutCoin()
+		{
 
-        public void spitOutMushroom()
+		}
+		public void spitOutMushroom()
         {
          
         }
         
-
         public void spitOutFireFlower()
         {
 
@@ -67,6 +69,10 @@ namespace MagicBrosMario.Source.Items
 
         }
 
+		public bool getCollected()
+		{
+			return false;
+		}
 
-    }
+	}
 }
