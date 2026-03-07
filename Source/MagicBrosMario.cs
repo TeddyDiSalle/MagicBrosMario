@@ -27,7 +27,7 @@ public class MagicBrosMario : Game
     private ILevel lvl;
     private SpriteFont _font;
 
-    private List<IItems> CollectableItems;
+    private List<IItems> ItemsList;
     private List<IEnemy> Enemies;
     private int ScreenWidth;
     private int ScreenHeight;
@@ -78,12 +78,14 @@ public class MagicBrosMario : Game
             halfY = _graphics.PreferredBackBufferHeight / 2
         };
         Controller = new MarioGameController(this, ref data);
-        CollectableItems = [
+        ItemsList = [
             new Fireflower(ItemTexture, ScreenWidth, ScreenHeight, 700, 150),
             new Fireflower_Underground(ItemTexture, ScreenWidth, ScreenHeight, 600, 150),
             new Mushroom(ItemTexture, ScreenWidth, ScreenHeight, 100, 150),
             new OneUp(ItemTexture, ScreenWidth, ScreenHeight, 0, 150),
             new Star(ItemTexture, ScreenWidth, ScreenHeight, 50, 150),
+            new MovingPlatform_Size1(ItemTexture, ScreenWidth, ScreenHeight, 300, 300, 1),
+            new Cloud(ItemTexture, ScreenWidth, ScreenHeight, 0, 200),
         ];
         Enemies = [
             new Goomba(EnemyTexture.NewAnimatedSprite(295, 187, 18, 18, 2, 0.2f),EnemyTexture.NewSprite(276, 187, 18, 18), 250, 500, 550),
@@ -100,7 +102,7 @@ public class MagicBrosMario : Game
             ];
 
         CollisionController.Instance.BindPlayer(Mario);
-        foreach(IItems item in CollectableItems)
+        foreach(IItems item in ItemsList)
             CollisionController.Instance.AddItem(item);
         foreach(IEnemy enemy in Enemies)
             CollisionController.Instance.AddEnemy(enemy);
@@ -111,17 +113,13 @@ public class MagicBrosMario : Game
         Controller.Update(gameTime);
         lvl.Update(gameTime);
         Mario.Update(gameTime);
-        CollisionController.Instance.Update(gameTime);
-        foreach (IItems item in CollectableItems)
+        
+        for (int i = 0; i < ItemsList.Count; i++)
         {
-            item.Update(gameTime);
-        }
-        for (int i = 0; i < CollectableItems.Count; i++)
-        {
-            CollectableItems[i].Update(gameTime);
-            if (CollectableItems[i].getCollected())
+            ItemsList[i].Update(gameTime);
+            if (ItemsList[i].getCollected())
             {
-                CollectableItems.RemoveAt(i);
+                ItemsList.RemoveAt(i);
             }
         }
         for (int i = 0; i < Enemies.Count; i++) {
@@ -131,7 +129,7 @@ public class MagicBrosMario : Game
                 Enemies.RemoveAt(i);
             }
         }
-            
+        CollisionController.Instance.Update(gameTime);
     }
 
     protected override void Draw(GameTime gameTime)
@@ -143,7 +141,7 @@ public class MagicBrosMario : Game
         lvl.Draw(_spriteBatch);
 
         Mario.Draw(_spriteBatch);
-        foreach (IItems item in CollectableItems)
+        foreach (IItems item in ItemsList)
             item.Draw(_spriteBatch);
         foreach (IEnemy enemy in Enemies)
             enemy.Draw(_spriteBatch);

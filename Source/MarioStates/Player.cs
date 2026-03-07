@@ -164,8 +164,11 @@ public class Player : ICollidable
         {
             case Cloud cloud:
                 UnCollide(Rectangle.Intersect(CollisionBox, cloud.CollisionBox), direction);
-                Position += new Vector2(cloud.getX(), 0);
-                Velocity = new Vector2(Velocity.X, 0);
+                if (direction == CollideDirection.Down)
+                {
+                    Position += new Vector2(cloud.getX(), 0);
+                    Velocity = new Vector2(Velocity.X, 0);
+                }
                 break;
             case Fireflower:
             case Fireflower_Underground:
