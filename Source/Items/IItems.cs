@@ -12,6 +12,8 @@ namespace MagicBrosMario.Source.Items
 		void Update(GameTime gameTime);
 		void Draw(SpriteBatch spriteBatch);
 
+		bool getCollected();
+
 
 	}
 }
