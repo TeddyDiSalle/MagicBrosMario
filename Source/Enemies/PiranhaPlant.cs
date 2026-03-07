@@ -27,7 +27,7 @@ public class PiranhaPlant : IEnemy, ICollidable
 
     private PiranhaState state;
     private float pauseTimer = 0f;
-    private Boolean isAlive;
+    private bool isAlive;
 
     public Point Position
     {
@@ -73,7 +73,10 @@ public class PiranhaPlant : IEnemy, ICollidable
         this.state = PiranhaState.Rising;
         this.pauseTimer = PAUSE_DURATION; 
     }
-
+    public bool GetIsAlive()
+    {
+        return isAlive;
+    }
     public void Update(GameTime gameTime)
     {
         if (!isAlive)

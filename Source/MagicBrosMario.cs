@@ -6,6 +6,8 @@ using MagicBrosMario.Source.MarioStates;
 using MagicBrosMario.Source.Sprite;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Linq;
+using System.Collections.Generic;
 
 
 namespace MagicBrosMario.Source;
@@ -25,8 +27,8 @@ public class MagicBrosMario : Game
     private ILevel lvl;
     private SpriteFont _font;
 
-    private IItems[] CollectableItems;
-    private IEnemy[] Enemies;
+    private List<IItems> CollectableItems;
+    private List<IEnemy> Enemies;
     private int ScreenWidth;
     private int ScreenHeight;
 
@@ -114,9 +116,20 @@ public class MagicBrosMario : Game
         {
             item.Update(gameTime);
         }
-        foreach (IEnemy enemy in Enemies)
-        {
-            enemy.Update(gameTime);
+        //for (int i = 0; i < CollectableItems.Count; i++)
+        //{
+        //    CollectableItems[i].Update(gameTime);
+        //    if (!CollectableItems[i].GetIsAlive())
+        //    {
+        //        CollectableItems.RemoveAt(i);
+        //    }
+        //}
+        for (int i = 0; i < Enemies.Count; i++) {
+            Enemies[i].Update(gameTime);
+            if (!Enemies[i].GetIsAlive())
+            {
+                Enemies.RemoveAt(i);
+            }
         }
             
     }

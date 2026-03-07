@@ -51,6 +51,11 @@ public class Goomba : IEnemy, ICollidable
         this.isAlive = true;
     }
 
+    public bool GetIsAlive()
+    {
+        return isAlive;
+    }
+
     public void Update(GameTime gametime)
     {
         if (isAlive)

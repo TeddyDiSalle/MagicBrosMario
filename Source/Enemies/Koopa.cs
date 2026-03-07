@@ -79,7 +79,10 @@ public class Koopa : IEnemy, ICollidable
         Position = new Point(leftBound, Y);
         this.state = KoopaState.WalkingAlive;
     }
-
+    public bool GetIsAlive()
+    {
+        return isAlive;
+    }
     public void Update(GameTime gametime)
     {
         if (state == KoopaState.ShellIdle)

@@ -84,7 +84,10 @@ public class Bowser : IEnemy, ICollidable
         Position = new Point(leftBound, y);
         this.fireCooldownTimer = FIRE_COOLDOWN;
     }
-
+    public bool GetIsAlive()
+    {
+        return isAlive;
+    }
     public void Update(GameTime gameTime)
     {
         if (!isAlive) return;
