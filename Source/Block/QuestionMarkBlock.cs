@@ -7,22 +7,28 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MagicBrosMario.Source.Block;
 
-public class CoinBlock(AnimatedSprite sprite, Sprite.Sprite emptySprite) : BlockBase<CoinBlock>(sprite), ICollidable {
+public class QuestionMarkBlock(AnimatedSprite sprite, Sprite.Sprite emptySprite) : BlockBase<QuestionMarkBlock>(sprite), ICollidable {
     public override void Update(GameTime gameTime) {
-        throw new System.NotImplementedException();
     }
 
     public override void Draw(SpriteBatch spriteBatch) {
-        throw new System.NotImplementedException();
     }
 
     /* ICollidable methods */
 
     public Rectangle CollisionBox => new(sprite.Position.X, sprite.Position.Y, sprite.Size.X, sprite.Size.Y);
 
+    private bool empty = false;
+
+    // ReSharper disable once InvertIf
     public void OnCollidePlayer(Player player, CollideDirection direction) {
-        // spawn coins
-        throw new System.NotImplementedException();
+        if (empty) return;
+
+        // spawn coins and change sprite
+        if (direction == CollideDirection.Down) {
+            Sprite = emptySprite;
+            empty = true;
+        }
     }
 
     public void OnCollideItem(IItems item, CollideDirection direction) {

@@ -7,7 +7,7 @@ namespace MagicBrosMario.Source.Sprite;
 
 /// <summary>
 /// camera class for drawing all the sprites and updating position based on screen
-/// this class should be intialized right after graphics is created
+/// this class should be initialized right after graphics is created
 /// </summary>
 public class Camera {
     private readonly GraphicsDeviceManager graphics;
