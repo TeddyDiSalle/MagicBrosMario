@@ -7,22 +7,33 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MagicBrosMario.Source.Block;
 
-public class QuestionMarkBlock(AnimatedSprite sprite, Sprite.Sprite emptySprite) : BlockBase<QuestionMarkBlock>(sprite), ICollidable {
-    /* ICollidable methods */
-
+public class QuestionMarkBlock : BlockBase<QuestionMarkBlock>, ICollidable {
     public Rectangle CollisionBox => new(sprite.Position.X, sprite.Position.Y, sprite.Size.X, sprite.Size.Y);
 
     private bool empty = false;
+    private AnimatedSprite sprite;
+    private readonly Sprite.Sprite emptySprite;
 
-    // ReSharper disable once InvertIf
+    public QuestionMarkBlock(AnimatedSprite sprite, Sprite.Sprite emptySprite) : base(sprite) {
+        this.sprite = sprite;
+        this.emptySprite = emptySprite;
+        sprite.Visible = true;
+        emptySprite.Visible = false;
+    }
+    
     public void OnCollidePlayer(Player player, CollideDirection direction) {
         if (empty) return;
 
+        // if mario does not collide from below
+        if (direction != CollideDirection.Down) return;
+        
+        // drop the sprite and allow gc to clean it up
+        sprite.Drop();
+        sprite = null;
+
         // spawn coins and change sprite
-        if (direction == CollideDirection.Down) {
-            Sprite = emptySprite;
-            empty = true;
-        }
+        Sprite = emptySprite;
+        empty = true;
     }
 
     public void OnCollideItem(IItems item, CollideDirection direction) {
