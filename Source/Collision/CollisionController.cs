@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using MagicBrosMario.Source.Block;
 using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.MarioStates;
@@ -15,7 +16,7 @@ public class CollisionController {
 
     public static CollisionController Instance { get; } = new CollisionController();
 
-    public void BindPlayer<TCollidablePlayer>(TCollidablePlayer collidablePlayer)
+	public void BindPlayer<TCollidablePlayer>(TCollidablePlayer collidablePlayer)
         where TCollidablePlayer : Player, ICollidable {
         player = collidablePlayer;
     }

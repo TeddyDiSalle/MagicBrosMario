@@ -23,7 +23,7 @@ public class MarioGameController{
     public void Initialize()
     {
         inputMap = new KeysNMouseCommandMapper();
-        SetSprint2Binds();
+        SetSprint3Binds();
     }
     public struct Sprint2Controller {
         public Player player;
@@ -33,15 +33,10 @@ public class MarioGameController{
         public int halfY;
     }
     // All the binds specified for sprint 2
-    public void SetSprint2Binds()
+    public void SetSprint3Binds()
     {
         Player player = gameData.player; 
         //Keyboard inputs
-        inputMap.Bind(Keys.D0,gt => game.Exit());
-        inputMap.Bind(Keys.D1, gt => game.displayPowerUp(0));
-        inputMap.Bind(Keys.D2, gt => game.displayPowerUp(1));
-        inputMap.Bind(Keys.D3, gt => game.displayPowerUp(2));
-        inputMap.Bind(Keys.D4, gt => game.displayPowerUp(3));
         inputMap.Bind(Keys.W, gt => player.Jump(gt));
         inputMap.Bind(Keys.Up, gt => player.Jump(gt));
         inputMap.Bind(Keys.A, gt => player.Left(gt));
@@ -53,21 +48,10 @@ public class MarioGameController{
         inputMap.Bind(Keys.Z, gt => player.Attack());
         inputMap.Bind(Keys.N, gt =>  player.Attack());
         inputMap.Bind(Keys.E, gt =>  player.TakeDamage());
-        inputMap.Bind(Keys.T, gt => game.incrementBlock()); // needs to be fixed so that it only runs once per key press
-        inputMap.Bind(Keys.Y, gt => game.decrementBlock());// needs to be fixed so that it only runs once per key press
-        inputMap.Bind(Keys.U, gt => game.incrementItem()); // needs to be fixed so that it only runs once per key press
-        inputMap.Bind(Keys.I, gt => game.decrementItem()); // needs to be fixed so that it only runs once per key press
-        inputMap.Bind(Keys.O, gt => game.incrementEnemy());// needs to be fixed so that it only runs once per key press
-        inputMap.Bind(Keys.P, gt => game.decrementEnemy());// needs to be fixed so that it only runs once per key press
         inputMap.Bind(Keys.Q, gt => game.Exit()); 
-        inputMap.Bind(Keys.R, gt => game.resetGame());
 
         // mouse inputs
         inputMap.Bind(m => m.IsButtonDown(MouseButton.Right), () => game.Exit());
-        inputMap.Bind(m => m.WasButtonJustPressed(MouseButton.Left) && m.Position.X < gameData.halfX && m.Position.Y < gameData.halfY, () => game.displayPowerUp(0));
-        inputMap.Bind(m => m.IsButtonDown(MouseButton.Left) && m.Position.X > gameData.halfX && m.Position.Y < gameData.halfY, () => game.displayPowerUp(1));
-        inputMap.Bind(m => m.IsButtonDown(MouseButton.Left) && m.Position.X < gameData.halfX && m.Position.Y > gameData.halfY, () => game.displayPowerUp(2));
-        inputMap.Bind(m => m.IsButtonDown(MouseButton.Left) && m.Position.X > gameData.halfX && m.Position.Y > gameData.halfY, () => game.displayPowerUp(3));
     }
     public void Update(GameTime gameTime)
     {

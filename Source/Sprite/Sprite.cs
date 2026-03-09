@@ -21,7 +21,8 @@ public class Sprite(
     int height
 ) : ISprite
 {
-    public bool IsAnimated => false;
+    public bool Animated => false;
+    public bool Visible { get; set; } = true;
     public bool Flipped { get; set; } = false;
 
     public Point Position
@@ -70,7 +71,7 @@ public class Sprite(
     }
 
     public void Draw(SpriteBatch spriteBatch) {
-        if (!shouldDraw) return;
+        if (!(Visible && shouldDraw)) return;
         
         if (Flipped)
         {
@@ -81,5 +82,9 @@ public class Sprite(
         {
             spriteBatch.Draw(texture.Texture, destRect, sourceRect, Color);
         }
+    }
+
+    public void Drop() {
+        Camera.Instance.Sprites.Remove(this);
     }
 }

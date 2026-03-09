@@ -1,6 +1,3 @@
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
 namespace MagicBrosMario.Source.Block;
 
 /// <summary>
@@ -29,15 +26,6 @@ namespace MagicBrosMario.Source.Block;
 /// sharedTexture.BindTexture(texture);
 /// 
 /// // both block1 and block2 has valid texture after this point
-///
-/// /* in Update */
-/// // this updates the animation
-/// block1.Update(gameTime);
-/// block2.Update(gameTime);
-///
-/// /* in Draw */
-/// block1.Draw(spriteBatch);
-/// block2.Draw(spriteBatch);
 /// ]]>
 /// </code>
 /// </example>
@@ -45,11 +33,4 @@ namespace MagicBrosMario.Source.Block;
 /// <param name="sprite">sprite object from shared texture, both sprite and animated sprite works</param>
 public class Block(Sprite.ISprite sprite) : BlockBase<Block>(sprite)
 {
-    public override void Update(GameTime gameTime)
-    {
-    }
-
-    public override void Draw(SpriteBatch spriteBatch)
-    {
-    }
 }

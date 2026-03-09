@@ -29,6 +29,7 @@ public class BigMarioCrouchState : IPlayerState
         {
             Sprites[i].Scale = scaleFactor;
         }
+        Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 16 * scaleFactor, 22 * scaleFactor);
     }
     public void Left(GameTime gameTime)
     {
@@ -72,6 +73,10 @@ public class BigMarioCrouchState : IPlayerState
                 Mario.StarTimeRemaining = 0;
                 break;
         }
+    }
+    public Power GetCurrentPower()
+    {
+        return Power.Mushroom;
     }
     public void Idle()
     {

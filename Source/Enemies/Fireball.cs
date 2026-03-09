@@ -1,10 +1,14 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using MagicBrosMario.Source.Collision;
+using MagicBrosMario.Source.Block;
+using MagicBrosMario.Source.Items;
+using MagicBrosMario.Source.MarioStates;
 
 namespace MagicBrosMario.Source;
 
-public class Fireball
+public class Fireball : ICollidable
 {
     private const int VELOCITY = 150;
     private const float LIFETIME = 3.0f;
@@ -13,10 +17,31 @@ public class Fireball
     private Sprite.AnimatedSprite spriteLeft;
     private Boolean movingRight;
     private float lifetimeRemaining;
+    private bool isActive = true;
 
     public Point Position
     {
         get { return movingRight ? spriteRight.Position : spriteLeft.Position; }
+    }
+
+    // ICollidable implementation
+    public Rectangle CollisionBox
+    {
+        get
+        {
+            if (!isActive)
+            {
+                return Rectangle.Empty; // No collision when expired
+            }
+
+            var currentSprite = movingRight ? spriteRight : spriteLeft;
+            return new Rectangle(
+                currentSprite.Position.X,
+                currentSprite.Position.Y,
+                currentSprite.Size.X,
+                currentSprite.Size.Y
+            );
+        }
     }
 
     public Fireball(
@@ -37,7 +62,18 @@ public class Fireball
 
     public void Update(GameTime gameTime)
     {
+        if (!isActive)
+        {
+            return;
+        }
+
         lifetimeRemaining -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+        if (lifetimeRemaining <= 0)
+        {
+            isActive = false;
+            return;
+        }
 
         var sec = (double)gameTime.ElapsedGameTime.TotalMilliseconds / 1000.0;
         var dx = (int)(sec * VELOCITY);
@@ -61,11 +97,16 @@ public class Fireball
 
     public bool IsExpired()
     {
-        return lifetimeRemaining <= 0;
+        return !isActive || lifetimeRemaining <= 0;
     }
 
     public void Draw(SpriteBatch _spriteBatch)
     {
+        if (!isActive)
+        {
+            return;
+        }
+
         if (movingRight)
         {
             spriteRight.Draw(_spriteBatch);
@@ -74,5 +115,36 @@ public class Fireball
         {
             spriteLeft.Draw(_spriteBatch);
         }
+    }
+
+    // ICollidable methods
+    public void OnCollidePlayer(Player player, CollideDirection direction)
+    {
+        // Fireball damages player (if it's from Bowser)
+        // Player takes damage
+        // Fireball disappears after hitting player
+        isActive = false;
+    }
+
+    public void OnCollideItem(IItems item, CollideDirection direction)
+    {
+        // Fireballs don't interact with items
+    }
+
+    public void OnCollideEnemy(IEnemy enemy, CollideDirection direction)
+    {
+        // Fireball defeats enemy
+        if (enemy != null)
+        {
+            enemy.Kill();
+        }
+        // Fireball disappears after hitting enemy
+        isActive = false;
+    }
+
+    public void OnCollideBlock(IBlock block, CollideDirection direction)
+    {
+        // Fireball hits a block and disappears
+        isActive = false;
     }
 }

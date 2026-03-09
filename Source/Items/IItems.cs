@@ -6,11 +6,13 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MagicBrosMario.Source.Items
 {
-    public interface IItems
+    public interface IItems:Collision.ICollidable
     {
 
 		void Update(GameTime gameTime);
 		void Draw(SpriteBatch spriteBatch);
+
+		bool getCollected();
 
 
 	}

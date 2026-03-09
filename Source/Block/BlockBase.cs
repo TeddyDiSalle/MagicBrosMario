@@ -8,8 +8,7 @@ namespace MagicBrosMario.Source.Block;
 /// </summary>
 /// <param name="sprite">sprite object from shared texture, both sprite and animated sprite works</param>
 /// <typeparam name="TBlock">type of self for self referencing</typeparam>
-public abstract class BlockBase<TBlock>(Sprite.ISprite sprite) : IBlock
-    where TBlock : BlockBase<TBlock> {
+public abstract class BlockBase<TBlock>(Sprite.ISprite sprite) : IBlock where TBlock : BlockBase<TBlock> {
     protected Sprite.ISprite Sprite {
         get;
         set {
@@ -19,6 +18,21 @@ public abstract class BlockBase<TBlock>(Sprite.ISprite sprite) : IBlock
             field = value;
         }
     } = sprite;
+
+    public bool Visible {
+        get => Sprite.Visible;
+        set => Sprite.Visible = value;
+    }
+
+    /// <summary>
+    /// this utility method allow giving block a initial visibility by chaining with constructor
+    /// </summary>
+    /// <param name="visibility">visibility</param>
+    /// <returns></returns>
+    public BlockBase<TBlock> WithVisibility(bool visibility) {
+        Visible = visibility;
+        return this;
+    }
 
     public Point Position {
         get => Sprite.Position;
@@ -31,9 +45,9 @@ public abstract class BlockBase<TBlock>(Sprite.ISprite sprite) : IBlock
     /// <param name="x">x position</param>
     /// <param name="y">y position</param>
     /// <returns></returns>
-    public TBlock WithPosition(int x, int y) {
+    public BlockBase<TBlock> WithPosition(int x, int y) {
         Position = new Point(x, y);
-        return (TBlock)this;
+        return this;
     }
 
     public Point Size => Sprite.Size;
@@ -44,7 +58,7 @@ public abstract class BlockBase<TBlock>(Sprite.ISprite sprite) : IBlock
     }
 
     /// <summary>
-    /// this utility method allow giving block a initial scale by chaining with constructor
+    /// this utility method allow giving block an initial scale by chaining with constructor
     /// </summary>
     /// <param name="scale">scale</param>
     /// <returns></returns>
@@ -52,7 +66,4 @@ public abstract class BlockBase<TBlock>(Sprite.ISprite sprite) : IBlock
         Scale = scale;
         return this;
     }
-
-    public abstract void Update(GameTime gameTime);
-    public abstract void Draw(SpriteBatch spriteBatch);
 }

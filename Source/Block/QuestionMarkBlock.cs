@@ -8,12 +8,6 @@ using Microsoft.Xna.Framework.Graphics;
 namespace MagicBrosMario.Source.Block;
 
 public class QuestionMarkBlock(AnimatedSprite sprite, Sprite.Sprite emptySprite) : BlockBase<QuestionMarkBlock>(sprite), ICollidable {
-    public override void Update(GameTime gameTime) {
-    }
-
-    public override void Draw(SpriteBatch spriteBatch) {
-    }
-
     /* ICollidable methods */
 
     public Rectangle CollisionBox => new(sprite.Position.X, sprite.Position.Y, sprite.Size.X, sprite.Size.Y);

@@ -1,4 +1,6 @@
-﻿using System.Runtime.CompilerServices;
+﻿using MagicBrosMario.Source.Block;
+using MagicBrosMario.Source.Collision;
+using MagicBrosMario.Source.MarioStates;
 using MagicBrosMario.Source.Sprite;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -7,8 +9,16 @@ namespace MagicBrosMario.Source.Items
 {
 	public class Fireflower : IItems
 	{
-		private AnimatedSprite sprite; 
+		private AnimatedSprite sprite;
+		private bool isCollected = false;
 
+		public Rectangle CollisionBox
+		{
+			get
+			{
+				return new Rectangle(sprite.Position.X, sprite.Position.Y, (int)(16 * sprite.Scale),(int)(16 * sprite.Scale));
+			}
+		}
 
 		public Fireflower(SharedTexture texture, int screenWidth, int screenHeight, int positionX, int positionY)
 		{
@@ -16,17 +26,41 @@ namespace MagicBrosMario.Source.Items
 
 			sprite.Position = new Point(positionX, positionY);
 			sprite.Scale = 3f;
-
 		}
 
 		public void Update(GameTime gameTime)
 		{
-			sprite.Update(gameTime);
-		}
+            if (!isCollected)
+            {
+                sprite.Update(gameTime);
+            }
+        }
 
 		public void Draw(SpriteBatch spriteBatch)
 		{
-			sprite.Draw(spriteBatch);
+			if (!isCollected)
+			{
+				sprite.Draw(spriteBatch);
+			}
 		}
-	}
+
+		public void OnCollidePlayer(Player player, CollideDirection direction)
+		{
+			if (isCollected) return;
+
+			isCollected = true;
+		}
+
+		public void OnCollideItem(IItems item, CollideDirection direction) { }
+
+		public void OnCollideEnemy(IEnemy enemy, CollideDirection direction) { }
+
+		public void OnCollideBlock(IBlock block, CollideDirection direction) { }
+
+        public bool getCollected()
+        {
+            return isCollected;
+        }
+
+    }
 }
