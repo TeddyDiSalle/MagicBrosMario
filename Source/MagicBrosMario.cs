@@ -82,7 +82,7 @@ public class MagicBrosMario : Game
             new Fireflower(ItemTexture, ScreenWidth, ScreenHeight, 700, 150),
             new Fireflower_Underground(ItemTexture, ScreenWidth, ScreenHeight, 600, 150),
             new Mushroom(ItemTexture, ScreenWidth, ScreenHeight, 100, 150),
-            new OneUp(ItemTexture, ScreenWidth, ScreenHeight, 0, 150),
+            new OneUp(ItemTexture, ScreenWidth, ScreenHeight, 1, 150),
             new Star(ItemTexture, ScreenWidth, ScreenHeight, 50, 150),
             new MovingPlatform_Size1(ItemTexture, ScreenWidth, ScreenHeight, 300, 300, 1),
             new Cloud(ItemTexture, ScreenWidth, ScreenHeight, 0, 200),
