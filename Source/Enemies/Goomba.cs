@@ -5,6 +5,7 @@ using MagicBrosMario.Source.Collision;
 using MagicBrosMario.Source.Block;
 using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.MarioStates;
+using MagicBrosMario.Source.Sprite;
 
 namespace MagicBrosMario.Source;
 
@@ -41,12 +42,14 @@ public class Goomba : IEnemy, ICollidable
         }
     }
 
-    public Goomba(Sprite.AnimatedSprite aliveSprite, Sprite.Sprite deadSprite, int Y, int leftBound, int rightBound)
+    public Goomba(SharedTexture EnemyTexture)
     {
-        this.leftBound = leftBound;
-        this.rightBound = rightBound;
+        int Y = 250;
+        this.leftBound = 500;
+        this.rightBound = 550;
         
-        sprites = [aliveSprite, deadSprite];
+        sprites = [EnemyTexture.NewAnimatedSprite(295, 187, 18, 18, 2, 0.2f), 
+                    EnemyTexture.NewSprite(276, 187, 18, 18)];
         Position = new Point(leftBound, Y);
         this.isAlive = true;
     }

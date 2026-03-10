@@ -88,17 +88,9 @@ public class MagicBrosMario : Game
             new Cloud(ItemTexture, ScreenWidth, ScreenHeight, 0, 200),
         ];
         Enemies = [
-            new Goomba(EnemyTexture.NewAnimatedSprite(295, 187, 18, 18, 2, 0.2f),EnemyTexture.NewSprite(276, 187, 18, 18), 250, 500, 550),
-            new Goomba(EnemyTexture.NewAnimatedSprite(295, 187, 18, 18, 2, 0.2f),EnemyTexture.NewSprite(276, 187, 18, 18), 250, 400, 550),
-            new Koopa(EnemyTexture.NewAnimatedSprite(296, 206, 18, 25, 2, 0.2f), // walkling right
-            EnemyTexture.NewAnimatedSprite(182, 206, 18, 25, 2, 0.2f), // walking left
-            EnemyTexture.NewSprite(144, 216, 16, 14), //  shell idle
-            EnemyTexture.NewSprite(144, 216, 16, 14), // repeate of shell idle
-            EnemyTexture.NewSprite(163, 215, 16, 15), // stomped
-            EnemyTexture.NewSprite(334, 215, 16, 15), // shell dead
-            250,
-            300,
-            550)
+            new Goomba(EnemyTexture),
+            new Goomba(EnemyTexture),
+            new Koopa(EnemyTexture)
             ];
 
         CollisionController.Instance.BindPlayer(Mario);

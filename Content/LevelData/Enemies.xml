@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Enemies>
+    <Enemy id="00" function="Bowser" />
+    <Enemy id="01" function="Goomba" />
+    <Enemy id="02" function="Koopa" />
+    <Enemy id="03" function="PiranhaPlant" />
+    <Enemy id="04" function="RotatingFireBall" />
+    <Enemy id="05" function="Fireball" />
+</Enemies>
