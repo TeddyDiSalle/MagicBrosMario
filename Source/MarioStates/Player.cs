@@ -257,7 +257,7 @@ public class Player : ICollidable
     }
     public void OnCollideBlock(IBlock block, Collision.CollideDirection direction)
     {
-        if (!block.IsSolid) return;
+        // if (!block.IsSolid) return;
         //Uncollide
     }
 

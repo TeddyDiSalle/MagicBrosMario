@@ -34,8 +34,8 @@ public class Level1 : ILevel
 		//block update
 		for(int r = 0; r < levHeight; r++)	{
 			for(int c = 0; c < levWidth; c++)	{
-				if(blocks[r][c] != null)
-					blocks[r][c].Update(gt);
+				//if(blocks[r][c] != null)
+					//blocks[r][c].Update(gt);
 			}
 		}
 	}
@@ -44,8 +44,8 @@ public class Level1 : ILevel
 		//block draw
 		for(int r = 0; r < levHeight; r++)	{
 			for(int c = 0; c < levWidth; c++)	{
-				if(blocks[r][c] != null)
-					blocks[r][c].Draw(sb);
+				//if(blocks[r][c] != null)
+					//blocks[r][c].Draw(sb);
 			}
 		}
 	}
