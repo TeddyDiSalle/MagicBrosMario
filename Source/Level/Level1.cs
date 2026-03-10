@@ -10,14 +10,14 @@ public class Level1 : ILevel
 {
 	private BlockManager _bm;
 	private IBlock[][] blocks;
-	private string Level1CSVPath = "Content/LevelData/1-1.csv";
+	private string Level1BlockCVS = "Content/LevelData/Blocks1-1.csv";
 	private static int _blockSize = 16;
 	private int tileSize = _blockSize * 4;
 	private string[] lines;
 	private int levWidth;
 	private int levHeight;
 	public Level1()	{
-		lines = File.ReadLines(Level1CSVPath).ToArray();
+		lines = File.ReadLines(Level1BlockCVS).ToArray();
 		levHeight = lines.Length;
 		levWidth = lines[0].Split(',').Length;
 		blocks = new IBlock[levHeight][];
