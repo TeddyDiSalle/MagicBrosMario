@@ -27,7 +27,7 @@ public class PiranhaPlant : IEnemy, ICollidable
 
     private PiranhaState state;
     private float pauseTimer = 0f;
-    private Boolean isAlive;
+    public Boolean isAlive;
 
     public Point Position
     {
