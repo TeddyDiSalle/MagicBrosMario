@@ -34,6 +34,7 @@ public class PiranhaPlant : IEnemy, ICollidable
         get { return aliveSprite.Position; }
         private set { aliveSprite.Position = value; }
     }
+    public bool GetIsAlive() => isAlive;
 
     
     public Rectangle CollisionBox
