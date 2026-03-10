@@ -25,7 +25,8 @@ public class AnimatedSprite(
     float secPerFrame
 ) : ISprite
 {
-    public bool IsAnimated => true;
+    public bool Animated => true;
+    public bool Visible { get; set; } = true;
     public bool Flipped { get; set; } = false;
 
     public Point Position
@@ -83,9 +84,8 @@ public class AnimatedSprite(
         timer -= framePassed * msPerFrame;
     }
 
-    public void Draw(SpriteBatch spriteBatch)
-    {
-        if (!shouldDraw) return;
+    public void Draw(SpriteBatch spriteBatch) {
+        if (!(Visible && shouldDraw)) return;
         
         var sourceRect = new Rectangle(offsetX + frameWidth * frame, offsetY, frameWidth, frameHeight);
         
@@ -98,5 +98,9 @@ public class AnimatedSprite(
         {
             spriteBatch.Draw(texture.Texture, destRect, sourceRect, Color);
         }
+    }
+
+    public void Drop() {
+        Camera.Instance.Sprites.Remove(this);
     }
 }

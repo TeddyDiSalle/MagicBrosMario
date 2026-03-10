@@ -47,13 +47,23 @@ namespace MagicBrosMario.Source.Items
             }
         }
 
-        public void OnCollidePlayer(Player player, CollideDirection direction) { }
+        public void OnCollidePlayer(Player player, CollideDirection direction)
+        {
+            if (isCollected) return;
+
+            isCollected = true;
+        }
 
         public void OnCollideItem(IItems item, CollideDirection direction) { }
 
         public void OnCollideEnemy(IEnemy enemy, CollideDirection direction) { }
 
         public void OnCollideBlock(IBlock block, CollideDirection direction) { }
+
+        public bool getCollected()
+        {
+            return isCollected;
+        }
 
     }
 }

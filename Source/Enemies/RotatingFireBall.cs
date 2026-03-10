@@ -92,7 +92,10 @@ public class RotatingFireBar : IEnemy, ICollidable
             fireball.Update(gameTime);
         }
     }
-
+    public bool GetIsAlive()
+    {
+        return true;
+    }
     public void Kill()
     {
         // Fire bars cannot be killed - this does nothing

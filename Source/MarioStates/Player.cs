@@ -17,7 +17,7 @@ public class Player : ICollidable
     public Vector2 Velocity { get; private set; }
     private const int scaleFactor = 3;
     private float GroundY = 260; //Temporary for Sprint2
-    private const float timeFrame = 0.15f, MovementSpeed = 7.0f, Gravity = 0.35f, MaxSpeed = 15.0f, fireballCooldown = 0.2f;
+    private const float timeFrame = 0.15f, MovementSpeed = 15.0f, Gravity = 0.35f, MaxSpeed = 15.0f, fireballCooldown = 0.2f;
     public bool IsCrouching { get; private set; } = false;
     public bool Flipped { get; set; } = false;
     public bool Invincible { get; set; } = false;
@@ -68,6 +68,10 @@ public class Player : ICollidable
         IsCrouching = true;
         PlayerState.Crouch(gameTime);
     }
+    public void SetPositon(Vector2 pos)
+    {
+        Position = pos;
+    }
     public void ReleaseCrouch()
     {
         IsCrouching = false;
@@ -80,10 +84,6 @@ public class Player : ICollidable
     public void TakeDamage()
     {
         PlayerState.TakeDamage();
-    }
-    public void AddLife()
-    {
-        lives++;
     }
     public void KillMario()
     {
@@ -129,7 +129,7 @@ public class Player : ICollidable
     }
     public void MoveUp(GameTime gameTime)
     {
-        float distanceMoved = (float)(gameTime.ElapsedGameTime.TotalSeconds * 80 * MovementSpeed);
+        float distanceMoved = (float)(gameTime.ElapsedGameTime.TotalSeconds * 40 * MovementSpeed);
         Velocity -= new Vector2(0, distanceMoved);
     }
     public void Idle()
@@ -153,23 +153,6 @@ public class Player : ICollidable
         }
     }
 
-    public void OnGround(float NewGroundY)
-    {
-        GroundY = NewGroundY;
-    }
-    public void SetPositon(Vector2 pos)
-    {
-        Position = pos;
-    }
-    public void AddToPositon(Vector2 dxdy)
-    {
-        Position += dxdy;
-    }
-    public void AddToVelocity(Vector2 dxdy)
-    {
-        Velocity += dxdy;
-    }
-
     //Collision Handling Methods
     public void OnCollidePlayer(Player player, Collision.CollideDirection direction)
     {
@@ -181,8 +164,11 @@ public class Player : ICollidable
         {
             case Cloud cloud:
                 UnCollide(Rectangle.Intersect(CollisionBox, cloud.CollisionBox), direction);
-                Position += new Vector2(cloud.getX(), 0);
-                Velocity = new Vector2(Velocity.X, 0);
+                if (direction == CollideDirection.Down)
+                {
+                    Position += new Vector2(cloud.getX(), 0);
+                    Velocity = new Vector2(Velocity.X, 0);
+                }
                 break;
             case Fireflower:
             case Fireflower_Underground:
@@ -190,28 +176,31 @@ public class Player : ICollidable
                 break;
             case MovingPlatform_Size1 plat:
                 UnCollide(Rectangle.Intersect(CollisionBox, plat.CollisionBox), direction);
-                Position += new Vector2(0, plat.getY());
+                if (direction is CollideDirection.Left or CollideDirection.Right) { return; }
                 Velocity = new Vector2(Velocity.X, 0);
+                Position += new Vector2(0, plat.getY());
                 break;
             case MovingPlatform_Size2 plat:
                 UnCollide(Rectangle.Intersect(CollisionBox, plat.CollisionBox), direction);
-                Position += new Vector2(0, plat.getY());
+                if (direction is CollideDirection.Left or CollideDirection.Right) { return; }
                 Velocity = new Vector2(Velocity.X, 0);
+                Position += new Vector2(0, plat.getY());
                 break;
             case MovingPlatform_Size3 plat:
                 UnCollide(Rectangle.Intersect(CollisionBox, plat.CollisionBox), direction);
-                Position += new Vector2(0, plat.getY());
+                if (direction is CollideDirection.Left or CollideDirection.Right) { return; }
                 Velocity = new Vector2(Velocity.X, 0);
+                Position += new Vector2(0, plat.getY());
                 break;
             case Mushroom:
                 PlayerState.PowerUp(Power.Mushroom);
                 break;
             case OneUp:
-                AddLife();
+                lives++;
                 break;
             case Spring_Stretched:
                 //Uncollide
-                Velocity += new Vector2(0, 70);
+                Velocity -= new Vector2(Velocity.X, 10);
                 break;
             case Star:
                 PlayerState.PowerUp(Power.Star);
@@ -223,19 +212,36 @@ public class Player : ICollidable
     }
     public void OnCollideEnemy(IEnemy enemy, Collision.CollideDirection direction)
     {
+        if (Invincible) { return; }
         switch (enemy)
         {
             case Fireball:
-            case Bowser:
-            //Uncollide
+                PlayerState.TakeDamage();
+                break;
+            case Bowser bowser:
+                UnCollide(Rectangle.Intersect(CollisionBox, bowser.CollisionBox), direction);
+                break;
             case PiranhaPlant:
                 PlayerState.TakeDamage();
                 break;
-            case Goomba:
-            //Uncollide
-            case Koopa:
-                //Uncollide
-                if (direction != Collision.CollideDirection.Top)
+            case Goomba goomba:
+                UnCollide(Rectangle.Intersect(CollisionBox, goomba.CollisionBox), direction);
+                if (direction == CollideDirection.Down) 
+                {
+                    Velocity -= new Vector2(0, 10);
+                }
+                else
+                {
+                    PlayerState.TakeDamage();
+                }
+                break;
+            case Koopa koopa:
+                UnCollide(Rectangle.Intersect(CollisionBox, koopa.CollisionBox), direction);
+                if (direction == CollideDirection.Down)
+                {
+                    Velocity -= new Vector2(0, 10);
+                }
+                else
                 {
                     PlayerState.TakeDamage();
                 }
@@ -251,7 +257,7 @@ public class Player : ICollidable
     }
     public void OnCollideBlock(IBlock block, Collision.CollideDirection direction)
     {
-        if (!block.IsSolid) return;
+        // if (!block.IsSolid) return;
         //Uncollide
     }
 

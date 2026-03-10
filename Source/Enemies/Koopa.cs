@@ -5,6 +5,7 @@ using MagicBrosMario.Source.Collision;
 using MagicBrosMario.Source.Block;
 using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.MarioStates;
+using MagicBrosMario.Source.Sprite;
 
 namespace MagicBrosMario.Source;
 
@@ -64,22 +65,26 @@ public class Koopa : IEnemy, ICollidable
         }
     }
 
-    public Koopa(
-        Sprite.AnimatedSprite walkingRightSprite,
-        Sprite.AnimatedSprite walkingLeftSprite,
-        Sprite.Sprite shellIdleSprite,
-        Sprite.Sprite shellMovingSprite,
-        Sprite.Sprite stompedSprite,
-        Sprite.Sprite shellDeathSprite,
-        int Y, int leftBound, int rightBound)
+    public Koopa(SharedTexture EnemyTexture)
     {
-        this.leftBound = leftBound;
-        this.rightBound = rightBound;
-        sprites = [walkingRightSprite, walkingLeftSprite, shellIdleSprite, shellMovingSprite, stompedSprite, shellDeathSprite];
+        int Y = 250;
+        this.leftBound = 300;
+        this.rightBound = 550;
+        sprites = [
+            EnemyTexture.NewAnimatedSprite(296, 206, 18, 25, 2, 0.2f), // walkling right
+            EnemyTexture.NewAnimatedSprite(182, 206, 18, 25, 2, 0.2f), // walking left
+            EnemyTexture.NewSprite(144, 216, 16, 14), //  shell idle
+            EnemyTexture.NewSprite(144, 216, 16, 14), // repeate of shell idle
+            EnemyTexture.NewSprite(163, 215, 16, 15), // stomped
+            EnemyTexture.NewSprite(334, 215, 16, 15), // shell dead
+            ];
         Position = new Point(leftBound, Y);
         this.state = KoopaState.WalkingAlive;
     }
-
+    public bool GetIsAlive()
+    {
+        return isAlive;
+    }
     public void Update(GameTime gametime)
     {
         if (state == KoopaState.ShellIdle)

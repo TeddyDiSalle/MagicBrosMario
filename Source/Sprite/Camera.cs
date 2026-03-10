@@ -7,7 +7,7 @@ namespace MagicBrosMario.Source.Sprite;
 
 /// <summary>
 /// camera class for drawing all the sprites and updating position based on screen
-/// this class should be intialized right after graphics is created
+/// this class should be initialized right after graphics is created
 /// </summary>
 public class Camera {
     private readonly GraphicsDeviceManager graphics;
@@ -29,7 +29,7 @@ public class Camera {
         private set;
     }
 
-    public List<ISprite> Sprites { get; } = [];
+    public HashSet<ISprite> Sprites { get; } = [];
 
     public Point WindowSize {
         get => new(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
@@ -40,6 +40,7 @@ public class Camera {
             foreach (var sprite in Sprites) {
                 sprite.UpdateDestRect();
             }
+
             graphics.ApplyChanges();
         }
     }
@@ -63,7 +64,7 @@ public class Camera {
             sprite.Update(gameTime);
         }
     }
-    
+
     public void Draw(SpriteBatch spriteBatch) {
         foreach (var sprite in Sprites) {
             sprite.Draw(spriteBatch);

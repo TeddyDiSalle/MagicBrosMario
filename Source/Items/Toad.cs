@@ -4,6 +4,7 @@ using MagicBrosMario.Source.MarioStates;
 using MagicBrosMario.Source.Sprite;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Reflection.Metadata.Ecma335;
 using System.Runtime.CompilerServices;
 
 namespace MagicBrosMario.Source.Items
@@ -47,5 +48,10 @@ namespace MagicBrosMario.Source.Items
         public void OnCollideEnemy(IEnemy enemy, CollideDirection direction) { }
 
         public void OnCollideBlock(IBlock block, CollideDirection direction) { }
+
+		public bool getCollected()
+		{
+			return false;
+		}
     }
 }
