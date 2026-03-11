@@ -2,11 +2,22 @@ using Microsoft.Xna.Framework;
 
 namespace MagicBrosMario.Source.Block;
 
-public abstract class BlockBase<TBlock>(Sprite.ISprite sprite) : IBlock
-    where TBlock : BlockBase<TBlock>
-{
-    public Sprite.ISprite Sprite { get; set; } = sprite;
-    
+/// <summary>
+/// abstract block class with useful utility methods
+/// </summary>
+/// <param name="sprite">sprite object from shared texture, both sprite and animated sprite works</param>
+/// <typeparam name="TBlock">type of self for self referencing</typeparam>
+public abstract class BlockBase<TBlock>(Sprite.ISprite sprite) : IBlock where TBlock : BlockBase<TBlock> {
+    protected Sprite.ISprite Sprite {
+        get;
+        set {
+            // sync the sprite data
+            value.Position = Position;
+            value.Scale = Scale;
+            field = value;
+        }
+    } = sprite;
+
     public bool Visible {
         get => Sprite.Visible;
         set => Sprite.Visible = value;

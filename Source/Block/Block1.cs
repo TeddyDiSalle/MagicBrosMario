@@ -1,4 +1,7 @@
-using MagicBrosMario.Source.Sprite;
+using MagicBrosMario.Source.Collision;
+using MagicBrosMario.Source.Items;
+using MagicBrosMario.Source.MarioStates;
+using Microsoft.Xna.Framework;
 
 namespace MagicBrosMario.Source.Block;
 
@@ -33,7 +36,23 @@ namespace MagicBrosMario.Source.Block;
 /// </example>
 /// </summary>
 /// <param name="sprite">sprite object from shared texture, both sprite and animated sprite works</param>
-public class Block1(ISprite sprite) : BlockBase<Block1>(sprite)
+public class Block(Sprite.ISprite sprite) : BlockBase<Block>(sprite), ICollidable
 {
-    //public ISprite BlockSprite { get; set; } = sprite;
+    public Rectangle CollisionBox => new(sprite.Position.X, sprite.Position.Y, sprite.Size.X, sprite.Size.Y);
+    
+    public void OnCollidePlayer(Player player, CollideDirection direction) {
+        // hello player
+    }
+
+    public void OnCollideItem(IItems item, CollideDirection direction) {
+        // hello item
+    }
+
+    public void OnCollideEnemy(IEnemy enemy, CollideDirection direction) {
+        // hello enemy
+    }
+
+    public void OnCollideBlock(IBlock block, CollideDirection direction) {
+        // this shouldn't even be called
+    }
 }
