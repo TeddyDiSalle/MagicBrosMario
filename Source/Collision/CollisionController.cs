@@ -10,9 +10,9 @@ namespace MagicBrosMario.Source.Collision;
 
 public class CollisionController {
     private ICollidable player;
-    private readonly List<ICollidable> items = [];
-    private readonly List<ICollidable> enemies = [];
-    private readonly List<ICollidable> blocks = [];
+    private readonly HashSet<ICollidable> items = [];
+    private readonly HashSet<ICollidable> enemies = [];
+    private readonly HashSet<ICollidable> blocks = [];
 
     public static CollisionController Instance { get; } = new CollisionController();
 
