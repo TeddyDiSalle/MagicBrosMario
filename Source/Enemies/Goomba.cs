@@ -12,6 +12,7 @@ namespace MagicBrosMario.Source;
 public class Goomba : IEnemy, ICollidable
 {
     private const int VELOCITY = 100;
+    private const float SCALE = 2f;
     private readonly int leftBound;
     private readonly int rightBound;
     private Sprite.ISprite[] sprites;
@@ -49,6 +50,10 @@ public class Goomba : IEnemy, ICollidable
         
         sprites = [EnemyTexture.NewAnimatedSprite(295, 187, 18, 18, 2, 0.2f), 
                     EnemyTexture.NewSprite(276, 187, 18, 18)];
+        foreach (var sprite in sprites)
+        {
+            sprite.Scale = SCALE;
+        }
         Position = new Point(leftBound, Y);
         this.isAlive = true;
     }
@@ -118,7 +123,7 @@ public class Goomba : IEnemy, ICollidable
 
     public void OnCollideEnemy(IEnemy enemy, CollideDirection direction)
     {
-        if (enemy is Bowser)
+        if (enemy is Bowser || enemy is Koopa koopa && koopa.IsShellMoving())
         {
             Kill();
             return;

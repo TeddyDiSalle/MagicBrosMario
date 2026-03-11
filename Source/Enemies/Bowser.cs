@@ -6,6 +6,7 @@ using MagicBrosMario.Source.Collision;
 using MagicBrosMario.Source.Block;
 using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.MarioStates;
+using MagicBrosMario.Source.Sprite;
 
 namespace MagicBrosMario.Source;
 
@@ -18,10 +19,7 @@ public class Bowser : IEnemy, ICollidable
     private readonly int rightBound;
     private Sprite.AnimatedSprite walkingRightSprite;
     private Sprite.AnimatedSprite walkingLeftSprite;
-    private Sprite.SharedTexture sharedTexture;
-    private int fireballRightX, fireballRightY;
-    private int fireballLeftX, fireballLeftY;
-    private int fireballWidth, fireballHeight;
+    private SharedTexture fireTexture;
 
     private List<Fireball> activeFireballs = new List<Fireball>();
 
@@ -55,31 +53,14 @@ public class Bowser : IEnemy, ICollidable
         }
     }
 
-    public Bowser(
-        Sprite.AnimatedSprite walkingRightSprite,
-        Sprite.AnimatedSprite walkingLeftSprite,
-        Sprite.SharedTexture sharedTexture,
-        int fireballRightX,
-        int fireballRightY,
-        int fireballLeftX,
-        int fireballLeftY,
-        int fireballWidth,
-        int fireballHeight,
-        int y,
-        int leftBound,
-        int rightBound)
+    public Bowser(SharedTexture EnemyTexture, SharedTexture FireTexture, int y, int leftBound, int rightBound)
     {
         this.leftBound = leftBound;
         this.rightBound = rightBound;
-        this.walkingRightSprite = walkingRightSprite;
-        this.walkingLeftSprite = walkingLeftSprite;
-        this.sharedTexture = sharedTexture;
-        this.fireballRightX = fireballRightX;
-        this.fireballRightY = fireballRightY;
-        this.fireballLeftX = fireballLeftX;
-        this.fireballLeftY = fireballLeftY;
-        this.fireballWidth = fireballWidth;
-        this.fireballHeight = fireballHeight;
+        this.fireTexture = FireTexture;
+
+        walkingRightSprite = EnemyTexture.NewAnimatedSprite(255, 368, 35, 32, 4, 0.2f);
+        walkingLeftSprite = EnemyTexture.NewAnimatedSprite(116, 368, 35, 32, 2, 0.2f);
 
         Position = new Point(leftBound, y);
         this.fireCooldownTimer = FIRE_COOLDOWN;
@@ -116,10 +97,8 @@ public class Bowser : IEnemy, ICollidable
 
     private void ShootFireball()
     {
-        var fireballSpriteRight = sharedTexture.NewAnimatedSprite(
-            fireballRightX, fireballRightY, fireballWidth, fireballHeight, 2, 0.1f);
-        var fireballSpriteLeft = sharedTexture.NewAnimatedSprite(
-            fireballLeftX, fireballLeftY, fireballWidth, fireballHeight, 2, 0.1f);
+        var fireballSpriteRight = fireTexture.NewAnimatedSprite(161, 253, 24, 8, 2, 0.1f);
+        var fireballSpriteLeft = fireTexture.NewAnimatedSprite(101, 253, 24, 8, 2, 0.1f);
 
         fireballSpriteRight.Scale = 3f;
         fireballSpriteLeft.Scale = 3f;
@@ -186,17 +165,14 @@ public class Bowser : IEnemy, ICollidable
 
     public void OnCollidePlayer(Player player, CollideDirection direction)
     {
-        // Boss logic: Player takes damage on contact
     }
 
     public void OnCollideItem(IItems item, CollideDirection direction)
     {
-        // Bowser could be hurt by Mario's fireballs here if you want
     }
 
     public void OnCollideEnemy(IEnemy enemy, CollideDirection direction)
     {
-        // Bowser doesn't kill enemies here — each enemy handles its own death
     }
 
     public void OnCollideBlock(IBlock block, CollideDirection direction)

@@ -22,6 +22,7 @@ public class MagicBrosMario : Game
     private SharedTexture MarioTexture;
     private SharedTexture ItemTexture;
     private SharedTexture EnemyTexture;
+    private SharedTexture FireTexture;
     private Camera cam;
     private float[] MarioStartPos = { 100, 300 };
     private ILevel lvl;
@@ -53,6 +54,10 @@ public class MagicBrosMario : Game
         Texture2D blockTexture = Content.Load<Texture2D>("blocks");
         Texture2D itemSheet = Content.Load<Texture2D>("items");
         Texture2D enemySheet = Content.Load<Texture2D>("characters");
+        Texture2D fireSheet = Content.Load<Texture2D>("enemies");
+
+        FireTexture = new SharedTexture();
+        FireTexture.BindTexture(fireSheet);
 
         EnemyTexture = new SharedTexture();
         EnemyTexture.BindTexture(enemySheet);
@@ -88,11 +93,12 @@ public class MagicBrosMario : Game
             new Cloud(ItemTexture, ScreenWidth, ScreenHeight, 0, 200),
         ];
         Enemies = [
-            new Goomba(EnemyTexture,200, 550),
-            new Goomba(EnemyTexture,100, 550),
-            new Koopa(EnemyTexture)
+            //new Goomba(EnemyTexture,200, 550),
+            //new Goomba(EnemyTexture,400, 550),
+            //new Koopa(EnemyTexture,300, 550),
+            new RotatingFireBar(FireTexture, 500, 200, 4, 40)
             ];
-
+        //
         CollisionController.Instance.BindPlayer(Mario);
         foreach(IItems item in ItemsList)
             CollisionController.Instance.AddItem(item);

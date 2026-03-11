@@ -5,13 +5,14 @@ using MagicBrosMario.Source.Collision;
 using MagicBrosMario.Source.Block;
 using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.MarioStates;
+using MagicBrosMario.Source.Sprite;
 
 namespace MagicBrosMario.Source;
 
 public class RotatingFireBar : IEnemy, ICollidable
 {
     private const float ROTATION_SPEED = 1.0f;
-    private const float SCALE = 3f; 
+    private const float SCALE = 4f;
 
     private Sprite.ISprite[] fireballs;
     private readonly Point centerPosition;
@@ -24,14 +25,10 @@ public class RotatingFireBar : IEnemy, ICollidable
         get { return centerPosition; }
     }
 
-    // ICollidable implementation
-    // Note: We need to check collision for EACH fireball, not just one box
     public Rectangle CollisionBox
     {
         get
         {
-            // Return the bounding box that contains all fireballs
-            // This is used for broad-phase collision detection
             int maxDistance = fireballCount * fireballSpacing;
             return new Rectangle(
                 centerPosition.X - maxDistance,
@@ -42,16 +39,7 @@ public class RotatingFireBar : IEnemy, ICollidable
         }
     }
 
-    public RotatingFireBar(
-        Sprite.SharedTexture sharedTexture,
-        int fireballX,
-        int fireballY,
-        int fireballWidth,
-        int fireballHeight,
-        int centerX,
-        int centerY,
-        int fireballCount,
-        int fireballSpacing)
+    public RotatingFireBar(SharedTexture FireTexture, int centerX, int centerY, int fireballCount, int fireballSpacing)
     {
         this.centerPosition = new Point(centerX, centerY);
         this.fireballCount = fireballCount;
@@ -60,7 +48,7 @@ public class RotatingFireBar : IEnemy, ICollidable
         fireballs = new Sprite.ISprite[fireballCount];
         for (int i = 0; i < fireballCount; i++)
         {
-            var fireball = sharedTexture.NewSprite(fireballX, fireballY, fireballWidth, fireballHeight);
+            var fireball = FireTexture.NewSprite(364, 188, 8, 8);
             fireball.Scale = SCALE;
             fireballs[i] = fireball;
         }
@@ -92,13 +80,14 @@ public class RotatingFireBar : IEnemy, ICollidable
             fireball.Update(gameTime);
         }
     }
+
     public bool GetIsAlive()
     {
         return true;
     }
+
     public void Kill()
     {
-        // Fire bars cannot be killed - this does nothing
     }
 
     public void Draw(SpriteBatch _spriteBatch)
@@ -109,7 +98,6 @@ public class RotatingFireBar : IEnemy, ICollidable
         }
     }
 
-    // Helper method to check collision with individual fireballs
     public bool IsCollidingWithFireballs(Rectangle otherBox)
     {
         foreach (var fireball in fireballs)
@@ -129,39 +117,19 @@ public class RotatingFireBar : IEnemy, ICollidable
         return false;
     }
 
-    // ICollidable methods
     public void OnCollidePlayer(Player player, CollideDirection direction)
     {
-        // Fire bar damages player on any collision
-        // Need to check each individual fireball for accurate collision
-        Rectangle playerBox = new Rectangle(
-            (int)player.Position.X,
-            (int)player.Position.Y,
-            // You'll need to get player width/height somehow
-            16 * 3, // Assuming scaled player size
-            16 * 3
-        );
-
-        if (IsCollidingWithFireballs(playerBox))
-        {
-            // Player takes damage from fire bar
-            // Handle player damage here if needed
-        }
     }
 
     public void OnCollideItem(IItems item, CollideDirection direction)
     {
-        // Fire bars don't interact with items
     }
 
     public void OnCollideEnemy(IEnemy enemy, CollideDirection direction)
     {
-        // Fire bars don't interact with other enemies
     }
 
     public void OnCollideBlock(IBlock block, CollideDirection direction)
     {
-        // Fire bars don't interact with blocks
-        // They're attached to a fixed center point
     }
 }
