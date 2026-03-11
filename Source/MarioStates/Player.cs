@@ -16,7 +16,7 @@ public class Player : ICollidable
     public Vector2 Position { get; private set; } = new Vector2(400, 240);
     public Vector2 Velocity { get; private set; }
     private const int scaleFactor = 3;
-    private float GroundY = 260; //Temporary for Sprint2
+    private float GroundY = 1260; //Temporary for Sprint2
     private const float timeFrame = 0.15f, MovementSpeed = 15.0f, Gravity = 0.35f, MaxSpeed = 15.0f, fireballCooldown = 0.2f;
     public bool IsCrouching { get; private set; } = false;
     public bool Flipped { get; set; } = false;
@@ -259,6 +259,8 @@ public class Player : ICollidable
     {
         // if (!block.IsSolid) return;
         //Uncollide
+        Rectangle intersect = Rectangle.Intersect(CollisionBox, new Rectangle(block.Position.X, block.Position.Y, block.Size.X, block.Size.Y));
+        UnCollide(intersect, direction);
     }
 
     public void UnCollide(Rectangle intersect, Collision.CollideDirection direction)
@@ -322,6 +324,7 @@ public class Player : ICollidable
         
         PlayerState.Update(gameTime, Velocity, Flipped);
         CollisionBox = new Rectangle((int)Position.X, (int)Position.Y, CollisionBox.Width, CollisionBox.Height);
+        Camera.Instance.Follow(Position);
     }
 
     public void Draw(SpriteBatch spriteBatch)

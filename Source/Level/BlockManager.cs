@@ -10,7 +10,7 @@ namespace MagicBrosMario.Source.Level;
 
 public class BlockManager
 {
-    private readonly Dictionary<string, Func<int, int, IBlock>> BlockConstructors = new();
+    private readonly Dictionary<string, Func<int, int, Block1>> BlockConstructors = new();
     private string xmlPath = "Content/LevelData/Blocks.xml";
     private readonly int _scale = 4;
 
@@ -32,7 +32,7 @@ public class BlockManager
         BlockFactory.BindTexture(texture);
     }
 
-    public IBlock CreateBlock(string blockId, int x, int y)
+    public Block1 CreateBlock(string blockId, int x, int y)
     {
         if (BlockConstructors.TryGetValue(blockId, out var constructor))
         {
@@ -42,7 +42,7 @@ public class BlockManager
         throw new KeyNotFoundException($"Block with ID '{blockId}' not found.");
     }
 
-    private Func<int, int, IBlock> GetBlockConstructor(string functionName)
+    private Func<int, int, Block1> GetBlockConstructor(string functionName)
     {
         return functionName switch
         {

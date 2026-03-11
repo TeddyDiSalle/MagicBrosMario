@@ -1,3 +1,5 @@
+using MagicBrosMario.Source.Sprite;
+
 namespace MagicBrosMario.Source.Block;
 
 /// <summary>
@@ -31,6 +33,7 @@ namespace MagicBrosMario.Source.Block;
 /// </example>
 /// </summary>
 /// <param name="sprite">sprite object from shared texture, both sprite and animated sprite works</param>
-public class Block(Sprite.ISprite sprite) : BlockBase<Block>(sprite)
+public class Block1(ISprite sprite) : BlockBase<Block1>(sprite)
 {
+    //public ISprite BlockSprite { get; set; } = sprite;
 }

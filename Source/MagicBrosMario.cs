@@ -130,7 +130,7 @@ public class MagicBrosMario : Game
 
         _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
 
-        lvl.Draw(_spriteBatch);
+        Camera.Instance.Draw(_spriteBatch);
 
         Mario.Draw(_spriteBatch);
         foreach (IItems item in ItemsList)
