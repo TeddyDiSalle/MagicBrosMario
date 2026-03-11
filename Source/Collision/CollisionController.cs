@@ -34,6 +34,20 @@ public class CollisionController {
         where TCollidableEnemy : IEnemy, ICollidable {
         enemies.Add(collidableEnemy);
     }
+    
+    public void RemoveItem<TCollidableItem>(TCollidableItem collidableItem) where TCollidableItem : IItems, ICollidable {
+        items.Remove(collidableItem);
+    }
+
+    public void RemoveBlock<TCollidableBlock>(TCollidableBlock collidableBlock)
+        where TCollidableBlock : IBlock, ICollidable {
+        blocks.Remove(collidableBlock);
+    }
+
+    public void RemoveEnemy<TCollidableEnemy>(TCollidableEnemy collidableEnemy)
+        where TCollidableEnemy : IEnemy, ICollidable {
+        enemies.Remove(collidableEnemy);
+    }
 
     public void Update(GameTime gameTime) {
         {
