@@ -18,6 +18,7 @@ public class Player : ICollidable
     private const int scaleFactor = 3;
     private float GroundY = 260; //Temporary for Sprint2
     private const float timeFrame = 0.15f, MovementSpeed = 5.0f, Gravity = 0.35f, MaxSpeed = 15.0f, fireballCooldown = 0.2f;
+    public bool IsGrounded { get; set; } = true;
     public bool IsCrouching { get; private set; } = false;
     public bool Flipped { get; set; } = false;
     public bool Invincible { get; set; } = false;
@@ -63,7 +64,6 @@ public class Player : ICollidable
     }
     public void Jump(GameTime gameTime)
     {
-        if(Velocity.Y > 0) { return; }
         PlayerState.Jump(gameTime);
     }
     public void Crouch(GameTime gameTime)
@@ -274,6 +274,7 @@ public class Player : ICollidable
     {
         if (!IsJumping) { return; }
         IsJumping = false;
+        IsGrounded = true;
         switch (GetCurrentPower())
         {
             case Power.None:

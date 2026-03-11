@@ -33,6 +33,7 @@ public class FireMarioJumpState : IPlayerState
         }
         Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 16 * scaleFactor, 32 * scaleFactor);
         Mario.IsJumping = true;
+        Mario.IsGrounded = false;
     }
     public void Left(GameTime gameTime)
     {

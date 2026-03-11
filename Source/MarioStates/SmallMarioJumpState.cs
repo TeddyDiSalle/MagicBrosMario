@@ -29,6 +29,7 @@ public class SmallMarioJumpState : IPlayerState
         }
         Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 16 * scaleFactor, 16 * scaleFactor);
         Mario.IsJumping = true;
+        Mario.IsGrounded = false;
     }
     public void Left(GameTime gameTime)
     {
@@ -98,11 +99,14 @@ public class SmallMarioJumpState : IPlayerState
         }
         CurrentSprite.Flipped = Mario.Flipped;
         CurrentSprite.Update(gameTime);
+        if(Mario.IsGrounded)
+        {
+            Mario.IsJumping = false;
+        }
         if (Mario.Velocity.Y == 0)
         {
             Mario.ChangeState(new SmallMarioIdleState(Mario, texture, timeFrame, scaleFactor));
         }
-
     }
     public void Draw(SpriteBatch spriteBatch)
     {
