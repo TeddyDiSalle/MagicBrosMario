@@ -253,8 +253,11 @@ public class Player : ICollidable
                     PlayerState.TakeDamage();
                 }
                 break;
-            case RotatingFireBar:
-                PlayerState.TakeDamage();
+            case RotatingFireBar firebar:
+                if (firebar.IsCollidingWithFireballs(CollisionBox))
+                {
+                    PlayerState.TakeDamage();
+                }
                 break;
             default:
                 //Nothing
