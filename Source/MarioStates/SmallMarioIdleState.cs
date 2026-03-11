@@ -83,7 +83,7 @@ public class SmallMarioIdleState : IPlayerState
     {
         //Nothing
     }
-    public void Update(GameTime gameTime, Vector2 Velocity, bool Flipped)
+    public void Update(GameTime gameTime)
     {
         if (Mario.Invincible)
         {
@@ -95,11 +95,12 @@ public class SmallMarioIdleState : IPlayerState
             CurrentSprite = Sprites[0];
         }
         CurrentSprite.Update(gameTime);
-        CurrentSprite.Flipped = Flipped;
+        CurrentSprite.Flipped = Mario.Flipped;
+        CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
     }
-    public void Draw(SpriteBatch spriteBatch, Vector2 Position)
+    public void Draw(SpriteBatch spriteBatch)
     {
-        CurrentSprite.Position = new Point((int)Position.X, (int)Position.Y);
+        
         CurrentSprite.Draw(spriteBatch);
     }
 

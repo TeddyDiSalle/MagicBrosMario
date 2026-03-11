@@ -83,7 +83,7 @@ public class FireMarioCrouchState : IPlayerState
     {
         //Nothing
     }
-    public void Update(GameTime gameTime, Vector2 Velocity, bool Flipped)
+    public void Update(GameTime gameTime)
     {
         if (Mario.Invincible)
         {
@@ -95,16 +95,15 @@ public class FireMarioCrouchState : IPlayerState
             CurrentSprite = Sprites[0];
         }
         CurrentSprite.Update(gameTime);
-        CurrentSprite.Flipped = Flipped;
-
+        CurrentSprite.Flipped = Mario.Flipped;
+        CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
         if (!Mario.IsCrouching)
         {
             Mario.ChangeState(new FireMarioIdleState(Mario, texture, timeFrame, scaleFactor));
         }
     }
-    public void Draw(SpriteBatch spriteBatch, Vector2 Position)
+    public void Draw(SpriteBatch spriteBatch)
     {
-        CurrentSprite.Position = new Point((int)Position.X, (int)Position.Y);
         CurrentSprite.Draw(spriteBatch);
     }
 

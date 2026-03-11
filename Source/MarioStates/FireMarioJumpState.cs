@@ -88,7 +88,7 @@ public class FireMarioJumpState : IPlayerState
     {
         //Nothing
     }
-    public void Update(GameTime gameTime, Vector2 Velocity, bool Flipped)
+    public void Update(GameTime gameTime)
     {
         if (Mario.Invincible)
         {
@@ -100,17 +100,16 @@ public class FireMarioJumpState : IPlayerState
             CurrentSprite = (IsAttacking) ? Sprites[2] : Sprites[0];
         }
         CurrentSprite.Update(gameTime);
-        CurrentSprite.Flipped = Flipped;
-
-        if (Velocity.Y == 0)
+        CurrentSprite.Flipped = Mario.Flipped;
+        CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
+        if (Mario.Velocity.Y == 0)
         {
             Mario.ChangeState(new FireMarioIdleState(Mario, texture, timeFrame, scaleFactor));
         }
         IsAttacking = false;
     }
-    public void Draw(SpriteBatch spriteBatch, Vector2 Position)
+    public void Draw(SpriteBatch spriteBatch)
     {
-        CurrentSprite.Position = new Point((int)Position.X, (int)Position.Y);
         CurrentSprite.Draw(spriteBatch);
     }
 

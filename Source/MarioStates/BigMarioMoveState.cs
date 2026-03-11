@@ -89,10 +89,10 @@ public class BigMarioMoveState : IPlayerState
     {
         Mario.ChangeState(new BigMarioIdleState(Mario, texture, timeFrame, scaleFactor));
     }
-    private void IsBraking(GameTime gameTime, Vector2 Velocity, bool Flipped)
+    private void IsBraking(GameTime gameTime)
     {
-        bool BrakingRight = !Flipped && Velocity.X < 0;
-        bool BrakingLeft = Flipped && Velocity.X > 0;
+        bool BrakingRight = !Mario.Flipped && Mario.Velocity.X < 0;
+        bool BrakingLeft = Mario.Flipped && Mario.Velocity.X > 0;
         if (BrakingRight || BrakingLeft)
         {
             Frame = 2;
@@ -108,13 +108,13 @@ public class BigMarioMoveState : IPlayerState
             }
         }
 
-        if(Braking && (!Flipped && Velocity.X >= 0 || Flipped && Velocity.X <= 0))
+        if(Braking && (!Mario.Flipped && Mario.Velocity.X >= 0 || Mario.Flipped && Mario.Velocity.X <= 0))
         {
             Braking = false;
         }
     }
 
-    private void UpdateMovementAnimations(GameTime gameTime, Vector2 Velocity, bool Flipped)
+    private void UpdateMovementAnimations(GameTime gameTime)
     {
         if (timer <= timeFrame) { return; }
 
@@ -126,7 +126,7 @@ public class BigMarioMoveState : IPlayerState
         {
             Frame = 1;
         }
-        IsBraking(gameTime, Velocity, Flipped);
+        IsBraking(gameTime);
         timer = 0;
     }
 
@@ -143,21 +143,21 @@ public class BigMarioMoveState : IPlayerState
             Frame = 1;
         }
     }
-    public void Update(GameTime gameTime, Vector2 Velocity, bool Flipped)
+    public void Update(GameTime gameTime)
     {
         double time = gameTime.ElapsedGameTime.TotalSeconds;
         timer += time;
         
-        UpdateMovementAnimations(gameTime, Velocity, Flipped);
+        UpdateMovementAnimations(gameTime);
         UpdateStarAnimations(time);
 
         CurrentSprite = Sprites[Frame];
         CurrentSprite.Update(gameTime);
-        CurrentSprite.Flipped = Flipped;
+        CurrentSprite.Flipped = Mario.Flipped;
+        CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
     }
-    public void Draw(SpriteBatch spriteBatch, Vector2 Position)
+    public void Draw(SpriteBatch spriteBatch)
     {
-        CurrentSprite.Position = new Point((int)Position.X, (int)Position.Y);
         CurrentSprite.Draw(spriteBatch);
     }
 }
