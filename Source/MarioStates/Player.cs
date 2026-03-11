@@ -17,7 +17,7 @@ public class Player : ICollidable
     public Vector2 Velocity { get; private set; }
     private const int scaleFactor = 3;
     private float GroundY = 260; //Temporary for Sprint2
-    private const float timeFrame = 0.15f, MovementSpeed = 15.0f, Gravity = 0.35f, MaxSpeed = 15.0f, fireballCooldown = 0.2f;
+    private const float timeFrame = 0.15f, MovementSpeed = 5.0f, Gravity = 0.35f, MaxSpeed = 15.0f, fireballCooldown = 0.2f;
     public bool IsCrouching { get; private set; } = false;
     public bool Flipped { get; set; } = false;
     public bool Invincible { get; set; } = false;
@@ -27,6 +27,8 @@ public class Player : ICollidable
     private float fireballTimeRemaining = 0;
     private int lives = 3;
     private readonly Sprite.SharedTexture texture;
+
+    public bool IsJumping { get; set; } = false;
 
     public Rectangle CollisionBox { get; set; }
 
@@ -61,6 +63,7 @@ public class Player : ICollidable
     }
     public void Jump(GameTime gameTime)
     {
+        if(Velocity.Y > 0) { return; }
         PlayerState.Jump(gameTime);
     }
     public void Crouch(GameTime gameTime)
@@ -107,7 +110,7 @@ public class Player : ICollidable
         PlayerState = state;
     }
 
-    public void MoveLeft(GameTime gameTime, int factor)
+    public void MoveLeft(GameTime gameTime, float factor = 1.0f)
     {
         float distanceMoved = (float)gameTime.ElapsedGameTime.TotalSeconds * MovementSpeed * factor;
 
@@ -117,7 +120,7 @@ public class Player : ICollidable
             Velocity = new Vector2(-MaxSpeed, Velocity.Y);
         }
     }
-    public void MoveRight(GameTime gameTime, int factor)
+    public void MoveRight(GameTime gameTime, float factor = 1.0f)
     {
         float distanceMoved = (float)gameTime.ElapsedGameTime.TotalSeconds * MovementSpeed * factor;
 
@@ -127,9 +130,9 @@ public class Player : ICollidable
             Velocity = new Vector2(MaxSpeed, Velocity.Y);
         }
     }
-    public void MoveUp(GameTime gameTime)
+    public void MoveUp(GameTime gameTime, float factor = 1.0f)
     {
-        float distanceMoved = (float)(gameTime.ElapsedGameTime.TotalSeconds * 40 * MovementSpeed);
+        float distanceMoved = (float)(gameTime.ElapsedGameTime.TotalSeconds * 45 * MovementSpeed * factor);
         Velocity -= new Vector2(0, distanceMoved);
     }
     public void Idle()
@@ -168,6 +171,7 @@ public class Player : ICollidable
                 {
                     Position += new Vector2(cloud.getX(), 0);
                     Velocity = new Vector2(Velocity.X, 0);
+                    UnjumpOnGroundCollide();
                 }
                 break;
             case Fireflower:
@@ -179,18 +183,21 @@ public class Player : ICollidable
                 if (direction is CollideDirection.Left or CollideDirection.Right) { return; }
                 Velocity = new Vector2(Velocity.X, 0);
                 Position += new Vector2(0, plat.getY());
+                UnjumpOnGroundCollide();
                 break;
             case MovingPlatform_Size2 plat:
                 UnCollide(Rectangle.Intersect(CollisionBox, plat.CollisionBox), direction);
                 if (direction is CollideDirection.Left or CollideDirection.Right) { return; }
                 Velocity = new Vector2(Velocity.X, 0);
                 Position += new Vector2(0, plat.getY());
+                UnjumpOnGroundCollide();
                 break;
             case MovingPlatform_Size3 plat:
                 UnCollide(Rectangle.Intersect(CollisionBox, plat.CollisionBox), direction);
                 if (direction is CollideDirection.Left or CollideDirection.Right) { return; }
                 Velocity = new Vector2(Velocity.X, 0);
                 Position += new Vector2(0, plat.getY());
+                UnjumpOnGroundCollide();
                 break;
             case Mushroom:
                 PlayerState.PowerUp(Power.Mushroom);
@@ -260,7 +267,25 @@ public class Player : ICollidable
         // if (!block.IsSolid) return;
         //Uncollide
     }
-
+    private void UnjumpOnGroundCollide()
+    {
+        if (!IsJumping) { return; }
+        IsJumping = false;
+        switch (GetCurrentPower())
+        {
+            case Power.None:
+                PlayerState = new SmallMarioIdleState(this, texture, timeFrame, scaleFactor);
+                break;
+            case Power.Mushroom:
+                PlayerState = new BigMarioIdleState(this, texture, timeFrame, scaleFactor);
+                break;
+            case Power.FireFlower:
+                PlayerState = new FireMarioIdleState(this, texture, timeFrame, scaleFactor);
+                break;
+            default:
+                break;
+        }
+    }
     public void UnCollide(Rectangle intersect, Collision.CollideDirection direction)
     {
         switch (direction)
@@ -319,7 +344,6 @@ public class Player : ICollidable
                 fireballs.RemoveAt(i);
             }
         }
-        
         PlayerState.Update(gameTime, Velocity, Flipped);
         CollisionBox = new Rectangle((int)Position.X, (int)Position.Y, CollisionBox.Width, CollisionBox.Height);
     }

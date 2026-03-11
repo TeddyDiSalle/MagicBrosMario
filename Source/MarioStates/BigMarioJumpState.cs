@@ -13,6 +13,7 @@ public class BigMarioJumpState : IPlayerState
 
     private readonly Sprite.ISprite[] Sprites;
 
+
     public BigMarioJumpState(Player Mario, Sprite.SharedTexture texture, float timeFrame, int scaleFactor)
     {
         this.Mario = Mario;
@@ -30,11 +31,11 @@ public class BigMarioJumpState : IPlayerState
     }
     public void Left(GameTime gameTime)
     {
-        Mario.MoveLeft(gameTime, 1);
+        Mario.MoveLeft(gameTime);
     }
     public void Right(GameTime gameTime)
     {
-        Mario.MoveRight(gameTime, 1);
+        Mario.MoveRight(gameTime);
     }
     public void Jump(GameTime gameTime)
     {

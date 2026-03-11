@@ -35,11 +35,11 @@ public class FireMarioJumpState : IPlayerState
     }
     public void Left(GameTime gameTime)
     {
-        Mario.MoveLeft(gameTime, 1);
+        Mario.MoveLeft(gameTime);
     }
     public void Right(GameTime gameTime)
     {
-        Mario.MoveRight(gameTime, 1);
+        Mario.MoveRight(gameTime);
     }
     public void Jump(GameTime gameTime)
     {

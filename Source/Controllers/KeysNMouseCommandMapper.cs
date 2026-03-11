@@ -27,7 +27,7 @@ public class KeysNMouseCommandMapper
     //}
 
     public void Bind(Keys key, Action<GameTime> action,
-        double initialDelaySeconds = 0.35, double repeatIntervalSeconds = 0.08)
+        double initialDelaySeconds = 0.1, double repeatIntervalSeconds = 0.01)
     {
         _held[key] = new RepeatBinding{
             Action = action,

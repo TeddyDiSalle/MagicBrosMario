@@ -38,12 +38,12 @@ public class FireMarioIdleState : IPlayerState
     }
     public void Left(GameTime gameTime)
     {
-        Mario.MoveLeft(gameTime, 1);
+        Mario.MoveLeft(gameTime);
         Mario.ChangeState(new FireMarioMoveState(Mario, texture, timeFrame, scaleFactor));
     }
     public void Right(GameTime gameTime)
     {
-        Mario.MoveRight(gameTime, 1);
+        Mario.MoveRight(gameTime);
         Mario.ChangeState(new FireMarioMoveState(Mario, texture, timeFrame, scaleFactor));
     }
 

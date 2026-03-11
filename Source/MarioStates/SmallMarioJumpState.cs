@@ -13,6 +13,10 @@ public class SmallMarioJumpState : IPlayerState
 
     private readonly Sprite.ISprite[] Sprites;
 
+    private const int maxJumpCalls = 5;
+    private int JumpCalls = 0;
+
+
     public SmallMarioJumpState(Player Mario, Sprite.SharedTexture texture, float timeFrame, int scaleFactor)
     {
         this.Mario = Mario;
@@ -27,18 +31,23 @@ public class SmallMarioJumpState : IPlayerState
             Sprites[i].Scale = scaleFactor;
         }
         Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 16 * scaleFactor, 16 * scaleFactor);
+        Mario.IsJumping = true;
     }
     public void Left(GameTime gameTime)
     {
-        Mario.MoveLeft(gameTime, 1);
+        Mario.MoveLeft(gameTime);
     }
     public void Right(GameTime gameTime)
     {
-        Mario.MoveRight(gameTime, 1);
+        Mario.MoveRight(gameTime);
     }
     public void Jump(GameTime gameTime)
     {
-        //Nothing
+        if(Mario.IsJumping && JumpCalls < maxJumpCalls)
+        {
+            Mario.MoveUp(gameTime, 0.3f);
+            JumpCalls++;
+        }
     }
     public void Crouch(GameTime gameTime)
     {
