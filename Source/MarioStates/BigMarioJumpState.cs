@@ -10,9 +10,9 @@ public class BigMarioJumpState : IPlayerState
     private Sprite.ISprite CurrentSprite;
     private readonly float timeFrame;
     private readonly int scaleFactor;
-
+    private const int maxJumpCalls = 6;
+    private int JumpCalls = 0;
     private readonly Sprite.ISprite[] Sprites;
-
 
     public BigMarioJumpState(Player Mario, Sprite.SharedTexture texture, float timeFrame, int scaleFactor)
     {
@@ -28,6 +28,7 @@ public class BigMarioJumpState : IPlayerState
             Sprites[i].Scale = scaleFactor;
         }
         Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 16 * scaleFactor, 32 * scaleFactor);
+        Mario.IsJumping = true;
     }
     public void Left(GameTime gameTime)
     {
@@ -39,7 +40,11 @@ public class BigMarioJumpState : IPlayerState
     }
     public void Jump(GameTime gameTime)
     {
-        //Nothing
+        if (Mario.IsJumping && JumpCalls < maxJumpCalls)
+        {
+            Mario.MoveUp(gameTime, 0.3f);
+            JumpCalls++;
+        }
     }
     public void Crouch(GameTime gameTime)
     {
@@ -93,15 +98,15 @@ public class BigMarioJumpState : IPlayerState
         }
         CurrentSprite.Update(gameTime);
         CurrentSprite.Flipped = Mario.Flipped;
-
         if (Mario.Velocity.Y == 0)
         {
             Mario.ChangeState(new BigMarioIdleState(Mario, texture, timeFrame, scaleFactor));
         }
-        CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
+
     }
     public void Draw(SpriteBatch spriteBatch)
     {
+        CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
         CurrentSprite.Draw(spriteBatch);
     }
 }

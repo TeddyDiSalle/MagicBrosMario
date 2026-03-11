@@ -59,10 +59,11 @@ public class MarioDeadState : IPlayerState
     }
     public void Update(GameTime gameTime)
     {
-        sprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
+        //Nothing
     }
     public void Draw(SpriteBatch spriteBatch)
     {
+        sprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
         sprite.Draw(spriteBatch);
     }
 

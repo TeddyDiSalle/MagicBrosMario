@@ -96,7 +96,6 @@ public class FireMarioCrouchState : IPlayerState
         }
         CurrentSprite.Update(gameTime);
         CurrentSprite.Flipped = Mario.Flipped;
-        CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
         if (!Mario.IsCrouching)
         {
             Mario.ChangeState(new FireMarioIdleState(Mario, texture, timeFrame, scaleFactor));
@@ -104,6 +103,7 @@ public class FireMarioCrouchState : IPlayerState
     }
     public void Draw(SpriteBatch spriteBatch)
     {
+        CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
         CurrentSprite.Draw(spriteBatch);
     }
 

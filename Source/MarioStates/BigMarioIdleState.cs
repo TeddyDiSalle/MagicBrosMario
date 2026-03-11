@@ -100,10 +100,10 @@ public class BigMarioIdleState : IPlayerState
         }
         CurrentSprite.Update(gameTime);
         CurrentSprite.Flipped = Mario.Flipped;
-        CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
     }
     public void Draw(SpriteBatch spriteBatch)
     {
+        CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
         CurrentSprite.Draw(spriteBatch);
     }
 }

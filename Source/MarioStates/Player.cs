@@ -296,6 +296,7 @@ public class Player : ICollidable
             case Collision.CollideDirection.Top:
                 Position += new Vector2(0, intersect.Height);
                 Velocity = new Vector2(Velocity.X, 0);
+                IsJumping = false;
                 break;
             case Collision.CollideDirection.Down:
                 Position -= new Vector2(0, intersect.Height);
@@ -347,13 +348,13 @@ public class Player : ICollidable
                 fireballs.RemoveAt(i);
             }
         }
-        PlayerState.Update(gameTime, Velocity, Flipped);
+        PlayerState.Update(gameTime);
         CollisionBox = new Rectangle((int)Position.X, (int)Position.Y, CollisionBox.Width, CollisionBox.Height);
     }
 
     public void Draw(SpriteBatch spriteBatch)
     {
-        PlayerState.Draw(spriteBatch, Position);
+        PlayerState.Draw(spriteBatch);
         foreach(MarioFireball fireball in fireballs)
         {
             fireball.Draw(spriteBatch);

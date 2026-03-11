@@ -10,12 +10,9 @@ public class SmallMarioJumpState : IPlayerState
     private Sprite.ISprite CurrentSprite;
     private readonly float timeFrame;
     private readonly int scaleFactor;
-
     private readonly Sprite.ISprite[] Sprites;
-
     private const int maxJumpCalls = 5;
     private int JumpCalls = 0;
-
 
     public SmallMarioJumpState(Player Mario, Sprite.SharedTexture texture, float timeFrame, int scaleFactor)
     {
@@ -101,7 +98,6 @@ public class SmallMarioJumpState : IPlayerState
         }
         CurrentSprite.Flipped = Mario.Flipped;
         CurrentSprite.Update(gameTime);
-        CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
         if (Mario.Velocity.Y == 0)
         {
             Mario.ChangeState(new SmallMarioIdleState(Mario, texture, timeFrame, scaleFactor));
@@ -110,6 +106,7 @@ public class SmallMarioJumpState : IPlayerState
     }
     public void Draw(SpriteBatch spriteBatch)
     {
+        CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
         CurrentSprite.Draw(spriteBatch);
     }
 
