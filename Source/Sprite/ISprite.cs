@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Runtime.InteropServices.Swift;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MagicBrosMario.Source.Sprite;
@@ -6,12 +7,16 @@ namespace MagicBrosMario.Source.Sprite;
 /// <summary>
 /// sprite interface for animated and non-animated sprite
 /// </summary>
-public interface ISprite
-{
+public interface ISprite {
     /// <summary>
     /// true for animated sprite and false for non-animated
     /// </summary>
-    public bool IsAnimated { get; }
+    public bool Animated { get; }
+
+    /// <summary>
+    /// true if this sprite needs to be drawn
+    /// </summary>
+    public bool Visible { get; set; }
 
     /// <summary>
     /// if this sprite is flipped horizontally
@@ -38,12 +43,11 @@ public interface ISprite
     /// </summary>
     public Color Color { get; set; }
 
-
     /// <summary>
     /// update function for destination rectangle, used by camera
     /// </summary>
     public void UpdateDestRect();
-    
+
     /// <summary>
     /// update function for sprite, currently only used by AnimatedSprite
     /// </summary>
@@ -53,8 +57,13 @@ public interface ISprite
     /// <summary>
     /// draw function for sprite
     ///
-    /// there is no IsVisible and OutOfScreen check for sprite
+    /// there OutOfScreen check for sprite
     /// </summary>
     /// <param name="spriteBatch"></param>
     public void Draw(SpriteBatch spriteBatch);
+
+    /// <summary>
+    /// destroy this sprite
+    /// </summary>
+    public void Drop();
 }

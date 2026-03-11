@@ -10,14 +10,14 @@ public class Level1 : ILevel
 {
 	private BlockManager _bm;
 	private IBlock[][] blocks;
-	private string Level1CSVPath = "Content/LevelData/1-1.csv";
+	private string Level1BlockCVS = "Content/LevelData/Blocks1-1.csv";
 	private static int _blockSize = 16;
 	private int tileSize = _blockSize * 4;
 	private string[] lines;
 	private int levWidth;
 	private int levHeight;
 	public Level1()	{
-		lines = File.ReadLines(Level1CSVPath).ToArray();
+		lines = File.ReadLines(Level1BlockCVS).ToArray();
 		levHeight = lines.Length;
 		levWidth = lines[0].Split(',').Length;
 		blocks = new IBlock[levHeight][];
@@ -34,8 +34,8 @@ public class Level1 : ILevel
 		//block update
 		for(int r = 0; r < levHeight; r++)	{
 			for(int c = 0; c < levWidth; c++)	{
-				if(blocks[r][c] != null)
-					blocks[r][c].Update(gt);
+				//if(blocks[r][c] != null)
+					//blocks[r][c].Update(gt);
 			}
 		}
 	}
@@ -44,8 +44,8 @@ public class Level1 : ILevel
 		//block draw
 		for(int r = 0; r < levHeight; r++)	{
 			for(int c = 0; c < levWidth; c++)	{
-				if(blocks[r][c] != null)
-					blocks[r][c].Draw(sb);
+				//if(blocks[r][c] != null)
+					//blocks[r][c].Draw(sb);
 			}
 		}
 	}
@@ -69,7 +69,7 @@ public class Level1 : ILevel
 			}
 		}
 
-		JustTheFloor();
+		//JustTheFloor();
 	}
 
 	private void JustTheFloor(){
