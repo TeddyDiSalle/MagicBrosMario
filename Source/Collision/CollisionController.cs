@@ -6,8 +6,10 @@ using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.MarioStates;
 using Microsoft.Xna.Framework;
 
+
 namespace MagicBrosMario.Source.Collision;
 
+// ReSharper disable ConvertIfStatementToReturnStatement
 public class CollisionController {
     private ICollidable player;
     private readonly HashSet<ICollidable> items = [];
@@ -16,7 +18,7 @@ public class CollisionController {
 
     public static CollisionController Instance { get; } = new CollisionController();
 
-	public void BindPlayer<TCollidablePlayer>(TCollidablePlayer collidablePlayer)
+    public void BindPlayer<TCollidablePlayer>(TCollidablePlayer collidablePlayer)
         where TCollidablePlayer : Player, ICollidable {
         player = collidablePlayer;
     }
@@ -34,8 +36,9 @@ public class CollisionController {
         where TCollidableEnemy : IEnemy, ICollidable {
         enemies.Add(collidableEnemy);
     }
-    
-    public void RemoveItem<TCollidableItem>(TCollidableItem collidableItem) where TCollidableItem : IItems, ICollidable {
+
+    public void RemoveItem<TCollidableItem>(TCollidableItem collidableItem)
+        where TCollidableItem : IItems, ICollidable {
         items.Remove(collidableItem);
     }
 
@@ -69,8 +72,6 @@ public class CollisionController {
         }
 
         foreach (var block in blocks) {
-            // block
-
             CheckCollisions(block, items, (a, b, aDir, bDir) => {
                 a.OnCollideItem(b as IItems, aDir);
                 b.OnCollideBlock(a as IBlock, bDir);
@@ -93,7 +94,7 @@ public class CollisionController {
                 b.OnCollideItem(a as IItems, bDir);
             });
         }
-        
+
         foreach (var enemy in enemies) {
             CheckCollisions(enemy, enemies, (a, b, aDir, bDir) => {
                 a.OnCollideEnemy(b as IEnemy, aDir);
@@ -109,10 +110,11 @@ public class CollisionController {
         foreach (var b in others) {
             if (a == b) continue;
             var collide = IsColliding(a, b);
-            if (collide.HasValue) {
-                var (dirA, dirB) = collide.Value;
-                onCollide(a, b, dirA, dirB);
-            }
+
+            if (!collide.HasValue) continue;
+
+            var (dirA, dirB) = collide.Value;
+            onCollide(a, b, dirA, dirB);
         }
     }
 
