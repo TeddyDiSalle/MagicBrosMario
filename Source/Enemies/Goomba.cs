@@ -25,7 +25,6 @@ public class Goomba : IEnemy, ICollidable
         get => CurrentSprite().Position;
         private set 
         { 
-            // Keep all visual states synced to the same coordinate
             foreach (var sprite in sprites)
             {
                 sprite.Position = value;
@@ -42,11 +41,11 @@ public class Goomba : IEnemy, ICollidable
         }
     }
 
-    public Goomba(SharedTexture EnemyTexture)
+    public Goomba(SharedTexture EnemyTexture, int leftBound, int rightBound)
     {
         int Y = 250;
-        this.leftBound = 500;
-        this.rightBound = 550;
+        this.leftBound = leftBound;
+        this.rightBound = rightBound;
         
         sprites = [EnemyTexture.NewAnimatedSprite(295, 187, 18, 18, 2, 0.2f), 
                     EnemyTexture.NewSprite(276, 187, 18, 18)];
@@ -98,6 +97,20 @@ public class Goomba : IEnemy, ICollidable
         this.isAlive = false;
     }
 
+    private void UnCollide(Rectangle intersect, CollideDirection direction)
+    {
+        if (direction == CollideDirection.Left)
+        {
+            Position = new Point(Position.X + intersect.Width, Position.Y);
+            movingRight = true;
+        }
+        else if (direction == CollideDirection.Right)
+        {
+            Position = new Point(Position.X - intersect.Width, Position.Y);
+            movingRight = false;
+        }
+    }
+
     public void Draw(SpriteBatch _spriteBatch)
     {
         CurrentSprite().Draw(_spriteBatch);
@@ -105,46 +118,22 @@ public class Goomba : IEnemy, ICollidable
 
     public void OnCollideEnemy(IEnemy enemy, CollideDirection direction)
     {
-        
-
-        int pushDistance = 15; 
-
-        if (direction == CollideDirection.Left)
+        if (enemy is Bowser)
         {
-            // Hit on my left side, I must move Right
-            movingRight = true;
-            Position = new Point(Position.X + pushDistance, Position.Y);
+            Kill();
+            return;
         }
-        else if (direction == CollideDirection.Right)
+        if (direction == CollideDirection.Left || direction == CollideDirection.Right)
         {
-            // Hit on my right side, I must move Left
-            movingRight = false;
-            Position = new Point(Position.X - pushDistance, Position.Y);
+            UnCollide(Rectangle.Intersect(CollisionBox, enemy.CollisionBox), direction);
         }
-        
-        Console.WriteLine($"Goomba hit {enemy.GetType().Name}. Forced direction: {(movingRight ? "Right" : "Left")}");
     }
 
     public void OnCollideBlock(IBlock block, CollideDirection direction)
     {
-        
         if (direction == CollideDirection.Left || direction == CollideDirection.Right)
         {
-            
-            int pushDistance = 15; 
-
-            if (direction == CollideDirection.Left)
-            {
-                // Hit a block on my left, must move Right
-                movingRight = true;
-                Position = new Point(Position.X + pushDistance, Position.Y);
-            }
-            else if (direction == CollideDirection.Right)
-            {
-                // Hit a block on my right, must move Left
-                movingRight = false;
-                Position = new Point(Position.X - pushDistance, Position.Y);
-            }
+            //UnCollide(Rectangle.Intersect(CollisionBox, block.CollisionBox), direction);
         }
     }
 

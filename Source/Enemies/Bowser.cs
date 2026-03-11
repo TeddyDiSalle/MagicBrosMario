@@ -84,10 +84,12 @@ public class Bowser : IEnemy, ICollidable
         Position = new Point(leftBound, y);
         this.fireCooldownTimer = FIRE_COOLDOWN;
     }
+
     public bool GetIsAlive()
     {
         return isAlive;
     }
+
     public void Update(GameTime gameTime)
     {
         if (!isAlive) return;
@@ -118,7 +120,7 @@ public class Bowser : IEnemy, ICollidable
             fireballRightX, fireballRightY, fireballWidth, fireballHeight, 2, 0.1f);
         var fireballSpriteLeft = sharedTexture.NewAnimatedSprite(
             fireballLeftX, fireballLeftY, fireballWidth, fireballHeight, 2, 0.1f);
-        
+
         fireballSpriteRight.Scale = 3f;
         fireballSpriteLeft.Scale = 3f;
 
@@ -158,17 +160,30 @@ public class Bowser : IEnemy, ICollidable
 
     public void Kill() => this.isAlive = false;
 
+    private void UnCollide(Rectangle intersect, CollideDirection direction)
+    {
+        if (direction == CollideDirection.Left)
+        {
+            Position = new Point(Position.X + intersect.Width, Position.Y);
+            movingRight = true;
+        }
+        else if (direction == CollideDirection.Right)
+        {
+            Position = new Point(Position.X - intersect.Width, Position.Y);
+            movingRight = false;
+        }
+    }
+
     public void Draw(SpriteBatch _spriteBatch)
     {
         if (!isAlive) return;
-        
+
         if (movingRight) walkingRightSprite.Draw(_spriteBatch);
         else walkingLeftSprite.Draw(_spriteBatch);
 
         foreach (var fireball in activeFireballs) fireball.Draw(_spriteBatch);
     }
 
-    // ICollidable methods
     public void OnCollidePlayer(Player player, CollideDirection direction)
     {
         // Boss logic: Player takes damage on contact
@@ -181,52 +196,14 @@ public class Bowser : IEnemy, ICollidable
 
     public void OnCollideEnemy(IEnemy enemy, CollideDirection direction)
     {
-
-
-        //Bowser destroys any minion in his way
-        if (direction == CollideDirection.Left || direction == CollideDirection.Right)
-        {
-            Console.WriteLine($"Bowser steamrolled a {enemy.GetType().Name}!");
-
-            // Kill the minion
-            enemy.Kill();
-
-            // 3. THE KEY: Force the enemy out of Bowser's space 
-            // We don't change Bowser's direction, but we "fling" the dead enemy
-            int flingDistance = 20; 
-
-            if (direction == CollideDirection.Left)
-            {
-                // Bowser hit something on HIS left, so the enemy is to his left.
-                // We don't have direct access to set enemy.Position here easily without casting,
-                // but since Bowser is the one moving, we just let him keep walking.
-                // If the enemy is still "blocking" him, we can give Bowser a tiny 2px boost.
-                Position = new Point(Position.X - 2, Position.Y); 
-            }
-            else if (direction == CollideDirection.Right)
-            {
-                // Bowser hit something on HIS right.
-                Position = new Point(Position.X + 2, Position.Y);
-            }
-        }
+        // Bowser doesn't kill enemies here — each enemy handles its own death
     }
 
     public void OnCollideBlock(IBlock block, CollideDirection direction)
     {
         if (direction == CollideDirection.Left || direction == CollideDirection.Right)
         {
-            int pushDistance = 10; // Bowser is big, needs a solid nudge
-            if (direction == CollideDirection.Left)
-            {
-                movingRight = true;
-                Position = new Point(Position.X + pushDistance, Position.Y);
-            }
-            else
-            {
-                movingRight = false;
-                Position = new Point(Position.X - pushDistance, Position.Y);
-            }
-            Console.WriteLine("Bowser hit a wall and turned around.");
+            //UnCollide(Rectangle.Intersect(CollisionBox, block.CollisionBox), direction);
         }
     }
 }

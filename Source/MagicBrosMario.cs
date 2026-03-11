@@ -88,8 +88,8 @@ public class MagicBrosMario : Game
             new Cloud(ItemTexture, ScreenWidth, ScreenHeight, 0, 200),
         ];
         Enemies = [
-            new Goomba(EnemyTexture),
-            new Goomba(EnemyTexture),
+            new Goomba(EnemyTexture,200, 550),
+            new Goomba(EnemyTexture,100, 550),
             new Koopa(EnemyTexture)
             ];
 
