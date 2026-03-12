@@ -16,9 +16,10 @@ public class Player : ICollidable
 
     public Vector2 Position { get; private set; } = new Vector2(400, 240);
     public Vector2 Velocity { get; private set; }
-    private const int scaleFactor = 3;
+    public int scaleFactor { get; } = 3;
     private float GroundY = 260; //Temporary for Sprint2
-    private const float timeFrame = 0.15f, MovementSpeed = 5.0f, Gravity = 0.35f, MaxSpeed = 15.0f, fireballCooldown = 0.2f;
+    private const float MovementSpeed = 5.0f, Gravity = 0.35f, MaxSpeed = 15.0f, fireballCooldown = 0.2f;
+    public float timeFrame { get; } = 0.15f;
     public bool IsGrounded { get; set; } = true;
     public bool IsCrouching { get; private set; } = false;
     public bool Flipped { get; set; } = false;
@@ -27,11 +28,12 @@ public class Player : ICollidable
     public double StarTimeRemaining { get; set; } = 0;
     private List<MarioFireball> fireballs = [];
     private float fireballTimeRemaining = 0;
-    private int lives = 3;
+    public int lives { get; set; } = 3;
     private const double DamageCoolDown = 2.0;
     private double DamageTimer = 0;
-    private readonly Sprite.SharedTexture texture;
+    public Sprite.SharedTexture texture { get; }
     public bool IsJumping { get; set; } = false;
+    private PlayerCollisionHandler playerCollision;
     public Rectangle CollisionBox { get; set; }
 
     public Player(Sprite.SharedTexture texture)
@@ -39,6 +41,7 @@ public class Player : ICollidable
         this.texture = texture;
         CollisionBox = new Rectangle((int)Position.X, (int)Position.Y, 0, 0);
         PlayerState = new SmallMarioIdleState(this, texture, timeFrame, scaleFactor);
+        playerCollision = new PlayerCollisionHandler(this);
     }
     public void CreateFireball()
     {
@@ -75,6 +78,10 @@ public class Player : ICollidable
     public void SetPositon(Vector2 pos)
     {
         Position = pos;
+    }
+    public void SetVelocity(Vector2 vel)
+    {
+        Velocity = vel;
     }
     public void ReleaseCrouch()
     {
@@ -164,160 +171,19 @@ public class Player : ICollidable
     //Collision Handling Methods
     public void OnCollidePlayer(Player player, Collision.CollideDirection direction)
     {
-        //Nothing
+        playerCollision.OnCollidePlayer(player, direction);
     }
     public void OnCollideItem(IItems item, Collision.CollideDirection direction)
     {
-        switch (item)
-        {
-            case Cloud cloud:
-                UnCollide(Rectangle.Intersect(CollisionBox, cloud.CollisionBox), direction);
-                if (direction == CollideDirection.Down)
-                {
-                    Position += new Vector2(cloud.getX(), 0);
-                    Velocity = new Vector2(Velocity.X, 0);
-                    UnjumpOnGroundCollide();
-                }
-                break;
-            case Fireflower:
-            case Fireflower_Underground:
-                PlayerState.PowerUp(Power.FireFlower);
-                break;
-            case MovingPlatform_Size1 plat:
-                UnCollide(Rectangle.Intersect(CollisionBox, plat.CollisionBox), direction);
-                if (direction is CollideDirection.Left or CollideDirection.Right) { return; }
-                Velocity = new Vector2(Velocity.X, 0);
-                Position += new Vector2(0, plat.getY());
-                UnjumpOnGroundCollide();
-                break;
-            case MovingPlatform_Size2 plat:
-                UnCollide(Rectangle.Intersect(CollisionBox, plat.CollisionBox), direction);
-                if (direction is CollideDirection.Left or CollideDirection.Right) { return; }
-                Velocity = new Vector2(Velocity.X, 0);
-                Position += new Vector2(0, plat.getY());
-                UnjumpOnGroundCollide();
-                break;
-            case MovingPlatform_Size3 plat:
-                UnCollide(Rectangle.Intersect(CollisionBox, plat.CollisionBox), direction);
-                if (direction is CollideDirection.Left or CollideDirection.Right) { return; }
-                Velocity = new Vector2(Velocity.X, 0);
-                Position += new Vector2(0, plat.getY());
-                UnjumpOnGroundCollide();
-                break;
-            case Mushroom:
-                PlayerState.PowerUp(Power.Mushroom);
-                break;
-            case OneUp:
-                lives++;
-                break;
-            case Spring_Stretched:
-                //Uncollide
-                Velocity -= new Vector2(Velocity.X, 10);
-                break;
-            case Star:
-                PlayerState.PowerUp(Power.Star);
-                break;
-            default:
-                //Nothing
-                break;
-        }
+        playerCollision.OnCollideItem(item, direction);
     }
     public void OnCollideEnemy(IEnemy enemy, Collision.CollideDirection direction)
     {
-        if (Invincible) { return; }
-        switch (enemy)
-        {
-            case Fireball:
-                TakeDamage();
-                break;
-            case Bowser bowser:
-                UnCollide(Rectangle.Intersect(CollisionBox, bowser.CollisionBox), direction);
-                TakeDamage();
-                break;
-            case PiranhaPlant:
-                TakeDamage();
-                break;
-            case Goomba goomba:
-                if (direction == CollideDirection.Down) 
-                {
-                    UnCollide(Rectangle.Intersect(CollisionBox, goomba.CollisionBox), direction);
-                    Velocity -= new Vector2(0, 10);
-                }
-                else
-                {
-                    TakeDamage();
-                }
-                break;
-            case Koopa koopa:
-                if (direction == CollideDirection.Down)
-                {
-                    UnCollide(Rectangle.Intersect(CollisionBox, koopa.CollisionBox), direction);
-                    Velocity -= new Vector2(0, 10);
-                }
-                else
-                {
-                    TakeDamage();
-                }
-                break;
-            case RotatingFireBar firebar:
-                if (firebar.IsCollidingWithFireballs(CollisionBox))
-                {
-                    TakeDamage();
-                }
-                break;
-            default:
-                //Nothing
-                break;
-
-        }
+        playerCollision.OnCollideEnemy(enemy, direction);
     }
     public void OnCollideBlock(IBlock block, Collision.CollideDirection direction)
     {
-         //if (!block.IsSolid) return;
-        //Uncollide
-    }
-    private void UnjumpOnGroundCollide()
-    {
-        if (!IsJumping) { return; }
-        IsJumping = false;
-        IsGrounded = true;
-        switch (GetCurrentPower())
-        {
-            case Power.None:
-                PlayerState = new SmallMarioIdleState(this, texture, timeFrame, scaleFactor);
-                break;
-            case Power.Mushroom:
-                PlayerState = new BigMarioIdleState(this, texture, timeFrame, scaleFactor);
-                break;
-            case Power.FireFlower:
-                PlayerState = new FireMarioIdleState(this, texture, timeFrame, scaleFactor);
-                break;
-            default:
-                break;
-        }
-    }
-    public void UnCollide(Rectangle intersect, Collision.CollideDirection direction)
-    {
-        switch (direction)
-        {
-            case Collision.CollideDirection.Top:
-                Position += new Vector2(0, intersect.Height);
-                Velocity = new Vector2(Velocity.X, 0);
-                IsJumping = false;
-                break;
-            case Collision.CollideDirection.Down:
-                Position -= new Vector2(0, intersect.Height);
-                Velocity = new Vector2(Velocity.X, 0);
-                break;
-            case Collision.CollideDirection.Left:
-                Position += new Vector2(intersect.X, 0);
-                Velocity = new Vector2(0, Velocity.Y);
-                break;
-            case Collision.CollideDirection.Right:
-                Position -= new Vector2(intersect.X, 0);
-                Velocity = new Vector2(0, Velocity.Y);
-                break;
-        }
+        playerCollision.OnCollideBlock(block, direction);
     }
 
     //Update and Draw
