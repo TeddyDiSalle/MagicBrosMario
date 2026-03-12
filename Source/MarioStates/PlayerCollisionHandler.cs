@@ -69,7 +69,7 @@ public class PlayerCollisionHandler
                 player.PowerUp(Power.Mushroom);
                 break;
             case OneUp:
-                player.lives++;
+                player.Lives++;
                 break;
             case Spring_Stretched spring:
                 UnCollide(Rectangle.Intersect(CollisionBox, spring.CollisionBox), direction);
@@ -145,13 +145,13 @@ public class PlayerCollisionHandler
         switch (player.GetCurrentPower())
         {
             case Power.None:
-                player.ChangeState(new SmallMarioIdleState(player, player.texture, player.timeFrame, player.scaleFactor));
+                player.ChangeState(new SmallMarioIdleState(player, player.Texture, player.TimeFrame, player.ScaleFactor));
                 break;
             case Power.Mushroom:
-                player.ChangeState(new BigMarioIdleState(player, player.texture, player.timeFrame, player.scaleFactor));
+                player.ChangeState(new BigMarioIdleState(player, player.Texture, player.TimeFrame, player.ScaleFactor));
                 break;
             case Power.FireFlower: 
-                player.ChangeState(new FireMarioIdleState(player, player.texture, player.timeFrame, player.scaleFactor));
+                player.ChangeState(new FireMarioIdleState(player, player.Texture, player.TimeFrame, player.ScaleFactor));
                 break;
             default:
                 break;
