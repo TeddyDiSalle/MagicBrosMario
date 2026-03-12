@@ -5,6 +5,7 @@ using MagicBrosMario.Source.Sprite;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 
 namespace MagicBrosMario.Source.MarioStates;
@@ -27,10 +28,10 @@ public class Player : ICollidable
     private List<MarioFireball> fireballs = [];
     private float fireballTimeRemaining = 0;
     private int lives = 3;
+    private const double DamageCoolDown = 2.0;
+    private double DamageTimer = 0;
     private readonly Sprite.SharedTexture texture;
-
     public bool IsJumping { get; set; } = false;
-
     public Rectangle CollisionBox { get; set; }
 
     public Player(Sprite.SharedTexture texture)
@@ -86,7 +87,11 @@ public class Player : ICollidable
     }
     public void TakeDamage()
     {
-        PlayerState.TakeDamage();
+        if (DamageTimer >= DamageCoolDown)
+        {
+            DamageTimer = 0;
+            PlayerState.TakeDamage();
+        }
     }
     public void KillMario()
     {
@@ -223,40 +228,41 @@ public class Player : ICollidable
         switch (enemy)
         {
             case Fireball:
-                PlayerState.TakeDamage();
+                TakeDamage();
                 break;
             case Bowser bowser:
                 UnCollide(Rectangle.Intersect(CollisionBox, bowser.CollisionBox), direction);
+                TakeDamage();
                 break;
             case PiranhaPlant:
-                PlayerState.TakeDamage();
+                TakeDamage();
                 break;
             case Goomba goomba:
-                UnCollide(Rectangle.Intersect(CollisionBox, goomba.CollisionBox), direction);
                 if (direction == CollideDirection.Down) 
                 {
+                    UnCollide(Rectangle.Intersect(CollisionBox, goomba.CollisionBox), direction);
                     Velocity -= new Vector2(0, 10);
                 }
                 else
                 {
-                    PlayerState.TakeDamage();
+                    TakeDamage();
                 }
                 break;
             case Koopa koopa:
-                UnCollide(Rectangle.Intersect(CollisionBox, koopa.CollisionBox), direction);
                 if (direction == CollideDirection.Down)
                 {
+                    UnCollide(Rectangle.Intersect(CollisionBox, koopa.CollisionBox), direction);
                     Velocity -= new Vector2(0, 10);
                 }
                 else
                 {
-                    PlayerState.TakeDamage();
+                    TakeDamage();
                 }
                 break;
             case RotatingFireBar firebar:
                 if (firebar.IsCollidingWithFireballs(CollisionBox))
                 {
-                    PlayerState.TakeDamage();
+                    TakeDamage();
                 }
                 break;
             default:
@@ -317,6 +323,10 @@ public class Player : ICollidable
     //Update and Draw
     public void Update(GameTime gameTime)
     {
+        if(DamageTimer < DamageCoolDown)
+        {
+            DamageTimer += gameTime.ElapsedGameTime.TotalSeconds;
+        }
         if (Position.Y < GroundY)
         {
             Velocity += new Vector2(0, Gravity);
