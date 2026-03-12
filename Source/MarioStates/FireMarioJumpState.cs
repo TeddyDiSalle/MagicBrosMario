@@ -107,6 +107,10 @@ public class FireMarioJumpState : IPlayerState
         }
         CurrentSprite.Update(gameTime);
         CurrentSprite.Flipped = Mario.Flipped;
+        if (Mario.IsGrounded)
+        {
+            Mario.IsJumping = false;
+        }
         if (Mario.Velocity.Y == 0)
         {
             Mario.ChangeState(new FireMarioIdleState(Mario, texture, timeFrame, scaleFactor));
