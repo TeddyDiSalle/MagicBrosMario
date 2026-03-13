@@ -5,6 +5,7 @@ using MagicBrosMario.Source.Collision;
 using MagicBrosMario.Source.Block;
 using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.MarioStates;
+using MagicBrosMario.Source.Sprite;
 
 namespace MagicBrosMario.Source;
 
@@ -27,33 +28,27 @@ public class PiranhaPlant : IEnemy, ICollidable
 
     private PiranhaState state;
     private float pauseTimer = 0f;
-    private bool isAlive;
+    public Boolean isAlive;
 
     public Point Position
     {
         get { return aliveSprite.Position; }
         private set { aliveSprite.Position = value; }
     }
+    public bool GetIsAlive() => isAlive;
 
-    
     public Rectangle CollisionBox
     {
         get
         {
-            // 1. No collision if dead
             if (!isAlive) return Rectangle.Empty;
 
-            // 2. Calculate how much of the plant is actually above the pipe
-            // hiddenY is the "floor", Position.Y is the current top of the plant
             int exposedHeight = hiddenY - Position.Y;
 
-            // 3. If the plant is fully inside the pipe, return no box
             if (exposedHeight <= 0) return Rectangle.Empty;
 
-            // 4. Return a box that starts at the current Position.Y 
-            // but ends at the top of the pipe (hiddenY)
             return new Rectangle(
-                Position.X + 4, // Slight horizontal padding
+                Position.X + 4,
                 Position.Y, 
                 aliveSprite.Size.X - 8, 
                 exposedHeight
@@ -61,22 +56,19 @@ public class PiranhaPlant : IEnemy, ICollidable
         }
     }
 
-    public PiranhaPlant(Sprite.AnimatedSprite aliveSprite, int pipeX, int pipeY)
+    public PiranhaPlant(SharedTexture EnemyTexture, int pipeX, int pipeY)
     {
         this.hiddenY = pipeY;
         this.visibleY = pipeY - RISE_HEIGHT;
 
-        this.aliveSprite = aliveSprite;
+        this.aliveSprite = EnemyTexture.NewAnimatedSprite(125, 180, 16, 23, 2, 0.2f);
 
         Position = new Point(pipeX, hiddenY);
         this.isAlive = true;
         this.state = PiranhaState.Rising;
         this.pauseTimer = PAUSE_DURATION; 
     }
-    public bool GetIsAlive()
-    {
-        return isAlive;
-    }
+
     public void Update(GameTime gameTime)
     {
         if (!isAlive)
@@ -86,7 +78,6 @@ public class PiranhaPlant : IEnemy, ICollidable
 
         float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-        // Handle pausing at top or bottom
         if (pauseTimer > 0)
         {
             pauseTimer -= deltaTime;
@@ -94,7 +85,6 @@ public class PiranhaPlant : IEnemy, ICollidable
             return;
         }
 
-        // Move up or down
         if (state == PiranhaState.Rising)
         {
             int newY = Position.Y - (int)(RISE_SPEED * deltaTime);
@@ -131,6 +121,7 @@ public class PiranhaPlant : IEnemy, ICollidable
     {
         this.isAlive = false;
         state = PiranhaState.Dead;
+        aliveSprite.Drop();
     }
 
     public void Draw(SpriteBatch _spriteBatch)
@@ -141,34 +132,23 @@ public class PiranhaPlant : IEnemy, ICollidable
         }
     }
 
-    // ICollidable methods
     public void OnCollidePlayer(Player player, CollideDirection direction)
     {
-        // Piranha Plant damages player on any collision
-        // Player takes damage regardless of direction
-        // Handle player damage here if needed
     }
 
     public void OnCollideItem(IItems item, CollideDirection direction)
     {
-        // Piranha Plant can be killed by fireballs
-        if (item != null) // Check if it's a fireball or star
+        if (item != null)//if its mario fireball
         {
-            
-            // For now, any item collision kills it
-            Kill();
+            //Kill();
         }
     }
 
     public void OnCollideEnemy(IEnemy enemy, CollideDirection direction)
     {
-        // Piranha Plants don't interact with other enemies
-        // They're stationary and don't affect each other
     }
 
     public void OnCollideBlock(IBlock block, CollideDirection direction)
     {
-        // Piranha Plants don't collide with blocks
-        // They're inside pipes
     }
 }

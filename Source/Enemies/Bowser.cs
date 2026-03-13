@@ -6,6 +6,7 @@ using MagicBrosMario.Source.Collision;
 using MagicBrosMario.Source.Block;
 using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.MarioStates;
+using MagicBrosMario.Source.Sprite;
 
 namespace MagicBrosMario.Source;
 
@@ -18,10 +19,7 @@ public class Bowser : IEnemy, ICollidable
     private readonly int rightBound;
     private Sprite.AnimatedSprite walkingRightSprite;
     private Sprite.AnimatedSprite walkingLeftSprite;
-    private Sprite.SharedTexture sharedTexture;
-    private int fireballRightX, fireballRightY;
-    private int fireballLeftX, fireballLeftY;
-    private int fireballWidth, fireballHeight;
+    private SharedTexture fireTexture;
 
     private List<Fireball> activeFireballs = new List<Fireball>();
 
@@ -55,39 +53,25 @@ public class Bowser : IEnemy, ICollidable
         }
     }
 
-    public Bowser(
-        Sprite.AnimatedSprite walkingRightSprite,
-        Sprite.AnimatedSprite walkingLeftSprite,
-        Sprite.SharedTexture sharedTexture,
-        int fireballRightX,
-        int fireballRightY,
-        int fireballLeftX,
-        int fireballLeftY,
-        int fireballWidth,
-        int fireballHeight,
-        int y,
-        int leftBound,
-        int rightBound)
+    public Bowser(SharedTexture EnemyTexture, SharedTexture FireTexture, int y, int leftBound, int rightBound)
     {
         this.leftBound = leftBound;
         this.rightBound = rightBound;
-        this.walkingRightSprite = walkingRightSprite;
-        this.walkingLeftSprite = walkingLeftSprite;
-        this.sharedTexture = sharedTexture;
-        this.fireballRightX = fireballRightX;
-        this.fireballRightY = fireballRightY;
-        this.fireballLeftX = fireballLeftX;
-        this.fireballLeftY = fireballLeftY;
-        this.fireballWidth = fireballWidth;
-        this.fireballHeight = fireballHeight;
+        this.fireTexture = FireTexture;
 
+        walkingRightSprite = EnemyTexture.NewAnimatedSprite(255, 368, 35, 32, 4, 0.2f);
+        walkingLeftSprite = EnemyTexture.NewAnimatedSprite(116, 368, 35, 32, 2, 0.2f);
+        walkingRightSprite.Visible = true;
+        walkingLeftSprite.Visible = false;
         Position = new Point(leftBound, y);
         this.fireCooldownTimer = FIRE_COOLDOWN;
     }
+
     public bool GetIsAlive()
     {
         return isAlive;
     }
+
     public void Update(GameTime gameTime)
     {
         if (!isAlive) return;
@@ -108,17 +92,17 @@ public class Bowser : IEnemy, ICollidable
             if (activeFireballs[i].IsExpired()) activeFireballs.RemoveAt(i);
         }
 
-        walkingRightSprite.Update(gameTime);
-        walkingLeftSprite.Update(gameTime);
+        if (movingRight)
+            walkingRightSprite.Update(gameTime);
+        else
+            walkingLeftSprite.Update(gameTime);
     }
 
     private void ShootFireball()
     {
-        var fireballSpriteRight = sharedTexture.NewAnimatedSprite(
-            fireballRightX, fireballRightY, fireballWidth, fireballHeight, 2, 0.1f);
-        var fireballSpriteLeft = sharedTexture.NewAnimatedSprite(
-            fireballLeftX, fireballLeftY, fireballWidth, fireballHeight, 2, 0.1f);
-        
+        var fireballSpriteRight = fireTexture.NewAnimatedSprite(161, 253, 24, 8, 2, 0.1f);
+        var fireballSpriteLeft = fireTexture.NewAnimatedSprite(101, 253, 24, 8, 2, 0.1f);
+
         fireballSpriteRight.Scale = 3f;
         fireballSpriteLeft.Scale = 3f;
 
@@ -143,6 +127,8 @@ public class Bowser : IEnemy, ICollidable
             {
                 Position = new Point(rightBound, Position.Y);
                 movingRight = false;
+                walkingRightSprite.Visible = false;
+                walkingLeftSprite.Visible = true;
             }
         }
         else
@@ -152,81 +138,71 @@ public class Bowser : IEnemy, ICollidable
             {
                 Position = new Point(leftBound, Position.Y);
                 movingRight = true;
+                walkingRightSprite.Visible = true;
+                walkingLeftSprite.Visible = false;
             }
         }
     }
 
-    public void Kill() => this.isAlive = false;
+    public void Kill(){
+        this.isAlive = false;
+        walkingRightSprite.Drop();
+        walkingLeftSprite.Drop();
+    }
+
+    private void UnCollide(Rectangle intersect, CollideDirection direction)
+    {
+        if (direction == CollideDirection.Left)
+        {
+            Position = new Point(Position.X + intersect.Width, Position.Y);
+            movingRight = true;
+        }
+        else if (direction == CollideDirection.Right)
+        {
+            Position = new Point(Position.X - intersect.Width, Position.Y);
+            movingRight = false;
+        }
+    }
 
     public void Draw(SpriteBatch _spriteBatch)
     {
         if (!isAlive) return;
-        
-        if (movingRight) walkingRightSprite.Draw(_spriteBatch);
-        else walkingLeftSprite.Draw(_spriteBatch);
-
         foreach (var fireball in activeFireballs) fireball.Draw(_spriteBatch);
+
+        if (movingRight)
+        {
+            walkingRightSprite.Visible = true;
+            walkingLeftSprite.Visible = false;
+            walkingRightSprite.Draw(_spriteBatch);
+        }
+        else
+        {
+            walkingRightSprite.Visible = false;
+            walkingLeftSprite.Visible = true;
+            walkingLeftSprite.Draw(_spriteBatch);
+        }
+
+        
     }
 
-    // ICollidable methods
     public void OnCollidePlayer(Player player, CollideDirection direction)
     {
-        // Boss logic: Player takes damage on contact
     }
 
     public void OnCollideItem(IItems item, CollideDirection direction)
     {
-        // Bowser could be hurt by Mario's fireballs here if you want
     }
 
     public void OnCollideEnemy(IEnemy enemy, CollideDirection direction)
     {
-
-
-        //Bowser destroys any minion in his way
-        if (direction == CollideDirection.Left || direction == CollideDirection.Right)
-        {
-            Console.WriteLine($"Bowser steamrolled a {enemy.GetType().Name}!");
-
-            // Kill the minion
-            enemy.Kill();
-
-            // 3. THE KEY: Force the enemy out of Bowser's space 
-            // We don't change Bowser's direction, but we "fling" the dead enemy
-            int flingDistance = 20; 
-
-            if (direction == CollideDirection.Left)
-            {
-                // Bowser hit something on HIS left, so the enemy is to his left.
-                // We don't have direct access to set enemy.Position here easily without casting,
-                // but since Bowser is the one moving, we just let him keep walking.
-                // If the enemy is still "blocking" him, we can give Bowser a tiny 2px boost.
-                Position = new Point(Position.X - 2, Position.Y); 
-            }
-            else if (direction == CollideDirection.Right)
-            {
-                // Bowser hit something on HIS right.
-                Position = new Point(Position.X + 2, Position.Y);
-            }
-        }
     }
 
     public void OnCollideBlock(IBlock block, CollideDirection direction)
     {
         if (direction == CollideDirection.Left || direction == CollideDirection.Right)
         {
-            int pushDistance = 10; // Bowser is big, needs a solid nudge
-            if (direction == CollideDirection.Left)
-            {
-                movingRight = true;
-                Position = new Point(Position.X + pushDistance, Position.Y);
-            }
-            else
-            {
-                movingRight = false;
-                Position = new Point(Position.X - pushDistance, Position.Y);
-            }
-            Console.WriteLine("Bowser hit a wall and turned around.");
+            Block.Block block1 = (Block.Block)block;
+            UnCollide(Rectangle.Intersect(CollisionBox, block1.CollisionBox), direction);
         }
     }
 }
