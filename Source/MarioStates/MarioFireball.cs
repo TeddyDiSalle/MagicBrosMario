@@ -6,6 +6,7 @@ using MagicBrosMario.Source.Sprite;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Diagnostics;
 
 namespace MagicBrosMario.Source;
 
@@ -18,15 +19,15 @@ public class MarioFireball: Items.IItems, Collision.ICollidable
     private readonly ISprite[] Sprites;
     private readonly bool movingRight;
     private float lifetimeRemaining;
+    private int ScaleFactor;
 
     private Vector2 position;
     private Vector2 velocity;
-    private readonly float GroundY;
     private const float Gravity = 0.35f;
 
     public Rectangle CollisionBox { get; private set; }
 
-    public MarioFireball(Sprite.AnimatedSprite fireball, Sprite.Sprite explosion, Vector2 position, bool movingRight, float groundY)
+    public MarioFireball(Sprite.AnimatedSprite fireball, Sprite.Sprite explosion, Vector2 position, bool movingRight, int ScaleFactor)
     {
         this.movingRight = movingRight;
         this.lifetimeRemaining = LIFETIME;
@@ -35,8 +36,9 @@ public class MarioFireball: Items.IItems, Collision.ICollidable
         CurrentSprite = Sprites[0];
         CurrentSprite.Visible = true;
         this.position = position;
-        this.GroundY = groundY+32;
+        this.ScaleFactor = ScaleFactor;
         CurrentSprite.Position = new Point((int)position.X, (int)position.Y);
+        CollisionBox = new Rectangle((int)position.X, (int)position.Y, 8 * ScaleFactor, 8 *ScaleFactor);
         if (movingRight)
         {
             velocity = new Vector2(VELOCITY, 0);
@@ -94,9 +96,10 @@ public class MarioFireball: Items.IItems, Collision.ICollidable
 
     public void OnCollideBlock(IBlock block, CollideDirection direction)
     {
+        Debug.WriteLine(direction);
         if(direction == CollideDirection.Down) {
-            position = new Vector2(position.X, GroundY);
-            velocity -= new Vector2(0, velocity.Y);
+            position = new Vector2(position.X, block.CollisionBox.Top);
+            velocity -= new Vector2(0, velocity.Y + 10);
         }
         else { Contact(); }
             
@@ -105,26 +108,13 @@ public class MarioFireball: Items.IItems, Collision.ICollidable
     {
         float time = (float)gameTime.ElapsedGameTime.TotalSeconds;
         lifetimeRemaining -= time;
+        float distanceMoved = (float)(time * 1 * VELOCITY);
 
-
-        float distanceMoved = (float)(time * 100 * VELOCITY);
-
-        //if (CurrentSprite.Position.Y >= GroundY)
-        //{
-        //    velocity -= new Vector2(0, distanceMoved);
-        //}
-        //if (CurrentSprite.Position.Y < GroundY)
-        //{
-        //    velocity += new Vector2(0, Gravity);
-        //}
         velocity += new Vector2(0, Gravity);
         position += velocity;
-        if (CurrentSprite.Position.Y > GroundY)
-        {
-            position = new Vector2(position.X, GroundY);
-            velocity -= new Vector2(0, velocity.Y);
-        }
+
         CurrentSprite.Position = new Point((int)position.X, (int)position.Y);
+        CollisionBox = new Rectangle((int)position.X, (int)position.Y, 8 * ScaleFactor, 8 * ScaleFactor);
         CurrentSprite.Update(gameTime);
     }
     public void Draw(SpriteBatch _spriteBatch)

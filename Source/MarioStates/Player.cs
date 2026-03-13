@@ -17,7 +17,6 @@ public class Player : ICollidable
     public Vector2 Position { get; private set; } = new Vector2(400, 240);
     public Vector2 Velocity { get; private set; }
     public int ScaleFactor { get; } = 2;
-    private readonly float GroundY = 260; //Temporary for Sprint2
     private const float MovementSpeed = 5.0f, Gravity = 0.35f, MaxSpeed = 15.0f, fireballCooldown = 0.2f;
     public float TimeFrame { get; } = 0.15f;
     public bool IsGrounded { get; set; } = false;
@@ -47,13 +46,14 @@ public class Player : ICollidable
     {
         if(FireballTimer < fireballCooldown) { return; }
         FireballTimer = 0;
-        AnimatedSprite movingFireball = new(Texture, 207, 168, 8, 8, 4, TimeFrame);
-        Sprite.Sprite explosion = new(Texture, 239, 168, 8, 8);
+        AnimatedSprite movingFireball = Texture.NewAnimatedSprite(207, 168, 8, 8, 4, TimeFrame);
+        Sprite.Sprite explosion = Texture.NewSprite(239, 168, 8, 8);
+
         movingFireball.Scale = ScaleFactor;
         explosion.Scale = ScaleFactor;
         movingFireball.Flipped = Flipped;
         explosion.Flipped = Flipped;
-        MarioFireball fireball = new(movingFireball, explosion, Position, !Flipped, GroundY);
+        MarioFireball fireball = new(movingFireball, explosion, Position, !Flipped, ScaleFactor);
         fireballs.Add(fireball);
     }
     public void Left(GameTime gameTime)
@@ -189,18 +189,6 @@ public class Player : ICollidable
         {
             DamageTimer += gameTime.ElapsedGameTime.TotalSeconds;
         }
-        //TEMP
-        // if (Position.Y < GroundY)
-        // {
-        //     Velocity += new Vector2(0, Gravity);
-        // }
-        // Position += Velocity;
-        // if (Position.Y > GroundY)
-        // {
-        //     Position = new Vector2(Position.X, GroundY);
-        //     Velocity -= new Vector2(0, Velocity.Y);
-        // }
-        //TEMP END
         //NEW
         if (!IsGrounded) { 
             Velocity += new Vector2(0, Gravity);
@@ -220,7 +208,7 @@ public class Player : ICollidable
         {
             FireballTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
-        for (int i = 0; i < fireballs.Count; i++)
+        for (int i = fireballs.Count - 1; i >= 0; i--)
         {
             fireballs[i].Update(gameTime);
 
@@ -232,7 +220,7 @@ public class Player : ICollidable
         PlayerState.Update(gameTime);
         CollisionBox = new Rectangle((int)Position.X, (int)Position.Y, CollisionBox.Width, CollisionBox.Height);
         Camera.Instance.Follow(Position);
-        Debug.WriteLine("---------------");
+
     }
 
     public void Draw(SpriteBatch spriteBatch)
