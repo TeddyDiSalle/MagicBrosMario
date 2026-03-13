@@ -134,8 +134,7 @@ public class PlayerCollisionHandler
     }
     public void OnCollideBlock(IBlock block, Collision.CollideDirection direction)
     {
-        Block.Block b = (Block.Block)block;
-        UnCollide(Rectangle.Intersect(CollisionBox, b.CollisionBox), direction);
+        UnCollide(Rectangle.Intersect(CollisionBox, block.CollisionBox), direction);
         //If ground collide call UnjumpOnGroundCollide
         if(direction == CollideDirection.Down)
         {

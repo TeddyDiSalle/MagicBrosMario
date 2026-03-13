@@ -46,15 +46,15 @@ public class BlockManager
     {
         return functionName switch
         {
-            "VoidBlock" => (x, y) => BlockFactory.VoidBlock().WithPosition(x, y).WithScale(_scale),
-            "SkyBlock" => (x, y) => BlockFactory.SkyBlock().WithPosition(x, y).WithScale(_scale),
+            "VoidBlock" => (x, y) => BlockFactory.GroundBlock().WithPosition(x, y).WithScale(_scale), //fix xml
+            "SkyBlock" => (x, y) => BlockFactory.GroundBlock().WithPosition(x, y).WithScale(_scale), // fix xml
             "GroundBlock" => (x, y) => BlockFactory.GroundBlock().WithPosition(x, y).WithScale(_scale),
             "BlueGroundBlock" => (x, y) => BlockFactory.BlueGroundBlock().WithPosition(x, y).WithScale(_scale),
             "Bricks" => (x, y) => BlockFactory.Bricks().WithPosition(x, y).WithScale(_scale),
             "BlueBricks" => (x, y) => BlockFactory.BlueBricks().WithPosition(x, y).WithScale(_scale),
             "BaseBlock" => (x, y) => BlockFactory.BaseBlock().WithPosition(x, y).WithScale(_scale),
             "QuestionMarkBlock" => (x, y) => BlockFactory.QuestionMarkBlock(QuestionMarkBlock.InnerItem.Coin).WithPosition(x, y).WithScale(_scale), // add par
-            "EmptyQuestionMarkBlock" => (x, y) => BlockFactory.VoidBlock().WithPosition(x, y).WithScale(_scale), // fix
+            "EmptyQuestionMarkBlock" => (x, y) => BlockFactory.GroundBlock().WithPosition(x, y).WithScale(_scale), // fix
             _ => throw new ArgumentException($"Unknown block function: {functionName}")
         };
     }
