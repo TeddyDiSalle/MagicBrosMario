@@ -55,11 +55,11 @@ public class Goomba : IEnemy, ICollidable
         }
     }
 
-    public Goomba(SharedTexture EnemyTexture, int leftBound, int rightBound)
+    public Goomba(SharedTexture EnemyTexture, int y,int leftBound)
     {
-        int Y = 250;
+        int Y = y;
         this.leftBound = leftBound;
-        this.rightBound = rightBound;
+        //this.rightBound = rightBound;
         
         sprites = [EnemyTexture.NewAnimatedSprite(295, 187, 18, 18, 2, 0.2f), 
                     EnemyTexture.NewSprite(276, 187, 18, 18)];

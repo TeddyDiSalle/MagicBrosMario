@@ -74,11 +74,11 @@ public class Koopa : IEnemy, ICollidable
         }
     }
 
-    public Koopa(SharedTexture EnemyTexture, int leftBound, int rightBound)
+    public Koopa(SharedTexture EnemyTexture, int y,int leftBound)
     {
-        int Y = 250;
+        int Y = y;
         this.leftBound = leftBound;
-        this.rightBound = rightBound;
+        //this.rightBound = rightBound;
         sprites = [
             EnemyTexture.NewAnimatedSprite(296, 206, 18, 25, 2, 0.2f),
             EnemyTexture.NewAnimatedSprite(182, 206, 18, 25, 2, 0.2f),

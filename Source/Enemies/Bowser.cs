@@ -167,6 +167,7 @@ public class Bowser : IEnemy, ICollidable
     public void Draw(SpriteBatch _spriteBatch)
     {
         if (!isAlive) return;
+        foreach (var fireball in activeFireballs) fireball.Draw(_spriteBatch);
 
         if (movingRight)
         {
@@ -181,7 +182,7 @@ public class Bowser : IEnemy, ICollidable
             walkingLeftSprite.Draw(_spriteBatch);
         }
 
-        foreach (var fireball in activeFireballs) fireball.Draw(_spriteBatch);
+        
     }
 
     public void OnCollidePlayer(Player player, CollideDirection direction)
