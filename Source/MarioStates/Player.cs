@@ -16,7 +16,7 @@ public class Player : ICollidable
 
     public Vector2 Position { get; private set; } = new Vector2(400, 240);
     public Vector2 Velocity { get; private set; }
-    public int ScaleFactor { get; } = 3;
+    public int ScaleFactor { get; } = 2;
     private readonly float GroundY = 260; //Temporary for Sprint2
     private const float MovementSpeed = 5.0f, Gravity = 0.35f, MaxSpeed = 15.0f, fireballCooldown = 0.2f;
     public float TimeFrame { get; } = 0.15f;

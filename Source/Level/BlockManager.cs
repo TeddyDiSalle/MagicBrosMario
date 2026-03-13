@@ -12,7 +12,7 @@ public class BlockManager
 {
     private readonly Dictionary<string, Func<int, int, IBlock>> BlockConstructors = new();
     private string xmlPath = "Content/LevelData/Blocks.xml";
-    private readonly int _scale = 4;
+    private static readonly int _scale = 2;
 
     public void Initialize(Texture2D texture)
     {
@@ -53,8 +53,8 @@ public class BlockManager
             "Bricks" => (x, y) => BlockFactory.Bricks().WithPosition(x, y).WithScale(_scale),
             "BlueBricks" => (x, y) => BlockFactory.BlueBricks().WithPosition(x, y).WithScale(_scale),
             "BaseBlock" => (x, y) => BlockFactory.BaseBlock().WithPosition(x, y).WithScale(_scale),
-            "QuestionMarkBlock" => (x, y) => BlockFactory.QuestionMarkBlock(QuestionMarkBlock.InnerItem.Coin).WithPosition(x, y).WithScale(_scale),
-            "EmptyQuestionMarkBlock" => (x, y) => BlockFactory.VoidBlock().WithPosition(x, y).WithScale(_scale),
+            "QuestionMarkBlock" => (x, y) => BlockFactory.QuestionMarkBlock(QuestionMarkBlock.InnerItem.Coin).WithPosition(x, y).WithScale(_scale), // add par
+            "EmptyQuestionMarkBlock" => (x, y) => BlockFactory.VoidBlock().WithPosition(x, y).WithScale(_scale), // fix
             _ => throw new ArgumentException($"Unknown block function: {functionName}")
         };
     }

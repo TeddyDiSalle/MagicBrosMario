@@ -6,6 +6,7 @@ using MagicBrosMario.Source.Block;
 using MagicBrosMario.Source.Sprite; 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MagicBrosMario.Source.Collision;
 namespace MagicBrosMario.Source.Level;
 public class Level1 : ILevel
 {
@@ -13,7 +14,8 @@ public class Level1 : ILevel
 	private IBlock[][] blocks;
 	private string Level1BlockCVS = "Content/LevelData/Blocks1-1.csv";
 	private static int _blockSize = 16;
-	private int tileSize = _blockSize * 4;
+	private static int _scale = 2;
+	private int tileSize = _blockSize * _scale;
 	private string[] lines;
 	private int levWidth;
 	private int levHeight;
@@ -67,6 +69,7 @@ public class Level1 : ILevel
 				}else{
 					blocks[r][c] = _bm.CreateBlock(id, c * tileSize, r * tileSize);// x,y - columnb => x, row => y
 					Camera.Instance.Sprites.Add(blocks[r][c].Sprite);
+					CollisionController.Instance.AddBlock(blocks[r][c]);
 				}
 			}
 		}
