@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Blocks>
+    <Block id="00" function="Coin" /> 
+    <Block id="01" function="Fireflower" />
+    <Block id="02" function="Star" />
+    <Block id="03" function="OneUp" />
+</Blocks>

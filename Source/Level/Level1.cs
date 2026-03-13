@@ -7,30 +7,59 @@ using MagicBrosMario.Source.Sprite;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MagicBrosMario.Source.Collision;
+using MagicBrosMario.Source.Items;
 namespace MagicBrosMario.Source.Level;
 public class Level1 : ILevel
 {
 	private BlockManager _bm;
+	private EnemyManager _em;
+	private ItemManager _im;
 	private IBlock[][] blocks;
-	private string Level1BlockCVS = "Content/LevelData/Blocks1-1.csv";
+	private IEnemy[][] enemies;
+	private IItems[][] items;
+	private string Level1BlockCVS = "Content/LevelData/1-1/Blocks1-1.csv";
+	private string Level1EnemyCVS = "Content/LevelData/1-1/Enemies1-1.csv";
+	private string Level1ItemCVS = "Content/LevelData/1-1/Items1-1.csv";
 	private static int _blockSize = 16;
 	private static int _scale = 2;
 	private int tileSize = _blockSize * _scale;
-	private string[] lines;
+	private string[] blockLines;
+	private string[] enemyLines;
+	private string[] itemLines;
 	private int levWidth;
 	private int levHeight;
 	public Level1()	{
-		lines = File.ReadLines(Level1BlockCVS).ToArray();
-		levHeight = lines.Length;
-		levWidth = lines[0].Split(',').Length;
+		blockLines = File.ReadLines(Level1BlockCVS).ToArray();
+		enemyLines = File.ReadLines(Level1EnemyCVS).ToArray();
+		itemLines = File.ReadLines(Level1ItemCVS).ToArray();
+
+		levHeight = blockLines.Length;
+		if(enemyLines.Length != levHeight || itemLines.Length != levHeight)	{
+			throw new Exception("Level1: Enemy or Item CSV file has different height than Block CSV file");
+		}
+		levWidth = blockLines[0].Split(',').Length;
+		if(enemyLines[0].Split(',').Length != levWidth || itemLines[0].Split(',').Length != levWidth)	{
+			throw new Exception("Level1: Enemy or Item CSV file has different width than Block CSV file");
+		}
+		
 		blocks = new IBlock[levHeight][];
+		enemies = new IEnemy[levHeight][];
+		items = new IItems[levHeight][];
 		for(int i = 0; i < levHeight; i++)	{
 			blocks[i] = new IBlock[levWidth];
+			enemies[i] = new IEnemy[levWidth];
+			items[i] = new IItems[levWidth];
+
 		}
+		
 	}
-	public void Initialize(Texture2D texture)	{
+	public void Initialize(Texture2D bTexture, Texture2D eTexture, Texture2D iTexture)	{
 		_bm = new BlockManager();
-		_bm.Initialize(texture);
+		_bm.Initialize(bTexture);
+		_em = new EnemyManager();
+		_em.Initialize(eTexture);
+		_im = new ItemManager();
+		_im.Initialize(iTexture);
 		LoadContent();
 	}
 	public void Update(GameTime gt)	{
@@ -39,6 +68,10 @@ public class Level1 : ILevel
 			for(int c = 0; c < levWidth; c++)	{
 				//if(blocks[r][c] != null)
 					//blocks[r][c].Update(gt);
+				if(enemies[r][c] != null)
+					enemies[r][c].Update(gt);
+				if(items[r][c] != null)
+					items[r][c].Update(gt);
 			}
 		}
 	}
@@ -55,21 +88,40 @@ public class Level1 : ILevel
 
 	private void LoadContent(){
 		
-		for (int r = 0; r < levHeight; r++)
-		{
-			string[] blockIds = lines[r].Split(',');
+		for (int r = 0; r < levHeight; r++){
+			string[] blockIds = blockLines[r].Split(',');
+			string[] enemyIds = enemyLines[r].Split(',');
+			string[] itemIds = itemLines[r].Split(',');
 
-			for (int c = 0; c < levWidth; c++)
-			{
-				string id = blockIds[c].Trim();
-				if (string.IsNullOrEmpty(id))
-				{
+			for (int c = 0; c < levWidth; c++){
+				string blockId = blockIds[c].Trim();
+				string enemyId = enemyIds[c].Trim();
+				string itemId = itemIds[c].Trim();
+				if (string.IsNullOrEmpty(blockId)){
 					blocks[r][c] = null;
 					
 				}else{
-					blocks[r][c] = _bm.CreateBlock(id, c * tileSize, r * tileSize);// x,y - columnb => x, row => y
+					blocks[r][c] = _bm.CreateBlock(blockId, c * tileSize, r * tileSize);// x,y - columnb => x, row => y
+
 					Camera.Instance.Sprites.Add(blocks[r][c].Sprite);
 					CollisionController.Instance.AddBlock(blocks[r][c]);
+					
+				}
+
+				if (string.IsNullOrEmpty(enemyId)){
+					enemies[r][c] = null;
+				}else{
+					enemies[r][c] = _em.CreateEnemy(enemyId, c * tileSize, r * tileSize);
+					Camera.Instance.Sprites.Add(enemies[r][c].Sprite);
+					CollisionController.Instance.AddEnemy(enemies[r][c]);
+				}
+
+				if (string.IsNullOrEmpty(itemId)){
+					items[r][c] = null;
+				}else{
+					items[r][c] = _im.CreateItem(itemId, c * tileSize, r * tileSize);
+					Camera.Instance.Sprites.Add(items[r][c].Sprite);
+					CollisionController.Instance.AddItem(items[r][c]);
 				}
 			}
 		}
@@ -78,10 +130,11 @@ public class Level1 : ILevel
 	}
 
 	private void JustTheFloor(){
+		int floorLevel = 10;
 		for (int c = 0; c < levWidth; c++)
 		{
-			blocks[levHeight - 10][c] = _bm.CreateBlock("04", c * tileSize, (levHeight - 10) * tileSize);
-			Camera.Instance.Sprites.Add(blocks[levHeight - 10][c].Sprite);
+			blocks[levHeight - floorLevel][c] = _bm.CreateBlock("04", c * tileSize, (levHeight - floorLevel) * tileSize);
+			Camera.Instance.Sprites.Add(blocks[levHeight - floorLevel][c].Sprite);
 		}
 		
 	}

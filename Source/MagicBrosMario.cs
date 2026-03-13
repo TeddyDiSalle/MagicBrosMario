@@ -64,7 +64,7 @@ public class MagicBrosMario : Game
         MarioTexture.BindTexture(marioSheet);
 
         lvl = new Level1();
-        lvl.Initialize(blockTexture);
+        lvl.Initialize(blockTexture, enemySheet, itemSheet);
 
         Mario = new Player(MarioTexture);
         Mario.SetPositon(new Vector2(MarioStartPos[0], MarioStartPos[1]));
