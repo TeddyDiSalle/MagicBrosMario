@@ -36,6 +36,7 @@ public class Koopa : IEnemy, ICollidable
 
     private Sprite.ISprite CurrentSprite()
     {   
+        foreach (var sprite in sprites) sprite.Visible = false;
         var current = state switch
         {
             KoopaState.WalkingAlive => movingRight ? sprites[WALKING_RIGHT] : sprites[WALKING_LEFT],
