@@ -227,6 +227,7 @@ public class Player : ICollidable
         }
         PlayerState.Update(gameTime);
         CollisionBox = new Rectangle((int)Position.X, (int)Position.Y, CollisionBox.Width, CollisionBox.Height);
+        Camera.Instance.Follow(Position);
     }
 
     public void Draw(SpriteBatch spriteBatch)

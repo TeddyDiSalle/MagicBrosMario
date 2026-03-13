@@ -2,14 +2,15 @@
 using System;
 using System.IO;
 using System.Linq;
-using MagicBrosMario.Source.Block;
+using MagicBrosMario.Source.Block; 
+using MagicBrosMario.Source.Sprite; 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 namespace MagicBrosMario.Source.Level;
 public class Level1 : ILevel
 {
 	private BlockManager _bm;
-	private IBlock[][] blocks;
+	private Block1[][] blocks;
 	private string Level1BlockCVS = "Content/LevelData/Blocks1-1.csv";
 	private static int _blockSize = 16;
 	private int tileSize = _blockSize * 4;
@@ -20,9 +21,9 @@ public class Level1 : ILevel
 		lines = File.ReadLines(Level1BlockCVS).ToArray();
 		levHeight = lines.Length;
 		levWidth = lines[0].Split(',').Length;
-		blocks = new IBlock[levHeight][];
+		blocks = new Block1[levHeight][];
 		for(int i = 0; i < levHeight; i++)	{
-			blocks[i] = new IBlock[levWidth];
+			blocks[i] = new Block1[levWidth];
 		}
 	}
 	public void Initialize(Texture2D texture)	{
@@ -65,17 +66,19 @@ public class Level1 : ILevel
 					
 				}else{
 					blocks[r][c] = _bm.CreateBlock(id, c * tileSize, r * tileSize);// x,y - columnb => x, row => y
+					Camera.Instance.Sprites.Add(blocks[r][c].Sprite);
 				}
 			}
 		}
 
-		//JustTheFloor();
+		JustTheFloor();
 	}
 
 	private void JustTheFloor(){
 		for (int c = 0; c < levWidth; c++)
 		{
 			blocks[levHeight - 10][c] = _bm.CreateBlock("04", c * tileSize, (levHeight - 10) * tileSize);
+			Camera.Instance.Sprites.Add(blocks[levHeight - 10][c].Sprite);
 		}
 		
 	}

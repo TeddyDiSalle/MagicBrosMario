@@ -13,43 +13,43 @@ public static class BlockFactory {
 
     public static Block VoidBlock() {
         var sprite = BLOCK_SHARED_TEXTURE.NewSprite(16, 16, 16, 16);
-        var block = new Block(sprite);
+        var block = new Block1(sprite);
         return block;
     }
 
     public static Block SkyBlock() {
         var sprite = BLOCK_SHARED_TEXTURE.NewSprite(32, 16, 16, 16);
-        var block = new Block(sprite);
+        var block = new Block1(sprite);
         return block;
     }
 
     public static Block GroundBlock() {
         var sprite = BLOCK_SHARED_TEXTURE.NewSprite(16, 32, 16, 16);
-        var block = new Block(sprite);
+        var block = new Block1(sprite);
         return block;
     }
 
     public static Block BlueGroundBlock() {
         var sprite = BLOCK_SHARED_TEXTURE.NewSprite(32, 32, 16, 16);
-        var block = new Block(sprite);
+        var block = new Block1(sprite);
         return block;
     }
 
     public static Block Bricks() {
         var sprite = BLOCK_SHARED_TEXTURE.NewSprite(48, 32, 16, 16);
-        var block = new Block(sprite);
+        var block = new Block1(sprite);
         return block;
     }
 
     public static Block BlueBricks() {
         var sprite = BLOCK_SHARED_TEXTURE.NewSprite(64, 32, 16, 16);
-        var block = new Block(sprite);
+        var block = new Block1(sprite);
         return block;
     }
 
     public static Block BaseBlock() {
         var sprite = BLOCK_SHARED_TEXTURE.NewSprite(80, 32, 16, 16);
-        var block = new Block(sprite);
+        var block = new Block1(sprite);
         return block;
     }
 
