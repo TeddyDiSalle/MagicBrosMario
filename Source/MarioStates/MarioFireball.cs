@@ -45,7 +45,50 @@ public class MarioFireball: Items.IItems, Collision.ICollidable
         }
 
     }
-    
+
+
+    public void Contact()
+    {
+        CurrentSprite = Sprites[1];
+        lifetimeRemaining = 0.15f;
+    }
+    public bool IsExpired()
+    {
+        return lifetimeRemaining <= 0;
+    }
+
+
+    private void SwitchSprite(int index)
+    {
+        CurrentSprite.Visible = false;
+        CurrentSprite = Sprites[index];
+        CurrentSprite.Visible = true;
+    }
+
+    public bool getCollected()
+    {
+        return IsExpired();
+    }
+
+    public void OnCollidePlayer(Player player, CollideDirection direction)
+    {
+        //Nothing
+    }
+
+    public void OnCollideItem(IItems item, CollideDirection direction)
+    {
+        //Nothing
+    }
+
+    public void OnCollideEnemy(IEnemy enemy, CollideDirection direction)
+    {
+        CurrentSprite = Sprites[1];
+    }
+
+    public void OnCollideBlock(IBlock block, CollideDirection direction)
+    {
+        throw new NotImplementedException();
+    }
     public void Update(GameTime gameTime)
     {
         float time = (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -71,44 +114,8 @@ public class MarioFireball: Items.IItems, Collision.ICollidable
         CurrentSprite.Position = new Point((int)position.X, (int)position.Y);
         CurrentSprite.Update(gameTime);
     }
-
-    public void Contact()
-    {
-        CurrentSprite = Sprites[1];
-        lifetimeRemaining = 0.15f;
-    }
-    public bool IsExpired()
-    {
-        return lifetimeRemaining <= 0;
-    }
-
     public void Draw(SpriteBatch _spriteBatch)
     {
         CurrentSprite.Draw(_spriteBatch);
-    }
-
-    public bool getCollected()
-    {
-        throw new NotImplementedException();
-    }
-
-    public void OnCollidePlayer(Player player, CollideDirection direction)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void OnCollideItem(IItems item, CollideDirection direction)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void OnCollideEnemy(IEnemy enemy, CollideDirection direction)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void OnCollideBlock(IBlock block, CollideDirection direction)
-    {
-        throw new NotImplementedException();
     }
 }
