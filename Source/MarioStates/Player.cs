@@ -188,6 +188,7 @@ public class Player : ICollidable
         {
             DamageTimer += gameTime.ElapsedGameTime.TotalSeconds;
         }
+        //TEMP
         if (Position.Y < GroundY)
         {
             Velocity += new Vector2(0, Gravity);
@@ -198,6 +199,10 @@ public class Player : ICollidable
             Position = new Vector2(Position.X, GroundY);
             Velocity -= new Vector2(0, Velocity.Y);
         }
+        //TEMP END
+        //NEW
+        //Position += Velocity + new Vector2(0, Gravity);
+        //NEW END
         if(StarTimeRemaining >= StarDuration)
         {
             StarTimeRemaining = 0;
