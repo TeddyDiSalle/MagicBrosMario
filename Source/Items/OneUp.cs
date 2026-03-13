@@ -1,25 +1,28 @@
-﻿using MagicBrosMario.Source.Block;
+﻿// Made by Brian
+using MagicBrosMario.Source.Block;
 using MagicBrosMario.Source.Collision;
 using MagicBrosMario.Source.MarioStates;
 using MagicBrosMario.Source.Sprite;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace MagicBrosMario.Source.Items
 {
-	internal class OneUp : IItems
-	{
+    internal class OneUp : IItems
+    {
 
-		private Sprite.Sprite sprite;
-		private Point position;
-		private float speed = 80f;
-		private int direction = 1;
-		private int xLimit;
-		private int yLimit;
+        private Sprite.Sprite sprite;
+        private Point position;
+        private float xSpeed = 100f;
+        private float gravitySpeed = 220f;
+        private int direction = 1;
+        private int xLimit;
+        private int yLimit;
         private bool isCollected = false;
+        private bool hasRisen = false;
+        private bool isOnBlock = false;
+        private float riseAmount = 0f;
+        private float riseTarget = 16f;
 
         public Rectangle CollisionBox
         {
@@ -30,36 +33,66 @@ namespace MagicBrosMario.Source.Items
         }
 
         public OneUp(SharedTexture texture, int screenWidth, int screenHeight, int positionX, int positionY)
-		{
+        {
 
-			sprite = texture.NewSprite(214, 34, 16, 16);
-			yLimit = screenHeight;
-			xLimit = screenWidth;
+            sprite = texture.NewSprite(214, 34, 16, 16);
+            yLimit = screenHeight;
+            xLimit = screenWidth;
 
-			position = new Point(positionX, positionY);
-			sprite.Scale = 3f;
+            if (positionX <= 0)
+            {
+                positionX = 1;
+            }
+            if (positionY <= 0)
+            {
+                positionY = 1;
+            }
 
-		}
-		public void Update(GameTime gameTime)
-		{
-			if (!isCollected)
-			{
+            position = new Point(positionX, positionY);
+            sprite.Scale = 3f;
+
+        }
+        public void Update(GameTime gameTime)
+        {
+            if (!isCollected)
+            {
                 float time = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                position.X += (int)(direction * speed * time);
-
-                if (position.X <= 0 || position.X + sprite.Size.X >= xLimit)
+                if (!hasRisen)
                 {
-                    direction *= -1;
-                }
+                    float riseStep = gravitySpeed * time;
 
-                sprite.Position = position;
+                    position.Y -= (int)riseStep;
+                    riseAmount += riseStep;
+
+                    if (riseAmount >= riseTarget)
+                    {
+                        hasRisen = true;
+                    }
+                }
+                else
+                {
+                    if (!isOnBlock)
+                    {
+                        position.Y += (int)(gravitySpeed * time);
+                    }
+                    position.X += (int)(direction * xSpeed * time);
+                    if (position.X <= 0 || position.X + sprite.Size.X >= xLimit)
+                    {
+                        direction *= -1;
+                    }
+                    sprite.Position = position;
+                    if (!isOnBlock)
+                    {
+
+                    }
+                }
 
                 sprite.Update(gameTime);
             }
-		}
-		public void Draw(SpriteBatch spriteBatch)
-		{
+        }
+        public void Draw(SpriteBatch spriteBatch)
+        {
             if (!isCollected)
             {
                 sprite.Draw(spriteBatch);
@@ -83,7 +116,6 @@ namespace MagicBrosMario.Source.Items
         {
             return isCollected;
         }
-
 
     }
 }
