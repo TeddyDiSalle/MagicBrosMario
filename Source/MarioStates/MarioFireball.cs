@@ -34,7 +34,7 @@ public class MarioFireball: Items.IItems, Collision.ICollidable
         CurrentSprite = Sprites[0];
         this.position = position;
         this.GroundY = groundY+32;
-        set
+        
         if (movingRight)
         {
             velocity = new Vector2(VELOCITY, 0);
