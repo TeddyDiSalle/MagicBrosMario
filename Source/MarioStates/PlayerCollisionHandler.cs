@@ -176,8 +176,6 @@ public class PlayerCollisionHandler
                 float newY = player.Position.Y - intersect.Height;
                 newY = (float)Math.Floor(newY);
                 player.SetPositon(new Vector2(player.Position.X, newY));
-
-                //player.SetPositon(player.Position - new Vector2(0, intersect.Height));
                 player.SetVelocity(new Vector2(player.Velocity.X, 0));
                 break;
             case Collision.CollideDirection.Left:
