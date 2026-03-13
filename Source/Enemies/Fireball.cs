@@ -54,6 +54,8 @@ public class Fireball : ICollidable
         this.spriteLeft = fireballSpriteLeft;
         this.movingRight = movingRight;
         this.lifetimeRemaining = LIFETIME;
+        spriteRight.Visible = true;
+        spriteLeft.Visible = true;
         
         spriteRight.Position = new Point(startX, startY);
         spriteLeft.Position = new Point(startX, startY);
@@ -108,10 +110,14 @@ public class Fireball : ICollidable
 
         if (movingRight)
         {
+            spriteRight.Visible = true;
+            spriteLeft.Visible = false;
             spriteRight.Draw(_spriteBatch);
         }
         else
         {
+            spriteRight.Visible = false;
+            spriteLeft.Visible = true;
             spriteLeft.Draw(_spriteBatch);
         }
     }

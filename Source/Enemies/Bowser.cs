@@ -61,7 +61,8 @@ public class Bowser : IEnemy, ICollidable
 
         walkingRightSprite = EnemyTexture.NewAnimatedSprite(255, 368, 35, 32, 4, 0.2f);
         walkingLeftSprite = EnemyTexture.NewAnimatedSprite(116, 368, 35, 32, 2, 0.2f);
-
+        walkingRightSprite.Visible = true;
+        walkingLeftSprite.Visible = false;
         Position = new Point(leftBound, y);
         this.fireCooldownTimer = FIRE_COOLDOWN;
     }
@@ -91,8 +92,10 @@ public class Bowser : IEnemy, ICollidable
             if (activeFireballs[i].IsExpired()) activeFireballs.RemoveAt(i);
         }
 
-        walkingRightSprite.Update(gameTime);
-        walkingLeftSprite.Update(gameTime);
+        if (movingRight)
+            walkingRightSprite.Update(gameTime);
+        else
+            walkingLeftSprite.Update(gameTime);
     }
 
     private void ShootFireball()
@@ -124,6 +127,8 @@ public class Bowser : IEnemy, ICollidable
             {
                 Position = new Point(rightBound, Position.Y);
                 movingRight = false;
+                walkingRightSprite.Visible = false;
+                walkingLeftSprite.Visible = true;
             }
         }
         else
@@ -133,6 +138,8 @@ public class Bowser : IEnemy, ICollidable
             {
                 Position = new Point(leftBound, Position.Y);
                 movingRight = true;
+                walkingRightSprite.Visible = true;
+                walkingLeftSprite.Visible = false;
             }
         }
     }
