@@ -3,20 +3,24 @@ using Microsoft.Xna.Framework;
 
 namespace MagicBrosMario.Source.Movement;
 
-public class MovementController(float gravity, float horizontalAcceleration, float maxSpeed) {
-    // these values need to be tuned
-    private const float DefaultGravity = 10f;
-    private const float DefaultHorizontalAcceleration = 10f;
-    private const float DefaultMaxSpeed = 10f;
-
-    public MovementController() : this(DefaultGravity, DefaultHorizontalAcceleration, DefaultMaxSpeed) {
-    }
+public class MovementController() {
 
     public Vector2 Position { get; set; } = Vector2.Zero;
 
     public Vector2 Velocity { get; set; } = Vector2.Zero;
 
     public bool OnGround { get; private set; } = false;
+    
+    // these values need to be tuned
+    private const float DefaultGravity = 10f;
+    private const float DefaultHorizontalAcceleration = 10f;
+    private const float DefaultMaxSpeed = 10f;
+    private const float DefaultJumpingStrength = 10f;
+
+    private float Gravity { get; set; } = DefaultGravity;
+    private float HorizontalAcceleration { get; set; } = DefaultHorizontalAcceleration;
+    private float MaxSpeed { get; set; } = DefaultMaxSpeed;
+    private float JumpingStrength { get; set; } = DefaultJumpingStrength;
 
     private MovingDirection moving = MovingDirection.None;
 
@@ -25,22 +29,22 @@ public class MovementController(float gravity, float horizontalAcceleration, flo
 
         // only apply gravity if it is not on ground
         if (!OnGround) {
-            Velocity += time * new Vector2(0, gravity);
+            Velocity += time * new Vector2(0, Gravity);
         }
 
         Velocity = moving switch {
             MovingDirection.None =>
                 // slow down
                 Velocity.X switch {
-                    > 0 => new Vector2(float.Max(0, Velocity.X - time * horizontalAcceleration), Velocity.Y),
-                    < 0 => new Vector2(float.Min(0, Velocity.X + time * horizontalAcceleration), Velocity.Y),
+                    > 0 => new Vector2(float.Max(0, Velocity.X - time * HorizontalAcceleration), Velocity.Y),
+                    < 0 => new Vector2(float.Min(0, Velocity.X + time * HorizontalAcceleration), Velocity.Y),
                     _ => Velocity
                 },
             MovingDirection.Left => new Vector2(
-                float.Max(-maxSpeed, Velocity.X - time * horizontalAcceleration),
+                float.Max(-MaxSpeed, Velocity.X - time * HorizontalAcceleration),
                 Velocity.Y),
             MovingDirection.Right => new Vector2(
-                float.Min(maxSpeed, Velocity.X + time * horizontalAcceleration),
+                float.Min(MaxSpeed, Velocity.X + time * HorizontalAcceleration),
                 Velocity.Y),
             _ => throw new ArgumentOutOfRangeException()
         };
@@ -57,8 +61,8 @@ public class MovementController(float gravity, float horizontalAcceleration, flo
         Right
     }
 
-    public void Jump(float upwardVelocity) {
-        Velocity = new Vector2(Velocity.X, upwardVelocity);
+    public void Jump() {
+        Velocity = new Vector2(Velocity.X, JumpingStrength);
     }
 
     public void MoveLeft() {
