@@ -134,8 +134,10 @@ public class PlayerCollisionHandler
     }
     public void OnCollideBlock(IBlock block, Collision.CollideDirection direction)
     {
-        //if (!block.IsSolid) return;
-        //Uncollide
+        Block.Block b = (Block.Block)block;
+        //If collidable, uncollide
+        //If ground collide call UnjumpOnGroundCollide
+        
     }
     private void UnjumpOnGroundCollide()
     {
