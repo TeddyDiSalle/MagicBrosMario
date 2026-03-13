@@ -119,12 +119,9 @@ public class SmallMarioJumpState : IPlayerState
         if(Mario.IsGrounded)
         {
             Mario.IsJumping = false;
-        }
-        CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
-        if (Mario.Velocity.Y == 0)
-        {
             Mario.ChangeState(new SmallMarioIdleState(Mario, texture, timeFrame, scaleFactor));
         }
+        CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
     }
     public void Draw(SpriteBatch spriteBatch)
     {
