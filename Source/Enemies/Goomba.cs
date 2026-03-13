@@ -37,7 +37,7 @@ public class Goomba : IEnemy, ICollidable
     public Point Position
     {
         get => CurrentSprite().Position;
-        private set 
+        set 
         { 
             foreach (var sprite in sprites)
             {
@@ -170,4 +170,5 @@ public class Goomba : IEnemy, ICollidable
     }
 
     public void OnCollideItem(IItems item, CollideDirection direction) { }
+
 }
