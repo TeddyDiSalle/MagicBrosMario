@@ -36,8 +36,10 @@ public class SmallMarioMoveState : IPlayerState
         for (int i = 0; i < Sprites.Length; i++)
         {
             Sprites[i].Scale = scaleFactor;
+            Sprites[i].Visible = false;
         }
         CurrentSprite = Sprites[0];
+        CurrentSprite.Visible = true;
         Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 16 * scaleFactor, 16 * scaleFactor);
     }
     public void Left(GameTime gameTime)
@@ -146,6 +148,16 @@ public class SmallMarioMoveState : IPlayerState
             Frame = 1;
         }
     }
+    public void StateChangePrep()
+    {
+        CurrentSprite.Visible = false;
+    }
+    private void SwitchSprite(int index)
+    {
+        CurrentSprite.Visible = false;
+        CurrentSprite = Sprites[index];
+        CurrentSprite.Visible = true;
+    }
     public void Update(GameTime gameTime)
     {
         double time = gameTime.ElapsedGameTime.TotalSeconds;
@@ -153,14 +165,13 @@ public class SmallMarioMoveState : IPlayerState
 
         UpdateMovementAnimations(gameTime);
         UpdateStarAnimations(time);
-
-        CurrentSprite = Sprites[Frame];
+        SwitchSprite(Frame);
+        CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
         CurrentSprite.Update(gameTime);
         CurrentSprite.Flipped = Mario.Flipped;
     }
     public void Draw(SpriteBatch spriteBatch)
     {
-        CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
         CurrentSprite.Draw(spriteBatch);
     }
 

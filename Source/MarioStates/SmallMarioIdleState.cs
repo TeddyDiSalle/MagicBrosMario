@@ -21,11 +21,13 @@ public class SmallMarioIdleState : IPlayerState
         this.scaleFactor = scaleFactor;
         Sprites = [texture.NewSprite(2, 2, 16, 16),
             texture.NewAnimatedSprite(2, 2, 16, 16, 4, timeFrame/4)];
-        CurrentSprite = Sprites[0];
         for (int i = 0; i < Sprites.Length; i++)
         {
             Sprites[i].Scale = scaleFactor;
+            Sprites[i].Visible = false;
         }
+        CurrentSprite = Sprites[0];
+        CurrentSprite.Visible = true;
         Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 16 * scaleFactor, 16 * scaleFactor);
     }
     public void Left(GameTime gameTime)
@@ -83,24 +85,34 @@ public class SmallMarioIdleState : IPlayerState
     {
         //Nothing
     }
+    public void StateChangePrep()
+    {
+        CurrentSprite.Visible = false;
+    }
+    private void SwitchSprite(int index)
+    {
+        CurrentSprite.Visible = false;
+        CurrentSprite = Sprites[index];
+        CurrentSprite.Visible = true;
+    }
     public void Update(GameTime gameTime)
     {
         if (Mario.Invincible)
         {
-            CurrentSprite = Sprites[1];
+            SwitchSprite(1);
             Mario.StarTimeRemaining += gameTime.ElapsedGameTime.TotalSeconds;
         }
         else
         {
-            CurrentSprite = Sprites[0];
+            SwitchSprite(0);
         }
         CurrentSprite.Update(gameTime);
         CurrentSprite.Flipped = Mario.Flipped;
-        
+        CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
+
     }
     public void Draw(SpriteBatch spriteBatch)
     {
-        CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
         CurrentSprite.Draw(spriteBatch);
     }
 

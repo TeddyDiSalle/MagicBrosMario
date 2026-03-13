@@ -13,6 +13,7 @@ public interface IPlayerState
     void TakeDamage();
     void PowerUp(Power power);
     Power GetCurrentPower();
+    void StateChangePrep();
     void Idle();
     void Update(GameTime gameTime);
     void Draw(SpriteBatch spriteBatch);

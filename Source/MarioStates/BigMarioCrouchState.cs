@@ -82,6 +82,16 @@ public class BigMarioCrouchState : IPlayerState
     {
         //Nothing
     }
+    public void StateChangePrep()
+    {
+        CurrentSprite.Visible = false;
+    }
+    private void SwitchSprite(int index)
+    {
+        CurrentSprite.Visible = false;
+        CurrentSprite = Sprites[index];
+        CurrentSprite.Visible = true;
+    }
     public void Update(GameTime gameTime)
     {
         if (Mario.Invincible)

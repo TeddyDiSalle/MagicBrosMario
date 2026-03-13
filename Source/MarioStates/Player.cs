@@ -118,6 +118,7 @@ public class Player : ICollidable
     }
     public void ChangeState(IPlayerState state)
     {
+        PlayerState.StateChangePrep();
         PlayerState = state;
     }
     public void MoveLeft(GameTime gameTime, float factor = 1.0f)

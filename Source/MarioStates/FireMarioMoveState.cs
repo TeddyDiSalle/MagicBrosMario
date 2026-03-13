@@ -100,6 +100,16 @@ public class FireMarioMoveState : IPlayerState
     {
         Mario.ChangeState(new FireMarioIdleState(Mario, texture, timeFrame, scaleFactor));
     }
+    public void StateChangePrep()
+    {
+        CurrentSprite.Visible = false;
+    }
+    private void SwitchSprite(int index)
+    {
+        CurrentSprite.Visible = false;
+        CurrentSprite = Sprites[index];
+        CurrentSprite.Visible = true;
+    }
     private void IsBraking(GameTime gameTime)
     {
         bool BrakingRight = !Mario.Flipped && Mario.Velocity.X < 0;
