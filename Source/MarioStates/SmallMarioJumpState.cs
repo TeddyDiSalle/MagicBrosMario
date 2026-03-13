@@ -29,6 +29,7 @@ public class SmallMarioJumpState : IPlayerState
         }
         CurrentSprite = Sprites[0];
         CurrentSprite.Visible = true;
+        CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
         Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 16 * scaleFactor, 16 * scaleFactor);
         Mario.IsJumping = true;
         Mario.IsGrounded = false;

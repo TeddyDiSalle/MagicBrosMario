@@ -26,11 +26,14 @@ public class FireMarioJumpState : IPlayerState
             texture.NewSprite(136, 269, 16, 32),
             texture.NewAnimatedSprite(136, 269, 16, 32, 4, timeFrame/4)
             ];
-        CurrentSprite = Sprites[0];
         for (int i = 0; i < Sprites.Length; i++)
         {
             Sprites[i].Scale = scaleFactor;
+            Sprites[i].Visible = false;
         }
+        CurrentSprite = Sprites[0];
+        CurrentSprite.Visible = true;
+        CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
         Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 16 * scaleFactor, 32 * scaleFactor);
         Mario.IsJumping = true;
         Mario.IsGrounded = false;
@@ -109,13 +112,14 @@ public class FireMarioJumpState : IPlayerState
         if (Mario.Invincible)
         {
             Mario.StarTimeRemaining += gameTime.ElapsedGameTime.TotalSeconds;
-            CurrentSprite = (IsAttacking) ? Sprites[3] : Sprites[1];
+            SwitchSprite((IsAttacking) ? 3 : 1);
         }
         else
         {
-            CurrentSprite = (IsAttacking) ? Sprites[2] : Sprites[0];
+            SwitchSprite((IsAttacking) ? 2 : 0);
         }
         CurrentSprite.Update(gameTime);
+        CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
         CurrentSprite.Flipped = Mario.Flipped;
         if (Mario.IsGrounded)
         {
@@ -129,7 +133,6 @@ public class FireMarioJumpState : IPlayerState
     }
     public void Draw(SpriteBatch spriteBatch)
     {
-        CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
         CurrentSprite.Draw(spriteBatch);
     }
 

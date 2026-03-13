@@ -40,8 +40,11 @@ public class FireMarioMoveState : IPlayerState
         for (int i = 0; i < Sprites.Length; i++)
         {
             Sprites[i].Scale = scaleFactor;
+            Sprites[i].Visible = false;
         }
-        CurrentSprite = Sprites[0];
+        CurrentSprite = Sprites[Frame];
+        CurrentSprite.Visible = true;
+        CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
         Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 16 * scaleFactor, 32 * scaleFactor);
     }
     public void Left(GameTime gameTime)
@@ -174,7 +177,7 @@ public class FireMarioMoveState : IPlayerState
         UpdateStarAnimations(time);
         if (IsAttacking)
         {
-            CurrentSprite = Sprites[Frame + 4];
+            SwitchSprite(Frame + 4);
             if(AttackTimer > timeFrame)
             {
                 IsAttacking = false;
@@ -183,14 +186,15 @@ public class FireMarioMoveState : IPlayerState
         }
         else
         {
-            CurrentSprite = Sprites[Frame];
+            SwitchSprite(Frame);
         }
         CurrentSprite.Update(gameTime);
+        CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
         CurrentSprite.Flipped = Mario.Flipped;
+        IsAttacking = false;
     }
     public void Draw(SpriteBatch spriteBatch)
     {
-        CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
         CurrentSprite.Draw(spriteBatch);
     }
 }

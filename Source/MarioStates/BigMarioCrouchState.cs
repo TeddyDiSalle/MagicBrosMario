@@ -24,11 +24,14 @@ public class BigMarioCrouchState : IPlayerState
             texture.NewSprite(136, 94, 16, 32),
             texture.NewAnimatedSprite(136, 94, 16, 32, 4, timeFrame/4)
         ];
-        CurrentSprite = Sprites[0];
         for (int i = 0; i < Sprites.Length; i++)
         {
             Sprites[i].Scale = scaleFactor;
+            Sprites[i].Visible = false;
         }
+        CurrentSprite = Sprites[0];
+        CurrentSprite.Visible = true;
+        CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
         Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 16 * scaleFactor, 22 * scaleFactor);
     }
     public void Left(GameTime gameTime)
@@ -96,15 +99,16 @@ public class BigMarioCrouchState : IPlayerState
     {
         if (Mario.Invincible)
         {
-            CurrentSprite = Sprites[1];
+            SwitchSprite(1);
             Mario.StarTimeRemaining += gameTime.ElapsedGameTime.TotalSeconds;
         }
         else
         {
-            CurrentSprite = Sprites[0];
+            SwitchSprite(0);
         }
         CurrentSprite.Update(gameTime);
         CurrentSprite.Flipped = Mario.Flipped;
+        CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
         if (!Mario.IsCrouching)
         {
             Mario.ChangeState(new BigMarioIdleState(Mario, texture, timeFrame, scaleFactor));
@@ -112,7 +116,6 @@ public class BigMarioCrouchState : IPlayerState
     }
     public void Draw(SpriteBatch spriteBatch)
     {
-        CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
         CurrentSprite.Draw(spriteBatch);
     }
 }
