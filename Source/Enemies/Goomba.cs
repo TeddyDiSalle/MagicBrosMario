@@ -115,6 +115,10 @@ public class Goomba : IEnemy, ICollidable
     public void Kill()
     {
         this.isAlive = false;
+        foreach (var sprite in sprites)
+        {
+            sprite.Drop();
+        }
     }
 
     private void UnCollide(Rectangle intersect, CollideDirection direction)

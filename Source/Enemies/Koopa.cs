@@ -35,9 +35,7 @@ public class Koopa : IEnemy, ICollidable
     private float shellTimer = 0f;
 
     private Sprite.ISprite CurrentSprite()
-    {
-        foreach (var sprite in sprites) sprite.Visible = false;
-        
+    {   
         var current = state switch
         {
             KoopaState.WalkingAlive => movingRight ? sprites[WALKING_RIGHT] : sprites[WALKING_LEFT],
@@ -91,6 +89,7 @@ public class Koopa : IEnemy, ICollidable
         foreach (var sprite in sprites)
         {
             sprite.Scale = SCALE;
+            sprite.Visible = false;
         }
         Position = new Point(leftBound, Y);
         this.state = KoopaState.WalkingAlive;
