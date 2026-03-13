@@ -71,7 +71,7 @@ public class Level1 : ILevel
 			}
 		}
 
-		JustTheFloor();
+		//JustTheFloor();
 	}
 
 	private void JustTheFloor(){
