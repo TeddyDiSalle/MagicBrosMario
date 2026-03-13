@@ -179,7 +179,8 @@ public class Bowser : IEnemy, ICollidable
     {
         if (direction == CollideDirection.Left || direction == CollideDirection.Right)
         {
-            //UnCollide(Rectangle.Intersect(CollisionBox, block.CollisionBox), direction);
+            Block.Block block1 = (Block.Block)block;
+            UnCollide(Rectangle.Intersect(CollisionBox, block1.CollisionBox), direction);
         }
     }
 }

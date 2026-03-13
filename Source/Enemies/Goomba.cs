@@ -19,7 +19,20 @@ public class Goomba : IEnemy, ICollidable
     private bool movingRight = true;
     private bool isAlive = true;
 
-    private Sprite.ISprite CurrentSprite() => isAlive ? sprites[0] : sprites[1];
+    private Sprite.ISprite CurrentSprite(){
+        if (isAlive)
+        {
+            sprites[1].Visible = false;
+            sprites[0].Visible = true;
+            return sprites[0];
+        }
+        else
+        {
+            sprites[1].Visible = true;
+            sprites[0].Visible = false;
+            return sprites[1];
+        }
+    }
 
     public Point Position
     {
@@ -53,9 +66,11 @@ public class Goomba : IEnemy, ICollidable
         foreach (var sprite in sprites)
         {
             sprite.Scale = SCALE;
+            sprite.Visible = false;
         }
         Position = new Point(leftBound, Y);
         this.isAlive = true;
+
     }
 
     public bool GetIsAlive()
@@ -123,7 +138,7 @@ public class Goomba : IEnemy, ICollidable
 
     public void OnCollideEnemy(IEnemy enemy, CollideDirection direction)
     {
-        if (enemy is Bowser || enemy is Koopa koopa && koopa.IsShellMoving())
+        if (enemy is Bowser || (enemy is Koopa koopa && koopa.IsShellMoving()))
         {
             Kill();
             return;
@@ -136,9 +151,10 @@ public class Goomba : IEnemy, ICollidable
 
     public void OnCollideBlock(IBlock block, CollideDirection direction)
     {
+        Block.Block block1 = (Block.Block)block;
         if (direction == CollideDirection.Left || direction == CollideDirection.Right)
         {
-            //UnCollide(Rectangle.Intersect(CollisionBox, block.CollisionBox), direction);
+            UnCollide(Rectangle.Intersect(CollisionBox, block1.CollisionBox), direction);
         }
     }
 
