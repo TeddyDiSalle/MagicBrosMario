@@ -32,8 +32,13 @@ public static class BlockManager
         BlockFactory.BindTexture(texture);
     }
 
-    public static IBlock CreateBlock(string blockId, int x, int y)
-    {
+    public static IBlock CreateBlock(string blockId, int x, int y, QuestionMarkBlock.InnerItem innerItem = QuestionMarkBlock.InnerItem.Coin)
+    {   
+        if(blockId == "07") // ?markblock
+        {
+            return BlockFactory.QuestionMarkBlock(innerItem).WithPosition(x, y).WithScale(_scale);
+        }
+
         if (BlockConstructors.TryGetValue(blockId, out var constructor))
         {
              return constructor(x, y);
@@ -53,7 +58,7 @@ public static class BlockManager
             "Bricks" => (x, y) => BlockFactory.Bricks().WithPosition(x, y).WithScale(_scale),
             "BlueBricks" => (x, y) => BlockFactory.BlueBricks().WithPosition(x, y).WithScale(_scale),
             "BaseBlock" => (x, y) => BlockFactory.BaseBlock().WithPosition(x, y).WithScale(_scale),
-            "QuestionMarkBlock" => (x, y) => BlockFactory.QuestionMarkBlock(QuestionMarkBlock.InnerItem.Coin).WithPosition(x, y).WithScale(_scale), // add par
+            "QuestionMarkBlock" => (x, y) =>BlockFactory.GroundBlock().WithPosition(x, y).WithScale(_scale), // if every called, a huge mistake has happened
             "EmptyQuestionMarkBlock" => (x, y) => BlockFactory.GroundBlock().WithPosition(x, y).WithScale(_scale), // fix
             _ => throw new ArgumentException($"Unknown block function: {functionName}")
         };

@@ -62,10 +62,10 @@ public class Level1 : ILevel
 			for(int c = 0; c < levWidth; c++)	{
 				//if(blocks[r][c] != null)
 					//blocks[r][c].Update(gt);
-				if(enemies[r][c] != null)
-					enemies[r][c].Update(gt);
-				if(items[r][c] != null)
-					items[r][c].Update(gt);
+				//if(enemies[r][c] != null)
+					//enemies[r][c].Update(gt);
+				//if(items[r][c] != null)
+					//items[r][c].Update(gt);
 			}
 		}
 	}
@@ -91,12 +91,35 @@ public class Level1 : ILevel
 				string blockId = blockIds[c].Trim();
 				string enemyId = enemyIds[c].Trim();
 				string itemId = itemIds[c].Trim();
+				if (string.IsNullOrEmpty(itemId)){
+					items[r][c] = null;
+				}else{
+					if(itemId == "00") // a coin is the only thing we place in the world right now, ?markblock takes care of the rest
+					{
+						items[r][c] = ItemManager.CreateItem(itemId, c * tileSize, r * tileSize);
+						CollisionController.Instance.AddItem(items[r][c]);
+					}
+				}
+				
 				if (string.IsNullOrEmpty(blockId)){
 					blocks[r][c] = null;
 					
 				}else{
-					blocks[r][c] =   BlockManager.CreateBlock(blockId, c * tileSize, r * tileSize);// x,y - columnb => x, row => y
-
+					if(blockId == "07") // ?markblock
+					{
+						//have to translate our item type to QuestionMarkBlock.InnerItem enum
+						//Temporary fix
+						QuestionMarkBlock.InnerItem qItem = items[r][c] is Coin ? QuestionMarkBlock.InnerItem.Coin :
+							items[r][c] is Mushroom ? QuestionMarkBlock.InnerItem.FireFlower : // Assuming Mushroom is treated as FireFlower for the inner item
+							items[r][c] is Fireflower ? QuestionMarkBlock.InnerItem.FireFlower :
+							items[r][c] is Star ? QuestionMarkBlock.InnerItem.Star :
+							items[r][c] is OneUp ? QuestionMarkBlock.InnerItem.FireFlower : // OneUp is not implemented yey
+							QuestionMarkBlock.InnerItem.Coin; // Default to Coin if not matched
+						
+						blocks[r][c] =   BlockManager.CreateBlock(blockId, c * tileSize, r * tileSize, qItem);
+					}else{
+						blocks[r][c] =   BlockManager.CreateBlock(blockId, c * tileSize, r * tileSize);// x,y - columnb => x, row => y
+					}
 					CollisionController.Instance.AddBlock(blocks[r][c]);
 					
 				}
@@ -106,13 +129,6 @@ public class Level1 : ILevel
 				}else{
 					enemies[r][c] = EnemyManager.CreateEnemy(enemyId, c * tileSize, r * tileSize);
 					CollisionController.Instance.AddEnemy(enemies[r][c]);
-				}
-
-				if (string.IsNullOrEmpty(itemId)){
-					items[r][c] = null;
-				}else{
-					items[r][c] = ItemManager.CreateItem(itemId, c * tileSize, r * tileSize);
-					CollisionController.Instance.AddItem(items[r][c]);
 				}
 			}
 		}
