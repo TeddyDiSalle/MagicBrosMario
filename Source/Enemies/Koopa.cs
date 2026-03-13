@@ -14,6 +14,7 @@ public class Koopa : IEnemy, ICollidable
     private const int VELOCITY = 100;
     private const int SHELL_VELOCITY = 200;
     private const float RECOVERY_TIME = 3.0f;
+    private const float SCALE = 2f;
     
     private readonly int leftBound;
     private readonly int rightBound;
@@ -33,10 +34,10 @@ public class Koopa : IEnemy, ICollidable
     private bool movingRight = true;
     private float shellTimer = 0f;
 
-
     private Sprite.ISprite CurrentSprite()
-    {
-        return state switch
+    {   
+        foreach (var sprite in sprites) sprite.Visible = false;
+        var current = state switch
         {
             KoopaState.WalkingAlive => movingRight ? sprites[WALKING_RIGHT] : sprites[WALKING_LEFT],
             KoopaState.ShellIdle => sprites[SHELL_IDLE],
@@ -45,6 +46,14 @@ public class Koopa : IEnemy, ICollidable
             KoopaState.Dead => sprites[SHELL_DEATH],
             _ => sprites[WALKING_RIGHT]
         };
+        
+        current.Visible = true;
+        return current;
+    }
+
+    public bool IsShellMoving()
+    {
+        return state == KoopaState.ShellMoving;
     }
 
     public Point Position
@@ -65,26 +74,33 @@ public class Koopa : IEnemy, ICollidable
         }
     }
 
-    public Koopa(SharedTexture EnemyTexture)
+    public Koopa(SharedTexture EnemyTexture, int leftBound, int rightBound)
     {
         int Y = 250;
-        this.leftBound = 300;
-        this.rightBound = 550;
+        this.leftBound = leftBound;
+        this.rightBound = rightBound;
         sprites = [
-            EnemyTexture.NewAnimatedSprite(296, 206, 18, 25, 2, 0.2f), // walkling right
-            EnemyTexture.NewAnimatedSprite(182, 206, 18, 25, 2, 0.2f), // walking left
-            EnemyTexture.NewSprite(144, 216, 16, 14), //  shell idle
-            EnemyTexture.NewSprite(144, 216, 16, 14), // repeate of shell idle
-            EnemyTexture.NewSprite(163, 215, 16, 15), // stomped
-            EnemyTexture.NewSprite(334, 215, 16, 15), // shell dead
-            ];
+            EnemyTexture.NewAnimatedSprite(296, 206, 18, 25, 2, 0.2f),
+            EnemyTexture.NewAnimatedSprite(182, 206, 18, 25, 2, 0.2f),
+            EnemyTexture.NewSprite(144, 216, 16, 14),
+            EnemyTexture.NewSprite(144, 216, 16, 14),
+            EnemyTexture.NewSprite(163, 215, 16, 15),
+            EnemyTexture.NewSprite(334, 215, 16, 15),
+        ];
+        foreach (var sprite in sprites)
+        {
+            sprite.Scale = SCALE;
+            sprite.Visible = false;
+        }
         Position = new Point(leftBound, Y);
         this.state = KoopaState.WalkingAlive;
     }
+
     public bool GetIsAlive()
     {
         return isAlive;
     }
+
     public void Update(GameTime gametime)
     {
         if (state == KoopaState.ShellIdle)
@@ -136,7 +152,15 @@ public class Koopa : IEnemy, ICollidable
     public void Kill()
     {
         if (state == KoopaState.WalkingAlive) { state = KoopaState.ShellIdle; shellTimer = 0f; }
-        else if (state != KoopaState.Dead) { state = KoopaState.Dead; isAlive = false; }
+        else if (state != KoopaState.Dead)
+        {
+            state = KoopaState.Dead;
+            isAlive = false;
+            foreach (var sprite in sprites)
+            {
+                sprite.Drop();
+            }
+        }
     }
 
     public void KickShell(bool kickRight)
@@ -149,57 +173,46 @@ public class Koopa : IEnemy, ICollidable
         }
     }
 
+    private void UnCollide(Rectangle intersect, CollideDirection direction)
+    {
+        if (direction == CollideDirection.Left)
+        {
+            Position = new Point(Position.X + intersect.Width, Position.Y);
+            movingRight = true;
+        }
+        else if (direction == CollideDirection.Right)
+        {
+            Position = new Point(Position.X - intersect.Width, Position.Y);
+            movingRight = false;
+        }
+    }
+
     public void Draw(SpriteBatch _spriteBatch) => CurrentSprite().Draw(_spriteBatch);
 
     public void OnCollideEnemy(IEnemy enemy, CollideDirection direction)
     {
-        
-
+        if (enemy is Bowser || (enemy is Koopa koopa && koopa.IsShellMoving()))
+        {
+            Kill();
+            return;
+        }
         if (direction == CollideDirection.Left || direction == CollideDirection.Right)
         {
             if (state == KoopaState.WalkingAlive)
             {
-                int pushDistance = 15;
-                if (direction == CollideDirection.Left)
-                {
-                    movingRight = true; // Hit on left, go right
-                    Position = new Point(Position.X + pushDistance, Position.Y);
-                }
-                else
-                {
-                    movingRight = false; // Hit on right, go left
-                    Position = new Point(Position.X - pushDistance, Position.Y);
-                }
-                Console.WriteLine("Koopa bumped enemy and changed direction.");
-            }
-            else if (state == KoopaState.ShellMoving)
-            {
-                enemy.Kill();
+                UnCollide(Rectangle.Intersect(CollisionBox, enemy.CollisionBox), direction);
             }
         }
     }
 
     public void OnCollideBlock(IBlock block, CollideDirection direction)
     {
+        Block.Block block1 = (Block.Block)block;
         if (direction == CollideDirection.Left || direction == CollideDirection.Right)
         {
-            // Only turn if walking or a moving shell
             if (state == KoopaState.WalkingAlive || state == KoopaState.ShellMoving)
             {
-                int pushDistance = 15;
-
-                if (direction == CollideDirection.Left)
-                {
-                    movingRight = true;
-                    Position = new Point(Position.X + pushDistance, Position.Y);
-                }
-                else if (direction == CollideDirection.Right)
-                {
-                    movingRight = false;
-                    Position = new Point(Position.X - pushDistance, Position.Y);
-                }
-                
-                
+               UnCollide(Rectangle.Intersect(CollisionBox, block1.CollisionBox), direction);
             }
         }
     }
