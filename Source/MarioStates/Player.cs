@@ -18,7 +18,7 @@ public class Player : ICollidable
     public Vector2 Velocity { get; private set; }
     public int ScaleFactor { get; } = 2;
     private readonly float GroundY = 260; //Temporary for Sprint2
-    private const float MovementSpeed = 5.0f, Gravity = 0.35f, MaxSpeed = 15.0f, fireballCooldown = 0.2f;
+    private const float MovementSpeed = 5.0f, Gravity = 4.35f, MaxSpeed = 15.0f, fireballCooldown = 0.2f;
     public float TimeFrame { get; } = 0.15f;
     public bool IsGrounded { get; set; } = true;
     public bool IsCrouching { get; private set; } = false;
@@ -201,7 +201,9 @@ public class Player : ICollidable
         // }
         //TEMP END
         //NEW
-        Position += Velocity + new Vector2(0, Gravity);
+        if(!IsGrounded)
+             Velocity += new Vector2(0, Gravity * (float)gameTime.ElapsedGameTime.TotalSeconds);
+        Position += 100*Velocity* (float)gameTime.ElapsedGameTime.TotalSeconds;
         //NEW END
         if(StarTimeRemaining >= StarDuration)
         {
@@ -227,6 +229,7 @@ public class Player : ICollidable
         }
         PlayerState.Update(gameTime);
         CollisionBox = new Rectangle((int)Position.X, (int)Position.Y, CollisionBox.Width, CollisionBox.Height);
+        IsGrounded = false;
         Camera.Instance.Follow(Position);
     }
 
