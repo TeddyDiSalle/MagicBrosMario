@@ -121,6 +121,7 @@ public class PiranhaPlant : IEnemy, ICollidable
     {
         this.isAlive = false;
         state = PiranhaState.Dead;
+        aliveSprite.Drop();
     }
 
     public void Draw(SpriteBatch _spriteBatch)

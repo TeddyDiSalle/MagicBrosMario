@@ -137,7 +137,11 @@ public class Bowser : IEnemy, ICollidable
         }
     }
 
-    public void Kill() => this.isAlive = false;
+    public void Kill(){
+        this.isAlive = false;
+        walkingRightSprite.Drop();
+        walkingLeftSprite.Drop();
+    }
 
     private void UnCollide(Rectangle intersect, CollideDirection direction)
     {
@@ -157,8 +161,18 @@ public class Bowser : IEnemy, ICollidable
     {
         if (!isAlive) return;
 
-        if (movingRight) walkingRightSprite.Draw(_spriteBatch);
-        else walkingLeftSprite.Draw(_spriteBatch);
+        if (movingRight)
+        {
+            walkingRightSprite.Visible = true;
+            walkingLeftSprite.Visible = false;
+            walkingRightSprite.Draw(_spriteBatch);
+        }
+        else
+        {
+            walkingRightSprite.Visible = false;
+            walkingLeftSprite.Visible = true;
+            walkingLeftSprite.Draw(_spriteBatch);
+        }
 
         foreach (var fireball in activeFireballs) fireball.Draw(_spriteBatch);
     }
