@@ -11,9 +11,6 @@ using MagicBrosMario.Source.Items;
 namespace MagicBrosMario.Source.Level;
 public class Level1 : ILevel
 {
-	private BlockManager _bm;
-	private EnemyManager _em;
-	private ItemManager _im;
 	private IBlock[][] blocks;
 	private IEnemy[][] enemies;
 	private IItems[][] items;
@@ -54,12 +51,9 @@ public class Level1 : ILevel
 		
 	}
 	public void Initialize(Texture2D bTexture, Texture2D eTexture, Texture2D iTexture)	{
-		_bm = new BlockManager();
-		_bm.Initialize(bTexture);
-		_em = new EnemyManager();
-		_em.Initialize(eTexture);
-		_im = new ItemManager();
-		_im.Initialize(iTexture);
+		BlockManager.Initialize(bTexture);
+		EnemyManager.Initialize(eTexture);
+		ItemManager.Initialize(iTexture);
 		LoadContent();
 	}
 	public void Update(GameTime gt)	{
@@ -101,9 +95,8 @@ public class Level1 : ILevel
 					blocks[r][c] = null;
 					
 				}else{
-					blocks[r][c] = _bm.CreateBlock(blockId, c * tileSize, r * tileSize);// x,y - columnb => x, row => y
+					blocks[r][c] =   BlockManager.CreateBlock(blockId, c * tileSize, r * tileSize);// x,y - columnb => x, row => y
 
-					Camera.Instance.Sprites.Add(blocks[r][c].Sprite);
 					CollisionController.Instance.AddBlock(blocks[r][c]);
 					
 				}
@@ -111,16 +104,14 @@ public class Level1 : ILevel
 				if (string.IsNullOrEmpty(enemyId)){
 					enemies[r][c] = null;
 				}else{
-					enemies[r][c] = _em.CreateEnemy(enemyId, c * tileSize, r * tileSize);
-					Camera.Instance.Sprites.Add(enemies[r][c].Sprite);
+					enemies[r][c] = EnemyManager.CreateEnemy(enemyId, c * tileSize, r * tileSize);
 					CollisionController.Instance.AddEnemy(enemies[r][c]);
 				}
 
 				if (string.IsNullOrEmpty(itemId)){
 					items[r][c] = null;
 				}else{
-					items[r][c] = _im.CreateItem(itemId, c * tileSize, r * tileSize);
-					Camera.Instance.Sprites.Add(items[r][c].Sprite);
+					items[r][c] = ItemManager.CreateItem(itemId, c * tileSize, r * tileSize);
 					CollisionController.Instance.AddItem(items[r][c]);
 				}
 			}
@@ -133,7 +124,7 @@ public class Level1 : ILevel
 		int floorLevel = 10;
 		for (int c = 0; c < levWidth; c++)
 		{
-			blocks[levHeight - floorLevel][c] = _bm.CreateBlock("04", c * tileSize, (levHeight - floorLevel) * tileSize);
+			blocks[levHeight - floorLevel][c] =   BlockManager.CreateBlock("04", c * tileSize, (levHeight - floorLevel) * tileSize);
 			Camera.Instance.Sprites.Add(blocks[levHeight - floorLevel][c].Sprite);
 		}
 		

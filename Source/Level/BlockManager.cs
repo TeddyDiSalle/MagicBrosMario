@@ -8,13 +8,13 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MagicBrosMario.Source.Level;
 
-public class BlockManager
+public static class BlockManager
 {
-    private readonly Dictionary<string, Func<int, int, IBlock>> BlockConstructors = new();
-    private string xmlPath = "Content/LevelData/Blocks.xml";
+    private static readonly Dictionary<string, Func<int, int, IBlock>> BlockConstructors = new();
+    private static string xmlPath = "Content/LevelData/Blocks.xml";
     private static readonly int _scale = 2;
 
-    public void Initialize(Texture2D texture)
+    public static void Initialize(Texture2D texture)
     {
         BlockConstructors.Clear();
         var doc = XDocument.Load(xmlPath);
@@ -32,7 +32,7 @@ public class BlockManager
         BlockFactory.BindTexture(texture);
     }
 
-    public IBlock CreateBlock(string blockId, int x, int y)
+    public static IBlock CreateBlock(string blockId, int x, int y)
     {
         if (BlockConstructors.TryGetValue(blockId, out var constructor))
         {
@@ -42,7 +42,7 @@ public class BlockManager
         throw new KeyNotFoundException($"Block with ID '{blockId}' not found.");
     }
 
-    private Func<int, int, IBlock> GetBlockConstructor(string functionName)
+    private static Func<int, int, IBlock> GetBlockConstructor(string functionName)
     {
         return functionName switch
         {

@@ -23,7 +23,7 @@ public class Goomba : IEnemy, ICollidable
     public Point Position
     {
         get => CurrentSprite().Position;
-        private set 
+        set 
         { 
             // Keep all visual states synced to the same coordinate
             foreach (var sprite in sprites)
@@ -156,4 +156,5 @@ public class Goomba : IEnemy, ICollidable
     }
 
     public void OnCollideItem(IItems item, CollideDirection direction) { }
+
 }
