@@ -33,7 +33,7 @@ public class FireMarioCrouchState : IPlayerState
         CurrentSprite = Sprites[0];
         CurrentSprite.Visible = true;
         CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
-        Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 16 * scaleFactor, 22 * scaleFactor);
+        Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 16 * scaleFactor, 32 * scaleFactor);
     }
     public void Left(GameTime gameTime)
     {

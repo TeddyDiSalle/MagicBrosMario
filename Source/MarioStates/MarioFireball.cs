@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Diagnostics;
 
+
 namespace MagicBrosMario.Source;
 
 public class MarioFireball: Items.IItems, Collision.ICollidable
@@ -20,6 +21,8 @@ public class MarioFireball: Items.IItems, Collision.ICollidable
     private readonly bool movingRight;
     private float lifetimeRemaining;
     private int ScaleFactor;
+    private double contactTimer = 0;
+    private double contantCD = 0.01;
 
     private Vector2 position;
     private Vector2 velocity;
@@ -39,6 +42,7 @@ public class MarioFireball: Items.IItems, Collision.ICollidable
         this.ScaleFactor = ScaleFactor;
         CurrentSprite.Position = new Point((int)position.X, (int)position.Y);
         CollisionBox = new Rectangle((int)position.X, (int)position.Y, 8 * ScaleFactor, 8 *ScaleFactor);
+        CollisionController.Instance.AddItem(this);
         if (movingRight)
         {
             velocity = new Vector2(VELOCITY, 0);
@@ -54,7 +58,7 @@ public class MarioFireball: Items.IItems, Collision.ICollidable
     public void Contact()
     {
         SwitchSprite(1);
-        lifetimeRemaining = 0.15f;
+        lifetimeRemaining = lifetimeRemaining/100;
     }
     public bool IsExpired()
     {
@@ -96,20 +100,49 @@ public class MarioFireball: Items.IItems, Collision.ICollidable
 
     public void OnCollideBlock(IBlock block, CollideDirection direction)
     {
-        Debug.WriteLine(direction);
-        if(direction == CollideDirection.Down) {
-            position = new Vector2(position.X, block.CollisionBox.Top);
-            velocity -= new Vector2(0, velocity.Y + 10);
+        if(contactTimer< contantCD) { return; }
+        contactTimer = 0;
+        UnCollide(Rectangle.Intersect(CollisionBox, block.CollisionBox), direction);
+        if(direction != CollideDirection.Down) {
+            Contact();
         }
-        else { Contact(); }
+     
             
+    }
+    public void UnCollide(Rectangle intersect, CollideDirection direction)
+    {
+        switch (direction)
+        {
+            case CollideDirection.Top:
+                position += new Vector2(0, intersect.Height);
+                velocity = new Vector2(0, 0);
+                break;
+
+            case CollideDirection.Down:
+                float newY = position.Y - intersect.Height;
+                newY = (float)Math.Floor(newY);
+                position = new Vector2(position.X, newY);
+                velocity = new Vector2(velocity.X, -5);
+                break;
+
+            case CollideDirection.Left:
+                position += new Vector2(intersect.Width, 0);
+                velocity = new Vector2(0, 0);
+                break;
+
+            case CollideDirection.Right:
+                position -= new Vector2(intersect.Width, 0);
+                velocity = new Vector2(0, 0);
+                break;
+        }
     }
     public void Update(GameTime gameTime)
     {
+     
         float time = (float)gameTime.ElapsedGameTime.TotalSeconds;
         lifetimeRemaining -= time;
         float distanceMoved = (float)(time * 1 * VELOCITY);
-
+        contactTimer += time;
         velocity += new Vector2(0, Gravity);
         position += velocity;
 
