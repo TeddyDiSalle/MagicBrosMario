@@ -8,4 +8,5 @@
     <Block id="05" function="BlueBricks" />
     <Block id="06" function="BaseBlock" />
     <Block id="07" function="QuestionMarkBlock" />
+    <Block id="08" function="EmptyQuestionMarkBlock"/>
 </Blocks>

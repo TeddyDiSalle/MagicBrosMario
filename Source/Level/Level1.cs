@@ -10,7 +10,7 @@ namespace MagicBrosMario.Source.Level;
 public class Level1 : ILevel
 {
 	private BlockManager _bm;
-	private Block1[][] blocks;
+	private IBlock[][] blocks;
 	private string Level1BlockCVS = "Content/LevelData/Blocks1-1.csv";
 	private static int _blockSize = 16;
 	private int tileSize = _blockSize * 4;
@@ -21,9 +21,9 @@ public class Level1 : ILevel
 		lines = File.ReadLines(Level1BlockCVS).ToArray();
 		levHeight = lines.Length;
 		levWidth = lines[0].Split(',').Length;
-		blocks = new Block1[levHeight][];
+		blocks = new IBlock[levHeight][];
 		for(int i = 0; i < levHeight; i++)	{
-			blocks[i] = new Block1[levWidth];
+			blocks[i] = new IBlock[levWidth];
 		}
 	}
 	public void Initialize(Texture2D texture)	{
