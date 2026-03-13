@@ -53,7 +53,7 @@ public class Player : ICollidable
         explosion.Scale = ScaleFactor;
         movingFireball.Flipped = Flipped;
         explosion.Flipped = Flipped;
-        MarioFireball fireball = new(movingFireball, explosion, Position + new Vector2(16, 0), !Flipped, GroundY);
+        MarioFireball fireball = new(movingFireball, explosion, Position, !Flipped, GroundY);
         fireballs.Add(fireball);
     }
     public void Left(GameTime gameTime)
@@ -232,6 +232,7 @@ public class Player : ICollidable
         PlayerState.Update(gameTime);
         CollisionBox = new Rectangle((int)Position.X, (int)Position.Y, CollisionBox.Width, CollisionBox.Height);
         Camera.Instance.Follow(Position);
+        Debug.WriteLine("---------------");
     }
 
     public void Draw(SpriteBatch spriteBatch)

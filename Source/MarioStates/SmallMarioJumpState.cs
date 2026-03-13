@@ -11,7 +11,7 @@ public class SmallMarioJumpState : IPlayerState
     private readonly float timeFrame;
     private readonly int scaleFactor;
     private readonly Sprite.ISprite[] Sprites;
-    private const int maxJumpCalls = 5;
+    private const int maxJumpCalls = 7;
     private int JumpCalls = 0;
 
     public SmallMarioJumpState(Player Mario, Sprite.SharedTexture texture, float timeFrame, int scaleFactor)

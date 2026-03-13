@@ -30,11 +30,13 @@ public class MarioFireball: Items.IItems, Collision.ICollidable
     {
         this.movingRight = movingRight;
         this.lifetimeRemaining = LIFETIME;
+        explosion.Visible = false;
         Sprites = [fireball, explosion];
         CurrentSprite = Sprites[0];
+        CurrentSprite.Visible = true;
         this.position = position;
         this.GroundY = groundY+32;
-        
+        CurrentSprite.Position = new Point((int)position.X, (int)position.Y);
         if (movingRight)
         {
             velocity = new Vector2(VELOCITY, 0);
@@ -49,12 +51,17 @@ public class MarioFireball: Items.IItems, Collision.ICollidable
 
     public void Contact()
     {
-        CurrentSprite = Sprites[1];
+        SwitchSprite(1);
         lifetimeRemaining = 0.15f;
     }
     public bool IsExpired()
     {
-        return lifetimeRemaining <= 0;
+        if (lifetimeRemaining <= 0)
+        {
+            Sprites[0].Drop();
+            Sprites[1].Drop();
+        }
+        return lifetimeRemaining <=0;
     }
 
 
@@ -82,12 +89,17 @@ public class MarioFireball: Items.IItems, Collision.ICollidable
 
     public void OnCollideEnemy(IEnemy enemy, CollideDirection direction)
     {
-        CurrentSprite = Sprites[1];
+        Contact();
     }
 
     public void OnCollideBlock(IBlock block, CollideDirection direction)
     {
-        throw new NotImplementedException();
+        if(direction == CollideDirection.Down) {
+            position = new Vector2(position.X, GroundY);
+            velocity -= new Vector2(0, velocity.Y);
+        }
+        else { Contact(); }
+            
     }
     public void Update(GameTime gameTime)
     {
@@ -97,14 +109,15 @@ public class MarioFireball: Items.IItems, Collision.ICollidable
 
         float distanceMoved = (float)(time * 100 * VELOCITY);
 
-        if (CurrentSprite.Position.Y >= GroundY)
-        {
-            velocity -= new Vector2(0, distanceMoved);
-        }
-        if (CurrentSprite.Position.Y < GroundY)
-        {
-            velocity += new Vector2(0, Gravity);
-        }
+        //if (CurrentSprite.Position.Y >= GroundY)
+        //{
+        //    velocity -= new Vector2(0, distanceMoved);
+        //}
+        //if (CurrentSprite.Position.Y < GroundY)
+        //{
+        //    velocity += new Vector2(0, Gravity);
+        //}
+        velocity += new Vector2(0, Gravity);
         position += velocity;
         if (CurrentSprite.Position.Y > GroundY)
         {
