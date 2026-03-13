@@ -20,7 +20,7 @@ public class Player : ICollidable
     private readonly float GroundY = 260; //Temporary for Sprint2
     private const float MovementSpeed = 5.0f, Gravity = 0.35f, MaxSpeed = 15.0f, fireballCooldown = 0.2f;
     public float TimeFrame { get; } = 0.15f;
-    public bool IsGrounded { get; set; } = true;
+    public bool IsGrounded { get; set; } = false;
     public bool IsCrouching { get; private set; } = false;
     public bool Flipped { get; set; } = false;
     public bool Invincible { get; set; } = false;
@@ -53,7 +53,7 @@ public class Player : ICollidable
         explosion.Scale = ScaleFactor;
         movingFireball.Flipped = Flipped;
         explosion.Flipped = Flipped;
-        MarioFireball fireball = new(movingFireball, explosion, Position + new Vector2(16, 0), !Flipped, GroundY);
+        MarioFireball fireball = new(movingFireball, explosion, Position, !Flipped, GroundY);
         fireballs.Add(fireball);
     }
     public void Left(GameTime gameTime)
@@ -184,7 +184,8 @@ public class Player : ICollidable
     //Update and Draw
     public void Update(GameTime gameTime)
     {
-        if(DamageTimer < DamageCoolDown)
+        IsGrounded = false;
+        if (DamageTimer < DamageCoolDown)
         {
             DamageTimer += gameTime.ElapsedGameTime.TotalSeconds;
         }
@@ -201,7 +202,10 @@ public class Player : ICollidable
         // }
         //TEMP END
         //NEW
-        Position += Velocity + new Vector2(0, Gravity);
+        if (!IsGrounded) { 
+            Velocity += new Vector2(0, Gravity);
+         }
+        Position += Velocity;
         //NEW END
         if(StarTimeRemaining >= StarDuration)
         {
@@ -228,6 +232,7 @@ public class Player : ICollidable
         PlayerState.Update(gameTime);
         CollisionBox = new Rectangle((int)Position.X, (int)Position.Y, CollisionBox.Width, CollisionBox.Height);
         Camera.Instance.Follow(Position);
+        Debug.WriteLine("---------------");
     }
 
     public void Draw(SpriteBatch spriteBatch)
