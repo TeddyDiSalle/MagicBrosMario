@@ -8,10 +8,17 @@ namespace MagicBrosMario.Source.Block;
 /// </summary>
 /// <param name="sprite">sprite object from shared texture, both sprite and animated sprite works</param>
 /// <typeparam name="TBlock">type of self for self referencing</typeparam>
-public abstract class BlockBase<TBlock>(Sprite.ISprite sprite) : IBlock
-    where TBlock : BlockBase<TBlock> {
-    protected Sprite.ISprite Sprite { get; set; } = sprite;
-    
+public abstract class BlockBase<TBlock>(Sprite.ISprite sprite) : IBlock where TBlock : BlockBase<TBlock> {
+    protected Sprite.ISprite Sprite {
+        get;
+        set {
+            // sync the sprite data
+            value.Position = Position;
+            value.Scale = Scale;
+            field = value;
+        }
+    } = sprite;
+
     public bool Visible {
         get => Sprite.Visible;
         set => Sprite.Visible = value;

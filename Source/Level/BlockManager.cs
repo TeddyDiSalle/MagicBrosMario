@@ -53,8 +53,7 @@ public class BlockManager
             "Bricks" => (x, y) => BlockFactory.Bricks().WithPosition(x, y).WithScale(_scale),
             "BlueBricks" => (x, y) => BlockFactory.BlueBricks().WithPosition(x, y).WithScale(_scale),
             "BaseBlock" => (x, y) => BlockFactory.BaseBlock().WithPosition(x, y).WithScale(_scale),
-            "QuestionMarkBlock" => (x, y) => BlockFactory.QuestionMarkBlock().WithPosition(x, y).WithScale(_scale),
-            "EmptyQuestionMarkBlock" => (x, y) => BlockFactory.EmptyQuestionMarkBlock().WithPosition(x, y).WithScale(_scale),
+            "QuestionMarkBlock" => (x, y) => BlockFactory.QuestionMarkBlock(QuestionMarkBlock.InnerItem.FireFlower).WithPosition(x, y).WithScale(_scale),
             _ => throw new ArgumentException($"Unknown block function: {functionName}")
         };
     }

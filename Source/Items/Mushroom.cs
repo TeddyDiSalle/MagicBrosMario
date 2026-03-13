@@ -5,19 +5,26 @@ using MagicBrosMario.Source.MarioStates;
 using MagicBrosMario.Source.Sprite;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Diagnostics.Metrics;
 
 namespace MagicBrosMario.Source.Items
 {
     internal class Mushroom : IItems
 	{
+        private const float GRAVITY_SPEED = 220f;
+
 
 		private Sprite.Sprite sprite;
 		private Point position;
-		private float speed = 80f;
+		private float xSpeed = 100f;
 		private int direction = 1;
 		private int xLimit;
 		private int yLimit;
 		private bool isCollected = false;
+        private bool hasRisen = false;
+        private bool isOnBlock = false;
+        private float riseAmount = 0f;
+        private float riseTarget = 16f;
 
         public Rectangle CollisionBox
         {
@@ -34,7 +41,16 @@ namespace MagicBrosMario.Source.Items
 			yLimit = screenHeight;
 			xLimit = screenWidth;
 
-			position = new Point(positionX, positionY);
+            if (positionX <= 0)
+            {
+                positionX = 1;
+            }
+            if (positionY <= 0)
+            {
+                positionY = 1;
+            }
+
+            position = new Point(positionX, positionY);
 			sprite.Scale = 3f;
 
 		}
@@ -44,14 +60,31 @@ namespace MagicBrosMario.Source.Items
 			{
                 float time = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                position.X += (int)(direction * speed * time);
-
-                if (position.X <= 0 || position.X + sprite.Size.X >= xLimit)
+                if (!hasRisen)
                 {
-                    direction *= -1;
-                }
+                    float riseStep = GRAVITY_SPEED * time;
 
-                sprite.Position = position;
+                    position.Y -= (int)riseStep;
+                    riseAmount += riseStep;
+
+                    if (riseAmount >= riseTarget)
+                    {
+                        hasRisen = true;
+                    }
+                } 
+                else
+                {
+                    if (isOnBlock)
+                    {
+                        position.Y += (int)(GRAVITY_SPEED * time);
+                    }
+                    position.X += (int)(direction * xSpeed * time);
+                    if (position.X <= 0 || position.X + sprite.Size.X >= xLimit)
+                    {
+                        direction *= -1;
+                    }
+                    sprite.Position = position;
+                }
 
                 sprite.Update(gameTime);
             }
@@ -75,7 +108,13 @@ namespace MagicBrosMario.Source.Items
 
         public void OnCollideEnemy(IEnemy enemy, CollideDirection direction) { }
 
-        public void OnCollideBlock(IBlock block, CollideDirection direction) { }
+        public void OnCollideBlock(IBlock block, CollideDirection direction) { 
+            if (direction == CollideDirection.Down)
+            {
+                // this is when it is on ground
+                isOnBlock = true;
+            }
+        }
 
         public bool getCollected()
         {

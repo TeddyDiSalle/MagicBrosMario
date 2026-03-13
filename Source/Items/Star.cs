@@ -12,13 +12,18 @@ namespace MagicBrosMario.Source.Items
 	{
 		private AnimatedSprite sprite;
 		private Vector2 position;
-		private float speed = 80f;
-		private int xDirection = 1;
+		private float speed = 100f;
+        private float gravitySpeed = 220f;
+        private int xDirection = 1;
 		private int yDirection = -1;
 		private int xLimit;
 		private float yBottom;
 		private float yTop;
         private bool isCollected = false;
+        private bool hasRisen = false;
+        private bool isOnBlock = false;
+        private float riseAmount = 0f;
+        private float riseTarget = 16f;
 
 
         public Rectangle CollisionBox
@@ -36,48 +41,79 @@ namespace MagicBrosMario.Source.Items
 			yTop = positionY - 30f;
 			xLimit = screenWidth;
 
-			position = new Vector2(positionX, positionY);
+            if (positionX <= 0)
+            {
+                positionX = 1;
+            }
+            if (positionY <= 0)
+            {
+                positionY = 1;
+            }
+
+            position = new Vector2(positionX, positionY);
 			sprite.Position = position.ToPoint();
 			sprite.Scale = 3f;
 
 		}
 
-		public void Update(GameTime gameTime)
-		{
-			if (!isCollected)
-			{
-				float time = (float)gameTime.ElapsedGameTime.TotalSeconds;
+        public void Update(GameTime gameTime)
+        {
+            if (!isCollected)
+            { 
+            float time = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-				position.X += (int)(xDirection * speed * time);
-				position.Y += (int)(yDirection * speed * time);
+            if (!hasRisen)
+            {
+                float riseStep = gravitySpeed * time;
 
-				if (position.X <= 0)
-				{
-					position.X = 0;
-					xDirection = 1;
-				}
-				else if (position.X + sprite.Size.X >= xLimit)
-				{
-					position.X = xLimit - sprite.Size.X;
-					xDirection = -1;
-				}
+                position.Y -= (int)riseStep;
+                riseAmount += riseStep;
 
-				if (position.Y <= yTop)
-				{
-					position.Y = yTop;
-					yDirection = 1;
-				}
-				else if (position.Y >= yBottom)
-				{
-					position.Y = yBottom;
-					yDirection = -1;
-				}
+                if (riseAmount >= riseTarget)
+                {
+                    hasRisen = true;
+                }
+            }
+            else
+            {
+                position.X += (int)(xDirection * speed * time);
+                position.Y += (int)(yDirection * speed * time);
+
+                if (position.X <= 0)
+                {
+                    position.X = 0;
+                    xDirection = 1;
+                }
+                else if (position.X + sprite.Size.X >= xLimit)
+                {
+                    position.X = xLimit - sprite.Size.X;
+                    xDirection = -1;
+                }
+
+                if (isOnBlock)
+                    {
+                        if (position.Y <= yTop)
+                        {
+                            position.Y = yTop;
+                            yDirection = 1;
+                        }
+                        else if (position.Y >= yBottom)
+                        {
+                            position.Y = yBottom;
+                            yDirection = -1;
+                        }
+                    }
+                else
+                    {
+                        position.Y += (int)(gravitySpeed * time);
+                    }
 
 
-				sprite.Position = position.ToPoint();
-				sprite.Update(gameTime);
-			}
-		}
+                sprite.Position = position.ToPoint();
+            }
+            sprite.Update(gameTime);
+         }
+    }
 
 		public void Draw(SpriteBatch spriteBatch)
 		{
