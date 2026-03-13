@@ -60,6 +60,7 @@ public class MarioDeadState : IPlayerState
     public void StateChangePrep()
     {
         CurrentSprite.Visible = false;
+        CurrentSprite.Drop();
     }
 
     public void Update(GameTime gameTime)

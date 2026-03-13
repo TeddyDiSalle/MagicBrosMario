@@ -85,6 +85,8 @@ public class MagicBrosMario : Game
             new OneUp(ItemTexture, ScreenWidth, ScreenHeight, 1, 150),
             new Star(ItemTexture, ScreenWidth, ScreenHeight, 50, 150),
             new MovingPlatform_Size1(ItemTexture, ScreenWidth, ScreenHeight, 300, 300, 1),
+            new MovingPlatform_Size2(ItemTexture, ScreenWidth, ScreenHeight, 300, 200, 1),
+            new MovingPlatform_Size3(ItemTexture, ScreenWidth, ScreenHeight, 300, 100, 1),
             new Cloud(ItemTexture, ScreenWidth, ScreenHeight, 0, 200),
         ];
         Enemies = [
@@ -109,18 +111,10 @@ public class MagicBrosMario : Game
         for (int i = 0; i < ItemsList.Count; i++)
         {
             ItemsList[i].Update(gameTime);
-            if (ItemsList[i].getCollected())
-            {
-                ItemsList.RemoveAt(i);
-            }
         }
         for (int i = 0; i < Enemies.Count; i++)
         {
             Enemies[i].Update(gameTime);
-            if (!Enemies[i].GetIsAlive())
-            {
-                Enemies.RemoveAt(i);
-            }
         }
         Camera.Instance.Update(gameTime);
         int cameraX = Math.Max(Camera.Instance.Position.X, (int)Mario.Position.X - Camera.Instance.WindowSize.X / 2);

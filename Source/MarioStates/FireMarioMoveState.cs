@@ -106,6 +106,10 @@ public class FireMarioMoveState : IPlayerState
     public void StateChangePrep()
     {
         CurrentSprite.Visible = false;
+        for(int i = 0; i < Sprites.Length; i++)
+        {
+            Sprites[i].Drop();
+        }
     }
     private void SwitchSprite(int index)
     {

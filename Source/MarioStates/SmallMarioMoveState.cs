@@ -95,6 +95,20 @@ public class SmallMarioMoveState : IPlayerState
     {
         Mario.ChangeState(new SmallMarioIdleState(Mario, texture, timeFrame, scaleFactor));
     }
+    public void StateChangePrep()
+    {
+        CurrentSprite.Visible = false;
+        for (int i = 0; i < Sprites.Length; i++)
+        {
+            Sprites[i].Drop();
+        }
+    }
+    private void SwitchSprite(int index)
+    {
+        CurrentSprite.Visible = false;
+        CurrentSprite = Sprites[index];
+        CurrentSprite.Visible = true;
+    }
     private void IsBraking(GameTime gameTime)
     {
         bool BrakingRight = !Mario.Flipped && Mario.Velocity.X < 0;
@@ -149,16 +163,7 @@ public class SmallMarioMoveState : IPlayerState
             Frame = 1;
         }
     }
-    public void StateChangePrep()
-    {
-        CurrentSprite.Visible = false;
-    }
-    private void SwitchSprite(int index)
-    {
-        CurrentSprite.Visible = false;
-        CurrentSprite = Sprites[index];
-        CurrentSprite.Visible = true;
-    }
+
     public void Update(GameTime gameTime)
     {
         double time = gameTime.ElapsedGameTime.TotalSeconds;
