@@ -189,19 +189,19 @@ public class Player : ICollidable
             DamageTimer += gameTime.ElapsedGameTime.TotalSeconds;
         }
         //TEMP
-        if (Position.Y < GroundY)
-        {
-            Velocity += new Vector2(0, Gravity);
-        }
-        Position += Velocity;
-        if (Position.Y > GroundY)
-        {
-            Position = new Vector2(Position.X, GroundY);
-            Velocity -= new Vector2(0, Velocity.Y);
-        }
+        // if (Position.Y < GroundY)
+        // {
+        //     Velocity += new Vector2(0, Gravity);
+        // }
+        // Position += Velocity;
+        // if (Position.Y > GroundY)
+        // {
+        //     Position = new Vector2(Position.X, GroundY);
+        //     Velocity -= new Vector2(0, Velocity.Y);
+        // }
         //TEMP END
         //NEW
-        //Position += Velocity + new Vector2(0, Gravity);
+        Position += Velocity + new Vector2(0, Gravity);
         //NEW END
         if(StarTimeRemaining >= StarDuration)
         {
