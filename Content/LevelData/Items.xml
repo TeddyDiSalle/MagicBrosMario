@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Items>
+    <Item id="00" function="Coin" /> 
+    <Item id="01" function="Fireflower" />
+    <Item id="02" function="Star" />
+    <Item id="03" function="OneUp" />
+</Items>
