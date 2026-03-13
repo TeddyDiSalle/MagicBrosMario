@@ -41,6 +41,7 @@ public class QuestionMarkBlock : BlockBase<QuestionMarkBlock> {
 
         // spawn coins and change sprite
         Sprite = emptySprite;
+        Sprite.Visible = true;
         empty = true;
 
         switch (innerItem) {
