@@ -126,7 +126,6 @@ public class MagicBrosMario : Game
         int cameraX = Math.Max(Camera.Instance.Position.X, (int)Mario.Position.X);
         Camera.Instance.Position = new Point(cameraX, 0);
         CollisionController.Instance.Update(gameTime);
-        base.Update(gameTime);
     }
 
     protected override void Draw(GameTime gameTime)
