@@ -13,13 +13,13 @@ public static class EnemyFactory {
     }
 
     public static IEnemy CreateGoomba(int x, int y) {
-        var enemy = new Goomba(ENEMY_SHARED_TEXTURE);
+        var enemy = new Goomba(ENEMY_SHARED_TEXTURE, y, x);
         enemy.Position = new Point(x, y);
         return enemy;
     }
 
     public static IEnemy CreateKoopa(int x, int y) {
-        var enemy = new Koopa(ENEMY_SHARED_TEXTURE );
+        var enemy = new Koopa(ENEMY_SHARED_TEXTURE, y,x);
         enemy.Position = new Point(x, y);
         return enemy;
     }
