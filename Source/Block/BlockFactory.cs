@@ -11,18 +11,6 @@ public static class BlockFactory {
         BLOCK_SHARED_TEXTURE.BindTexture(texture);
     }
 
-    public static Block VoidBlock() {
-        var sprite = BLOCK_SHARED_TEXTURE.NewSprite(16, 16, 16, 16);
-        var block = new Block(sprite);
-        return block;
-    }
-
-    public static Block SkyBlock() {
-        var sprite = BLOCK_SHARED_TEXTURE.NewSprite(32, 16, 16, 16);
-        var block = new Block(sprite);
-        return block;
-    }
-
     public static Block GroundBlock() {
         var sprite = BLOCK_SHARED_TEXTURE.NewSprite(16, 32, 16, 16);
         var block = new Block(sprite);

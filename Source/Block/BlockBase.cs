@@ -1,3 +1,6 @@
+using MagicBrosMario.Source.Collision;
+using MagicBrosMario.Source.Items;
+using MagicBrosMario.Source.MarioStates;
 using Microsoft.Xna.Framework;
 
 namespace MagicBrosMario.Source.Block;
@@ -49,4 +52,14 @@ public abstract class BlockBase<TBlock>(Sprite.ISprite sprite) : IBlock where TB
         Scale = scale;
         return (TBlock)this;
     }
+
+    public Rectangle CollisionBox => new(sprite.Position.X, sprite.Position.Y, sprite.Size.X, sprite.Size.Y);
+
+    public abstract void OnCollidePlayer(Player player, CollideDirection direction);
+
+    public abstract void OnCollideItem(IItems item, CollideDirection direction);
+
+    public abstract void OnCollideEnemy(IEnemy enemy, CollideDirection direction);
+
+    public abstract void OnCollideBlock(IBlock block, CollideDirection direction);
 }

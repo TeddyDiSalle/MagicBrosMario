@@ -7,7 +7,7 @@ namespace MagicBrosMario.Source.Block;
 /// <summary>
 /// interface for all block related class
 /// </summary>
-public interface IBlock
+public interface IBlock : ICollidable
 {
     /// <summary>
     /// whether this block is visible
