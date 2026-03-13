@@ -1,13 +1,14 @@
-﻿using MagicBrosMario.Source.Level;
-using MagicBrosMario.Source.Block;
+﻿using MagicBrosMario.Source.Block;
 using MagicBrosMario.Source.Collision;
 using MagicBrosMario.Source.Items;
+using MagicBrosMario.Source.Level;
 using MagicBrosMario.Source.MarioStates;
 using MagicBrosMario.Source.Sprite;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Linq;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 
 namespace MagicBrosMario.Source;
@@ -22,8 +23,6 @@ public class MagicBrosMario : Game
     private SharedTexture MarioTexture;
     private SharedTexture ItemTexture;
     private SharedTexture EnemyTexture;
-    private SharedTexture FireTexture;
-    private Camera cam;
     private float[] MarioStartPos = { 100, 300 };
     private ILevel lvl;
     private SpriteFont _font;
@@ -36,11 +35,11 @@ public class MagicBrosMario : Game
     public MagicBrosMario()
     {
         _graphics = new GraphicsDeviceManager(this);
-        cam = new Camera(_graphics);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
         ScreenWidth = Window.ClientBounds.Width;
         ScreenHeight = Window.ClientBounds.Height;
+        new Camera(_graphics);
     }
 
 
@@ -54,10 +53,6 @@ public class MagicBrosMario : Game
         Texture2D blockTexture = Content.Load<Texture2D>("blocks");
         Texture2D itemSheet = Content.Load<Texture2D>("items");
         Texture2D enemySheet = Content.Load<Texture2D>("characters");
-        Texture2D fireSheet = Content.Load<Texture2D>("enemies");
-
-        FireTexture = new SharedTexture();
-        FireTexture.BindTexture(fireSheet);
 
         EnemyTexture = new SharedTexture();
         EnemyTexture.BindTexture(enemySheet);
@@ -87,18 +82,19 @@ public class MagicBrosMario : Game
             new Fireflower(ItemTexture, ScreenWidth, ScreenHeight, 700, 150),
             new Fireflower_Underground(ItemTexture, ScreenWidth, ScreenHeight, 600, 150),
             new Mushroom(ItemTexture, ScreenWidth, ScreenHeight, 100, 150),
-            new OneUp(ItemTexture, ScreenWidth, ScreenHeight, 0, 150),
-            new Star(ItemTexture, ScreenWidth, ScreenHeight, 50, 150),
-            new MovingPlatform_Size1(ItemTexture, ScreenWidth, ScreenHeight, 300, 300, 1),
-            new Cloud(ItemTexture, ScreenWidth, ScreenHeight, 0, 200),
+            //new OneUp(ItemTexture, ScreenWidth, ScreenHeight, 1, 150),
+            //new Star(ItemTexture, ScreenWidth, ScreenHeight, 50, 150),
+            //new MovingPlatform_Size1(ItemTexture, ScreenWidth, ScreenHeight, 300, 300, 1),
+            //new MovingPlatform_Size2(ItemTexture, ScreenWidth, ScreenHeight, 300, 200, 1),
+            //new MovingPlatform_Size3(ItemTexture, ScreenWidth, ScreenHeight, 300, 100, 1),
+            //new Cloud(ItemTexture, ScreenWidth, ScreenHeight, 0, 200),
         ];
         Enemies = [
-            //new Goomba(EnemyTexture,200, 550),
-            //new Goomba(EnemyTexture,400, 550),
-            //new Koopa(EnemyTexture,300, 550),
-            new RotatingFireBar(FireTexture, 500, 200, 4, 40)
+            new Goomba(EnemyTexture),
+            new Goomba(EnemyTexture),
+            new Koopa(EnemyTexture)
             ];
-        //
+
         CollisionController.Instance.BindPlayer(Mario);
         foreach(IItems item in ItemsList)
             CollisionController.Instance.AddItem(item);
@@ -111,22 +107,22 @@ public class MagicBrosMario : Game
         Controller.Update(gameTime);
         lvl.Update(gameTime);
         Mario.Update(gameTime);
-        
+
         for (int i = 0; i < ItemsList.Count; i++)
         {
             ItemsList[i].Update(gameTime);
-            if (ItemsList[i].getCollected())
-            {
-                ItemsList.RemoveAt(i);
-            }
         }
-        for (int i = 0; i < Enemies.Count; i++) {
+        for (int i = 0; i < Enemies.Count; i++)
+        {
             Enemies[i].Update(gameTime);
             if (!Enemies[i].GetIsAlive())
             {
-                Enemies.RemoveAt(i);
+                CollisionController.Instance.RemoveEnemy(Enemies[i]);
             }
         }
+        Camera.Instance.Update(gameTime);
+        int cameraX = Math.Max(Camera.Instance.Position.X, (int)Mario.Position.X - Camera.Instance.WindowSize.X / 2);
+        Camera.Instance.Position = new Point(cameraX, 0);
         CollisionController.Instance.Update(gameTime);
     }
 
@@ -135,15 +131,7 @@ public class MagicBrosMario : Game
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
         _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
-
-        lvl.Draw(_spriteBatch);
-
-        Mario.Draw(_spriteBatch);
-        foreach (IItems item in ItemsList)
-            item.Draw(_spriteBatch);
-        foreach (IEnemy enemy in Enemies)
-            enemy.Draw(_spriteBatch);
-        _spriteBatch.DrawString(_font, "Super Mario Bros", new Vector2(150, 100), Color.White); //SAMPLE USAGE
+        Camera.Instance.Draw(_spriteBatch);
         _spriteBatch.End();
 
         base.Draw(gameTime);

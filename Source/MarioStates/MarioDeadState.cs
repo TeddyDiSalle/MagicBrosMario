@@ -7,7 +7,7 @@ public class MarioDeadState : IPlayerState
 {
     private readonly Player Mario;
     private readonly Sprite.SharedTexture texture;
-    private readonly Sprite.Sprite sprite;
+    private readonly Sprite.Sprite CurrentSprite;
     private readonly float timeFrame;
     private readonly int scaleFactor;
     public MarioDeadState(Player Mario, Sprite.SharedTexture texture, float timeFrame, int scaleFactor)
@@ -16,8 +16,8 @@ public class MarioDeadState : IPlayerState
         this.texture = texture;
         this.timeFrame = timeFrame;
         this.scaleFactor = scaleFactor;
-        sprite = texture.NewSprite(136, 2, 16, 16);
-        sprite.Scale = scaleFactor;
+        CurrentSprite = texture.NewSprite(136, 2, 16, 16);
+        CurrentSprite.Scale = scaleFactor;
         Mario.KillMario();
         Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 0 * scaleFactor, 0 * scaleFactor);
     }
@@ -57,14 +57,19 @@ public class MarioDeadState : IPlayerState
     {
         //Nothing
     }
-    public void Update(GameTime gameTime, Vector2 Velocity, bool Flipped)
+    public void StateChangePrep()
     {
-        //Nothing
+        CurrentSprite.Visible = false;
+        CurrentSprite.Drop();
     }
-    public void Draw(SpriteBatch spriteBatch, Vector2 Position)
+
+    public void Update(GameTime gameTime)
     {
-        sprite.Position = new Point((int)Position.X, (int)Position.Y);
-        sprite.Draw(spriteBatch);
+        CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
+    }
+    public void Draw(SpriteBatch spriteBatch)
+    {
+        CurrentSprite.Draw(spriteBatch);
     }
 
 }

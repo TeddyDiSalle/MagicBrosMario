@@ -25,11 +25,14 @@ public class FireMarioCrouchState : IPlayerState
             texture.NewSprite(136, 199, 16, 32),
             texture.NewAnimatedSprite(136, 199, 16, 32, 4, timeFrame/4)
         ];
-        CurrentSprite = Sprites[0];
         for (int i = 0; i < Sprites.Length; i++)
         {
             Sprites[i].Scale = scaleFactor;
+            Sprites[i].Visible = false;
         }
+        CurrentSprite = Sprites[0];
+        CurrentSprite.Visible = true;
+        CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
         Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 16 * scaleFactor, 22 * scaleFactor);
     }
     public void Left(GameTime gameTime)
@@ -83,28 +86,41 @@ public class FireMarioCrouchState : IPlayerState
     {
         //Nothing
     }
-    public void Update(GameTime gameTime, Vector2 Velocity, bool Flipped)
+    public void StateChangePrep()
+    {
+        CurrentSprite.Visible = false;
+        for (int i = 0; i < Sprites.Length; i++)
+        {
+            Sprites[i].Drop();
+        }
+    }
+    private void SwitchSprite(int index)
+    {
+        CurrentSprite.Visible = false;
+        CurrentSprite = Sprites[index];
+        CurrentSprite.Visible = true;
+    }
+    public void Update(GameTime gameTime)
     {
         if (Mario.Invincible)
         {
-            CurrentSprite = Sprites[1];
+            SwitchSprite(1);
             Mario.StarTimeRemaining += gameTime.ElapsedGameTime.TotalSeconds;
         }
         else
         {
-            CurrentSprite = Sprites[0];
+            SwitchSprite(0);
         }
         CurrentSprite.Update(gameTime);
-        CurrentSprite.Flipped = Flipped;
-
+        CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
+        CurrentSprite.Flipped = Mario.Flipped;
         if (!Mario.IsCrouching)
         {
             Mario.ChangeState(new FireMarioIdleState(Mario, texture, timeFrame, scaleFactor));
         }
     }
-    public void Draw(SpriteBatch spriteBatch, Vector2 Position)
+    public void Draw(SpriteBatch spriteBatch)
     {
-        CurrentSprite.Position = new Point((int)Position.X, (int)Position.Y);
         CurrentSprite.Draw(spriteBatch);
     }
 

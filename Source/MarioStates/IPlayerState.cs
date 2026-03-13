@@ -13,8 +13,9 @@ public interface IPlayerState
     void TakeDamage();
     void PowerUp(Power power);
     Power GetCurrentPower();
+    void StateChangePrep();
     void Idle();
-    void Update(GameTime gameTime, Vector2 Velocity, bool Flipped);
-    void Draw(SpriteBatch spriteBatch, Vector2 Position);
+    void Update(GameTime gameTime);
+    void Draw(SpriteBatch spriteBatch);
 
 }

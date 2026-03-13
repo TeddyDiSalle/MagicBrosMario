@@ -30,4 +30,6 @@ public interface IBlock
     /// </summary>
     /// <value>scale of this block</value>
     float Scale { get; set; }
+
+    Sprite.ISprite Sprite { get;set; }
 }

@@ -58,10 +58,18 @@ public class Camera {
                destRect.X + destRect.Width > 0 &&
                destRect.Y + destRect.Height > 0;
     }
+    public void Follow(Vector2 targetPosition)
+    {
+        int x = (int)targetPosition.X - WindowSize.X / 2;
+        int y = (int)targetPosition.Y - WindowSize.Y / 2;
+
+        Position = new Point(Math.Max(0, x), Math.Max(0, y));
+    }
 
     public void Update(GameTime gameTime) {
         foreach (var sprite in Sprites) {
             sprite.Update(gameTime);
+            sprite.UpdateDestRect();
         }
     }
 

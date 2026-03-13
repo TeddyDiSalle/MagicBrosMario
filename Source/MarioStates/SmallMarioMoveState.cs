@@ -36,17 +36,20 @@ public class SmallMarioMoveState : IPlayerState
         for (int i = 0; i < Sprites.Length; i++)
         {
             Sprites[i].Scale = scaleFactor;
+            Sprites[i].Visible = false;
         }
         CurrentSprite = Sprites[0];
+        CurrentSprite.Visible = true;
+        CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
         Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 16 * scaleFactor, 16 * scaleFactor);
     }
     public void Left(GameTime gameTime)
     {
-        Mario.MoveLeft(gameTime, 1);
+        Mario.MoveLeft(gameTime);
     }
     public void Right(GameTime gameTime)
     {
-        Mario.MoveRight(gameTime, 1);
+        Mario.MoveRight(gameTime);
     }
     public void Jump(GameTime gameTime)
     {
@@ -92,10 +95,24 @@ public class SmallMarioMoveState : IPlayerState
     {
         Mario.ChangeState(new SmallMarioIdleState(Mario, texture, timeFrame, scaleFactor));
     }
-    private void IsBraking(GameTime gameTime, Vector2 Velocity, bool Flipped)
+    public void StateChangePrep()
     {
-        bool BrakingRight = !Flipped && Velocity.X < 0;
-        bool BrakingLeft = Flipped && Velocity.X > 0;
+        CurrentSprite.Visible = false;
+        for (int i = 0; i < Sprites.Length; i++)
+        {
+            Sprites[i].Drop();
+        }
+    }
+    private void SwitchSprite(int index)
+    {
+        CurrentSprite.Visible = false;
+        CurrentSprite = Sprites[index];
+        CurrentSprite.Visible = true;
+    }
+    private void IsBraking(GameTime gameTime)
+    {
+        bool BrakingRight = !Mario.Flipped && Mario.Velocity.X < 0;
+        bool BrakingLeft = Mario.Flipped && Mario.Velocity.X > 0;
         if (BrakingRight || BrakingLeft)
         {
             Frame = 2;
@@ -111,13 +128,13 @@ public class SmallMarioMoveState : IPlayerState
             }
         }
 
-        if (Braking && (!Flipped && Velocity.X >= 0 || Flipped && Velocity.X <= 0))
+        if (Braking && (!Mario.Flipped && Mario.Velocity.X >= 0 || Mario.Flipped && Mario.Velocity.X <= 0))
         {
             Braking = false;
         }
     }
 
-    private void UpdateMovementAnimations(GameTime gameTime, Vector2 Velocity, bool Flipped)
+    private void UpdateMovementAnimations(GameTime gameTime)
     {
         if (timer <= timeFrame) { return; }
 
@@ -129,7 +146,7 @@ public class SmallMarioMoveState : IPlayerState
         {
             Frame = 1;
         }
-        IsBraking(gameTime, Velocity, Flipped);
+        IsBraking(gameTime);
         timer = 0;
     }
 
@@ -146,21 +163,21 @@ public class SmallMarioMoveState : IPlayerState
             Frame = 1;
         }
     }
-    public void Update(GameTime gameTime, Vector2 Velocity, bool Flipped)
+
+    public void Update(GameTime gameTime)
     {
         double time = gameTime.ElapsedGameTime.TotalSeconds;
         timer += time;
 
-        UpdateMovementAnimations(gameTime, Velocity, Flipped);
+        UpdateMovementAnimations(gameTime);
         UpdateStarAnimations(time);
-
-        CurrentSprite = Sprites[Frame];
+        SwitchSprite(Frame);
+        CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
         CurrentSprite.Update(gameTime);
-        CurrentSprite.Flipped = Flipped;
+        CurrentSprite.Flipped = Mario.Flipped;
     }
-    public void Draw(SpriteBatch spriteBatch, Vector2 Position)
+    public void Draw(SpriteBatch spriteBatch)
     {
-        CurrentSprite.Position = new Point((int)Position.X, (int)Position.Y);
         CurrentSprite.Draw(spriteBatch);
     }
 

@@ -10,8 +10,9 @@ public class SmallMarioJumpState : IPlayerState
     private Sprite.ISprite CurrentSprite;
     private readonly float timeFrame;
     private readonly int scaleFactor;
-
     private readonly Sprite.ISprite[] Sprites;
+    private const int maxJumpCalls = 5;
+    private int JumpCalls = 0;
 
     public SmallMarioJumpState(Player Mario, Sprite.SharedTexture texture, float timeFrame, int scaleFactor)
     {
@@ -21,24 +22,33 @@ public class SmallMarioJumpState : IPlayerState
         this.scaleFactor = scaleFactor;
         Sprites = [texture.NewSprite(69, 2, 16, 16),
             texture.NewAnimatedSprite(69, 2, 16, 16, 4, timeFrame/4)];
-        CurrentSprite = Sprites[0];
         for (int i = 0; i < Sprites.Length; i++)
         {
             Sprites[i].Scale = scaleFactor;
+            Sprites[i].Visible = false;
         }
+        CurrentSprite = Sprites[0];
+        CurrentSprite.Visible = true;
+        CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
         Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 16 * scaleFactor, 16 * scaleFactor);
+        Mario.IsJumping = true;
+        Mario.IsGrounded = false;
     }
     public void Left(GameTime gameTime)
     {
-        Mario.MoveLeft(gameTime, 1);
+        Mario.MoveLeft(gameTime);
     }
     public void Right(GameTime gameTime)
     {
-        Mario.MoveRight(gameTime, 1);
+        Mario.MoveRight(gameTime);
     }
     public void Jump(GameTime gameTime)
     {
-        //Nothing
+        if(Mario.IsJumping && JumpCalls < maxJumpCalls)
+        {
+            Mario.MoveUp(gameTime, 0.3f);
+            JumpCalls++;
+        }
     }
     public void Crouch(GameTime gameTime)
     {
@@ -79,27 +89,46 @@ public class SmallMarioJumpState : IPlayerState
     {
         //Nothing
     }
-    public void Update(GameTime gameTime, Vector2 Velocity, bool Flipped)
+    public void StateChangePrep()
+    {
+        CurrentSprite.Visible = false;
+        for (int i = 0; i < Sprites.Length; i++)
+        {
+            Sprites[i].Drop();
+        }
+    }
+    private void SwitchSprite(int index)
+    {
+        CurrentSprite.Visible = false; 
+        CurrentSprite = Sprites[index];
+        CurrentSprite.Visible = true;
+    }
+    public void Update(GameTime gameTime)
     {
         if (Mario.Invincible)
         {
-            CurrentSprite = Sprites[1];
+            SwitchSprite(1);
             Mario.StarTimeRemaining += gameTime.ElapsedGameTime.TotalSeconds;
         }
         else
         {
-            CurrentSprite = Sprites[0];
+            SwitchSprite(0);
         }
-        CurrentSprite.Flipped = Flipped;
+        CurrentSprite.Flipped = Mario.Flipped;
         CurrentSprite.Update(gameTime);
-        if (Velocity.Y == 0)
+        if(Mario.IsGrounded)
+        {
+            Mario.IsJumping = false;
+        }
+        CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
+        if (Mario.Velocity.Y == 0)
         {
             Mario.ChangeState(new SmallMarioIdleState(Mario, texture, timeFrame, scaleFactor));
         }
     }
-    public void Draw(SpriteBatch spriteBatch, Vector2 Position)
+    public void Draw(SpriteBatch spriteBatch)
     {
-        CurrentSprite.Position = new Point((int)Position.X, (int)Position.Y);
+
         CurrentSprite.Draw(spriteBatch);
     }
 

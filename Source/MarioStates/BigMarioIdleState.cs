@@ -25,21 +25,24 @@ public class BigMarioIdleState : IPlayerState
             texture.NewSprite(2, 59, 16, 32),
             texture.NewAnimatedSprite(2, 59, 16, 32, 4, timeFrame/4)
         ];
-        CurrentSprite = Sprites[0];
         for (int i = 0; i < Sprites.Length; i++)
         {
             Sprites[i].Scale = scaleFactor;
+            Sprites[i].Visible = false;
         }
+        CurrentSprite = Sprites[0];
+        CurrentSprite.Visible = true;
+        CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
         Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 16 * scaleFactor, 32 * scaleFactor);
     }
     public void Left(GameTime gameTime)
     {
-        Mario.MoveLeft(gameTime, 1);
+        Mario.MoveLeft(gameTime);
         Mario.ChangeState(new BigMarioMoveState(Mario, texture, timeFrame, scaleFactor));
     }
     public void Right(GameTime gameTime)
     {
-        Mario.MoveRight(gameTime, 1);
+        Mario.MoveRight(gameTime);
         Mario.ChangeState(new BigMarioMoveState(Mario, texture, timeFrame, scaleFactor));
     }
 
@@ -87,23 +90,37 @@ public class BigMarioIdleState : IPlayerState
     {
         //Nothing
     }
-    public void Update(GameTime gameTime, Vector2 Velocity, bool Flipped)
+    public void StateChangePrep()
+    {
+        CurrentSprite.Visible = false;
+        for (int i = 0; i < Sprites.Length; i++)
+        {
+            Sprites[i].Drop();
+        }
+    }
+    private void SwitchSprite(int index)
+    {
+        CurrentSprite.Visible = false;
+        CurrentSprite = Sprites[index];
+        CurrentSprite.Visible = true;
+    }
+    public void Update(GameTime gameTime)
     {
         if (Mario.Invincible)
         {
-            CurrentSprite = Sprites[1];
+            SwitchSprite(1);
             Mario.StarTimeRemaining += gameTime.ElapsedGameTime.TotalSeconds;
         }
         else
         {
-            CurrentSprite = Sprites[0];
+            SwitchSprite(0);
         }
         CurrentSprite.Update(gameTime);
-        CurrentSprite.Flipped = Flipped;
+        CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
+        CurrentSprite.Flipped = Mario.Flipped;
     }
-    public void Draw(SpriteBatch spriteBatch, Vector2 Position)
-    {
-        CurrentSprite.Position = new Point((int)Position.X, (int)Position.Y);
+    public void Draw(SpriteBatch spriteBatch)
+    { 
         CurrentSprite.Draw(spriteBatch);
     }
 }
