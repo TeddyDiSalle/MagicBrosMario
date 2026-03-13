@@ -5,6 +5,7 @@ using MagicBrosMario.Source.Sprite;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 
 namespace MagicBrosMario.Source.MarioStates;
@@ -15,35 +16,41 @@ public class Player : ICollidable
 
     public Vector2 Position { get; private set; } = new Vector2(400, 240);
     public Vector2 Velocity { get; private set; }
-    private const int scaleFactor = 3;
-    private float GroundY = 260; //Temporary for Sprint2
-    private const float timeFrame = 0.15f, MovementSpeed = 15.0f, Gravity = 0.35f, MaxSpeed = 15.0f, fireballCooldown = 0.2f;
+    public int ScaleFactor { get; } = 3;
+    private readonly float GroundY = 260; //Temporary for Sprint2
+    private const float MovementSpeed = 5.0f, Gravity = 0.35f, MaxSpeed = 15.0f, fireballCooldown = 0.2f;
+    public float TimeFrame { get; } = 0.15f;
+    public bool IsGrounded { get; set; } = true;
     public bool IsCrouching { get; private set; } = false;
     public bool Flipped { get; set; } = false;
     public bool Invincible { get; set; } = false;
     private double StarDuration { get; set; } = 10;
     public double StarTimeRemaining { get; set; } = 0;
-    private List<MarioFireball> fireballs = [];
-    private float fireballTimeRemaining = 0;
-    private int lives = 3;
-    private readonly Sprite.SharedTexture texture;
-
+    private readonly List<MarioFireball> fireballs = [];
+    private float FireballTimer = 0;
+    public int Lives { get; set; } = 3;
+    private const double DamageCoolDown = 2.0;
+    private double DamageTimer = 0;
+    public Sprite.SharedTexture Texture { get; }
+    public bool IsJumping { get; set; } = false;
+    private readonly PlayerCollisionHandler PlayerCollision;
     public Rectangle CollisionBox { get; set; }
 
     public Player(Sprite.SharedTexture texture)
     {
-        this.texture = texture;
+        this.Texture = texture;
         CollisionBox = new Rectangle((int)Position.X, (int)Position.Y, 0, 0);
-        PlayerState = new SmallMarioIdleState(this, texture, timeFrame, scaleFactor);
+        PlayerState = new SmallMarioIdleState(this, texture, TimeFrame, ScaleFactor);
+        PlayerCollision = new PlayerCollisionHandler(this);
     }
     public void CreateFireball()
     {
-        if(fireballTimeRemaining < fireballCooldown) { return; }
-        fireballTimeRemaining = 0;
-        AnimatedSprite movingFireball = new(texture, 207, 168, 8, 8, 4, timeFrame);
-        Sprite.Sprite explosion = new(texture, 239, 168, 8, 8);
-        movingFireball.Scale = scaleFactor;
-        explosion.Scale = scaleFactor;
+        if(FireballTimer < fireballCooldown) { return; }
+        FireballTimer = 0;
+        AnimatedSprite movingFireball = new(Texture, 207, 168, 8, 8, 4, TimeFrame);
+        Sprite.Sprite explosion = new(Texture, 239, 168, 8, 8);
+        movingFireball.Scale = ScaleFactor;
+        explosion.Scale = ScaleFactor;
         movingFireball.Flipped = Flipped;
         explosion.Flipped = Flipped;
         MarioFireball fireball = new(movingFireball, explosion, Position + new Vector2(16, 0), !Flipped, GroundY);
@@ -72,6 +79,10 @@ public class Player : ICollidable
     {
         Position = pos;
     }
+    public void SetVelocity(Vector2 vel)
+    {
+        Velocity = vel;
+    }
     public void ReleaseCrouch()
     {
         IsCrouching = false;
@@ -83,15 +94,19 @@ public class Player : ICollidable
     }
     public void TakeDamage()
     {
-        PlayerState.TakeDamage();
+        if (DamageTimer >= DamageCoolDown)
+        {
+            DamageTimer = 0;
+            PlayerState.TakeDamage();
+        }
     }
     public void KillMario()
     {
-        lives--;
+        Lives--;
     }
     public bool IsAlive()
     {
-        return lives != 0;
+        return Lives != 0;
     }
     public void PowerUp(Power power)
     {
@@ -101,35 +116,32 @@ public class Player : ICollidable
     {
         return PlayerState.GetCurrentPower();
     }
-
     public void ChangeState(IPlayerState state)
     {
+        PlayerState.StateChangePrep();
         PlayerState = state;
     }
-
-    public void MoveLeft(GameTime gameTime, int factor)
+    public void MoveLeft(GameTime gameTime, float factor = 1.0f)
     {
         float distanceMoved = (float)gameTime.ElapsedGameTime.TotalSeconds * MovementSpeed * factor;
-
         Velocity -= new Vector2(distanceMoved, 0);
         if(-Velocity.X > MaxSpeed)
         {
             Velocity = new Vector2(-MaxSpeed, Velocity.Y);
         }
     }
-    public void MoveRight(GameTime gameTime, int factor)
+    public void MoveRight(GameTime gameTime, float factor = 1.0f)
     {
         float distanceMoved = (float)gameTime.ElapsedGameTime.TotalSeconds * MovementSpeed * factor;
-
         Velocity += new Vector2(distanceMoved, 0);
         if (Velocity.X > MaxSpeed)
         {
             Velocity = new Vector2(MaxSpeed, Velocity.Y);
         }
     }
-    public void MoveUp(GameTime gameTime)
+    public void MoveUp(GameTime gameTime, float factor = 1.0f)
     {
-        float distanceMoved = (float)(gameTime.ElapsedGameTime.TotalSeconds * 40 * MovementSpeed);
+        float distanceMoved = (float)(gameTime.ElapsedGameTime.TotalSeconds * 45 * MovementSpeed * factor);
         Velocity -= new Vector2(0, distanceMoved);
     }
     public void Idle()
@@ -152,141 +164,31 @@ public class Player : ICollidable
             }
         }
     }
-
     //Collision Handling Methods
     public void OnCollidePlayer(Player player, Collision.CollideDirection direction)
     {
-        //Nothing
+        PlayerCollision.OnCollidePlayer(player, direction);
     }
     public void OnCollideItem(IItems item, Collision.CollideDirection direction)
     {
-        switch (item)
-        {
-            case Cloud cloud:
-                UnCollide(Rectangle.Intersect(CollisionBox, cloud.CollisionBox), direction);
-                if (direction == CollideDirection.Down)
-                {
-                    Position += new Vector2(cloud.getX(), 0);
-                    Velocity = new Vector2(Velocity.X, 0);
-                }
-                break;
-            case Fireflower:
-            case Fireflower_Underground:
-                PlayerState.PowerUp(Power.FireFlower);
-                break;
-            case MovingPlatform_Size1 plat:
-                UnCollide(Rectangle.Intersect(CollisionBox, plat.CollisionBox), direction);
-                if (direction is CollideDirection.Left or CollideDirection.Right) { return; }
-                Velocity = new Vector2(Velocity.X, 0);
-                Position += new Vector2(0, plat.getY());
-                break;
-            case MovingPlatform_Size2 plat:
-                UnCollide(Rectangle.Intersect(CollisionBox, plat.CollisionBox), direction);
-                if (direction is CollideDirection.Left or CollideDirection.Right) { return; }
-                Velocity = new Vector2(Velocity.X, 0);
-                Position += new Vector2(0, plat.getY());
-                break;
-            case MovingPlatform_Size3 plat:
-                UnCollide(Rectangle.Intersect(CollisionBox, plat.CollisionBox), direction);
-                if (direction is CollideDirection.Left or CollideDirection.Right) { return; }
-                Velocity = new Vector2(Velocity.X, 0);
-                Position += new Vector2(0, plat.getY());
-                break;
-            case Mushroom:
-                PlayerState.PowerUp(Power.Mushroom);
-                break;
-            case OneUp:
-                lives++;
-                break;
-            case Spring_Stretched:
-                //Uncollide
-                Velocity -= new Vector2(Velocity.X, 10);
-                break;
-            case Star:
-                PlayerState.PowerUp(Power.Star);
-                break;
-            default:
-                //Nothing
-                break;
-        }
+        PlayerCollision.OnCollideItem(item, direction);
     }
     public void OnCollideEnemy(IEnemy enemy, Collision.CollideDirection direction)
     {
-        if (Invincible) { return; }
-        switch (enemy)
-        {
-            case Fireball:
-                PlayerState.TakeDamage();
-                break;
-            case Bowser bowser:
-                UnCollide(Rectangle.Intersect(CollisionBox, bowser.CollisionBox), direction);
-                break;
-            case PiranhaPlant:
-                PlayerState.TakeDamage();
-                break;
-            case Goomba goomba:
-                UnCollide(Rectangle.Intersect(CollisionBox, goomba.CollisionBox), direction);
-                if (direction == CollideDirection.Down) 
-                {
-                    Velocity -= new Vector2(0, 10);
-                }
-                else
-                {
-                    PlayerState.TakeDamage();
-                }
-                break;
-            case Koopa koopa:
-                UnCollide(Rectangle.Intersect(CollisionBox, koopa.CollisionBox), direction);
-                if (direction == CollideDirection.Down)
-                {
-                    Velocity -= new Vector2(0, 10);
-                }
-                else
-                {
-                    PlayerState.TakeDamage();
-                }
-                break;
-            case RotatingFireBar:
-                PlayerState.TakeDamage();
-                break;
-            default:
-                //Nothing
-                break;
-
-        }
+        PlayerCollision.OnCollideEnemy(enemy, direction);
     }
     public void OnCollideBlock(IBlock block, Collision.CollideDirection direction)
     {
-        // if (!block.IsSolid) return;
-        //Uncollide
+        PlayerCollision.OnCollideBlock(block, direction);
     }
-
-    public void UnCollide(Rectangle intersect, Collision.CollideDirection direction)
-    {
-        switch (direction)
-        {
-            case Collision.CollideDirection.Top:
-                Position += new Vector2(0, intersect.Height);
-                Velocity = new Vector2(Velocity.X, 0);
-                break;
-            case Collision.CollideDirection.Down:
-                Position -= new Vector2(0, intersect.Height);
-                Velocity = new Vector2(Velocity.X, 0);
-                break;
-            case Collision.CollideDirection.Left:
-                Position += new Vector2(intersect.X, 0);
-                Velocity = new Vector2(0, Velocity.Y);
-                break;
-            case Collision.CollideDirection.Right:
-                Position -= new Vector2(intersect.X, 0);
-                Velocity = new Vector2(0, Velocity.Y);
-                break;
-        }
-    }
-
     //Update and Draw
     public void Update(GameTime gameTime)
     {
+        if(DamageTimer < DamageCoolDown)
+        {
+            DamageTimer += gameTime.ElapsedGameTime.TotalSeconds;
+        }
+        //TEMP
         if (Position.Y < GroundY)
         {
             Velocity += new Vector2(0, Gravity);
@@ -297,6 +199,10 @@ public class Player : ICollidable
             Position = new Vector2(Position.X, GroundY);
             Velocity -= new Vector2(0, Velocity.Y);
         }
+        //TEMP END
+        //NEW
+        //Position += Velocity + new Vector2(0, Gravity);
+        //NEW END
         if(StarTimeRemaining >= StarDuration)
         {
             StarTimeRemaining = 0;
@@ -306,9 +212,9 @@ public class Player : ICollidable
         {
             Idle();
         }
-        if(fireballTimeRemaining < fireballCooldown)
+        if(FireballTimer < fireballCooldown)
         {
-            fireballTimeRemaining += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            FireballTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
         for (int i = 0; i < fireballs.Count; i++)
         {
@@ -319,14 +225,13 @@ public class Player : ICollidable
                 fireballs.RemoveAt(i);
             }
         }
-        
-        PlayerState.Update(gameTime, Velocity, Flipped);
+        PlayerState.Update(gameTime);
         CollisionBox = new Rectangle((int)Position.X, (int)Position.Y, CollisionBox.Width, CollisionBox.Height);
     }
 
     public void Draw(SpriteBatch spriteBatch)
     {
-        PlayerState.Draw(spriteBatch, Position);
+        PlayerState.Draw(spriteBatch);
         foreach(MarioFireball fireball in fireballs)
         {
             fireball.Draw(spriteBatch);
