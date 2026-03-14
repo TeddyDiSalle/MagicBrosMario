@@ -62,6 +62,7 @@ public class MarioFireball: Items.IItems, Collision.ICollidable
     }
     public bool IsExpired()
     {
+        CollisionController.Instance.RemoveItem(this);
         if (lifetimeRemaining <= 0)
         {
             Sprites[0].Drop();
