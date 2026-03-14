@@ -32,7 +32,7 @@ namespace MagicBrosMario.Source.Items
         public Cloud(SharedTexture texture, int screenWidth, int screenHeight, int positionX, int positionY)
 		{
 
-			sprite = new Sprite.Sprite(texture, 123, 38, 48, 8);
+            sprite = texture.NewSprite(123, 38, 48, 8);
 			yLimit = screenHeight;
 			xLimit = screenWidth;
 

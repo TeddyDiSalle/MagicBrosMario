@@ -22,7 +22,7 @@ namespace MagicBrosMario.Source.Items
 
 		public Fireflower(SharedTexture texture, int screenWidth, int screenHeight, int positionX, int positionY)
 		{
-			sprite = new AnimatedSprite(texture, 4, 64, 16, 16, 4, 0.025f);
+			sprite = texture.NewAnimatedSprite(4, 64, 16, 16, 4, 0.025f);
 
 			sprite.Position = new Point(positionX, positionY);
 			sprite.Scale = 3f;
@@ -46,9 +46,8 @@ namespace MagicBrosMario.Source.Items
 
 		public void OnCollidePlayer(Player player, CollideDirection direction)
 		{
-			if (isCollected) return;
-
-			isCollected = true;
+            isCollected = true;
+            return;
 		}
 
 		public void OnCollideItem(IItems item, CollideDirection direction) { }
