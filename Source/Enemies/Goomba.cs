@@ -148,11 +148,12 @@ public class Goomba : IEnemy, ICollidable
 
     public void OnCollideBlock(IBlock block, CollideDirection direction)
     {
-        Block.Block block1 = (Block.Block)block;
-        //Console.WriteLine($"Goomba hit block, direction: {direction}");
         if (direction == CollideDirection.Left || direction == CollideDirection.Right)
         {
-            UnCollide(Rectangle.Intersect(CollisionBox, block1.CollisionBox), direction);
+            if (block.CollisionBox.Y < Position.Y + CollisionBox.Height - 4)
+            {
+                UnCollide(Rectangle.Intersect(CollisionBox, block.CollisionBox), direction);
+            }
         }
     }
 
