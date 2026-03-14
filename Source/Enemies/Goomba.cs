@@ -84,7 +84,7 @@ public class Goomba : IEnemy, ICollidable
         {
             Walking(gametime);
         }
-        CurrentSprite().Update(gametime);
+        //CurrentSprite().Update(gametime);
     }
 
     public void Walking(GameTime gameTime)
@@ -119,6 +119,7 @@ public class Goomba : IEnemy, ICollidable
         {
             sprite.Drop();
         }
+        CollisionController.Instance.RemoveEnemy(this);
     }
 
     private void UnCollide(Rectangle intersect, CollideDirection direction)

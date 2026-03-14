@@ -161,6 +161,7 @@ public class Koopa : IEnemy, ICollidable
                 sprite.Drop();
             }
         }
+        CollisionController.Instance.RemoveEnemy(this);
     }
 
     public void KickShell(bool kickRight)
