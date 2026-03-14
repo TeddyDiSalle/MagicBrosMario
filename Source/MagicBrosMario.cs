@@ -96,10 +96,9 @@ public class MagicBrosMario : Game
             //new Cloud(ItemTexture, ScreenWidth, ScreenHeight, 0, 200),
         ];
         Enemies = [
-            //new Goomba(EnemyTexture, 100, 700),
-            //new Goomba(EnemyTexture, 330, 700),
-            //new Koopa(EnemyTexture, 500, 700),
-            //new Bowser(EnemyTexture, FireTexture, 250, 0, 700)
+            //new Goomba(EnemyTexture, 300, 100),
+            //new Goomba(EnemyTexture, 300, 200),
+            //new Koopa(EnemyTexture, 300, 100)
             ];
 
         CollisionController.Instance.BindPlayer(Mario);
@@ -131,9 +130,11 @@ public class MagicBrosMario : Game
                 CollisionController.Instance.RemoveEnemy(Enemies[i]);
             }
         }
-        Camera.Instance.Update(gameTime);
         int cameraX = Math.Max(Camera.Instance.Position.X, (int)Mario.Position.X - Camera.Instance.WindowSize.X / 2);
         Camera.Instance.Position = new Point(cameraX, 0);
+        Camera.Instance.Update(gameTime);
+        
+        
         CollisionController.Instance.Update(gameTime);
     }
 
