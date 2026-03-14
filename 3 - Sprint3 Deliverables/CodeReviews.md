@@ -1,25 +1,4 @@
 # Sprint3 Code Review
-
-## Readability Review by Vincent Do
-
-[MovingPlatform_Size1.cs](../Source/Items/MovingPlatform_Size1.cs) by Brian Perusek
-
-- Date: 03.13.2026
-- Time: 2 minutes
-
-### Comments
-
->Everything is straightforward and understandable. The platform simply moves up or down and wraps back around. Its only responsibility for collision is updating its collision box.
-
----
-
-## Maintainability Review by Vincent Do
-
-[ItemManager.cs](../Source/Level/ItemManager.cs) by Teddy DiSalle
-
-- Date: 03.13.2026
-- Time: 2 minutes
-
 ### Comments
 
 >Item manager does its job efficiently and is easy to understand. It simply takes in the data from the documents, and for each id it find and pairs the function to the id and stores the pair in a dictionary where it is later used to create the item at the location provided. Overall very maintainable and easy to change or debug. 
@@ -28,27 +7,27 @@
 
 ## Readability Review by Brian Perusek
 
-[Class.cs](../Source/Class.cs) by Author
+[Goomba.cs](../Source/Enemies/Goomba.cs) by Roshan Ramamurthy
 
 - Date: 03.13.2026
 - Time: 2 minutes
 
 ### Comments
 
->
+> Everything is readable and straightforward. The collisions make sense and its easy to understand what each collision does depending on the situation.
 
 ---
 
 ## Maintainability Review by Brian Perusek
 
-[Class.cs](../Source/Class.cs) by Author
+[PlayerCollisionHandler.cs](../Source/MarioStates/PlayerCollisionHandler.cs) by Vincent Do
 
 - Date: 03.13.2026
 - Time: 3 minutes
 
 ### Comments
 
->
+> The Player Collision Handler does its job and is relatively easy to understand. The switch statement is set up very well and looks like it can be easily worked with if any new conditions are needed.
 
 ---
 
