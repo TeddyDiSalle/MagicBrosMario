@@ -104,7 +104,7 @@ public class PlayerCollisionHandler
                 if (direction == CollideDirection.Down)
                 {
                     UnCollide(Rectangle.Intersect(CollisionBox, goomba.CollisionBox), direction);
-                    player.SetVelocity(player.Velocity - new Vector2(0, 10));
+                    player.SetVelocity(player.Velocity - new Vector2(0, 7));
                 }
                 else
                 {
@@ -115,7 +115,7 @@ public class PlayerCollisionHandler
                 if (direction == CollideDirection.Down)
                 {
                     UnCollide(Rectangle.Intersect(CollisionBox, koopa.CollisionBox), direction);
-                    player.SetVelocity(player.Velocity - new Vector2(0, 10));
+                    player.SetVelocity(player.Velocity - new Vector2(0, 7));
                 }
                 else
                 {
@@ -146,7 +146,7 @@ public class PlayerCollisionHandler
     }
     private void UnjumpOnGroundCollide()
     {
-        if (!player.IsJumping) { return; }
+        if (!player.IsJumping || !player.IsAlive) { return; }
         player.IsJumping = false;
         player.IsGrounded = true;
         switch (player.GetCurrentPower())

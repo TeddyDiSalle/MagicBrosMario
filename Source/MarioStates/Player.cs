@@ -28,6 +28,7 @@ public class Player : ICollidable
     private readonly List<MarioFireball> fireballs = [];
     private float FireballTimer = 0;
     public int Lives { get; set; } = 3;
+    public bool IsAlive { get; set; } = true;
     private const double DamageCoolDown = 2.0;
     private double DamageTimer = 0;
     public Sprite.SharedTexture Texture { get; }
@@ -103,10 +104,6 @@ public class Player : ICollidable
     public void KillMario()
     {
         Lives--;
-    }
-    public bool IsAlive()
-    {
-        return Lives != 0;
     }
     public void PowerUp(Power power)
     {
