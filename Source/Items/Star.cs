@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 
 namespace MagicBrosMario.Source.Items
 {
+<<<<<<< HEAD
     public class Star : IItems
     {
         private AnimatedSprite sprite;
@@ -19,6 +20,19 @@ namespace MagicBrosMario.Source.Items
         private int xLimit;
         private float yBottom;
         private float yTop;
+=======
+	public class Star : IItems
+	{
+		private AnimatedSprite sprite;
+		private Vector2 position;
+		private float speed = 100f;
+        private float gravitySpeed = 220f;
+        private int xDirection = 1;
+		private int yDirection = -1;
+		private int xLimit;
+		private float yBottom;
+		private float yTop;
+>>>>>>> main
         private bool isCollected = false;
         private bool hasRisen = false;
         private bool isOnBlock = false;
@@ -49,11 +63,19 @@ namespace MagicBrosMario.Source.Items
             {
                 positionY = 1;
             }
+<<<<<<< HEAD
+=======
+
+            position = new Vector2(positionX, positionY);
+			sprite.Position = position.ToPoint();
+			sprite.Scale = 3f;
+>>>>>>> main
 
             position = new Vector2(positionX, positionY);
             sprite.Position = position.ToPoint();
             sprite.Scale = 3f;
 
+<<<<<<< HEAD
         }
 
         public void Update(GameTime gameTime)
@@ -91,6 +113,43 @@ namespace MagicBrosMario.Source.Items
                     }
 
                     if (!isOnBlock)
+=======
+        public void Update(GameTime gameTime)
+        {
+            if (!isCollected)
+            { 
+            float time = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (!hasRisen)
+            {
+                float riseStep = gravitySpeed * time;
+
+                position.Y -= (int)riseStep;
+                riseAmount += riseStep;
+
+                if (riseAmount >= riseTarget)
+                {
+                    hasRisen = true;
+                }
+            }
+            else
+            {
+                position.X += (int)(xDirection * speed * time);
+                position.Y += (int)(yDirection * speed * time);
+
+                if (position.X <= 0)
+                {
+                    position.X = 0;
+                    xDirection = 1;
+                }
+                else if (position.X + sprite.Size.X >= xLimit)
+                {
+                    position.X = xLimit - sprite.Size.X;
+                    xDirection = -1;
+                }
+
+                if (isOnBlock)
+>>>>>>> main
                     {
                         if (position.Y <= yTop)
                         {
@@ -103,17 +162,29 @@ namespace MagicBrosMario.Source.Items
                             yDirection = -1;
                         }
                     }
+<<<<<<< HEAD
                     else
+=======
+                else
+>>>>>>> main
                     {
                         position.Y += (int)(gravitySpeed * time);
                     }
 
 
+<<<<<<< HEAD
                     sprite.Position = position.ToPoint();
                 }
                 sprite.Update(gameTime);
             }
         }
+=======
+                sprite.Position = position.ToPoint();
+            }
+            sprite.Update(gameTime);
+         }
+    }
+>>>>>>> main
 
         public void Draw(SpriteBatch spriteBatch)
         {

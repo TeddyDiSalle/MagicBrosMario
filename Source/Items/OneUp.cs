@@ -15,7 +15,11 @@ namespace MagicBrosMario.Source.Items
         private Point position;
         private float xSpeed = 100f;
         private float gravitySpeed = 220f;
+<<<<<<< HEAD
         private int xDirection = 1;
+=======
+        private int direction = 1;
+>>>>>>> main
         private int xLimit;
         private int yLimit;
         private bool isCollected = false;
@@ -76,10 +80,17 @@ namespace MagicBrosMario.Source.Items
                     {
                         position.Y += (int)(gravitySpeed * time);
                     }
+<<<<<<< HEAD
                     position.X += (int)(xDirection * xSpeed * time);
                     if (position.X <= 0 || position.X + sprite.Size.X >= xLimit)
                     {
                         xDirection *= -1;
+=======
+                    position.X += (int)(direction * xSpeed * time);
+                    if (position.X <= 0 || position.X + sprite.Size.X >= xLimit)
+                    {
+                        direction *= -1;
+>>>>>>> main
                     }
                     sprite.Position = position;
                     if (!isOnBlock)

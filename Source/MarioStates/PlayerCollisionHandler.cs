@@ -2,6 +2,8 @@
 using MagicBrosMario.Source.Collision;
 using MagicBrosMario.Source.Items;
 using Microsoft.Xna.Framework;
+using System;
+using System.Diagnostics;
 
 
 
@@ -134,9 +136,12 @@ public class PlayerCollisionHandler
     }
     public void OnCollideBlock(IBlock block, Collision.CollideDirection direction)
     {
-        Block.Block b = (Block.Block)block;
-        //If collidable, uncollide
-        //If ground collide call UnjumpOnGroundCollide
+  
+        UnCollide(Rectangle.Intersect(CollisionBox, block.CollisionBox), direction);
+        if(direction == CollideDirection.Down)
+        {
+            UnjumpOnGroundCollide();
+        }
         
     }
     private void UnjumpOnGroundCollide()
@@ -166,20 +171,22 @@ public class PlayerCollisionHandler
             case Collision.CollideDirection.Top:
                 player.SetPositon(player.Position + new Vector2(0, intersect.Height));
                 player.SetVelocity(new Vector2(player.Velocity.X, 0));
-                player.IsJumping = false;
                 break;
             case Collision.CollideDirection.Down:
-                player.SetPositon(player.Position - new Vector2(0, intersect.Height));
+                float newY = player.Position.Y - intersect.Height;
+                newY = (float)Math.Floor(newY);
+                player.SetPositon(new Vector2(player.Position.X, newY));
                 player.SetVelocity(new Vector2(player.Velocity.X, 0));
                 break;
             case Collision.CollideDirection.Left:
-                player.SetPositon(player.Position + new Vector2(intersect.X, 0));
+                player.SetPositon(player.Position + new Vector2(intersect.Width, 0));
                 player.SetVelocity(new Vector2(0, player.Velocity.Y));
                 break;
             case Collision.CollideDirection.Right:
-                player.SetPositon(player.Position - new Vector2(intersect.X, 0));
+                player.SetPositon(player.Position - new Vector2(intersect.Width, 0));
                 player.SetVelocity(new Vector2(0, player.Velocity.Y));
                 break;
         }
+
     }
 }

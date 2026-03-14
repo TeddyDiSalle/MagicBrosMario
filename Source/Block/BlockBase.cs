@@ -1,5 +1,7 @@
+using MagicBrosMario.Source.Collision;
+using MagicBrosMario.Source.Items;
+using MagicBrosMario.Source.MarioStates;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace MagicBrosMario.Source.Block;
 
@@ -9,7 +11,7 @@ namespace MagicBrosMario.Source.Block;
 /// <param name="sprite">sprite object from shared texture, both sprite and animated sprite works</param>
 /// <typeparam name="TBlock">type of self for self referencing</typeparam>
 public abstract class BlockBase<TBlock>(Sprite.ISprite sprite) : IBlock where TBlock : BlockBase<TBlock> {
-    protected Sprite.ISprite Sprite {
+    public Sprite.ISprite Sprite {
         get;
         set {
             // sync the sprite data
@@ -24,14 +26,9 @@ public abstract class BlockBase<TBlock>(Sprite.ISprite sprite) : IBlock where TB
         set => Sprite.Visible = value;
     }
 
-    /// <summary>
-    /// this utility method allow giving block a initial visibility by chaining with constructor
-    /// </summary>
-    /// <param name="visibility">visibility</param>
-    /// <returns></returns>
-    public BlockBase<TBlock> WithVisibility(bool visibility) {
+    public TBlock WithVisibility(bool visibility) {
         Visible = visibility;
-        return this;
+        return (TBlock)this;
     }
 
     public Point Position {
@@ -39,15 +36,9 @@ public abstract class BlockBase<TBlock>(Sprite.ISprite sprite) : IBlock where TB
         set => Sprite.Position = value;
     }
 
-    /// <summary>
-    /// this utility method allow giving block a initial position by chaining with constructor
-    /// </summary>
-    /// <param name="x">x position</param>
-    /// <param name="y">y position</param>
-    /// <returns></returns>
-    public BlockBase<TBlock> WithPosition(int x, int y) {
+    public TBlock WithPosition(int x, int y) {
         Position = new Point(x, y);
-        return this;
+        return (TBlock)this;
     }
 
     public Point Size => Sprite.Size;
@@ -57,13 +48,18 @@ public abstract class BlockBase<TBlock>(Sprite.ISprite sprite) : IBlock where TB
         set => Sprite.Scale = value;
     }
 
-    /// <summary>
-    /// this utility method allow giving block an initial scale by chaining with constructor
-    /// </summary>
-    /// <param name="scale">scale</param>
-    /// <returns></returns>
-    public BlockBase<TBlock> WithScale(float scale) {
+    public TBlock WithScale(float scale) {
         Scale = scale;
-        return this;
+        return (TBlock)this;
     }
+
+    public Rectangle CollisionBox => new(sprite.Position.X, sprite.Position.Y, sprite.Size.X, sprite.Size.Y);
+
+    public abstract void OnCollidePlayer(Player player, CollideDirection direction);
+
+    public abstract void OnCollideItem(IItems item, CollideDirection direction);
+
+    public abstract void OnCollideEnemy(IEnemy enemy, CollideDirection direction);
+
+    public abstract void OnCollideBlock(IBlock block, CollideDirection direction);
 }

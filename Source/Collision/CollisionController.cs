@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Linq;
 using MagicBrosMario.Source.Block;
 using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.MarioStates;
@@ -16,7 +16,7 @@ public class CollisionController {
     private readonly HashSet<ICollidable> enemies = [];
     private readonly HashSet<ICollidable> blocks = [];
 
-    public static CollisionController Instance { get; } = new CollisionController();
+    public static CollisionController Instance { get; } = new();
 
     public void BindPlayer<TCollidablePlayer>(TCollidablePlayer collidablePlayer)
         where TCollidablePlayer : Player, ICollidable {
@@ -70,6 +70,8 @@ public class CollisionController {
                 b.OnCollidePlayer(a as Player, bDir);
             });
         }
+        
+        HashSet<ICollidable> seen = [];
 
         foreach (var block in blocks) {
             CheckCollisions(block, items, (a, b, aDir, bDir) => {
@@ -82,24 +84,30 @@ public class CollisionController {
                 b.OnCollideBlock(a as IBlock, bDir);
             });
         }
+        
+        seen.Clear();
 
         foreach (var item in items) {
-            CheckCollisions(item, items, (a, b, aDir, bDir) => {
+            CheckCollisions(item, items.Except(seen), (a, b, aDir, bDir) => {
                 a.OnCollideItem(b as IItems, aDir);
                 b.OnCollideItem(a as IItems, bDir);
             });
+            seen.Add(item);
 
             CheckCollisions(item, enemies, (a, b, aDir, bDir) => {
                 a.OnCollideEnemy(b as IEnemy, aDir);
                 b.OnCollideItem(a as IItems, bDir);
             });
         }
+        
+        seen.Clear();
 
         foreach (var enemy in enemies) {
-            CheckCollisions(enemy, enemies, (a, b, aDir, bDir) => {
+            CheckCollisions(enemy, enemies.Except(seen), (a, b, aDir, bDir) => {
                 a.OnCollideEnemy(b as IEnemy, aDir);
                 b.OnCollideEnemy(a as IEnemy, bDir);
             });
+            seen.Add(enemy);
         }
     }
 
@@ -119,11 +127,11 @@ public class CollisionController {
     }
 
     private static (CollideDirection, CollideDirection)? IsColliding(ICollidable a, ICollidable b) {
-        var dx = (b.CollisionBox.X + b.CollisionBox.Width / 2) - (a.CollisionBox.X + a.CollisionBox.Width / 2);
-        var dy = (b.CollisionBox.Y + b.CollisionBox.Height / 2) - (a.CollisionBox.Y + a.CollisionBox.Height / 2);
+        var dx = (b.CollisionBox.Width / 2f + b.CollisionBox.X) - (a.CollisionBox.Width / 2f + a.CollisionBox.X);
+        var dy = (b.CollisionBox.Height / 2f + b.CollisionBox.Y) - (a.CollisionBox.Height / 2f + a.CollisionBox.Y);
 
-        var limitX = (a.CollisionBox.Width + b.CollisionBox.Width) / 2;
-        var limitY = (a.CollisionBox.Height + b.CollisionBox.Height) / 2;
+        var limitX = ((float)a.CollisionBox.Width + b.CollisionBox.Width) / 2;
+        var limitY = ((float)a.CollisionBox.Height + b.CollisionBox.Height) / 2;
 
         // return if no overlap
         if (Math.Abs(dx) > limitX) return null;

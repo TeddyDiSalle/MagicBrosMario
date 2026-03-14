@@ -10,6 +10,7 @@ using System.Diagnostics.Metrics;
 namespace MagicBrosMario.Source.Items
 {
     internal class Mushroom : IItems
+<<<<<<< HEAD
     {
         private const float GRAVITY_SPEED = 220f;
 
@@ -21,6 +22,19 @@ namespace MagicBrosMario.Source.Items
         private int xLimit;
         private int yLimit;
         private bool isCollected = false;
+=======
+	{
+        private const float GRAVITY_SPEED = 220f;
+
+
+		private Sprite.Sprite sprite;
+		private Point position;
+		private float xSpeed = 100f;
+		private int direction = 1;
+		private int xLimit;
+		private int yLimit;
+		private bool isCollected = false;
+>>>>>>> main
         private bool hasRisen = false;
         private bool isOnBlock = false;
         private float riseAmount = 0f;
@@ -49,6 +63,12 @@ namespace MagicBrosMario.Source.Items
             {
                 positionY = 1;
             }
+<<<<<<< HEAD
+=======
+
+            position = new Point(positionX, positionY);
+			sprite.Scale = 3f;
+>>>>>>> main
 
             position = new Point(positionX, positionY);
             sprite.Scale = 3f;
@@ -71,6 +91,7 @@ namespace MagicBrosMario.Source.Items
                     {
                         hasRisen = true;
                     }
+<<<<<<< HEAD
                 }
                 else
                 {
@@ -82,6 +103,19 @@ namespace MagicBrosMario.Source.Items
                     if (position.X <= 0 || position.X + sprite.Size.X >= xLimit)
                     {
                         xDirection *= -1;
+=======
+                } 
+                else
+                {
+                    if (isOnBlock)
+                    {
+                        position.Y += (int)(GRAVITY_SPEED * time);
+                    }
+                    position.X += (int)(direction * xSpeed * time);
+                    if (position.X <= 0 || position.X + sprite.Size.X >= xLimit)
+                    {
+                        direction *= -1;
+>>>>>>> main
                     }
                     sprite.Position = position;
                 }
@@ -108,17 +142,24 @@ namespace MagicBrosMario.Source.Items
 
         public void OnCollideEnemy(IEnemy enemy, CollideDirection direction) { }
 
+<<<<<<< HEAD
         public void OnCollideBlock(IBlock block, CollideDirection direction)
         {
+=======
+        public void OnCollideBlock(IBlock block, CollideDirection direction) { 
+>>>>>>> main
             if (direction == CollideDirection.Down)
             {
                 // this is when it is on ground
                 isOnBlock = true;
             }
+<<<<<<< HEAD
             if (direction == CollideDirection.Left || direction ==  CollideDirection.Right)
             {
                 xDirection = (xDirection * - 1);
             }
+=======
+>>>>>>> main
         }
 
         public bool getCollected()

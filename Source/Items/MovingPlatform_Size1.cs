@@ -16,7 +16,7 @@ namespace MagicBrosMario.Source.Items
 		private Sprite.Sprite sprite;
 		private Point position;
 		private float speed = 80f;
-		private int direction = -1;
+		private int direction;
 		private int xLimit;
 		private int yLimit;
 		private int yDifference = 0;
@@ -35,6 +35,7 @@ namespace MagicBrosMario.Source.Items
 			sprite = texture.NewSprite(0, 38, 24, 8);
 			yLimit = screenHeight;
 			xLimit = screenWidth;
+			direction = d;
 
 			position = new Point(positionX, positionY);
 			sprite.Scale = 3f;
