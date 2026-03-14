@@ -221,5 +221,11 @@ public class Koopa : IEnemy, ICollidable
         }
     }
 
-    public void OnCollideItem(IItems item, CollideDirection direction) { }
+    public void OnCollideItem(IItems item, CollideDirection direction)
+    {
+        if (item is MarioFireball)
+        {
+            Kill();
+        }
+    }
 }
