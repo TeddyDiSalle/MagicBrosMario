@@ -103,6 +103,7 @@ namespace MagicBrosMario.Source.Items
             
             isCollected = true;
             CollisionController.Instance.RemoveItem(this);
+            sprite.Drop();
             if (isCollected) return;
         }
 

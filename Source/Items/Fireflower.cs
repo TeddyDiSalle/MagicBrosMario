@@ -47,8 +47,10 @@ namespace MagicBrosMario.Source.Items
 		public void OnCollidePlayer(Player player, CollideDirection direction)
 		{
             isCollected = true;
-            return;
-		}
+            CollisionController.Instance.RemoveItem(this);
+            sprite.Drop();
+            if (isCollected) return;
+        }
 
 		public void OnCollideItem(IItems item, CollideDirection direction) { }
 
