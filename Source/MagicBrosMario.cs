@@ -112,12 +112,16 @@ public class MagicBrosMario : Game
     protected override void Update(GameTime gameTime)
     {
         Controller.Update(gameTime);
-        lvl.Update(gameTime);
+        //lvl.Update(gameTime);
         Mario.Update(gameTime);
 
         for (int i = 0; i < ItemsList.Count; i++)
         {
             ItemsList[i].Update(gameTime);
+            if (ItemsList[i].getCollected())
+            {
+                CollisionController.Instance.RemoveItem(ItemsList[i]);
+            }
         }
         for (int i = 0; i < Enemies.Count; i++)
         {
