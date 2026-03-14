@@ -15,8 +15,10 @@ public class Koopa : IEnemy, ICollidable
     private const int SHELL_VELOCITY = 200;
     private const float RECOVERY_TIME = 3.0f;
     private const float SCALE = 2f;
+    private const float GRAVITY = 0.35f;
     
     private Sprite.ISprite[] sprites;
+    private float velocityY = 0f;
 
     private const int WALKING_RIGHT = 0;
     private const int WALKING_LEFT = 1;
@@ -113,6 +115,9 @@ public class Koopa : IEnemy, ICollidable
         if (state == KoopaState.WalkingAlive) Move(gametime, VELOCITY);
         else if (state == KoopaState.ShellMoving) Move(gametime, SHELL_VELOCITY);
 
+        velocityY += GRAVITY;
+        Position = new Point(Position.X, Position.Y + (int)velocityY);
+
         foreach (var sprite in sprites) sprite.Visible = false;
         sprites[CurrentSpriteIndex()].Visible = true;
     }
@@ -193,7 +198,13 @@ public class Koopa : IEnemy, ICollidable
 
     public void OnCollideBlock(IBlock block, CollideDirection direction)
     {
-        if (direction == CollideDirection.Left || direction == CollideDirection.Right)
+        if (direction == CollideDirection.Down)
+        {
+            Rectangle intersect = Rectangle.Intersect(CollisionBox, block.CollisionBox);
+            Position = new Point(Position.X, Position.Y - intersect.Height);
+            velocityY = 0;
+        }
+        else if (direction == CollideDirection.Left || direction == CollideDirection.Right)
         {
             if (block.CollisionBox.Y < Position.Y + CollisionBox.Height - 4)
             {

@@ -1,4 +1,4 @@
-# Sprint2 Code Review
+# Sprint3 Code Review
 
 ## Readability Review by Vincent Do
 
@@ -15,7 +15,7 @@
 
 ## Maintainability Review by Vincent Do
 
-[ItemManager.cs](..\Source\Level\ItemManager.cs) by Teddy DiSalle
+[ItemManager.cs](../Source/Level/ItemManager.cs) by Teddy DiSalle
 
 - Date: 03.13.2026
 - Time: 2 minutes
@@ -54,7 +54,7 @@
 
 ## Readability Review by Teddy DiSalle
 
-[Class.cs](../Source/Movement/MovementController.cs) by Chuang-Yun
+[MovementController.cs](../Source/Movement/MovementController.cs) by Chuang-Yun
 
 - Date: 03.13.2026
 - Time: 4 minutes
@@ -67,7 +67,7 @@
 
 ## Maintainability Review by Teddy DiSalle
 
-[Class.cs](../Source/MarioStates/Player.cs) by Vincent
+[Player.cs](../Source/MarioStates/Player.cs) by Vincent
 
 - Date: 03.13.2026
 - Time: 3 minutes
