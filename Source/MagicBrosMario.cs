@@ -22,6 +22,7 @@ public class MagicBrosMario : Game
     private SharedTexture MarioTexture;
     private SharedTexture ItemTexture;
     private SharedTexture EnemyTexture;
+    private SharedTexture FireTexture;
     private float[] MarioStartPos = { 100, 300 };
     private ILevel lvl;
     private SpriteFont _font;
@@ -52,6 +53,8 @@ public class MagicBrosMario : Game
         Texture2D blockTexture = Content.Load<Texture2D>("blocks");
         Texture2D itemSheet = Content.Load<Texture2D>("items");
         Texture2D enemySheet = Content.Load<Texture2D>("characters");
+        Texture2D fireSheet = Content.Load<Texture2D>("enemies");
+
 
         EnemyTexture = new SharedTexture();
         EnemyTexture.BindTexture(enemySheet);
@@ -62,12 +65,15 @@ public class MagicBrosMario : Game
         MarioTexture = new SharedTexture();
         MarioTexture.BindTexture(marioSheet);
 
+        FireTexture = new SharedTexture();
+        FireTexture.BindTexture(fireSheet);
+
         lvl = new Level1();
         lvl.Initialize(blockTexture, enemySheet, itemSheet);
 
         Mario = new Player(MarioTexture);
         Mario.SetPositon(new Vector2(MarioStartPos[0], MarioStartPos[1]));
-        //Mario.PowerUp(Power.FireFlower);
+        Mario.PowerUp(Power.FireFlower);
 
         MarioGameController.Sprint2Controller data = new MarioGameController.Sprint2Controller
         {
@@ -105,12 +111,16 @@ public class MagicBrosMario : Game
     protected override void Update(GameTime gameTime)
     {
         Controller.Update(gameTime);
-        lvl.Update(gameTime);
+        //lvl.Update(gameTime);
         Mario.Update(gameTime);
 
         for (int i = 0; i < ItemsList.Count; i++)
         {
             ItemsList[i].Update(gameTime);
+            if (ItemsList[i].getCollected())
+            {
+                CollisionController.Instance.RemoveItem(ItemsList[i]);
+            }
         }
         for (int i = 0; i < Enemies.Count; i++)
         {

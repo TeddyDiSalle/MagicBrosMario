@@ -136,7 +136,7 @@ public class PlayerCollisionHandler
     }
     public void OnCollideBlock(IBlock block, Collision.CollideDirection direction)
     {
-        Debug.WriteLine(direction);
+  
         UnCollide(Rectangle.Intersect(CollisionBox, block.CollisionBox), direction);
         if(direction == CollideDirection.Down)
         {

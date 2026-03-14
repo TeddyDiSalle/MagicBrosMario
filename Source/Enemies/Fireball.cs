@@ -24,14 +24,13 @@ public class Fireball : ICollidable
         get { return movingRight ? spriteRight.Position : spriteLeft.Position; }
     }
 
-    // ICollidable implementation
     public Rectangle CollisionBox
     {
         get
         {
             if (!isActive)
             {
-                return Rectangle.Empty; // No collision when expired
+                return Rectangle.Empty;
             }
 
             var currentSprite = movingRight ? spriteRight : spriteLeft;
@@ -55,6 +54,8 @@ public class Fireball : ICollidable
         this.spriteLeft = fireballSpriteLeft;
         this.movingRight = movingRight;
         this.lifetimeRemaining = LIFETIME;
+        spriteRight.Visible = true;
+        spriteLeft.Visible = true;
         
         spriteRight.Position = new Point(startX, startY);
         spriteLeft.Position = new Point(startX, startY);
@@ -109,20 +110,20 @@ public class Fireball : ICollidable
 
         if (movingRight)
         {
+            spriteRight.Visible = true;
+            spriteLeft.Visible = false;
             spriteRight.Draw(_spriteBatch);
         }
         else
         {
+            spriteRight.Visible = false;
+            spriteLeft.Visible = true;
             spriteLeft.Draw(_spriteBatch);
         }
     }
 
-    // ICollidable methods
     public void OnCollidePlayer(Player player, CollideDirection direction)
     {
-        // Fireball damages player (if it's from Bowser)
-        // Player takes damage
-        // Fireball disappears after hitting player
         isActive = false;
     }
 
@@ -133,18 +134,12 @@ public class Fireball : ICollidable
 
     public void OnCollideEnemy(IEnemy enemy, CollideDirection direction)
     {
-        // Fireball defeats enemy
-        if (enemy != null)
-        {
-            enemy.Kill();
-        }
-        // Fireball disappears after hitting enemy
+        // Fireball just deactivates itself — the enemy handles its own death
         isActive = false;
     }
 
     public void OnCollideBlock(IBlock block, CollideDirection direction)
     {
-        // Fireball hits a block and disappears
         isActive = false;
     }
 }
