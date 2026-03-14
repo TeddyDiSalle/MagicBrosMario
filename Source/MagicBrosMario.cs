@@ -1,5 +1,4 @@
-﻿using MagicBrosMario.Source.Block;
-using MagicBrosMario.Source.Collision;
+﻿using MagicBrosMario.Source.Collision;
 using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.Level;
 using MagicBrosMario.Source.MarioStates;
@@ -70,10 +69,11 @@ public class MagicBrosMario : Game
         FireTexture.BindTexture(fireSheet);
 
         lvl = new Level1();
-        lvl.Initialize(blockTexture);
+        lvl.Initialize(blockTexture, enemySheet, itemSheet);
 
         Mario = new Player(MarioTexture);
         Mario.SetPositon(new Vector2(MarioStartPos[0], MarioStartPos[1]));
+        //Mario.PowerUp(Power.FireFlower);
 
         MarioGameController.Sprint2Controller data = new MarioGameController.Sprint2Controller
         {

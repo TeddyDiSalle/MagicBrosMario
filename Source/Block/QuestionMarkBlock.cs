@@ -4,11 +4,10 @@ using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.MarioStates;
 using MagicBrosMario.Source.Sprite;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace MagicBrosMario.Source.Block;
 
-public class QuestionMarkBlock : BlockBase<QuestionMarkBlock>, ICollidable {
+public class QuestionMarkBlock : BlockBase<QuestionMarkBlock> {
     public enum InnerItem {
         Coin,
         Star,
@@ -30,7 +29,7 @@ public class QuestionMarkBlock : BlockBase<QuestionMarkBlock>, ICollidable {
         emptySprite.Visible = false;
     }
 
-    public void OnCollidePlayer(Player player, CollideDirection direction) {
+    public override void OnCollidePlayer(Player player, CollideDirection direction) {
         if (empty) return;
 
         // if mario does not collide from below
@@ -42,6 +41,7 @@ public class QuestionMarkBlock : BlockBase<QuestionMarkBlock>, ICollidable {
 
         // spawn coins and change sprite
         Sprite = emptySprite;
+        Sprite.Visible = true;
         empty = true;
 
         switch (innerItem) {
@@ -59,15 +59,15 @@ public class QuestionMarkBlock : BlockBase<QuestionMarkBlock>, ICollidable {
         }
     }
 
-    public void OnCollideItem(IItems item, CollideDirection direction) {
+    public override void OnCollideItem(IItems item, CollideDirection direction) {
         // never gonna pick coin up, never gonna put coin down
     }
 
-    public void OnCollideEnemy(IEnemy enemy, CollideDirection direction) {
+    public override void OnCollideEnemy(IEnemy enemy, CollideDirection direction) {
         // enemies don't have wallet, they can't pick up coins
     }
 
-    public void OnCollideBlock(IBlock block, CollideDirection direction) {
+    public override void OnCollideBlock(IBlock block, CollideDirection direction) {
         // this shouldn't even be called
     }
 }

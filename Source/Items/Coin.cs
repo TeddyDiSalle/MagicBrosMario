@@ -21,7 +21,7 @@ namespace MagicBrosMario.Source.Items
             }
         }
 
-        public Coin(SharedTexture texture, int screenWidth, int screenHeight, int positionX, int positionY)
+        public Coin(SharedTexture texture,  int positionX, int positionY)
 		{
 			sprite = new AnimatedSprite(texture, 128, 95, 8, 16, 4, 0.05f);
 

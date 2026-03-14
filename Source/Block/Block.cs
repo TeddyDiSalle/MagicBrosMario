@@ -36,23 +36,22 @@ namespace MagicBrosMario.Source.Block;
 /// </example>
 /// </summary>
 /// <param name="sprite">sprite object from shared texture, both sprite and animated sprite works</param>
-public class Block(Sprite.ISprite sprite) : BlockBase<Block>(sprite), ICollidable
-{
+public class Block(Sprite.ISprite sprite) : BlockBase<Block>(sprite) {
     public Rectangle CollisionBox => new(sprite.Position.X, sprite.Position.Y, sprite.Size.X, sprite.Size.Y);
-    
-    public void OnCollidePlayer(Player player, CollideDirection direction) {
+
+    public override void OnCollidePlayer(Player player, CollideDirection direction) {
         // hello player
     }
 
-    public void OnCollideItem(IItems item, CollideDirection direction) {
+    public override void OnCollideItem(IItems item, CollideDirection direction) {
         // hello item
     }
 
-    public void OnCollideEnemy(IEnemy enemy, CollideDirection direction) {
+    public override void OnCollideEnemy(IEnemy enemy, CollideDirection direction) {
         // hello enemy
     }
 
-    public void OnCollideBlock(IBlock block, CollideDirection direction) {
+    public override void OnCollideBlock(IBlock block, CollideDirection direction) {
         // this shouldn't even be called
     }
 }
