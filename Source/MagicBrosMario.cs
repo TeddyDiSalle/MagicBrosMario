@@ -90,9 +90,9 @@ public class MagicBrosMario : Game
             //new Cloud(ItemTexture, ScreenWidth, ScreenHeight, 0, 200),
         ];
         Enemies = [
-            new Goomba(EnemyTexture),
-            new Goomba(EnemyTexture),
-            new Koopa(EnemyTexture)
+            new Goomba(EnemyTexture, 300, 100),
+            new Goomba(EnemyTexture, 300, 200),
+            new Koopa(EnemyTexture, 300, 100)
             ];
 
         CollisionController.Instance.BindPlayer(Mario);
