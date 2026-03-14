@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Blocks>
-    <Block id="00" function="VoidBlock" />
+    <Block id="00" function="VoidBlock" /> 
     <Block id="01" function="SkyBlock" />
     <Block id="02" function="GroundBlock" />
     <Block id="03" function="BlueGroundBlock" />

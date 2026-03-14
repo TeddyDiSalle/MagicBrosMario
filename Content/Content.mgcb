@@ -68,17 +68,26 @@
 /processorParam:TextureFormat=Color
 /build:items.png
 
-#begin LevelData/Blocks1-1.csv
-/copy:LevelData/Blocks1-1.csv
-
 #begin LevelData/Blocks.xml
 /copy:LevelData/Blocks.xml
 
-#begin LevelData/Enemies1-1.csv
-/copy:LevelData/Enemies1-1.csv
-
 #begin LevelData/Enemies.xml
 /copy:LevelData/Enemies.xml
+
+#begin LevelData/Items.xml
+/copy:LevelData/Items.xml
+
+#begin LevelData/1-1/Blocks1-1.csv
+/copy:LevelData/1-1/Blocks1-1.csv
+
+#begin LevelData/1-1/Enemies1-1.csv
+/copy:LevelData/1-1/Enemies1-1.csv
+
+#begin LevelData/1-1/Items1-1.csv
+/copy:LevelData/1-1/Items1-1.csv
+
+#begin LevelData/1-1/1-1LazyDebugBackground.png
+/copy:LevelData/1-1/1-1LazyDebugBackground.png
 
 #begin LevelData/SMB_NES_World_1-1_Map.png
 /importer:TextureImporter

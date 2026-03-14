@@ -59,7 +59,7 @@ public class Koopa : IEnemy, ICollidable
     public Point Position
     {
         get => CurrentSprite().Position;
-        private set 
+        set 
         { 
             foreach (var sprite in sprites) sprite.Position = value;
         }
