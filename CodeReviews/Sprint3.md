@@ -54,27 +54,27 @@
 
 ## Readability Review by Teddy DiSalle
 
-[Class.cs](../Source/Class.cs) by Author
+[Class.cs](../Source/Movement/MovementController.cs) by Chuang-Yun
 
 - Date: 03.13.2026
 - Time: 4 minutes
 
 ### Comments
 
->
+> Nice readable class. Very easy to use by other classes and understand how to implement into our own classes. nice bro.
 
 ---
 
 ## Maintainability Review by Teddy DiSalle
 
-[Class.cs](../Source/Class.cs) by Author
+[Class.cs](../Source/MarioStates/Player.cs) by Vincent
 
 - Date: 03.13.2026
 - Time: 3 minutes
 
 ### Comments
 
->
+> Lot of nice and small functions and the class delegates to other classes very well. But there are too many variables and too many functions. I think if it had more helper classes and reduce its size would increase its maintainability. Then bug fixing would be easier as well when the bugs are placed in different classes and comparmentalized.
 
 ---
 
