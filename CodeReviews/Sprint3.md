@@ -2,27 +2,27 @@
 
 ## Readability Review by Vincent Do
 
-[Class.cs](../Source/Class.cs) by Author
+[MovingPlatform_Size1.cs](../Source/Items/MovingPlatform_Size1.cs) by Brian Perusek
 
 - Date: 03.13.2026
-- Time: 3 minutes
+- Time: 2 minutes
 
 ### Comments
 
->
+>Everything is straightforward and understandable. The platform simply moves up or down and wraps back around. Its only responsibility for collision is updating its collision box.
 
 ---
 
 ## Maintainability Review by Vincent Do
 
-[Class.cs](../Source/Class.cs) by Author
+[ItemManager.cs](..\Source\Level\ItemManager.cs) by Teddy DiSalle
 
 - Date: 03.13.2026
-- Time: 4 minutes
+- Time: 2 minutes
 
 ### Comments
 
->
+>Item manager does its job efficiently and is easy to understand. It simply takes in the data from the documents, and for each id it find and pairs the function to the id and stores the pair in a dictionary where it is later used to create the item at the location provided. Overall very maintainable and easy to change or debug. 
 
 ---
 
