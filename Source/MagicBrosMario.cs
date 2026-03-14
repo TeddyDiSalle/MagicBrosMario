@@ -70,6 +70,7 @@ public class MagicBrosMario : Game
 
         lvl = new Level1();
         lvl.Initialize(blockTexture, enemySheet, itemSheet);
+        Enemies = lvl.GetEnemies();
 
         Mario = new Player(MarioTexture);
         Mario.SetPositon(new Vector2(MarioStartPos[0], MarioStartPos[1]));
@@ -95,11 +96,11 @@ public class MagicBrosMario : Game
             //new MovingPlatform_Size3(ItemTexture, ScreenWidth, ScreenHeight, 300, 100, 1),
             //new Cloud(ItemTexture, ScreenWidth, ScreenHeight, 0, 200),
         ];
-        Enemies = [
+        //Enemies = [
             //new Goomba(EnemyTexture, 300, 100),
             //new Goomba(EnemyTexture, 300, 200),
             //new Koopa(EnemyTexture, 300, 100)
-            ];
+            //];
 
         CollisionController.Instance.BindPlayer(Mario);
         foreach(IItems item in ItemsList)

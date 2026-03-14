@@ -36,7 +36,7 @@ public class Goomba : IEnemy, ICollidable
 
     public Point Position
     {
-        get => CurrentSprite().Position;
+        get => sprites[0].Position;
         set 
         { 
             foreach (var sprite in sprites)
@@ -50,7 +50,7 @@ public class Goomba : IEnemy, ICollidable
     {
         get
         {
-            var sprite = CurrentSprite();
+            var sprite = isAlive ? sprites[0] : sprites[1];
             return new Rectangle(Position.X, Position.Y, sprite.Size.X, sprite.Size.Y);
         }
     }
@@ -85,6 +85,8 @@ public class Goomba : IEnemy, ICollidable
             Walking(gametime);
         }
         //CurrentSprite().Update(gametime);
+        sprites[0].Visible = isAlive;
+        sprites[1].Visible = !isAlive;
     }
 
     public void Walking(GameTime gameTime)
@@ -95,20 +97,10 @@ public class Goomba : IEnemy, ICollidable
         if (movingRight)
         {
             Position = new Point(Position.X + dx, Position.Y);
-            if (Position.X >= rightBound)
-            {
-                Position = new Point(rightBound, Position.Y);
-                movingRight = false;
-            }
         }
         else
         {
             Position = new Point(Position.X - dx, Position.Y);
-            if (Position.X <= leftBound)
-            {
-                Position = new Point(leftBound, Position.Y);
-                movingRight = true;
-            }
         }
     }
 
@@ -138,7 +130,7 @@ public class Goomba : IEnemy, ICollidable
 
     public void Draw(SpriteBatch _spriteBatch)
     {
-        CurrentSprite().Draw(_spriteBatch);
+        //CurrentSprite().Draw(_spriteBatch);
     }
 
     public void OnCollideEnemy(IEnemy enemy, CollideDirection direction)
@@ -157,6 +149,7 @@ public class Goomba : IEnemy, ICollidable
     public void OnCollideBlock(IBlock block, CollideDirection direction)
     {
         Block.Block block1 = (Block.Block)block;
+        //Console.WriteLine($"Goomba hit block, direction: {direction}");
         if (direction == CollideDirection.Left || direction == CollideDirection.Right)
         {
             UnCollide(Rectangle.Intersect(CollisionBox, block1.CollisionBox), direction);
