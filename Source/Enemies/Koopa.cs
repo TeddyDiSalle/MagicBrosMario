@@ -15,10 +15,10 @@ public class Koopa : IEnemy, ICollidable
     private const int SHELL_VELOCITY = 200;
     private const float RECOVERY_TIME = 3.0f;
     private const float SCALE = 2f;
+    private const float GRAVITY = 0.35f;
     
-    private readonly int leftBound;
-    private readonly int rightBound;
     private Sprite.ISprite[] sprites;
+    private float velocityY = 0f;
 
     private const int WALKING_RIGHT = 0;
     private const int WALKING_LEFT = 1;
@@ -34,21 +34,17 @@ public class Koopa : IEnemy, ICollidable
     private bool movingRight = true;
     private float shellTimer = 0f;
 
-    private Sprite.ISprite CurrentSprite()
-    {   
-        foreach (var sprite in sprites) sprite.Visible = false;
-        var current = state switch
+    private int CurrentSpriteIndex()
+    {
+        return state switch
         {
-            KoopaState.WalkingAlive => movingRight ? sprites[WALKING_RIGHT] : sprites[WALKING_LEFT],
-            KoopaState.ShellIdle => sprites[SHELL_IDLE],
-            KoopaState.ShellMoving => sprites[SHELL_MOVING],
-            KoopaState.Stomped => sprites[STOMPED],
-            KoopaState.Dead => sprites[SHELL_DEATH],
-            _ => sprites[WALKING_RIGHT]
+            KoopaState.WalkingAlive => movingRight ? WALKING_RIGHT : WALKING_LEFT,
+            KoopaState.ShellIdle => SHELL_IDLE,
+            KoopaState.ShellMoving => SHELL_MOVING,
+            KoopaState.Stomped => STOMPED,
+            KoopaState.Dead => SHELL_DEATH,
+            _ => WALKING_RIGHT
         };
-        
-        current.Visible = true;
-        return current;
     }
 
     public bool IsShellMoving()
@@ -58,7 +54,7 @@ public class Koopa : IEnemy, ICollidable
 
     public Point Position
     {
-        get => CurrentSprite().Position;
+        get => sprites[0].Position;
         set 
         { 
             foreach (var sprite in sprites) sprite.Position = value;
@@ -69,16 +65,14 @@ public class Koopa : IEnemy, ICollidable
     {
         get
         {
-            var sprite = CurrentSprite();
+            var sprite = sprites[CurrentSpriteIndex()];
             return new Rectangle(Position.X, Position.Y, sprite.Size.X, sprite.Size.Y);
         }
     }
 
-    public Koopa(SharedTexture EnemyTexture, int leftBound, int rightBound)
+    public Koopa(SharedTexture EnemyTexture, int y, int leftBound)
     {
-        int Y = 250;
-        this.leftBound = leftBound;
-        this.rightBound = rightBound;
+        int Y = y;
         sprites = [
             EnemyTexture.NewAnimatedSprite(296, 206, 18, 25, 2, 0.2f),
             EnemyTexture.NewAnimatedSprite(182, 206, 18, 25, 2, 0.2f),
@@ -121,7 +115,11 @@ public class Koopa : IEnemy, ICollidable
         if (state == KoopaState.WalkingAlive) Move(gametime, VELOCITY);
         else if (state == KoopaState.ShellMoving) Move(gametime, SHELL_VELOCITY);
 
-        CurrentSprite().Update(gametime);
+        velocityY += GRAVITY;
+        Position = new Point(Position.X, Position.Y + (int)velocityY);
+
+        foreach (var sprite in sprites) sprite.Visible = false;
+        sprites[CurrentSpriteIndex()].Visible = true;
     }
 
     private void Move(GameTime gameTime, int velocity)
@@ -132,20 +130,10 @@ public class Koopa : IEnemy, ICollidable
         if (movingRight)
         {
             Position = new Point(Position.X + dx, Position.Y);
-            if (Position.X >= rightBound)
-            {
-                Position = new Point(rightBound, Position.Y);
-                movingRight = false;
-            }
         }
         else
         {
             Position = new Point(Position.X - dx, Position.Y);
-            if (Position.X <= leftBound)
-            {
-                Position = new Point(leftBound, Position.Y);
-                movingRight = true;
-            }
         }
     }
 
@@ -160,6 +148,7 @@ public class Koopa : IEnemy, ICollidable
             {
                 sprite.Drop();
             }
+            CollisionController.Instance.RemoveEnemy(this);
         }
     }
 
@@ -187,7 +176,9 @@ public class Koopa : IEnemy, ICollidable
         }
     }
 
-    public void Draw(SpriteBatch _spriteBatch) => CurrentSprite().Draw(_spriteBatch);
+    public void Draw(SpriteBatch _spriteBatch)
+    {
+    }
 
     public void OnCollideEnemy(IEnemy enemy, CollideDirection direction)
     {
@@ -207,12 +198,20 @@ public class Koopa : IEnemy, ICollidable
 
     public void OnCollideBlock(IBlock block, CollideDirection direction)
     {
-        Block.Block block1 = (Block.Block)block;
-        if (direction == CollideDirection.Left || direction == CollideDirection.Right)
+        if (direction == CollideDirection.Down)
         {
-            if (state == KoopaState.WalkingAlive || state == KoopaState.ShellMoving)
+            Rectangle intersect = Rectangle.Intersect(CollisionBox, block.CollisionBox);
+            Position = new Point(Position.X, Position.Y - intersect.Height);
+            velocityY = 0;
+        }
+        else if (direction == CollideDirection.Left || direction == CollideDirection.Right)
+        {
+            if (block.CollisionBox.Y < Position.Y + CollisionBox.Height - 4)
             {
-               UnCollide(Rectangle.Intersect(CollisionBox, block1.CollisionBox), direction);
+                if (state == KoopaState.WalkingAlive || state == KoopaState.ShellMoving)
+                {
+                    UnCollide(Rectangle.Intersect(CollisionBox, block.CollisionBox), direction);
+                }
             }
         }
     }
@@ -233,5 +232,11 @@ public class Koopa : IEnemy, ICollidable
         }
     }
 
-    public void OnCollideItem(IItems item, CollideDirection direction) { }
+    public void OnCollideItem(IItems item, CollideDirection direction)
+    {
+        if (item is MarioFireball)
+        {
+            Kill();
+        }
+    }
 }

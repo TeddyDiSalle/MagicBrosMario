@@ -2,6 +2,8 @@
 using MagicBrosMario.Source.Collision;
 using MagicBrosMario.Source.Items;
 using Microsoft.Xna.Framework;
+using System;
+using System.Diagnostics;
 
 
 
@@ -102,7 +104,7 @@ public class PlayerCollisionHandler
                 if (direction == CollideDirection.Down)
                 {
                     UnCollide(Rectangle.Intersect(CollisionBox, goomba.CollisionBox), direction);
-                    player.SetVelocity(player.Velocity - new Vector2(0, 10));
+                    player.SetVelocity(player.Velocity - new Vector2(0, 7));
                 }
                 else
                 {
@@ -113,7 +115,7 @@ public class PlayerCollisionHandler
                 if (direction == CollideDirection.Down)
                 {
                     UnCollide(Rectangle.Intersect(CollisionBox, koopa.CollisionBox), direction);
-                    player.SetVelocity(player.Velocity - new Vector2(0, 10));
+                    player.SetVelocity(player.Velocity - new Vector2(0, 7));
                 }
                 else
                 {
@@ -134,8 +136,8 @@ public class PlayerCollisionHandler
     }
     public void OnCollideBlock(IBlock block, Collision.CollideDirection direction)
     {
+  
         UnCollide(Rectangle.Intersect(CollisionBox, block.CollisionBox), direction);
-        //If ground collide call UnjumpOnGroundCollide
         if(direction == CollideDirection.Down)
         {
             UnjumpOnGroundCollide();
@@ -144,7 +146,7 @@ public class PlayerCollisionHandler
     }
     private void UnjumpOnGroundCollide()
     {
-        if (!player.IsJumping) { return; }
+        if (!player.IsJumping || !player.IsAlive) { return; }
         player.IsJumping = false;
         player.IsGrounded = true;
         switch (player.GetCurrentPower())
@@ -169,20 +171,22 @@ public class PlayerCollisionHandler
             case Collision.CollideDirection.Top:
                 player.SetPositon(player.Position + new Vector2(0, intersect.Height));
                 player.SetVelocity(new Vector2(player.Velocity.X, 0));
-                player.IsJumping = false;
                 break;
             case Collision.CollideDirection.Down:
-                player.SetPositon(player.Position - new Vector2(0, intersect.Height));
+                float newY = player.Position.Y - intersect.Height;
+                newY = (float)Math.Floor(newY);
+                player.SetPositon(new Vector2(player.Position.X, newY));
                 player.SetVelocity(new Vector2(player.Velocity.X, 0));
                 break;
             case Collision.CollideDirection.Left:
-                player.SetPositon(player.Position + new Vector2(intersect.X, 0));
+                player.SetPositon(player.Position + new Vector2(intersect.Width, 0));
                 player.SetVelocity(new Vector2(0, player.Velocity.Y));
                 break;
             case Collision.CollideDirection.Right:
-                player.SetPositon(player.Position - new Vector2(intersect.X, 0));
+                player.SetPositon(player.Position - new Vector2(intersect.Width, 0));
                 player.SetVelocity(new Vector2(0, player.Velocity.Y));
                 break;
         }
+
     }
 }

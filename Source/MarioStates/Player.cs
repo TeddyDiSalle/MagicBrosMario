@@ -17,10 +17,9 @@ public class Player : ICollidable
     public Vector2 Position { get; private set; } = new Vector2(400, 240);
     public Vector2 Velocity { get; private set; }
     public int ScaleFactor { get; } = 2;
-    private readonly float GroundY = 260; //Temporary for Sprint2
-    private const float MovementSpeed = 5.0f, Gravity = 4.35f, MaxSpeed = 15.0f, fireballCooldown = 0.2f;
+    private const float MovementSpeed = 5.0f, Gravity = 0.35f, MaxSpeed = 15.0f, fireballCooldown = 0.2f;
     public float TimeFrame { get; } = 0.15f;
-    public bool IsGrounded { get; set; } = true;
+    public bool IsGrounded { get; set; } = false;
     public bool IsCrouching { get; private set; } = false;
     public bool Flipped { get; set; } = false;
     public bool Invincible { get; set; } = false;
@@ -29,6 +28,7 @@ public class Player : ICollidable
     private readonly List<MarioFireball> fireballs = [];
     private float FireballTimer = 0;
     public int Lives { get; set; } = 3;
+    public bool IsAlive { get; set; } = true;
     private const double DamageCoolDown = 2.0;
     private double DamageTimer = 0;
     public Sprite.SharedTexture Texture { get; }
@@ -47,13 +47,14 @@ public class Player : ICollidable
     {
         if(FireballTimer < fireballCooldown) { return; }
         FireballTimer = 0;
-        AnimatedSprite movingFireball = new(Texture, 207, 168, 8, 8, 4, TimeFrame);
-        Sprite.Sprite explosion = new(Texture, 239, 168, 8, 8);
+        AnimatedSprite movingFireball = Texture.NewAnimatedSprite(207, 168, 8, 8, 4, TimeFrame);
+        Sprite.Sprite explosion = Texture.NewSprite(239, 168, 8, 8);
+
         movingFireball.Scale = ScaleFactor;
         explosion.Scale = ScaleFactor;
         movingFireball.Flipped = Flipped;
         explosion.Flipped = Flipped;
-        MarioFireball fireball = new(movingFireball, explosion, Position + new Vector2(16, 0), !Flipped, GroundY);
+        MarioFireball fireball = new(movingFireball, explosion, Position, !Flipped, ScaleFactor);
         fireballs.Add(fireball);
     }
     public void Left(GameTime gameTime)
@@ -103,10 +104,6 @@ public class Player : ICollidable
     public void KillMario()
     {
         Lives--;
-    }
-    public bool IsAlive()
-    {
-        return Lives != 0;
     }
     public void PowerUp(Power power)
     {
@@ -184,26 +181,16 @@ public class Player : ICollidable
     //Update and Draw
     public void Update(GameTime gameTime)
     {
-        if(DamageTimer < DamageCoolDown)
+        IsGrounded = false;
+        if (DamageTimer < DamageCoolDown)
         {
             DamageTimer += gameTime.ElapsedGameTime.TotalSeconds;
         }
-        //TEMP
-        // if (Position.Y < GroundY)
-        // {
-        //     Velocity += new Vector2(0, Gravity);
-        // }
-        // Position += Velocity;
-        // if (Position.Y > GroundY)
-        // {
-        //     Position = new Vector2(Position.X, GroundY);
-        //     Velocity -= new Vector2(0, Velocity.Y);
-        // }
-        //TEMP END
         //NEW
-        if(!IsGrounded)
-             Velocity += new Vector2(0, Gravity * (float)gameTime.ElapsedGameTime.TotalSeconds);
-        Position += 100*Velocity* (float)gameTime.ElapsedGameTime.TotalSeconds;
+        if (!IsGrounded) { 
+            Velocity += new Vector2(0, Gravity);
+         }
+        Position += Velocity;
         //NEW END
         if(StarTimeRemaining >= StarDuration)
         {
@@ -218,7 +205,7 @@ public class Player : ICollidable
         {
             FireballTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
-        for (int i = 0; i < fireballs.Count; i++)
+        for (int i = fireballs.Count - 1; i >= 0; i--)
         {
             fireballs[i].Update(gameTime);
 
@@ -231,6 +218,7 @@ public class Player : ICollidable
         CollisionBox = new Rectangle((int)Position.X, (int)Position.Y, CollisionBox.Width, CollisionBox.Height);
         IsGrounded = false;
         Camera.Instance.Follow(Position);
+
     }
 
     public void Draw(SpriteBatch spriteBatch)

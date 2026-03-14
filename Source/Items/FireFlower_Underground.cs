@@ -24,12 +24,13 @@ namespace MagicBrosMario.Source.Items
 
         public Fireflower_Underground(SharedTexture texture, int screenWidth, int screenHeight, int positionX, int positionY)
 		{
-			sprite = new AnimatedSprite(texture, 124, 64, 16, 16, 4, 0.025f);
+            sprite = texture.NewAnimatedSprite(124, 64, 16, 16, 4, 0.025f);
 
 			sprite.Position = new Point(positionX, positionY);
 			sprite.Scale = 3f;
+            CollisionController.Instance.AddItem(this);
 
-		}
+        }
 
 		public void Update(GameTime gameTime)
 		{
@@ -50,7 +51,8 @@ namespace MagicBrosMario.Source.Items
         public void OnCollidePlayer(Player player, CollideDirection direction)
         {
             if (isCollected) return;
-
+            CollisionController.Instance.RemoveItem(this);
+            sprite.Drop();
             isCollected = true;
         }
 

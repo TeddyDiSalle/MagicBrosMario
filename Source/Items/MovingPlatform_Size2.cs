@@ -16,7 +16,7 @@ namespace MagicBrosMario.Source.Items
 		private Sprite.Sprite sprite;
 		private Point position;
 		private float speed = 80f;
-		private int direction = -1;
+		private int direction;
 		private int xLimit;
 		private int yLimit;
 		private int yDifference = 0;

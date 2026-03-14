@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MagicBrosMario.Source.Collision;
 using MagicBrosMario.Source.Items;
 namespace MagicBrosMario.Source.Level;
+using System.Collections.Generic;
 public class Level1 : ILevel
 {
 	private IBlock[][] blocks;
@@ -68,6 +69,20 @@ public class Level1 : ILevel
 					//items[r][c].Update(gt);
 			}
 		}
+	}
+
+	public List<IEnemy> GetEnemies()
+	{
+		var list = new List<IEnemy>();
+		for (int r = 0; r < levHeight; r++)
+		{
+			for (int c = 0; c < levWidth; c++)
+			{
+				if (enemies[r][c] != null)
+					list.Add(enemies[r][c]);
+			}
+		}
+		return list;
 	}
 
 	public void Draw(SpriteBatch sb) {

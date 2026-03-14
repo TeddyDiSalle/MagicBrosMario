@@ -13,30 +13,15 @@ public class Goomba : IEnemy, ICollidable
 {
     private const int VELOCITY = 100;
     private const float SCALE = 2f;
-    private readonly int leftBound;
-    private readonly int rightBound;
+    private const float GRAVITY = 0.35f;
     private Sprite.ISprite[] sprites;
     private bool movingRight = true;
     private bool isAlive = true;
-
-    private Sprite.ISprite CurrentSprite(){
-        if (isAlive)
-        {
-            sprites[1].Visible = false;
-            sprites[0].Visible = true;
-            return sprites[0];
-        }
-        else
-        {
-            sprites[1].Visible = true;
-            sprites[0].Visible = false;
-            return sprites[1];
-        }
-    }
+    private float velocityY = 0f;
 
     public Point Position
     {
-        get => CurrentSprite().Position;
+        get => sprites[0].Position;
         set 
         { 
             foreach (var sprite in sprites)
@@ -50,17 +35,13 @@ public class Goomba : IEnemy, ICollidable
     {
         get
         {
-            var sprite = CurrentSprite();
+            var sprite = isAlive ? sprites[0] : sprites[1];
             return new Rectangle(Position.X, Position.Y, sprite.Size.X, sprite.Size.Y);
         }
     }
 
-    public Goomba(SharedTexture EnemyTexture, int leftBound, int rightBound)
+    public Goomba(SharedTexture EnemyTexture, int y, int leftBound)
     {
-        int Y = 250;
-        this.leftBound = leftBound;
-        this.rightBound = rightBound;
-        
         sprites = [EnemyTexture.NewAnimatedSprite(295, 187, 18, 18, 2, 0.2f), 
                     EnemyTexture.NewSprite(276, 187, 18, 18)];
         foreach (var sprite in sprites)
@@ -68,9 +49,8 @@ public class Goomba : IEnemy, ICollidable
             sprite.Scale = SCALE;
             sprite.Visible = false;
         }
-        Position = new Point(leftBound, Y);
+        Position = new Point(leftBound, y);
         this.isAlive = true;
-
     }
 
     public bool GetIsAlive()
@@ -84,7 +64,12 @@ public class Goomba : IEnemy, ICollidable
         {
             Walking(gametime);
         }
-        CurrentSprite().Update(gametime);
+
+        velocityY += GRAVITY;
+        Position = new Point(Position.X, Position.Y + (int)velocityY);
+
+        sprites[0].Visible = isAlive;
+        sprites[1].Visible = !isAlive;
     }
 
     public void Walking(GameTime gameTime)
@@ -95,20 +80,10 @@ public class Goomba : IEnemy, ICollidable
         if (movingRight)
         {
             Position = new Point(Position.X + dx, Position.Y);
-            if (Position.X >= rightBound)
-            {
-                Position = new Point(rightBound, Position.Y);
-                movingRight = false;
-            }
         }
         else
         {
             Position = new Point(Position.X - dx, Position.Y);
-            if (Position.X <= leftBound)
-            {
-                Position = new Point(leftBound, Position.Y);
-                movingRight = true;
-            }
         }
     }
 
@@ -119,6 +94,7 @@ public class Goomba : IEnemy, ICollidable
         {
             sprite.Drop();
         }
+        CollisionController.Instance.RemoveEnemy(this);
     }
 
     private void UnCollide(Rectangle intersect, CollideDirection direction)
@@ -137,7 +113,6 @@ public class Goomba : IEnemy, ICollidable
 
     public void Draw(SpriteBatch _spriteBatch)
     {
-        CurrentSprite().Draw(_spriteBatch);
     }
 
     public void OnCollideEnemy(IEnemy enemy, CollideDirection direction)
@@ -155,10 +130,18 @@ public class Goomba : IEnemy, ICollidable
 
     public void OnCollideBlock(IBlock block, CollideDirection direction)
     {
-        Block.Block block1 = (Block.Block)block;
-        if (direction == CollideDirection.Left || direction == CollideDirection.Right)
+        if (direction == CollideDirection.Down)
         {
-            UnCollide(Rectangle.Intersect(CollisionBox, block1.CollisionBox), direction);
+            Rectangle intersect = Rectangle.Intersect(CollisionBox, block.CollisionBox);
+            Position = new Point(Position.X, Position.Y - intersect.Height);
+            velocityY = 0;
+        }
+        else if (direction == CollideDirection.Left || direction == CollideDirection.Right)
+        {
+            if (block.CollisionBox.Y < Position.Y + CollisionBox.Height - 4)
+            {
+                UnCollide(Rectangle.Intersect(CollisionBox, block.CollisionBox), direction);
+            }
         }
     }
 
@@ -169,6 +152,11 @@ public class Goomba : IEnemy, ICollidable
         }
     }
 
-    public void OnCollideItem(IItems item, CollideDirection direction) { }
-
+    public void OnCollideItem(IItems item, CollideDirection direction)
+    {
+        if (item is MarioFireball)
+        {
+            Kill();
+        }
+    }
 }
