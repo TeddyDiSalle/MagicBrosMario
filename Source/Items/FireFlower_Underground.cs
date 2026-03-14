@@ -28,8 +28,9 @@ namespace MagicBrosMario.Source.Items
 
 			sprite.Position = new Point(positionX, positionY);
 			sprite.Scale = 3f;
+            CollisionController.Instance.AddItem(this);
 
-		}
+        }
 
 		public void Update(GameTime gameTime)
 		{
@@ -50,7 +51,8 @@ namespace MagicBrosMario.Source.Items
         public void OnCollidePlayer(Player player, CollideDirection direction)
         {
             if (isCollected) return;
-
+            CollisionController.Instance.RemoveItem(this);
+            sprite.Drop();
             isCollected = true;
         }
 
