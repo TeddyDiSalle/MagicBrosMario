@@ -58,48 +58,13 @@ namespace MagicBrosMario.Source.Items
             {
                 float time = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                if (!hasRisen)
-                {
-                    float riseStep = gravitySpeed * time;
-
-                    position.Y -= (int)riseStep;
-                    riseAmount += riseStep;
-
-                    if (riseAmount >= riseTarget)
-                    {
-                        hasRisen = true;
-                    }
-                }
-                else
-                {
-                    if (!isOnBlock)
-                    {
-                        position.Y += (int)(gravitySpeed * time);
-                    }
-                    position.X += (int)(xDirection * xSpeed * time);
-
-                    if (position.X <= 0)
-                    {
-                        position.X = 1;
-                        xDirection = 1;
-                    }
-                    //else if (position.X + CollisionBox.Width >= xLimit)
-                    //{
-                    //    position.X = xLimit - CollisionBox.Width - 1;
-                    //    xDirection = -1;
-                    //}
-
-                    if (position.Y > yLimit)
-                    {
-                        isCollected = true;
-                        CollisionController.Instance.RemoveItem(this);
-                    }
-
-                    sprite.Position = position;
-                }
+                move(gameTime);
 
                 sprite.Update(gameTime);
-                isOnBlock = false;
+            }
+            else
+            {
+                return;
             }
         }
         public void Draw(SpriteBatch spriteBatch)
@@ -110,12 +75,24 @@ namespace MagicBrosMario.Source.Items
             }
         }
 
+        private void move(GameTime gameTime)
+        {
+            float time = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (!isOnBlock)
+            {
+                position.Y += (int)(gravitySpeed * time);
+            }
+            position.X += (int)(xDirection * xSpeed * time);
+
+            sprite.Position = position;
+        }
+
         public void OnCollidePlayer(Player player, CollideDirection direction)
         {
             isCollected = true;
             CollisionController.Instance.RemoveItem(this);
             sprite.Drop();
-            if (isCollected) return;
         }
 
         public void OnCollideItem(IItems item, CollideDirection direction) { }
