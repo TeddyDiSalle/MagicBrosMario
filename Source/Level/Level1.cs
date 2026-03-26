@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MagicBrosMario.Source.Collision;
 using MagicBrosMario.Source.Items;
+using MagicBrosMario.Source.Sprite;
 namespace MagicBrosMario.Source.Level;
 using System.Collections.Generic;
 public class Level1 : ILevel
@@ -18,6 +19,7 @@ public class Level1 : ILevel
 	private string Level1BlockCVS = "Content/LevelData/1-1/Blocks1-1.csv";
 	private string Level1EnemyCVS = "Content/LevelData/1-1/Enemies1-1.csv";
 	private string Level1ItemCVS = "Content/LevelData/1-1/Items1-1.csv";
+	private string BackgroundPath = "Content/LevelData/1-1/1-1LazyDebugBackground.png";
 	private static int _blockSize = 16;
 	private static int _scale = 2;
 	private int tileSize = _blockSize * _scale;
@@ -49,6 +51,8 @@ public class Level1 : ILevel
 			items[i] = new IItems[levWidth];
 
 		}
+		SharedTexture back = new SharedTexture();
+		back.BindTexture(new Texture2D(BackgroundPath));
 		
 	}
 	public void Initialize(Texture2D bTexture, Texture2D eTexture, Texture2D iTexture)	{
