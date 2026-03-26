@@ -32,10 +32,9 @@ namespace MagicBrosMario.Source.Items
             }
         }
 
-        public Star(SharedTexture texture, int screenWidth, int screenHeight, int positionX, int positionY)
+        public Star(SharedTexture texture, int positionX, int positionY)
         {
-            sprite = texture.NewAnimatedSprite(5, 94, 14, 16, 4, 0.08f);
-            xLimit = screenWidth;
+            sprite = texture.NewAnimatedSprite(5, 94, 14, 16, 4, 0.08f); 
 
             if (positionX <= 0)
             {

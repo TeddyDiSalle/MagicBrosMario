@@ -21,7 +21,7 @@ namespace MagicBrosMario.Source.Items
             }
         }
 
-        public Spring_Compressed(SharedTexture texture, int screenWidth, int screenHeight, int positionX, int positionY)
+        public Spring_Compressed(SharedTexture texture, int positionX, int positionY)
 		{
 			sprite = new Sprite.Sprite(texture, 124, 8, 16, 8);
 

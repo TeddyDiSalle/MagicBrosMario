@@ -22,7 +22,7 @@ namespace MagicBrosMario.Source.Items
         private int xLimit;
         private int yLimit;
         private bool isCollected = false;
-        private bool hasRisen = false;
+        private bool hasRisen = true;
         private bool isOnBlock = false;
         private float riseAmount = 0f;
         private float riseTarget = 16f;
@@ -37,12 +37,10 @@ namespace MagicBrosMario.Source.Items
 
         public Point position { get => sprite.Position; private set => sprite.Position = value; }
 
-        public Mushroom(SharedTexture texture, int screenWidth, int screenHeight, int positionX, int positionY)
+        public Mushroom(SharedTexture texture, int positionX, int positionY)
         {
             
-            sprite = texture.NewSprite(184, 34, 16, 16);
-            yLimit = screenHeight;
-            xLimit = screenWidth;
+            sprite = texture.NewSprite(184, 34, 16, 16); 
 
             if (positionX <= 0)
             {
@@ -60,11 +58,19 @@ namespace MagicBrosMario.Source.Items
         }
         public void Update(GameTime gameTime)
         {
-            if (!isCollected)
+            if (isCollected)
+                return; 
+
+
+			if (!hasRisen)
+            {
+                rise(gameTime);
+            }   else
             {
                 isOnBlock = false;
                 move(gameTime);
-            } 
+            }
+            
         }
         public void Draw(SpriteBatch spriteBatch)
         {
@@ -72,6 +78,11 @@ namespace MagicBrosMario.Source.Items
             {
                 sprite.Draw(spriteBatch);
             }
+        }
+
+        private void rise(GameTime gameTime)
+        {
+
         }
 
         private void move(GameTime gameTime)
@@ -100,22 +111,25 @@ namespace MagicBrosMario.Source.Items
 
         public void OnCollideBlock(IBlock block, CollideDirection direction)
         {
-            Debug.WriteLine(direction);
-            if (direction == CollideDirection.Down) 
+            
+            if (hasRisen)
             {
-                isOnBlock = true;
-                position = new Point(position.X,  block.CollisionBox.Top - CollisionBox.Height - 3);
-            } 
-            else if (direction == CollideDirection.Left) 
-            {
-                xDirection = 1;
-                position = new Point(block.CollisionBox.Right + 1, position.Y);
-            }
-            else if (direction == CollideDirection.Right)
-            {
-                xDirection = -1; 
-                position = new Point(block.CollisionBox.Left - sprite.Size.X - 1, position.Y);
-            }
+				if (direction == CollideDirection.Down)
+				{
+					isOnBlock = true;
+					position = new Point(position.X, block.CollisionBox.Top - CollisionBox.Height - 3);
+				}
+				else if (direction == CollideDirection.Left)
+				{
+					xDirection = 1;
+					position = new Point(block.CollisionBox.Right + 1, position.Y);
+				}
+				else if (direction == CollideDirection.Right)
+				{
+					xDirection = -1;
+					position = new Point(block.CollisionBox.Left - sprite.Size.X - 1, position.Y);
+				}
+			}
 
         }
 
