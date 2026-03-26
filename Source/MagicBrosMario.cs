@@ -91,7 +91,7 @@ public class MagicBrosMario : Game
             new Mushroom(ItemTexture, 700, 150),
             new OneUp(ItemTexture, 300, 150),
             new CollectableCoin(ItemTexture, 400, 250),
-            //new Star(ItemTexture, 200, 150),
+            new Star(ItemTexture, 200, 150),
             //new MovingPlatform_Size1(ItemTexture, ScreenHeight, 300, 300, 1),
             //new MovingPlatform_Size2(ItemTexture, ScreenHeight, 300, 200, 1),
             //new MovingPlatform_Size3(ItemTexture, ScreenHeight, 300, 100, 1),
