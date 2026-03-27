@@ -47,7 +47,6 @@ public class Koopa : IEnemy, ICollidable
     }
 
     public bool IsShellMoving() => state == KoopaState.ShellMoving;
-    public bool IsWalking() => state == KoopaState.WalkingAlive;
 
     public Point Position
     {
@@ -82,10 +81,8 @@ public class Koopa : IEnemy, ICollidable
             sprite.Scale = SCALE;
             sprite.Visible = false;
         }
-        Position = new Point(leftBound, Y);
-        this.state = KoopaState.WalkingAlive;
-        CollisionController.Instance.AddEnemy(this);
-
+        Position = new Point(x, y);
+        state = KoopaState.WalkingAlive;
     }
 
     public bool GetIsAlive() => isAlive;
