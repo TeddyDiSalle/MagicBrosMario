@@ -86,11 +86,12 @@ public class MagicBrosMario : Game
         };
         Controller = new MarioGameController(this, ref data);
         ItemsList = [
-            new Fireflower(ItemTexture, 700, 368),
+            //new Fireflower(ItemTexture, 700, 368),
             //new Fireflower_Underground(ItemTexture, ScreenHeight, 600, 150),
             new Mushroom(ItemTexture, 700, 150),
-            new OneUp(ItemTexture, 300, 150),
-            new CollectableCoin(ItemTexture, 400, 250),
+            //new Mushroom(ItemTexture, 250, 150),
+            //new OneUp(ItemTexture, 300, 150),
+            //new CollectableCoin(ItemTexture, 400, 250),
             new Star(ItemTexture, 200, 150),
             //new MovingPlatform_Size1(ItemTexture, ScreenHeight, 300, 300, 1),
             //new MovingPlatform_Size2(ItemTexture, ScreenHeight, 300, 200, 1),
