@@ -107,7 +107,14 @@ public class PiranhaPlant : IEnemy, ICollidable
     // Camera handles drawing
     public void Draw(SpriteBatch _spriteBatch) { }
 
-    public void OnCollidePlayer(Player player, CollideDirection direction) { }
+    public void OnCollidePlayer(Player player, CollideDirection direction)
+    {
+        if (player.GetCurrentPower().Equals(Power.Star))
+        {
+            Kill();
+            return;
+        }
+    }
 
     public void OnCollideItem(IItems item, CollideDirection direction)
     {

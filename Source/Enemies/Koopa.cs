@@ -199,6 +199,12 @@ public class Koopa : IEnemy, ICollidable
 
     public void OnCollidePlayer(Player player, CollideDirection direction)
     {
+        if (player.GetCurrentPower().Equals(Power.Star))
+        {
+            Kill();
+            Kill();
+            return;
+        }
         if (state == KoopaState.Dead) return;
 
         if (direction == CollideDirection.Top)

@@ -127,8 +127,10 @@ public class Goomba : IEnemy, ICollidable
 
     public void OnCollidePlayer(Player player, CollideDirection direction)
     {
-        if (direction == CollideDirection.Top)
+        if(player.GetCurrentPower().Equals(Power.Star)|| (direction == CollideDirection.Top))
+        {
             Kill();
+        }
     }
 
     public void OnCollideItem(IItems item, CollideDirection direction)
