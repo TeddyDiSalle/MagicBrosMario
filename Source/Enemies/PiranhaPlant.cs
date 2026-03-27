@@ -1,6 +1,5 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using MagicBrosMario.Source.Collision;
 using MagicBrosMario.Source.Block;
 using MagicBrosMario.Source.Items;
@@ -14,27 +13,24 @@ public class PiranhaPlant : IEnemy, ICollidable
     private const float RISE_SPEED = 100f;
     private const float PAUSE_DURATION = 0f;
     private const int RISE_HEIGHT = 48;
+    private const float SCALE = 2f;
 
     private Sprite.AnimatedSprite aliveSprite;
     private readonly int hiddenY;
     private readonly int visibleY;
 
-    private enum PiranhaState
-    {
-        Rising,
-        Lowering,
-        Dead
-    }
+    private enum PiranhaState { Rising, Lowering, Dead }
 
     private PiranhaState state;
     private float pauseTimer = 0f;
-    public Boolean isAlive;
+    private bool isAlive;
 
     public Point Position
     {
         get { return aliveSprite.Position; }
         private set { aliveSprite.Position = value; }
     }
+
     public bool GetIsAlive() => isAlive;
 
     public Rectangle CollisionBox
@@ -42,46 +38,33 @@ public class PiranhaPlant : IEnemy, ICollidable
         get
         {
             if (!isAlive) return Rectangle.Empty;
-
             int exposedHeight = hiddenY - Position.Y;
-
             if (exposedHeight <= 0) return Rectangle.Empty;
-
-            return new Rectangle(
-                Position.X + 4,
-                Position.Y, 
-                aliveSprite.Size.X - 8, 
-                exposedHeight
-            );
+            return new Rectangle(Position.X + 4, Position.Y, aliveSprite.Size.X - 8, exposedHeight);
         }
     }
 
     public PiranhaPlant(SharedTexture EnemyTexture, int pipeX, int pipeY)
     {
-        this.hiddenY = pipeY;
-        this.visibleY = pipeY - RISE_HEIGHT;
-
-        this.aliveSprite = EnemyTexture.NewAnimatedSprite(125, 180, 16, 23, 2, 0.2f);
-
+        hiddenY = pipeY;
+        visibleY = pipeY - RISE_HEIGHT;
+        aliveSprite = EnemyTexture.NewAnimatedSprite(125, 180, 16, 23, 2, 0.2f);
+        aliveSprite.Scale = SCALE;
         Position = new Point(pipeX, hiddenY);
-        this.isAlive = true;
-        this.state = PiranhaState.Rising;
-        this.pauseTimer = PAUSE_DURATION; 
+        isAlive = true;
+        state = PiranhaState.Rising;
+        pauseTimer = PAUSE_DURATION;
     }
 
     public void Update(GameTime gameTime)
     {
-        if (!isAlive)
-        {
-            return;
-        }
+        if (!isAlive) return;
 
         float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
         if (pauseTimer > 0)
         {
             pauseTimer -= deltaTime;
-            aliveSprite.Update(gameTime);
             return;
         }
 
@@ -95,9 +78,7 @@ public class PiranhaPlant : IEnemy, ICollidable
                 pauseTimer = PAUSE_DURATION;
             }
             else
-            {
                 Position = new Point(Position.X, newY);
-            }
         }
         else if (state == PiranhaState.Lowering)
         {
@@ -109,46 +90,32 @@ public class PiranhaPlant : IEnemy, ICollidable
                 pauseTimer = PAUSE_DURATION;
             }
             else
-            {
                 Position = new Point(Position.X, newY);
-            }
         }
 
-        aliveSprite.Update(gameTime);
+        aliveSprite.Visible = isAlive;
     }
 
     public void Kill()
     {
-        this.isAlive = false;
+        isAlive = false;
         state = PiranhaState.Dead;
         aliveSprite.Drop();
+        CollisionController.Instance.RemoveEnemy(this);
     }
 
-    public void Draw(SpriteBatch _spriteBatch)
-    {
-        if (isAlive)
-        {
-            aliveSprite.Draw(_spriteBatch);
-        }
-    }
+    // Camera handles drawing
+    public void Draw(SpriteBatch _spriteBatch) { }
 
-    public void OnCollidePlayer(Player player, CollideDirection direction)
-    {
-    }
+    public void OnCollidePlayer(Player player, CollideDirection direction) { }
 
     public void OnCollideItem(IItems item, CollideDirection direction)
     {
-        if (item != null)//if its mario fireball
-        {
-            //Kill();
-        }
+        if (item is MarioFireball)
+            Kill();
     }
 
-    public void OnCollideEnemy(IEnemy enemy, CollideDirection direction)
-    {
-    }
+    public void OnCollideEnemy(IEnemy enemy, CollideDirection direction) { }
 
-    public void OnCollideBlock(IBlock block, CollideDirection direction)
-    {
-    }
+    public void OnCollideBlock(IBlock block, CollideDirection direction) { }
 }
