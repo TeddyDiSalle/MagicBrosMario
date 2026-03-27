@@ -23,6 +23,7 @@ public class PlayerCollisionHandler
     public PlayerCollisionHandler(Player player)
     {
         this.player = player;
+        CollisionController.Instance.BindPlayer(player);
     }
 
     public void OnCollidePlayer(Player player, Collision.CollideDirection direction)

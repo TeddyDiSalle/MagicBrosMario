@@ -87,7 +87,16 @@
 /copy:LevelData/1-1/Items1-1.csv
 
 #begin LevelData/1-1/1-1LazyDebugBackground.png
-/copy:LevelData/1-1/1-1LazyDebugBackground.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:LevelData/1-1/1-1LazyDebugBackground.png
 
 #begin LevelData/SMB_NES_World_1-1_Map.png
 /importer:TextureImporter

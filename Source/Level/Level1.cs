@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MagicBrosMario.Source.Collision;
 using MagicBrosMario.Source.Items;
+using MagicBrosMario.Source.Sprite;
 namespace MagicBrosMario.Source.Level;
 using System.Collections.Generic;
 public class Level1 : ILevel
@@ -18,6 +19,7 @@ public class Level1 : ILevel
 	private string Level1BlockCVS = "Content/LevelData/1-1/Blocks1-1.csv";
 	private string Level1EnemyCVS = "Content/LevelData/1-1/Enemies1-1.csv";
 	private string Level1ItemCVS = "Content/LevelData/1-1/Items1-1.csv";
+	private string BackgroundPath = "Content/LevelData/1-1/1-1LazyDebugBackground.png";
 	private static int _blockSize = 16;
 	private static int _scale = 2;
 	private int tileSize = _blockSize * _scale;
@@ -50,8 +52,14 @@ public class Level1 : ILevel
 
 		}
 		
+		
 	}
-	public void Initialize(Texture2D bTexture, Texture2D eTexture, Texture2D iTexture)	{
+	public void Initialize(Microsoft.Xna.Framework.Content.ContentManager contentManager, Texture2D bTexture, Texture2D eTexture, Texture2D iTexture)	{
+		SharedTexture back = new SharedTexture();
+		//Texture2D backTexture = contentManager.Load<Texture2D>(BackgroundPath);
+		//back.BindTexture(backTexture);
+		
+
 		BlockManager.Initialize(bTexture);
 		EnemyManager.Initialize(eTexture);
 		ItemManager.Initialize(iTexture);
@@ -63,26 +71,12 @@ public class Level1 : ILevel
 			for(int c = 0; c < levWidth; c++)	{
 				//if(blocks[r][c] != null)
 					//blocks[r][c].Update(gt);
-				//if(enemies[r][c] != null)
-					//enemies[r][c].Update(gt);
+				if(enemies[r][c] != null)
+					enemies[r][c].Update(gt);
 				//if(items[r][c] != null)
 					//items[r][c].Update(gt);
 			}
 		}
-	}
-
-	public List<IEnemy> GetEnemies()
-	{
-		var list = new List<IEnemy>();
-		for (int r = 0; r < levHeight; r++)
-		{
-			for (int c = 0; c < levWidth; c++)
-			{
-				if (enemies[r][c] != null)
-					list.Add(enemies[r][c]);
-			}
-		}
-		return list;
 	}
 
 	public void Draw(SpriteBatch sb) {

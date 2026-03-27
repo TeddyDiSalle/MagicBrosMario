@@ -39,6 +39,7 @@ public class MarioGameController{
         //Keyboard inputs
         inputMap.Bind(Keys.W, gt => player.Jump(gt));
         inputMap.Bind(Keys.Up, gt => player.Jump(gt));
+        inputMap.Bind(Keys.Space, gt => player.Jump(gt));
         inputMap.Bind(Keys.A, gt => player.Left(gt));
         inputMap.Bind(Keys.Left, gt => player.Left(gt));
         inputMap.Bind(Keys.S, gt => player.Crouch(gt));
@@ -49,6 +50,7 @@ public class MarioGameController{
         inputMap.Bind(Keys.N, gt =>  player.Attack());
         inputMap.Bind(Keys.E, gt =>  player.TakeDamage());
         inputMap.Bind(Keys.Q, gt => game.Exit()); 
+        inputMap.Bind(Keys.R, gt => game.Exit()); // TODO: NEED RESET IMPLEMTATION
 
         // mouse inputs
         inputMap.Bind(m => m.IsButtonDown(MouseButton.Right), () => game.Exit());

@@ -82,8 +82,10 @@ public class Koopa : IEnemy, ICollidable
             sprite.Scale = SCALE;
             sprite.Visible = false;
         }
-        Position = new Point(x, y);
-        state = KoopaState.WalkingAlive;
+        Position = new Point(leftBound, Y);
+        this.state = KoopaState.WalkingAlive;
+        CollisionController.Instance.AddEnemy(this);
+
     }
 
     public bool GetIsAlive() => isAlive;
