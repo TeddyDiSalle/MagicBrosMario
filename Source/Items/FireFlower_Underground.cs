@@ -22,7 +22,7 @@ namespace MagicBrosMario.Source.Items
             }
         }
 
-        public Fireflower_Underground(SharedTexture texture, int screenWidth, int screenHeight, int positionX, int positionY)
+        public Fireflower_Underground(SharedTexture texture, int positionX, int positionY)
 		{
             sprite = texture.NewAnimatedSprite(124, 64, 16, 16, 4, 0.025f);
 

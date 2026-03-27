@@ -21,7 +21,7 @@ namespace MagicBrosMario.Source.Items
             }
         }
 
-        public Spring_Stretched(SharedTexture texture, int screenWidth, int screenHeight, int positionX, int positionY)
+        public Spring_Stretched(SharedTexture texture, int positionX, int positionY)
 		{
 			sprite = new Sprite.Sprite(texture, 154, 0, 16, 24);
 

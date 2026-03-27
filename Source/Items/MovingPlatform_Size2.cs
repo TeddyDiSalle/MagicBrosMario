@@ -29,12 +29,11 @@ namespace MagicBrosMario.Source.Items
             }
         }
 
-        public MovingPlatform_Size2(SharedTexture texture, int screenWidth, int screenHeight, int positionX, int positionY, int d)
+        public MovingPlatform_Size2(SharedTexture texture, int screenHeight, int positionX, int positionY, int d)
 		{
 
 			sprite = texture.NewSprite(26, 38, 32, 8);
-			yLimit = screenHeight;
-			xLimit = screenWidth;
+			yLimit = screenHeight; 
 			direction = d;
 
 			position = new Point(positionX, positionY);

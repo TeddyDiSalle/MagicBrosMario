@@ -23,7 +23,7 @@ namespace MagicBrosMario.Source.Items
         private Sprite.Sprite sprite; 
 
 
-		public Toad(SharedTexture texture, int screenWidth, int screenHeight, int positionX, int positionY)
+		public Toad(SharedTexture texture, int positionX, int positionY)
 		{
 			sprite =  texture.NewSprite(244, 0, 16, 24);
 

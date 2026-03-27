@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MagicBrosMario.Source.Items
 {
-	public class Fireflower : IItems
+	public class CollectableCoin : IItems
 	{
 		private AnimatedSprite sprite;
 		private bool isCollected = false;
@@ -16,26 +16,25 @@ namespace MagicBrosMario.Source.Items
 		{
 			get
 			{
-				return new Rectangle(sprite.Position.X, sprite.Position.Y, (int)(16 * sprite.Scale),(int)(16 * sprite.Scale));
+				return new Rectangle(sprite.Position.X, sprite.Position.Y, (int)(16 * sprite.Scale), (int)(16 * sprite.Scale));
 			}
 		}
 
-		public Fireflower(SharedTexture texture, int positionX, int positionY)
+		public CollectableCoin(SharedTexture texture, int positionX, int positionY)
 		{
-			sprite = texture.NewAnimatedSprite(4, 64, 16, 16, 4, 0.025f);
+			sprite = texture.NewAnimatedSprite(192, 64, 10, 14, 4, 0.05f);
 
 			sprite.Position = new Point(positionX, positionY);
 			sprite.Scale = 2f;
-            CollisionController.Instance.AddItem(this);
 		}
 
 		public void Update(GameTime gameTime)
 		{
-            if (!isCollected)
-            {
-                sprite.Update(gameTime);
-            }
-        }
+			if (!isCollected)
+			{
+				sprite.Update(gameTime);
+			}
+		}
 
 		public void Draw(SpriteBatch spriteBatch)
 		{
@@ -47,12 +46,11 @@ namespace MagicBrosMario.Source.Items
 
 		public void OnCollidePlayer(Player player, CollideDirection direction)
 		{
-            if (isCollected) return;
-            isCollected = true;
-            CollisionController.Instance.RemoveItem(this);
-            sprite.Drop();
-            
-        }
+			isCollected = true;
+			CollisionController.Instance.RemoveItem(this);
+			sprite.Drop();
+			if (isCollected) return;
+		}
 
 		public void OnCollideItem(IItems item, CollideDirection direction) { }
 
@@ -60,10 +58,10 @@ namespace MagicBrosMario.Source.Items
 
 		public void OnCollideBlock(IBlock block, CollideDirection direction) { }
 
-        public bool getCollected()
-        {
-            return isCollected;
-        }
+		public bool getCollected()
+		{
+			return isCollected;
+		}
 
-    }
+	}
 }
