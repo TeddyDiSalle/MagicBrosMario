@@ -84,7 +84,7 @@ public class MagicBrosMario : Game
     protected override void Update(GameTime gameTime)
     {
         Controller.Update(gameTime);
-        //lvl.Update(gameTime);
+        lvl.Update(gameTime);
         Mario.Update(gameTime);
 
         int cameraX = Math.Max(Camera.Instance.Position.X, (int)Mario.Position.X - Camera.Instance.WindowSize.X / 2);

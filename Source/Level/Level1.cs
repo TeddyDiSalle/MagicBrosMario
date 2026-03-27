@@ -71,26 +71,12 @@ public class Level1 : ILevel
 			for(int c = 0; c < levWidth; c++)	{
 				//if(blocks[r][c] != null)
 					//blocks[r][c].Update(gt);
-				//if(enemies[r][c] != null)
-					//enemies[r][c].Update(gt);
+				if(enemies[r][c] != null)
+					enemies[r][c].Update(gt);
 				//if(items[r][c] != null)
 					//items[r][c].Update(gt);
 			}
 		}
-	}
-
-	public List<IEnemy> GetEnemies()
-	{
-		var list = new List<IEnemy>();
-		for (int r = 0; r < levHeight; r++)
-		{
-			for (int c = 0; c < levWidth; c++)
-			{
-				if (enemies[r][c] != null)
-					list.Add(enemies[r][c]);
-			}
-		}
-		return list;
 	}
 
 	public void Draw(SpriteBatch sb) {

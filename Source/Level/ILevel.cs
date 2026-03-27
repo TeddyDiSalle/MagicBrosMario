@@ -8,6 +8,5 @@ public interface ILevel
     void Update(GameTime gt);
     void Draw(SpriteBatch sb);
     public void Initialize(Microsoft.Xna.Framework.Content.ContentManager contentManager, Texture2D bTexture, Texture2D eTexture, Texture2D iTexture);
-    public List<IEnemy> GetEnemies();
 
 }
