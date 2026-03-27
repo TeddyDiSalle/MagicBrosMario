@@ -51,6 +51,8 @@ public class Goomba : IEnemy, ICollidable
         }
         Position = new Point(leftBound, y);
         this.isAlive = true;
+        
+        CollisionController.Instance.AddEnemy(this);
     }
 
     public bool GetIsAlive()

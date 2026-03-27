@@ -51,11 +51,15 @@ public class Level1 : ILevel
 			items[i] = new IItems[levWidth];
 
 		}
-		SharedTexture back = new SharedTexture();
-		back.BindTexture(new Texture2D(BackgroundPath));
+		
 		
 	}
-	public void Initialize(Texture2D bTexture, Texture2D eTexture, Texture2D iTexture)	{
+	public void Initialize(Microsoft.Xna.Framework.Content.ContentManager contentManager, Texture2D bTexture, Texture2D eTexture, Texture2D iTexture)	{
+		SharedTexture back = new SharedTexture();
+		//Texture2D backTexture = contentManager.Load<Texture2D>(BackgroundPath);
+		//back.BindTexture(backTexture);
+		
+
 		BlockManager.Initialize(bTexture);
 		EnemyManager.Initialize(eTexture);
 		ItemManager.Initialize(iTexture);

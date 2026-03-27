@@ -88,6 +88,8 @@ public class Koopa : IEnemy, ICollidable
         }
         Position = new Point(leftBound, Y);
         this.state = KoopaState.WalkingAlive;
+        CollisionController.Instance.AddEnemy(this);
+
     }
 
     public bool GetIsAlive()
