@@ -14,6 +14,7 @@ public class Bowser : IEnemy, ICollidable
     private const int VELOCITY = 100;
     private const float FIRE_COOLDOWN = 3.0f;
     private const float GRAVITY = 0.35f;
+    private const int MAX_HEALTH = 16;
 
     private Sprite.AnimatedSprite walkingRightSprite;
     private Sprite.AnimatedSprite walkingLeftSprite;
@@ -24,6 +25,7 @@ public class Bowser : IEnemy, ICollidable
     private bool isAlive = true;
     private float fireCooldownTimer = 0f;
     private float velocityY = 0f;
+    private int health = MAX_HEALTH;
 
     public Point Position
     {
@@ -57,6 +59,13 @@ public class Bowser : IEnemy, ICollidable
     }
 
     public bool GetIsAlive() => isAlive;
+
+    public void TakeDamage()
+    {
+        health--;
+        if (health <= 0)
+            Kill();
+    }
 
     public void Update(GameTime gameTime)
     {
@@ -132,7 +141,11 @@ public class Bowser : IEnemy, ICollidable
 
     public void OnCollidePlayer(Player player, CollideDirection direction) { }
 
-    public void OnCollideItem(IItems item, CollideDirection direction) { }
+    public void OnCollideItem(IItems item, CollideDirection direction)
+    {
+        if (item is MarioFireball)
+            TakeDamage();
+    }
 
     public void OnCollideEnemy(IEnemy enemy, CollideDirection direction) { }
 
