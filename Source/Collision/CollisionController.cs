@@ -134,8 +134,8 @@ public class CollisionController {
         var limitY = ((float)a.CollisionBox.Height + b.CollisionBox.Height) / 2;
 
         // return if no overlap
-        if (Math.Abs(dx) > limitX) return null;
-        if (Math.Abs(dy) > limitY) return null;
+        if (Math.Abs(dx) >= limitX) return null;
+        if (Math.Abs(dy) >= limitY) return null;
 
         // if normalized dx is greater than normalized dy
         if (Math.Abs(dx) / limitX > Math.Abs(dy) / limitY) {
