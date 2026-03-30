@@ -119,10 +119,10 @@ public class Level1 : ILevel
 						//have to translate our item type to QuestionMarkBlock.InnerItem enum
 						//Temporary fix
 						QuestionMarkBlock.InnerItem qItem = items[r][c] is Coin ? QuestionMarkBlock.InnerItem.Coin :
-							items[r][c] is Mushroom ? QuestionMarkBlock.InnerItem.FireFlower : // Assuming Mushroom is treated as FireFlower for the inner item
-							items[r][c] is Fireflower ? QuestionMarkBlock.InnerItem.FireFlower :
+							items[r][c] is Mushroom ? QuestionMarkBlock.InnerItem.Mushroom : // Assuming Mushroom is treated as FireFlower for the inner item
+							items[r][c] is Fireflower ? QuestionMarkBlock.InnerItem.Mushroom :
 							items[r][c] is Star ? QuestionMarkBlock.InnerItem.Star :
-							items[r][c] is OneUp ? QuestionMarkBlock.InnerItem.FireFlower : // OneUp is not implemented yey
+							items[r][c] is OneUp ? QuestionMarkBlock.InnerItem.Mushroom : // OneUp is not implemented yey
 							QuestionMarkBlock.InnerItem.Coin; // Default to Coin if not matched
 						
 						blocks[r][c] =   BlockManager.CreateBlock(blockId, c * tileSize, r * tileSize, qItem);
