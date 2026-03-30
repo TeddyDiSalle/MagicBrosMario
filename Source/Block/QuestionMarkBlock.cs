@@ -7,11 +7,14 @@ using Microsoft.Xna.Framework;
 
 namespace MagicBrosMario.Source.Block;
 
-public class QuestionMarkBlock : BlockBase<QuestionMarkBlock> {
-    public enum InnerItem {
+public class QuestionMarkBlock : BlockBase<QuestionMarkBlock>
+{
+    public enum InnerItem
+    {
         Coin,
         Star,
-        FireFlower
+        OneUp,
+        Mushroom,
     }
 
     public Rectangle CollisionBox => new(sprite.Position.X, sprite.Position.Y, sprite.Size.X, sprite.Size.Y);
@@ -21,7 +24,8 @@ public class QuestionMarkBlock : BlockBase<QuestionMarkBlock> {
     private readonly Sprite.Sprite emptySprite;
     private readonly InnerItem innerItem;
 
-    public QuestionMarkBlock(AnimatedSprite sprite, Sprite.Sprite emptySprite, InnerItem innerItem) : base(sprite) {
+    public QuestionMarkBlock(AnimatedSprite sprite, Sprite.Sprite emptySprite, InnerItem innerItem) : base(sprite)
+    {
         this.sprite = sprite;
         this.emptySprite = emptySprite;
         this.innerItem = innerItem;
@@ -29,7 +33,8 @@ public class QuestionMarkBlock : BlockBase<QuestionMarkBlock> {
         emptySprite.Visible = false;
     }
 
-    public override void OnCollidePlayer(Player player, CollideDirection direction) {
+    public override void OnCollidePlayer(Player player, CollideDirection direction)
+    {
         if (empty) return;
 
         // if mario does not collide from below
@@ -44,30 +49,39 @@ public class QuestionMarkBlock : BlockBase<QuestionMarkBlock> {
         Sprite.Visible = true;
         empty = true;
 
-        switch (innerItem) {
+        switch (innerItem)
+        {
             case InnerItem.Coin:
                 // spawn coin above
                 break;
             case InnerItem.Star:
                 // spawn star above
                 break;
-            case InnerItem.FireFlower:
-                // spawn fire flower above
+            case InnerItem.OneUp:
+                // spawn one up above
+                break;
+            case InnerItem.Mushroom:
+                // spawn mushroom above
+                MagicBrosMario.INSTANCE.items.Add(new Mushroom(MagicBrosMario.INSTANCE.ItemTexture, Position.X,
+                    Position.Y));
                 break;
             default:
                 throw new Exception("impossible default branch");
         }
     }
 
-    public override void OnCollideItem(IItems item, CollideDirection direction) {
+    public override void OnCollideItem(IItems item, CollideDirection direction)
+    {
         // never gonna pick coin up, never gonna put coin down
     }
 
-    public override void OnCollideEnemy(IEnemy enemy, CollideDirection direction) {
+    public override void OnCollideEnemy(IEnemy enemy, CollideDirection direction)
+    {
         // enemies don't have wallet, they can't pick up coins
     }
 
-    public override void OnCollideBlock(IBlock block, CollideDirection direction) {
+    public override void OnCollideBlock(IBlock block, CollideDirection direction)
+    {
         // this shouldn't even be called
     }
 }
