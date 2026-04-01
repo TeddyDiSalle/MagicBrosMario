@@ -17,16 +17,16 @@ public static class ItemFactory {
     }
 
     public static IItems CreateFireFlower(int x, int y) {
-        var item = new Fireflower(ITEM_SHARED_TEXTURE, 100, 100, x, y); // TODO get rid of bounds in parameters
+        var item = new Fireflower(ITEM_SHARED_TEXTURE, x, y); // TODO get rid of bounds in parameters
         return item;
     }
 
     public static IItems CreateStar(int x, int y) {
-        var item = new Star(ITEM_SHARED_TEXTURE, 100, 100, x, y); // TODO get rid of bounds in parameters
+        var item = new Star(ITEM_SHARED_TEXTURE, x, y); // TODO get rid of bounds in parameters
         return item;
     }
     public static IItems CreateOneUp(int x, int y) {
-        var item = new OneUp(ITEM_SHARED_TEXTURE, 100, 100, x, y); // TODO get rid of bounds in parameters
+        var item = new OneUp(ITEM_SHARED_TEXTURE, x, y); // TODO get rid of bounds in parameters
         return item;
     }
 

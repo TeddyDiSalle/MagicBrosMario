@@ -1,6 +1,5 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using MagicBrosMario.Source.Collision;
 using MagicBrosMario.Source.Block;
 using MagicBrosMario.Source.Items;
@@ -25,9 +24,7 @@ public class Goomba : IEnemy, ICollidable
         set 
         { 
             foreach (var sprite in sprites)
-            {
                 sprite.Position = value;
-            }
         }
     }
 
@@ -40,7 +37,7 @@ public class Goomba : IEnemy, ICollidable
         }
     }
 
-    public Goomba(SharedTexture EnemyTexture, int y, int leftBound)
+    public Goomba(SharedTexture EnemyTexture, int y, int x)
     {
         sprites = [EnemyTexture.NewAnimatedSprite(295, 187, 18, 18, 2, 0.2f), 
                     EnemyTexture.NewSprite(276, 187, 18, 18)];
@@ -49,23 +46,15 @@ public class Goomba : IEnemy, ICollidable
             sprite.Scale = SCALE;
             sprite.Visible = false;
         }
-        Position = new Point(leftBound, y);
-        this.isAlive = true;
-        
-        CollisionController.Instance.AddEnemy(this);
+        Position = new Point(x, y);
     }
 
-    public bool GetIsAlive()
-    {
-        return isAlive;
-    }
+    public bool GetIsAlive() => isAlive;
 
     public void Update(GameTime gametime)
     {
         if (isAlive)
-        {
             Walking(gametime);
-        }
 
         velocityY += GRAVITY;
         Position = new Point(Position.X, Position.Y + (int)velocityY);
@@ -80,22 +69,16 @@ public class Goomba : IEnemy, ICollidable
         var dx = (int)(sec * VELOCITY);
 
         if (movingRight)
-        {
             Position = new Point(Position.X + dx, Position.Y);
-        }
         else
-        {
             Position = new Point(Position.X - dx, Position.Y);
-        }
     }
 
     public void Kill()
     {
-        this.isAlive = false;
+        isAlive = false;
         foreach (var sprite in sprites)
-        {
             sprite.Drop();
-        }
         CollisionController.Instance.RemoveEnemy(this);
     }
 
@@ -113,9 +96,8 @@ public class Goomba : IEnemy, ICollidable
         }
     }
 
-    public void Draw(SpriteBatch _spriteBatch)
-    {
-    }
+    // Camera handles drawing
+    public void Draw(SpriteBatch _spriteBatch) { }
 
     public void OnCollideEnemy(IEnemy enemy, CollideDirection direction)
     {
@@ -125,9 +107,7 @@ public class Goomba : IEnemy, ICollidable
             return;
         }
         if (direction == CollideDirection.Left || direction == CollideDirection.Right)
-        {
             UnCollide(Rectangle.Intersect(CollisionBox, enemy.CollisionBox), direction);
-        }
     }
 
     public void OnCollideBlock(IBlock block, CollideDirection direction)
@@ -141,15 +121,14 @@ public class Goomba : IEnemy, ICollidable
         else if (direction == CollideDirection.Left || direction == CollideDirection.Right)
         {
             if (block.CollisionBox.Y < Position.Y + CollisionBox.Height - 4)
-            {
                 UnCollide(Rectangle.Intersect(CollisionBox, block.CollisionBox), direction);
-            }
         }
     }
 
     public void OnCollidePlayer(Player player, CollideDirection direction)
     {
-        if (direction == CollideDirection.Top){
+        if(player.GetCurrentPower().Equals(Power.Star)|| (direction == CollideDirection.Top))
+        {
             Kill();
         }
     }
@@ -157,8 +136,6 @@ public class Goomba : IEnemy, ICollidable
     public void OnCollideItem(IItems item, CollideDirection direction)
     {
         if (item is MarioFireball)
-        {
             Kill();
-        }
     }
 }

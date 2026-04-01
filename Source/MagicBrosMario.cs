@@ -5,6 +5,8 @@ using MagicBrosMario.Source.Sprite;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
+using MagicBrosMario.Source.Items;
 
 
 namespace MagicBrosMario.Source;
@@ -16,25 +18,29 @@ public class MagicBrosMario : Game
     private MarioGameController Controller;
 
     public Player Mario;
-    private SharedTexture MarioTexture;
-    private SharedTexture ItemTexture;
-    private SharedTexture EnemyTexture;
-    private SharedTexture FireTexture;
+    public SharedTexture MarioTexture { get; }
+    public SharedTexture ItemTexture { get; }
+    public SharedTexture EnemyTexture { get; }
+    public SharedTexture FireTexture { get; }
     private float[] MarioStartPos = { 100, 300 };
     private ILevel lvl;
-    private SpriteFont _font;
 
-    private int ScreenWidth;
-    private int ScreenHeight;
+    public static MagicBrosMario INSTANCE { get; private set; }
+    public List<IItems> items { get; } = new();
 
     public MagicBrosMario()
     {
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
-        ScreenWidth = Window.ClientBounds.Width;
-        ScreenHeight = Window.ClientBounds.Height;
-        new Camera(_graphics);
+        var _ = new Camera(_graphics);
+
+        EnemyTexture = new SharedTexture();
+        ItemTexture = new SharedTexture();
+        MarioTexture = new SharedTexture();
+        FireTexture = new SharedTexture();
+
+        INSTANCE = this;
     }
 
 
@@ -42,25 +48,15 @@ public class MagicBrosMario : Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-        _font = Content.Load<SpriteFont>("Font");
-
         Texture2D marioSheet = Content.Load<Texture2D>("MarioSpriteSheet");
         Texture2D blockTexture = Content.Load<Texture2D>("blocks");
         Texture2D itemSheet = Content.Load<Texture2D>("items");
         Texture2D enemySheet = Content.Load<Texture2D>("characters");
         Texture2D fireSheet = Content.Load<Texture2D>("enemies");
 
-
-        EnemyTexture = new SharedTexture();
         EnemyTexture.BindTexture(enemySheet);
-
-        ItemTexture = new SharedTexture();
         ItemTexture.BindTexture(itemSheet);
-
-        MarioTexture = new SharedTexture();
         MarioTexture.BindTexture(marioSheet);
-
-        FireTexture = new SharedTexture();
         FireTexture.BindTexture(fireSheet);
 
         lvl = new Level1();
@@ -75,8 +71,8 @@ public class MagicBrosMario : Game
             player = Mario,
             mouse = new MouseInfo(),
             keyb = new KeyboardInfo(),
-            halfX = _graphics.PreferredBackBufferWidth / 2,
-            halfY = _graphics.PreferredBackBufferHeight / 2
+            halfX = Camera.Instance.WindowSize.X / 2,
+            halfY = Camera.Instance.WindowSize.Y / 2
         };
         Controller = new MarioGameController(this, ref data);
     }
@@ -90,8 +86,8 @@ public class MagicBrosMario : Game
         int cameraX = Math.Max(Camera.Instance.Position.X, (int)Mario.Position.X - Camera.Instance.WindowSize.X / 2);
         Camera.Instance.Position = new Point(cameraX, 0);
         Camera.Instance.Update(gameTime);
-        
-        
+
+
         CollisionController.Instance.Update(gameTime);
     }
 
