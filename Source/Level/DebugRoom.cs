@@ -14,7 +14,7 @@ namespace MagicBrosMario.Source.Level;
 public class DebugRoom : ILevel
 {
     public DebugRoom()	{
-		blockLines = File.ReadLines(Level1BlockCVS).ToArray();
+		/*blockLines = File.ReadLines(Level1BlockCVS).ToArray();
 		enemyLines = File.ReadLines(Level1EnemyCVS).ToArray();
 		itemLines = File.ReadLines(Level1ItemCVS).ToArray();
 
@@ -27,7 +27,7 @@ public class DebugRoom : ILevel
 			enemies[i] = new IEnemy[levWidth];
 			items[i] = new IItems[levWidth];
 
-		}	
+		}	*/
 	}
 	public void Initialize(Microsoft.Xna.Framework.Content.ContentManager contentManager, Texture2D tilesetTexture, Texture2D characterTexture, Texture2D itemTexture)
 	{
