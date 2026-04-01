@@ -8,9 +8,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MagicBrosMario.Source.Collision;
 using MagicBrosMario.Source.Items;
-using MagicBrosMario.Source.Sprite;
 namespace MagicBrosMario.Source.Level;
-using System.Collections.Generic;
 public class Level1 : ILevel
 {
 	private IBlock[][] blocks;
@@ -50,9 +48,7 @@ public class Level1 : ILevel
 			enemies[i] = new IEnemy[levWidth];
 			items[i] = new IItems[levWidth];
 
-		}
-		
-		
+		}	
 	}
 	public void Initialize(Microsoft.Xna.Framework.Content.ContentManager contentManager, Texture2D bTexture, Texture2D eTexture, Texture2D iTexture)	{
 		SharedTexture back = new SharedTexture();

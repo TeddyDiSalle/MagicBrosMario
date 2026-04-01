@@ -105,4 +105,25 @@ public class MagicBrosMario : Game
 
         base.Draw(gameTime);
     }
+
+    public void Debug()
+    {
+        
+        Texture2D blockTexture = Content.Load<Texture2D>("blocks");
+        Texture2D itemSheet = Content.Load<Texture2D>("items");
+        Texture2D enemySheet = Content.Load<Texture2D>("characters");
+        
+        lvl = new DebugRoom();
+        lvl.Initialize(Content, blockTexture, enemySheet, itemSheet);
+    }
+
+    public void Level1()
+    {
+        Texture2D blockTexture = Content.Load<Texture2D>("blocks");
+        Texture2D itemSheet = Content.Load<Texture2D>("items");
+        Texture2D enemySheet = Content.Load<Texture2D>("characters");
+
+        lvl = new Level1();
+        lvl.Initialize(Content, blockTexture, enemySheet, itemSheet);
+    }
 }
