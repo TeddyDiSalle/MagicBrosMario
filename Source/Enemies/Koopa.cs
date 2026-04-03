@@ -7,7 +7,7 @@ using MagicBrosMario.Source.MarioStates;
 using MagicBrosMario.Source.Sprite;
 
 namespace MagicBrosMario.Source;
-
+//Roshan Ramamurthy
 public class Koopa : IEnemy, ICollidable
 {
     private const int VELOCITY = 100;
@@ -69,8 +69,8 @@ public class Koopa : IEnemy, ICollidable
     public Koopa(SharedTexture EnemyTexture, int y, int x)
     {
         sprites = [
-            EnemyTexture.NewAnimatedSprite(296, 206, 18, 25, 2, 0.2f),
-            EnemyTexture.NewAnimatedSprite(182, 206, 18, 25, 2, 0.2f),
+            EnemyTexture.NewAnimatedSprite(296, 206, 18, 24, 2, 0.2f),
+            EnemyTexture.NewAnimatedSprite(182, 206, 18, 24, 2, 0.2f),
             EnemyTexture.NewSprite(144, 216, 16, 14),
             EnemyTexture.NewSprite(144, 216, 16, 14),
             EnemyTexture.NewSprite(163, 215, 16, 15),

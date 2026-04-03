@@ -8,7 +8,7 @@ using MagicBrosMario.Source.MarioStates;
 using MagicBrosMario.Source.Sprite;
 
 namespace MagicBrosMario.Source;
-
+//Roshan Ramamurthy
 public class RotatingFireBar : IEnemy, ICollidable
 {
     private const float ROTATION_SPEED = 1.0f;

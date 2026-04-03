@@ -8,7 +8,7 @@ using MagicBrosMario.Source.MarioStates;
 using MagicBrosMario.Source.Sprite;
 
 namespace MagicBrosMario.Source;
-
+//Roshan Ramamurthy
 public class Bowser : IEnemy, ICollidable
 {
     private const int VELOCITY = 100;
