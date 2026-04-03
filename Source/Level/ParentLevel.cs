@@ -12,6 +12,7 @@ using MagicBrosMario.Source.Items;
 namespace MagicBrosMario.Source.Level;
 public abstract class ParentLevel : ILevel
 {
+	static bool _ManagersIntialized = false;
     protected IBlock[][] blocks;
     protected IEnemy[][] enemies;
     protected IItems[][] items;
@@ -27,6 +28,8 @@ public abstract class ParentLevel : ILevel
 	protected string[] itemLines;
 	private int levWidth;
 	private int levHeight;
+	public int MarioStartPosX {get; protected set; }
+	public int MarioStartPosY {get; protected set; }
 
     public void Initialize(Microsoft.Xna.Framework.Content.ContentManager contentManager, Texture2D bTexture, Texture2D eTexture, Texture2D iTexture)	{
 		tileSize = _blockSize * _scale;
@@ -50,10 +53,18 @@ public abstract class ParentLevel : ILevel
 
 		}
 
+		InitializeManagers(bTexture, eTexture, iTexture);
+		LoadContent();
+	}
+
+	private static void InitializeManagers(Texture2D bTexture, Texture2D eTexture, Texture2D iTexture)	{
+		if(_ManagersIntialized)	{
+			return;
+		}		
+		_ManagersIntialized = true;
 		BlockManager.Initialize(bTexture);
 		EnemyManager.Initialize(eTexture);
 		ItemManager.Initialize(iTexture);
-		LoadContent();
 	}
 
 // if you want to read from csv, must be before Initialize
@@ -144,4 +155,24 @@ public abstract class ParentLevel : ILevel
 		}
 
 	}
-    }
+
+	public void Clear()	{
+		// Clears enemies, blocks, and items from the level and collision controller
+		for(int r = 0; r < levHeight; r++)	{
+			for(int c = 0; c < levWidth; c++)	{
+				if(blocks[r][c] != null)	{
+					CollisionController.Instance.RemoveBlock(blocks[r][c]);
+					blocks[r][c] = null;
+				}
+				if(enemies[r][c] != null)	{
+					CollisionController.Instance.RemoveEnemy(enemies[r][c]);
+					enemies[r][c] = null;
+				}
+				if(items[r][c] != null)	{
+					CollisionController.Instance.RemoveItem(items[r][c]);
+					items[r][c] = null;
+				}
+			}
+		}
+	}
+}

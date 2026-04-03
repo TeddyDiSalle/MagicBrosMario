@@ -50,10 +50,12 @@ public class MarioGameController{
         inputMap.Bind(Keys.N, gt =>  player.Attack());
         inputMap.Bind(Keys.E, gt =>  player.TakeDamage());
         inputMap.Bind(Keys.Q, gt => game.Exit()); 
-        inputMap.Bind(Keys.R, gt => game.Exit()); // TODO: NEED RESET IMPLEMTATION
+        inputMap.Bind(Keys.R, gt => MagicBrosMario.INSTANCE.Level1());
 
         // mouse inputs
         inputMap.Bind(m => m.IsButtonDown(MouseButton.Right), () => game.Exit());
+        inputMap.Bind(m => m.IsButtonDown(MouseButton.Left) && m.Position.X < gameData.halfX, () => MagicBrosMario.INSTANCE.Debug());//If you click the left side of the screen, call DebugRomm()
+        inputMap.Bind(m => m.IsButtonDown(MouseButton.Left) && m.Position.X >= gameData.halfX, () => MagicBrosMario.INSTANCE.Level1()); //If you click the right side of the screen, call Level1()
     }
     public void Update(GameTime gameTime)
     {

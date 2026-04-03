@@ -52,6 +52,10 @@ public class CollisionController {
         enemies.Remove(collidableEnemy);
     }
 
+    public void RemovePlayer(){
+        player = null;
+    }
+
     public void Update(GameTime gameTime) {
         {
             // player

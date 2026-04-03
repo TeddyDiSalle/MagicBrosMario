@@ -3,6 +3,8 @@ namespace MagicBrosMario.Source.Level;
 public class Level1 : ParentLevel
 {
 	public Level1()	{
+		MarioStartPosX = 100;
+		MarioStartPosY = 300;
 		Level1BlockCVS = "Content/LevelData/1-1/Blocks1-1.csv";
 		Level1EnemyCVS = "Content/LevelData/1-1/Enemies1-1.csv";
 		Level1ItemCVS = "Content/LevelData/1-1/Items1-1.csv";

@@ -1,5 +1,6 @@
 // Made By Teddy
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Runtime.ConstrainedExecution;
 using System.Xml.Linq;
@@ -25,8 +26,10 @@ public static class EnemyManager
 
             if (!string.IsNullOrEmpty(id) && !string.IsNullOrEmpty(function))
             {
+                
                 EnemyConstructors[id] = GetEnemyConstructor(function);
             }
+            
         }
         EnemyFactory.BindTexture(texture);
     }
@@ -47,6 +50,9 @@ public static class EnemyManager
         {
             "Goomba" => (x, y) => EnemyFactory.CreateGoomba(x, y),
             "Koopa" => (x, y) => EnemyFactory.CreateKoopa(x, y),
+            "Bowser" => (x, y) => EnemyFactory.CreateBowser(x, y, MagicBrosMario.INSTANCE.FireTexture),
+            "PiranhaPlant" => (x, y) => EnemyFactory.CreatePiranhaPlant(x, y),
+            "RotatingFireBar" => (x, y) => EnemyFactory.CreateRotatingFireBar(x, y),
             _ => throw new ArgumentException($"Unknown enemy function: {functionName}")
         };
     }

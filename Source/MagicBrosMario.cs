@@ -22,9 +22,7 @@ public class MagicBrosMario : Game
     public SharedTexture ItemTexture { get; }
     public SharedTexture EnemyTexture { get; }
     public SharedTexture FireTexture { get; }
-    private float[] MarioStartPos = { 100, 300 };
     private ILevel lvl;
-
     public static MagicBrosMario INSTANCE { get; private set; }
     public List<IItems> items { get; } = new();
 
@@ -59,13 +57,12 @@ public class MagicBrosMario : Game
         MarioTexture.BindTexture(marioSheet);
         FireTexture.BindTexture(fireSheet);
 
-        lvl = new Level1();
-        lvl.Initialize(Content, blockTexture, enemySheet, itemSheet);
+        Level1(); // Intializes mario where level1 wants
 
-        Mario = new Player(MarioTexture);
-        Mario.SetPositon(new Vector2(MarioStartPos[0], MarioStartPos[1]));
-        Mario.PowerUp(Power.FireFlower);
+        setController();
+    }
 
+    private void setController()	{
         MarioGameController.Sprint2Controller data = new MarioGameController.Sprint2Controller
         {
             player = Mario,
@@ -104,22 +101,43 @@ public class MagicBrosMario : Game
 
     public void Debug()
     {
-        
+        resetLevel();
         Texture2D blockTexture = Content.Load<Texture2D>("blocks");
         Texture2D itemSheet = Content.Load<Texture2D>("items");
         Texture2D enemySheet = Content.Load<Texture2D>("characters");
         
         lvl = new DebugRoom();
         lvl.Initialize(Content, blockTexture, enemySheet, itemSheet);
+        resetMario();
     }
 
     public void Level1()
     {
+        resetLevel();
         Texture2D blockTexture = Content.Load<Texture2D>("blocks");
         Texture2D itemSheet = Content.Load<Texture2D>("items");
         Texture2D enemySheet = Content.Load<Texture2D>("characters");
 
         lvl = new Level1();
         lvl.Initialize(Content, blockTexture, enemySheet, itemSheet);
+
+        resetMario();
+    }
+
+    private void resetLevel()
+    {
+        if(lvl != null) lvl.Clear();
+        
+        Camera.Instance.Position = Point.Zero;
+        Camera.Instance.Sprites.Clear();
+    }
+
+    private void resetMario()
+    {
+        CollisionController.Instance.RemovePlayer();	
+        Mario = new Player(MarioTexture);
+        Mario.SetPositon(new Vector2(lvl.MarioStartPosX, lvl.MarioStartPosY));
+        Mario.PowerUp(Power.FireFlower);
+        setController();
     }
 }

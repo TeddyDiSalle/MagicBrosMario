@@ -14,13 +14,28 @@ public static class EnemyFactory {
 
     public static IEnemy CreateGoomba(int x, int y) {
         var enemy = new Goomba(ENEMY_SHARED_TEXTURE,y,x);
-        enemy.Position = new Point(x, y);
+        //enemy.Position = new Point(x, y);
         return enemy;
     }
 
     public static IEnemy CreateKoopa(int x, int y) {
         var enemy = new Koopa(ENEMY_SHARED_TEXTURE,y,x);
-        enemy.Position = new Point(x, y);
+        //enemy.Position = new Point(x, y);
+        return enemy;
+    }
+
+    public static IEnemy CreateBowser(int x, int y, SharedTexture fireTexture) {
+        var enemy = new Bowser(ENEMY_SHARED_TEXTURE, fireTexture, y, x);
+        return enemy;
+    }
+
+    public static IEnemy CreatePiranhaPlant(int x, int y) {
+        var enemy = new PiranhaPlant(ENEMY_SHARED_TEXTURE,y,x);
+        return enemy;
+    }
+
+    public static IEnemy CreateRotatingFireBar(int x, int y) {
+        var enemy = new RotatingFireBar(ENEMY_SHARED_TEXTURE,y,x, 6, 16);
         return enemy;
     }
 
