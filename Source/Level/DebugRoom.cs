@@ -1,43 +1,44 @@
 // Made By Teddy
-using System;
-using System.IO;
-using System.Linq;
-using MagicBrosMario.Source.Block; 
-using MagicBrosMario.Source.Sprite; 
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using MagicBrosMario.Source.Collision;
-using MagicBrosMario.Source.Items;
 
 namespace MagicBrosMario.Source.Level;
 
-public class DebugRoom : ILevel
+public class DebugRoom : ParentLevel
 {
     public DebugRoom()	{
-		/*blockLines = File.ReadLines(Level1BlockCVS).ToArray();
-		enemyLines = File.ReadLines(Level1EnemyCVS).ToArray();
-		itemLines = File.ReadLines(Level1ItemCVS).ToArray();
 
-		
-		blocks = new IBlock[levHeight][];
-		enemies = new IEnemy[levHeight][];
-		items = new IItems[levHeight][];
-		for(int i = 0; i < levHeight; i++)	{
-			blocks[i] = new IBlock[levWidth];
-			enemies[i] = new IEnemy[levWidth];
-			items[i] = new IItems[levWidth];
+		//If you wish to edit the debug room for your own purposes
+		// Look at Blocks, Items, or Enemies.xml in the LevelData folder for the correct object ids
+		blockLines =  ["  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ",
+					   "  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ",
+					   "  ,  ,  ,  ,  ,  ,  ,04,  ,  ,  ,  ,  ,  ",
+					   "  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ",
+					   "  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ",
+					   "  ,  ,  ,  ,  ,  ,  ,02,  ,  ,07,  ,07,  ",
+					   "  ,  ,  ,04,  ,  ,  ,02,  ,  ,  ,  ,  ,  ",
+					   "  ,  ,  ,  ,  ,  ,  ,02,  ,  ,  ,  ,  ,  ",
+					   "  ,  ,  ,  ,  ,  ,  ,02,  ,  ,  ,  ,  ,02",
+					   "02,02,02,02,02,02,02,02,02,02,02,02,02,02",];
 
-		}	*/
-	}
-	public void Initialize(Microsoft.Xna.Framework.Content.ContentManager contentManager, Texture2D tilesetTexture, Texture2D characterTexture, Texture2D itemTexture)
-	{
-	}
+		enemyLines =  ["  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ",
+					   "  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ",
+					   "  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ",
+					   "  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ",
+					   "  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ",
+					   "  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ",
+					   "  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ",
+					   "  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,00,  ",
+					   "  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,01,  ,  ,  ",
+					   "  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ",];
 
-	public void Update(GameTime gameTime)
-	{
-	}
-
-	public void Draw(SpriteBatch spriteBatch)
-	{
+		itemLines =  ["  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ",
+					   "  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ",
+					   "  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ",
+					   "  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,00,  ,  ,  ", // one coin outside a mystery block
+					   "  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ",
+					   "  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,00,  ,01,  ", // coin inside a mystery block and mush/ff in a mb
+					   "  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ",
+					   "  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ",
+					   "  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ",
+					   "  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ",];
 	}
 }
