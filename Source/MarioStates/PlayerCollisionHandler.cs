@@ -139,17 +139,21 @@ public class PlayerCollisionHandler
     {
   
         UnCollide(Rectangle.Intersect(CollisionBox, block.CollisionBox), direction);
+        
+        Debug.Write(direction);
         if(direction == CollideDirection.Down)
         {
+            player.SetPositon(new Vector2(player.Position.X, block.CollisionBox.Top - player.CollisionBox.Height));
             UnjumpOnGroundCollide();
         }
         
     }
     private void UnjumpOnGroundCollide()
     {
+        player.IsGrounded = true;
         if (!player.IsJumping || !player.IsAlive) { return; }
         player.IsJumping = false;
-        player.IsGrounded = true;
+        
         switch (player.GetCurrentPower())
         {
             case Power.None:
@@ -174,9 +178,9 @@ public class PlayerCollisionHandler
                 player.SetVelocity(new Vector2(player.Velocity.X, 0));
                 break;
             case Collision.CollideDirection.Down:
-                float newY = player.Position.Y - intersect.Height;
-                newY = (float)Math.Floor(newY);
-                player.SetPositon(new Vector2(player.Position.X, newY));
+                //float newY = player.Position.Y - intersect.Height;
+                //newY = (float)Math.Floor(newY);
+                //player.SetPositon(new Vector2(player.Position.X, newY));
                 player.SetVelocity(new Vector2(player.Velocity.X, 0));
                 break;
             case Collision.CollideDirection.Left:
