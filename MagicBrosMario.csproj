@@ -17,6 +17,9 @@
     <Compile Remove="Source\MarioStates\RightSmallMarioIdleState.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Content\LevelData\**\*" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.*" />
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.*" />
   </ItemGroup>
