@@ -7,7 +7,7 @@ using MagicBrosMario.Source.MarioStates;
 using MagicBrosMario.Source.Sprite;
 
 namespace MagicBrosMario.Source;
-
+//Roshan Ramamurthy
 public class Goomba : IEnemy, ICollidable
 {
     private const int VELOCITY = 100;
@@ -39,8 +39,8 @@ public class Goomba : IEnemy, ICollidable
 
     public Goomba(SharedTexture EnemyTexture, int y, int x)
     {
-        sprites = [EnemyTexture.NewAnimatedSprite(295, 187, 18, 18, 2, 0.2f), 
-                    EnemyTexture.NewSprite(276, 187, 18, 18)];
+        sprites = [EnemyTexture.NewAnimatedSprite(295, 187, 18, 16, 2, 0.2f), 
+                    EnemyTexture.NewSprite(276, 187, 18, 16)];
         foreach (var sprite in sprites)
         {
             sprite.Scale = SCALE;

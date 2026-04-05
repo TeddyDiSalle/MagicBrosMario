@@ -2,4 +2,7 @@
 <Enemies>
     <Enemy id="00" function="Goomba" />
     <Enemy id="01" function="Koopa" />
+    <Enemy id="02" function="Bowser" />
+    <Enemy id="03" function="PiranhaPlant" />
+    <Enemy id="04" function="RotatingFireBar" />
 </Enemies>

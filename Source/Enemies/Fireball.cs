@@ -6,8 +6,8 @@ using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.MarioStates;
 
 namespace MagicBrosMario.Source;
-
-public class Fireball : ICollidable
+//Roshan Ramamurthy
+public class Fireball : IEnemy, ICollidable
 {
     private const int VELOCITY = 150;
     private const float LIFETIME = 3.0f;
@@ -67,13 +67,16 @@ public class Fireball : ICollidable
         spriteRight.Visible = movingRight;
         spriteLeft.Visible = !movingRight;
     }
-
+    public bool GetIsAlive() => isActive;
+    public void Kill() => Deactivate();
     private void Deactivate()
     {
         isActive = false;
         spriteRight.Drop();
         spriteLeft.Drop();
+        CollisionController.Instance.RemoveEnemy(this);
     }
+
 
     public bool IsExpired() => !isActive || lifetimeRemaining <= 0;
 

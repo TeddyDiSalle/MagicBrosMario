@@ -7,7 +7,7 @@ using MagicBrosMario.Source.MarioStates;
 using MagicBrosMario.Source.Sprite;
 
 namespace MagicBrosMario.Source;
-
+//Roshan Ramamurthy
 public class PiranhaPlant : IEnemy, ICollidable
 {
     private const float RISE_SPEED = 100f;
@@ -44,7 +44,7 @@ public class PiranhaPlant : IEnemy, ICollidable
         }
     }
 
-    public PiranhaPlant(SharedTexture EnemyTexture, int pipeX, int pipeY)
+    public PiranhaPlant(SharedTexture EnemyTexture, int pipeY, int pipeX)
     {
         hiddenY = pipeY;
         visibleY = pipeY - RISE_HEIGHT;

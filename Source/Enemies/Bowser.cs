@@ -8,13 +8,14 @@ using MagicBrosMario.Source.MarioStates;
 using MagicBrosMario.Source.Sprite;
 
 namespace MagicBrosMario.Source;
-
+//Roshan Ramamurthy
 public class Bowser : IEnemy, ICollidable
 {
     private const int VELOCITY = 100;
     private const float FIRE_COOLDOWN = 3.0f;
     private const float GRAVITY = 0.35f;
     private const int MAX_HEALTH = 16;
+    private const float SCALE = 2f;
 
     private Sprite.AnimatedSprite walkingRightSprite;
     private Sprite.AnimatedSprite walkingLeftSprite;
@@ -54,6 +55,8 @@ public class Bowser : IEnemy, ICollidable
         walkingLeftSprite = EnemyTexture.NewAnimatedSprite(116, 368, 35, 32, 2, 0.2f);
         walkingRightSprite.Visible = true;
         walkingLeftSprite.Visible = false;
+        walkingRightSprite.Scale = SCALE;
+        walkingLeftSprite.Scale = SCALE;
         Position = new Point(x, y);
         fireCooldownTimer = FIRE_COOLDOWN;
     }
@@ -101,6 +104,7 @@ public class Bowser : IEnemy, ICollidable
             fireTexture.NewAnimatedSprite(101, 253, 24, 8, 2, 0.1f),
             Position.X, Position.Y, movingRight);
         activeFireballs.Add(fireball);
+        CollisionController.Instance.AddEnemy(fireball);
     }
 
     private void Move(GameTime gameTime)
