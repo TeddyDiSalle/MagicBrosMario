@@ -19,7 +19,7 @@ public class SoundController
 
     private void LoadSound(SoundTypes type, string soundName)
     {
-        sounds.Add(type, MagicBrosMario.INSTANCE.Content.Load<SoundEffect>(soundName));
+        sounds.Add(type, MagicBrosMario.INSTANCE.Content.Load<SoundEffect>("Sounds/"+soundName));
     }
 
     public static void PlaySound(SoundTypes type, float volume)
