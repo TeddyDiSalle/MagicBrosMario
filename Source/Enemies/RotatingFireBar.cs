@@ -39,7 +39,7 @@ public class RotatingFireBar : IEnemy, ICollidable
         }
     }
 
-    public RotatingFireBar(SharedTexture FireTexture, int centerX, int centerY, int fireballCount, int fireballSpacing)
+    public RotatingFireBar(SharedTexture FireTexture, int centerY, int centerX, int fireballCount, int fireballSpacing)
     {
         this.centerPosition = new Point(centerX, centerY);
         this.fireballCount = fireballCount;

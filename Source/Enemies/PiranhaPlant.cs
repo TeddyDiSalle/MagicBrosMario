@@ -44,7 +44,7 @@ public class PiranhaPlant : IEnemy, ICollidable
         }
     }
 
-    public PiranhaPlant(SharedTexture EnemyTexture, int pipeX, int pipeY)
+    public PiranhaPlant(SharedTexture EnemyTexture, int pipeY, int pipeX)
     {
         hiddenY = pipeY;
         visibleY = pipeY - RISE_HEIGHT;
