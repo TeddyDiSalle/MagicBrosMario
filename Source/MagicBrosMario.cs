@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using MagicBrosMario.Source.Items;
+using MagicBrosMario.Source.GameStates;
 
 
 namespace MagicBrosMario.Source;
@@ -15,7 +16,9 @@ public class MagicBrosMario : Game
 {
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
-    private MarioGameController Controller;
+	private IGameState _currentState;
+    public MarioGameController Controller { get; private set; }
+	private IGameState currentState;
 
     public Player Mario;
     public SharedTexture MarioTexture { get; }
@@ -26,7 +29,16 @@ public class MagicBrosMario : Game
     public static MagicBrosMario INSTANCE { get; private set; }
     public List<IItems> items { get; } = new();
 
-    public MagicBrosMario()
+	public enum GameState
+	{
+		TitleScreen,
+		Loading,   // The black transition screen
+		Playing,
+		Paused,
+		GameOver
+	}
+
+	public MagicBrosMario()
     {
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
@@ -57,12 +69,29 @@ public class MagicBrosMario : Game
         MarioTexture.BindTexture(marioSheet);
         FireTexture.BindTexture(fireSheet);
 
-        Level1(); // Intializes mario where level1 wants
+		Mario = new Player(MarioTexture);
 
-        setController();
+		MarioGameController.Sprint2Controller data = new()
+		{
+			player = Mario,
+			keyb = new KeyboardInfo(),
+			mouse = new MouseInfo(),
+			halfX = Camera.Instance.WindowSize.X / 2,
+			halfY = Camera.Instance.WindowSize.Y / 2
+		};
+		Controller = new MarioGameController(this, ref data);
+
+		_currentState = new TitleScreenState(this);
+
+
+		setController();
     }
+	public void SetState(IGameState newState)
+	{
+		_currentState = newState;
+	}
 
-    private void setController()	{
+	private void setController()	{
         MarioGameController.Sprint2Controller data = new MarioGameController.Sprint2Controller
         {
             player = Mario,
@@ -77,10 +106,11 @@ public class MagicBrosMario : Game
     protected override void Update(GameTime gameTime)
     {
         Controller.Update(gameTime);
-        lvl.Update(gameTime);
+        //lvl.Update(gameTime);
         Mario.Update(gameTime);
+		_currentState.Update(gameTime);
 
-        int cameraX = Math.Max(Camera.Instance.Position.X, (int)Mario.Position.X - Camera.Instance.WindowSize.X / 2);
+		int cameraX = Math.Max(Camera.Instance.Position.X, (int)Mario.Position.X - Camera.Instance.WindowSize.X / 2);
         Camera.Instance.Position = new Point(cameraX, 0);
         Camera.Instance.Update(gameTime);
 
@@ -94,7 +124,8 @@ public class MagicBrosMario : Game
 
         _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
         Camera.Instance.Draw(_spriteBatch);
-        _spriteBatch.End();
+		_currentState.Draw(_spriteBatch);
+		_spriteBatch.End();
 
         base.Draw(gameTime);
     }
