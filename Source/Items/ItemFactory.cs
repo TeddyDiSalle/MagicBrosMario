@@ -12,21 +12,24 @@ public static class ItemFactory {
     }
 
     public static IItems CreateCoin(int x, int y) {
-        var item = new Coin(ITEM_SHARED_TEXTURE, x, y);
+        var item = new CollectableCoin(ITEM_SHARED_TEXTURE, x, y);
         return item;
     }
-
+    public static IItems CreateMushroom(int x, int y) {
+        var item = new Mushroom(ITEM_SHARED_TEXTURE, x, y);
+        return item;
+    }
     public static IItems CreateFireFlower(int x, int y) {
-        var item = new Fireflower(ITEM_SHARED_TEXTURE, x, y); // TODO get rid of bounds in parameters
+        var item = new Fireflower(ITEM_SHARED_TEXTURE, x, y);
         return item;
     }
 
     public static IItems CreateStar(int x, int y) {
-        var item = new Star(ITEM_SHARED_TEXTURE, x, y); // TODO get rid of bounds in parameters
+        var item = new Star(ITEM_SHARED_TEXTURE, x, y);
         return item;
     }
     public static IItems CreateOneUp(int x, int y) {
-        var item = new OneUp(ITEM_SHARED_TEXTURE, x, y); // TODO get rid of bounds in parameters
+        var item = new OneUp(ITEM_SHARED_TEXTURE, x, y);
         return item;
     }
 

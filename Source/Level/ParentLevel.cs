@@ -30,6 +30,7 @@ public abstract class ParentLevel : ILevel
 	private int levHeight;
 	public int MarioStartPosX {get; protected set; }
 	public int MarioStartPosY {get; protected set; }
+	public String Name {get; protected set; }
 
     public void Initialize(Microsoft.Xna.Framework.Content.ContentManager contentManager, Texture2D bTexture, Texture2D eTexture, Texture2D iTexture)	{
 		tileSize = _blockSize * _scale;

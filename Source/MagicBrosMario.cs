@@ -26,7 +26,6 @@ public class MagicBrosMario : Game
     public SpriteFont font { get; private set; }
     private ILevel lvl;
     public static MagicBrosMario INSTANCE { get; private set; }
-    public List<IItems> items { get; } = new();
 
     public MagicBrosMario()
     {
