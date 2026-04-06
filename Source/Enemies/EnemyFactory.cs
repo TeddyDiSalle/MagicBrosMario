@@ -24,8 +24,8 @@ public static class EnemyFactory {
         return enemy;
     }
 
-    public static IEnemy CreateBowser(int x, int y, SharedTexture fireTexture) {
-        var enemy = new Bowser(ENEMY_SHARED_TEXTURE, fireTexture, y, x);
+    public static IEnemy CreateBowser(int x, int y) {
+        var enemy = new Bowser(ENEMY_SHARED_TEXTURE, MagicBrosMario.INSTANCE.FireTexture, y, x);
         return enemy;
     }
 
@@ -35,7 +35,7 @@ public static class EnemyFactory {
     }
 
     public static IEnemy CreateRotatingFireBar(int x, int y) {
-        var enemy = new RotatingFireBar(ENEMY_SHARED_TEXTURE,y,x, 6, 16);
+        var enemy = new RotatingFireBar(MagicBrosMario.INSTANCE.FireTexture,y,x, 6, 16);
         return enemy;
     }
 
