@@ -9,29 +9,40 @@ namespace MagicBrosMario.Source.GameStates
 	{
 		private MagicBrosMario _game;
 		private Texture2D _titleTexture;
+        private SpriteFont _font;
 
-		public TitleScreenState(MagicBrosMario game)
+        public TitleScreenState(MagicBrosMario game)
 		{
 			_game = game;
-			// Ensure "MarioTitleScreen" is the name of your file in Content
 			_titleTexture = _game.Content.Load<Texture2D>("MarioTitleScreen");
-		}
+            _font = _game.Content.Load<SpriteFont>("font");
+        }
 
 		public void Update(GameTime gameTime)
 		{
-			// When Enter is pressed, skip transitions and go straight to Level 1
-			if (Keyboard.GetState().IsKeyDown(Keys.Enter))
-			{
-				_game.SetState(new PlayingState(_game, new Level1()));
-			}
-		}
+            if (Keyboard.GetState().IsKeyDown(Keys.Enter))
+            {
+                _game.SetState(new TransitionState(_game, new Level.Level1()));
+            }
+        }
 
 		public void Draw(SpriteBatch spriteBatch)
 		{
-			// Draw the title image to fill the screen
 			spriteBatch.Draw(_titleTexture, new Rectangle(0, 0,
 				_game.GraphicsDevice.Viewport.Width,
 				_game.GraphicsDevice.Viewport.Height), Color.White);
-		}
+
+			string text = "Press Enter to Start\n\n  Press R to Reset";
+
+            Vector2 textSize = _font.MeasureString(text);
+            Vector2 position = new Vector2(
+                (_game.GraphicsDevice.Viewport.Width / 2) - (textSize.X / 2),
+                (_game.GraphicsDevice.Viewport.Height / 2) + 50
+            );
+
+            spriteBatch.DrawString(_font, text, position, Color.White);
+
+
+        }
 	}
 }
