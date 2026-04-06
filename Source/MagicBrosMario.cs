@@ -47,7 +47,7 @@ public class MagicBrosMario : Game
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
-        SoundController.LoadSounds();
+        SoundEffectController.LoadSounds();
 
         Texture2D marioSheet = Content.Load<Texture2D>("MarioSpriteSheet");
         Texture2D blockTexture = Content.Load<Texture2D>("blocks");
