@@ -35,7 +35,7 @@ public class PlayerCollisionHandler
         switch (item)
         {
             case Cloud cloud:
-                UnCollide(Rectangle.Intersect(CollisionBox, cloud.CollisionBox), direction);
+                UnCollide(cloud.CollisionBox, direction);
                 if (direction == CollideDirection.Down)
                 {
                     player.SetPositon(player.Position + new Vector2(cloud.getX(), 0));
@@ -48,21 +48,21 @@ public class PlayerCollisionHandler
                 player.PowerUp(Power.FireFlower);
                 break;
             case MovingPlatform_Size1 plat:
-                UnCollide(Rectangle.Intersect(CollisionBox, plat.CollisionBox), direction);
+                UnCollide(plat.CollisionBox, direction);
                 if (direction is CollideDirection.Left or CollideDirection.Right) { return; }
                 player.SetVelocity(new Vector2(player.Velocity.X, 0));
                 player.SetPositon(player.Position + new Vector2(0, plat.getY()));
                 UnjumpOnGroundCollide();
                 break;
             case MovingPlatform_Size2 plat:
-                UnCollide(Rectangle.Intersect(CollisionBox, plat.CollisionBox), direction);
+                UnCollide(plat.CollisionBox, direction);
                 if (direction is CollideDirection.Left or CollideDirection.Right) { return; }
                 player.SetVelocity(new Vector2(player.Velocity.X, 0));
                 player.SetPositon(player.Position + new Vector2(0, plat.getY()));
                 UnjumpOnGroundCollide();
                 break;
             case MovingPlatform_Size3 plat:
-                UnCollide(Rectangle.Intersect(CollisionBox, plat.CollisionBox), direction);
+                UnCollide(plat.CollisionBox, direction);
                 if (direction is CollideDirection.Left or CollideDirection.Right) { return; }
                 player.SetVelocity(new Vector2(player.Velocity.X, 0));
                 player.SetPositon(player.Position + new Vector2(0, plat.getY()));
@@ -75,7 +75,7 @@ public class PlayerCollisionHandler
                 player.Lives++;
                 break;
             case Spring_Stretched spring:
-                UnCollide(Rectangle.Intersect(CollisionBox, spring.CollisionBox), direction);
+                UnCollide(spring.CollisionBox, direction);
                 player.SetVelocity(player.Velocity - new Vector2(0, 15));
                 break;
             case Star:
@@ -95,7 +95,7 @@ public class PlayerCollisionHandler
                 player.TakeDamage();
                 break;
             case Bowser bowser:
-                UnCollide(Rectangle.Intersect(CollisionBox, bowser.CollisionBox), direction);
+                UnCollide(bowser.CollisionBox, direction);
                 player.TakeDamage();
                 break;
             case PiranhaPlant:
@@ -104,7 +104,7 @@ public class PlayerCollisionHandler
             case Goomba goomba:
                 if (direction == CollideDirection.Down)
                 {
-                    UnCollide(Rectangle.Intersect(CollisionBox, goomba.CollisionBox), direction);
+                    UnCollide(goomba.CollisionBox, direction);
                     player.SetVelocity(player.Velocity - new Vector2(0, 7));
                 }
                 else
@@ -115,8 +115,11 @@ public class PlayerCollisionHandler
             case Koopa koopa:
                 if (direction == CollideDirection.Down)
                 {
-                    UnCollide(Rectangle.Intersect(CollisionBox, koopa.CollisionBox), direction);
+                    UnCollide(koopa.CollisionBox, direction);
                     player.SetVelocity(player.Velocity - new Vector2(0, 7));
+                }else if((direction == CollideDirection.Right || direction == CollideDirection.Left) && koopa.IsShellMoving())
+                {
+                    //Nothing
                 }
                 else
                 {
@@ -132,24 +135,22 @@ public class PlayerCollisionHandler
             default:
                 //Nothing
                 break;
-
         }
     }
     public void OnCollideBlock(IBlock block, Collision.CollideDirection direction)
     {
-  
-        UnCollide(Rectangle.Intersect(CollisionBox, block.CollisionBox), direction);
-        if(direction == CollideDirection.Down)
+        UnCollide(block.CollisionBox, direction);
+        if (direction == CollideDirection.Down)
         {
             UnjumpOnGroundCollide();
         }
-        
     }
     private void UnjumpOnGroundCollide()
     {
+        player.IsGrounded = true;
         if (!player.IsJumping || !player.IsAlive) { return; }
         player.IsJumping = false;
-        player.IsGrounded = true;
+        
         switch (player.GetCurrentPower())
         {
             case Power.None:
@@ -165,29 +166,27 @@ public class PlayerCollisionHandler
                 break;
         }
     }
-    public void UnCollide(Rectangle intersect, Collision.CollideDirection direction)
+    public void UnCollide(Rectangle block, Collision.CollideDirection direction)
     {
         switch (direction)
         {
             case Collision.CollideDirection.Top:
-                player.SetPositon(player.Position + new Vector2(0, intersect.Height));
+                player.SetPositon(new Vector2(player.Position.X, block.Bottom));
                 player.SetVelocity(new Vector2(player.Velocity.X, 0));
                 break;
             case Collision.CollideDirection.Down:
-                float newY = player.Position.Y - intersect.Height;
-                newY = (float)Math.Floor(newY);
-                player.SetPositon(new Vector2(player.Position.X, newY));
+                player.SetPositon(new Vector2(player.Position.X, block.Top - player.CollisionBox.Height));
                 player.SetVelocity(new Vector2(player.Velocity.X, 0));
+                
                 break;
             case Collision.CollideDirection.Left:
-                player.SetPositon(player.Position + new Vector2(intersect.Width, 0));
+                player.SetPositon(new Vector2(block.Right, player.Position.Y));
                 player.SetVelocity(new Vector2(0, player.Velocity.Y));
                 break;
             case Collision.CollideDirection.Right:
-                player.SetPositon(player.Position - new Vector2(intersect.Width, 0));
+                player.SetPositon(new Vector2(block.Left - player.CollisionBox.Width, player.Position.Y));
                 player.SetVelocity(new Vector2(0, player.Velocity.Y));
                 break;
         }
-
     }
 }

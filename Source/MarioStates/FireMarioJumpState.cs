@@ -11,7 +11,7 @@ public class FireMarioJumpState : IPlayerState
     private readonly float timeFrame;
     private readonly int scaleFactor;
     private readonly Sprite.ISprite[] Sprites;
-    private const int maxJumpCalls = 6;
+    private const int maxJumpCalls = 7;
     private int JumpCalls = 0;
     private bool IsAttacking = false;
     public FireMarioJumpState(Player Mario, Sprite.SharedTexture texture, float timeFrame, int scaleFactor)
@@ -36,7 +36,7 @@ public class FireMarioJumpState : IPlayerState
         CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
         Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 16 * scaleFactor, 32 * scaleFactor);
         Mario.IsJumping = true;
-        Mario.IsGrounded = false;
+        //Mario.IsGrounded = false;
     }
     public void Left(GameTime gameTime)
     {
