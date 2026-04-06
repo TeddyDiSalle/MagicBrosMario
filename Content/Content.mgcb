@@ -56,12 +56,6 @@
 /processorParam:TextureFormat=Compressed
 /build:Font.spritefont
 
-#begin game_over.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:game_over.wav
-
 #begin items.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -73,18 +67,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:items.png
-
-#begin jump_small.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:jump_small.wav
-
-#begin jump_super.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:jump_super.wav
 
 #begin LevelData/1-1/1-1LazyDebugBackground.png
 /importer:TextureImporter
@@ -131,15 +113,33 @@
 /processorParam:TextureFormat=Color
 /build:MarioSpriteSheet.png
 
-#begin one_up.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:one_up.wav
-
 #begin Sounds/1-1/smb overworld.mp3
 /importer:Mp3Importer
 /processor:SongProcessor
 /processorParam:Quality=Best
 /build:Sounds/1-1/smb overworld.mp3
+
+#begin Sounds/game_over.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/game_over.wav
+
+#begin Sounds/jump_small.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/jump_small.wav
+
+#begin Sounds/jump_super.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/jump_super.wav
+
+#begin Sounds/one_up.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/one_up.wav
 
