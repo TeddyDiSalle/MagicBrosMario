@@ -4,6 +4,7 @@ using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.Sprite;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -17,7 +18,7 @@ public class Player : ICollidable
     public Vector2 Position { get; private set; } = new Vector2(400, 240);
     public Vector2 Velocity { get; private set; }
     public int ScaleFactor { get; } = 2;
-    private const float MovementSpeed = 5.0f, Gravity = 0.35f, MaxSpeed = 15.0f, fireballCooldown = 0.2f;
+    private const float MovementSpeed = 5.0f, Gravity = 0.35f, MaxSpeed = 4.0f, fireballCooldown = 0.2f;
     public float TimeFrame { get; } = 0.15f;
     public bool IsGrounded { get; set; } = false;
     public bool IsCrouching { get; private set; } = false;
@@ -34,7 +35,7 @@ public class Player : ICollidable
     public Sprite.SharedTexture Texture { get; }
     public bool IsJumping { get; set; } = false;
     private readonly PlayerCollisionHandler PlayerCollision;
-    public Rectangle CollisionBox { get; set; }
+    public Rectangle CollisionBox {get; set; }
 
     public Player(Sprite.SharedTexture texture)
     {
@@ -79,6 +80,10 @@ public class Player : ICollidable
     public void SetPositon(Vector2 pos)
     {
         Position = pos;
+        CollisionBox = new Rectangle(
+            (int)Math.Ceiling(pos.X),
+            (int)Math.Ceiling(pos.Y),
+            CollisionBox.Width, CollisionBox.Height);
     }
     public void SetVelocity(Vector2 vel)
     {
@@ -181,17 +186,16 @@ public class Player : ICollidable
     //Update and Draw
     public void Update(GameTime gameTime)
     {
+        bool wasGrounded = IsGrounded;
         IsGrounded = false;
         if (DamageTimer < DamageCoolDown)
         {
             DamageTimer += gameTime.ElapsedGameTime.TotalSeconds;
         }
-        //NEW
-        if (!IsGrounded) { 
+        if (!wasGrounded) { 
             Velocity += new Vector2(0, Gravity);
-         }
+        }
         Position += Velocity;
-        //NEW END
         if(StarTimeRemaining >= StarDuration)
         {
             StarTimeRemaining = 0;
@@ -214,11 +218,11 @@ public class Player : ICollidable
                 fireballs.RemoveAt(i);
             }
         }
+        CollisionBox = new Rectangle(
+            (int)Math.Ceiling(Position.X),
+            (int)Math.Ceiling(Position.Y),
+            CollisionBox.Width, CollisionBox.Height);
         PlayerState.Update(gameTime);
-        CollisionBox = new Rectangle((int)Position.X, (int)Position.Y, CollisionBox.Width, CollisionBox.Height);
-        IsGrounded = false;
-        Camera.Instance.Follow(Position);
-
     }
 
     public void Draw(SpriteBatch spriteBatch)
