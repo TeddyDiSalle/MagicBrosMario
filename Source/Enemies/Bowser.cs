@@ -14,7 +14,7 @@ public class Bowser : IEnemy, ICollidable
     private const int VELOCITY = 100;
     private const float FIRE_COOLDOWN = 3.0f;
     private const float GRAVITY = 0.35f;
-    private const int MAX_HEALTH = 16;
+    private const int MAX_HEALTH = 20;
     private const float SCALE = 2f;
 
     private Sprite.AnimatedSprite walkingRightSprite;
