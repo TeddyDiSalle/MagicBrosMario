@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.Sound;
-
+using MagicBrosMario.Source.HUDAndScoring;
 
 namespace MagicBrosMario.Source;
 
