@@ -7,8 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using MagicBrosMario.Source.Items;
-using MagicBrosMario.Source.Sound;
-using MagicBrosMario.Source.HUDAndScoring;
+
 
 namespace MagicBrosMario.Source;
 
@@ -23,7 +22,6 @@ public class MagicBrosMario : Game
     public SharedTexture ItemTexture { get; }
     public SharedTexture EnemyTexture { get; }
     public SharedTexture FireTexture { get; }
-    public SpriteFont font { get; private set; }
     private ILevel lvl;
     public static MagicBrosMario INSTANCE { get; private set; }
     public List<IItems> items { get; } = new();
@@ -47,7 +45,6 @@ public class MagicBrosMario : Game
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
-        SoundController.LoadSounds();
 
         Texture2D marioSheet = Content.Load<Texture2D>("MarioSpriteSheet");
         Texture2D blockTexture = Content.Load<Texture2D>("blocks");
@@ -59,7 +56,7 @@ public class MagicBrosMario : Game
         ItemTexture.BindTexture(itemSheet);
         MarioTexture.BindTexture(marioSheet);
         FireTexture.BindTexture(fireSheet);
-        font = Content.Load<SpriteFont>("Font");
+
         Level1(); // Intializes mario where level1 wants
 
         setController();
@@ -86,7 +83,7 @@ public class MagicBrosMario : Game
         int cameraX = Math.Max(Camera.Instance.Position.X, (int)Mario.Position.X - Camera.Instance.WindowSize.X / 2);
         Camera.Instance.Position = new Point(cameraX, 0);
         Camera.Instance.Update(gameTime);
-        HUD.Instance.Update(gameTime);
+
 
         CollisionController.Instance.Update(gameTime);
     }
@@ -96,7 +93,6 @@ public class MagicBrosMario : Game
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
         _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
-        HUD.Instance.Draw(_spriteBatch);
         Camera.Instance.Draw(_spriteBatch);
         _spriteBatch.End();
 
