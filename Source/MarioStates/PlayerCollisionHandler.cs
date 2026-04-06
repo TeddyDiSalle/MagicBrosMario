@@ -117,6 +117,9 @@ public class PlayerCollisionHandler
                 {
                     UnCollide(koopa.CollisionBox, direction);
                     player.SetVelocity(player.Velocity - new Vector2(0, 7));
+                }else if((direction == CollideDirection.Right || direction == CollideDirection.Left) && koopa.IsShellMoving())
+                {
+                    //Nothing
                 }
                 else
                 {
