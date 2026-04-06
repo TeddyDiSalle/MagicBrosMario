@@ -17,6 +17,6 @@ public enum GameEventType{
 public struct GameEvent
 {
     public GameEventType EventType;
-    public Vector2 EventPosition;
+    public Point EventPosition;
     public object Data;
 }

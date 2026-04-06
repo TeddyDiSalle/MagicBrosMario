@@ -218,7 +218,6 @@ public class Player : ICollidable
         for (int i = fireballs.Count - 1; i >= 0; i--)
         {
             fireballs[i].Update(gameTime);
-
             if (fireballs[i].IsExpired())
             {
                 fireballs.RemoveAt(i);

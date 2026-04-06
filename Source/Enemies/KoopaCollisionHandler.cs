@@ -1,8 +1,9 @@
-using Microsoft.Xna.Framework;
-using MagicBrosMario.Source.Collision;
 using MagicBrosMario.Source.Block;
+using MagicBrosMario.Source.Collision;
+using MagicBrosMario.Source.HUDAndScoring;
 using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.MarioStates;
+using Microsoft.Xna.Framework;
 
 namespace MagicBrosMario.Source;
 //Roshan Ramamurthy
@@ -52,6 +53,12 @@ public class KoopaCollisionHandler
         if (player.GetCurrentPower().Equals(Power.Star))
         {
             koopa.FullKill();
+            HUD.Instance.SendEvent(new GameEvent
+            {
+                EventType = GameEventType.EnemyStomped,
+                EventPosition = koopa.Position,
+                Data = this
+            });
             return;
         }
         if (!koopa.GetIsAlive()) return;
@@ -71,6 +78,14 @@ public class KoopaCollisionHandler
     public void OnCollideItem(IItems item, CollideDirection direction)
     {
         if (item is MarioFireball)
+        {
             koopa.FullKill();
+            HUD.Instance.SendEvent(new GameEvent
+            {
+                EventType = GameEventType.EnemyKilledByFireball,
+                EventPosition = koopa.Position,
+                Data = this
+            });
+        }
     }
 }

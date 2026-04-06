@@ -13,14 +13,16 @@ public class HUD
     private AnimatedSprite coin = new(MagicBrosMario.INSTANCE.ItemTexture, 192, 64, 10, 14, 4, 0.15f);
     private Player player = MagicBrosMario.INSTANCE.Mario;
     private int score = 0;
-    private int coinCount = 0;
+    private int coinCount = 70; //For testing and functionality check in
     private int level = 0;
-    private int time = 20;
+    private int time = 200;
     private int FrameCount = 0;
     private bool levelOver = false;
     private bool waitForNextLevel = false;
-    private int[] stompScores = { 100, 200, 400, 800, 1000, 2000, 4000, 8000 };
-    private int stompchain = 0;
+    private readonly int[] stompScores = { 100, 200, 400, 800, 1000, 2000, 4000, 8000 };
+    private int StompChain = 0;
+    private readonly double stompChainCD = 1.0;
+    private double stompChainTimer = 0;
     public static HUD Instance { get; } = new();
 
     public void SetLevel(int level)
@@ -39,10 +41,16 @@ public class HUD
         switch (gameEvent.EventType)
         {
             case GameEventType.EnemyStomped:
-                if (stompchain < stompScores.Length)
+
+                if(stompChainTimer >= stompChainCD)
                 {
-                    score += stompScores[stompchain];
-                    stompchain++;
+                    StompChain = 0;
+                }
+                stompChainTimer = 0;
+                if (StompChain < stompScores.Length)
+                {
+                    score += stompScores[StompChain];
+                    StompChain++;
                 }
                 else
                 {
@@ -52,7 +60,7 @@ public class HUD
                 break;
             case GameEventType.LandedOnGround:
                 if (player.GetCurrentPower() != Power.Star)
-                    stompchain = 0;
+                    StompChain = 0;
                 break;
             case GameEventType.EnemyKilledByFireball:
                 if(gameEvent.Data is not Bowser)
@@ -85,6 +93,7 @@ public class HUD
                 break;
             case GameEventType.EndOfLevel:
                 levelOver = true;
+                SoundEffectController.PlaySound(SoundTypes.GameOver, 1.0f);
                 break;
             default:
                 break;
@@ -94,23 +103,24 @@ public class HUD
     {
         if (waitForNextLevel) { return; }
         FrameCount++;
-        if (FrameCount == 24 && time >0)
+        if (FrameCount == 24 && time >0 && !levelOver)
         {
+            SendEvent(new GameEvent { EventType = GameEventType.CoinCollected});//For testing and functionality check in
             time--;
             FrameCount = 0;
         }
-        if (time == 0)
-            player.KillMario();
+
         if (levelOver)
         {
             time--;
             score += 50;
+            //Point incrementing sound
             if (score == 0)
             {
                 waitForNextLevel = true;
-                SoundEffectController.PlaySound(SoundTypes.GameOver, 1.0f);
             }
         }
+        else if (time == 0) { player.KillMario(); }
         coin.Position = new Point(Camera.Instance.Position.X + 250, 27);
         coin.Update(gametime);
     }

@@ -12,7 +12,7 @@ namespace MagicBrosMario.Source.MarioStates;
 //Vincent Do
 public class PlayerCollisionHandler
 {
-    private Player player;
+    private readonly Player player;
     public Rectangle CollisionBox
     {
         get
@@ -52,7 +52,7 @@ public class PlayerCollisionHandler
                 {
                     EventType = GameEventType.PowerupCollected,
                     Data = item,
-                    EventPosition = new Vector2(item.CollisionBox.X, item.CollisionBox.Y) + new Vector2(item.CollisionBox.Width / 2, item.CollisionBox.Height / 2)
+                    EventPosition = new Point(item.CollisionBox.X, item.CollisionBox.Y) + new Point(item.CollisionBox.Width / 2, item.CollisionBox.Height / 2)
                 });
                 break;
             case MovingPlatform_Size1 plat:
@@ -82,7 +82,7 @@ public class PlayerCollisionHandler
                 {
                     EventType = GameEventType.PowerupCollected,
                     Data = item,
-                    EventPosition = new Vector2(item.CollisionBox.X, item.CollisionBox.Y) + new Vector2(item.CollisionBox.Width / 2, item.CollisionBox.Height / 2)
+                    EventPosition = new Point(item.CollisionBox.X, item.CollisionBox.Y) + new Point(item.CollisionBox.Width / 2, item.CollisionBox.Height / 2)
                 });
                 break;
             case OneUp:
@@ -91,7 +91,7 @@ public class PlayerCollisionHandler
                 {
                     EventType = GameEventType.PowerupCollected,
                     Data = item,
-                    EventPosition = new Vector2(item.CollisionBox.X, item.CollisionBox.Y) + new Vector2(item.CollisionBox.Width / 2, item.CollisionBox.Height / 2)
+                    EventPosition = new Point(item.CollisionBox.X, item.CollisionBox.Y) + new Point(item.CollisionBox.Width / 2, item.CollisionBox.Height / 2)
                 });
                 break;
             case Star:
@@ -100,7 +100,7 @@ public class PlayerCollisionHandler
                 {
                     EventType = GameEventType.PowerupCollected,
                     Data = item,
-                    EventPosition = new Vector2(item.CollisionBox.X, item.CollisionBox.Y) + new Vector2(item.CollisionBox.Width / 2, item.CollisionBox.Height / 2)
+                    EventPosition = new Point(item.CollisionBox.X, item.CollisionBox.Y) + new Point(item.CollisionBox.Width / 2, item.CollisionBox.Height / 2)
                 });
                 break;
             default:
@@ -198,7 +198,6 @@ public class PlayerCollisionHandler
             case Collision.CollideDirection.Down:
                 player.SetPositon(new Vector2(player.Position.X, block.Top - player.CollisionBox.Height));
                 player.SetVelocity(new Vector2(player.Velocity.X, 0));
-                
                 break;
             case Collision.CollideDirection.Left:
                 player.SetPositon(new Vector2(block.Right, player.Position.Y));
