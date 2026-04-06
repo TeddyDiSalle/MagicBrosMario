@@ -10,7 +10,6 @@ public class HUD
 {
     private readonly SpriteFont font = MagicBrosMario.INSTANCE.font;
     private AnimatedSprite coin = new(MagicBrosMario.INSTANCE.ItemTexture, 192, 64, 10, 14, 4, 0.15f);
-    private Player player = MagicBrosMario.INSTANCE.Mario;
     private int score = 123;
     private int coinCount = 0;
     private int time = 0;
@@ -27,7 +26,7 @@ public class HUD
         if(coinCount == 100)
         {
             coinCount = 0;
-            player.Lives++;
+            MagicBrosMario.INSTANCE.Mario.Lives++;
         }
     }
     public void Update(GameTime gametime)
