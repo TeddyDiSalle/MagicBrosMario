@@ -84,7 +84,7 @@ public class MagicBrosMario : Game
         int cameraX = Math.Max(Camera.Instance.Position.X, (int)Mario.Position.X - Camera.Instance.WindowSize.X / 2);
         Camera.Instance.Position = new Point(cameraX, 0);
         Camera.Instance.Update(gameTime);
-
+        HUD.Instance.Update(gameTime);
 
         CollisionController.Instance.Update(gameTime);
     }

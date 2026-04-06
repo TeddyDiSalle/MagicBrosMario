@@ -2,10 +2,13 @@
 using MagicBrosMario.Source.Sprite;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Reflection.Metadata.Ecma335;
 namespace MagicBrosMario.Source;
 public class HUD
 {
-    private readonly SpriteFont font = MagicBrosMario.INSTANCE.font; 
+    private readonly SpriteFont font = MagicBrosMario.INSTANCE.font;
+
+    private AnimatedSprite coin = new(MagicBrosMario.INSTANCE.ItemTexture, 192, 64, 10, 14, 4, 0.15f);
     private int score = 123;
     private int coinCount = 0;
     private int level = 0;
@@ -25,16 +28,26 @@ public class HUD
     {
         coinCount++;
     }
-    public void Update()
+    public void Update(GameTime gametime)
     {
-        //Update scores
+        coin.Position = new Point(Camera.Instance.Position.X + 250, 27);
+        coin.Update(gametime);
     }
     public void Draw(SpriteBatch _spriteBatch)
     {
         _spriteBatch.DrawString(font, "MARIO", new Vector2(100, 10), Color.White);
         string numStr = score.ToString().PadLeft(6, '0');
         _spriteBatch.DrawString(font, numStr, new Vector2(100, 26), Color.White);
+
         numStr = coinCount.ToString().PadLeft(2, '0');
-        _spriteBatch.DrawString(font, "x" + numStr, new Vector2(264, 26), Color.White);
+        coin.Draw(_spriteBatch);
+        _spriteBatch.DrawString(font, "x" + numStr, new Vector2(265, 26), Color.White);
+
+        _spriteBatch.DrawString(font, "LEVEL", new Vector2(415, 10), Color.White);
+        _spriteBatch.DrawString(font, level.ToString(), new Vector2(447, 26), Color.White);
+
+        numStr = time.ToString().PadLeft(3, '0');
+        _spriteBatch.DrawString(font, "TIME", new Vector2(565, 10), Color.White);
+        _spriteBatch.DrawString(font, numStr, new Vector2(580, 26), Color.White);
     }
 }
