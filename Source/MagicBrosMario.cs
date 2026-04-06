@@ -7,8 +7,8 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using MagicBrosMario.Source.Items;
-using MagicBrosMario.Source.GameStates;
-
+using MagicBrosMario.Source.Sound;
+using MagicBrosMario.Source.HUDAndScoring;
 
 namespace MagicBrosMario.Source;
 
@@ -16,29 +16,18 @@ public class MagicBrosMario : Game
 {
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
-	private IGameState _currentState;
-    public MarioGameController Controller { get; private set; }
-	private IGameState currentState;
+    private MarioGameController Controller;
 
     public Player Mario;
     public SharedTexture MarioTexture { get; }
     public SharedTexture ItemTexture { get; }
     public SharedTexture EnemyTexture { get; }
     public SharedTexture FireTexture { get; }
-    private ILevel lvl;
+    public SpriteFont font { get; private set; }
+    public ILevel lvl {get; set;}
     public static MagicBrosMario INSTANCE { get; private set; }
-    public List<IItems> items { get; } = new();
 
-	public enum GameState
-	{
-		TitleScreen,
-		Loading,   // The black transition screen
-		Playing,
-		Paused,
-		GameOver
-	}
-
-	public MagicBrosMario()
+    public MagicBrosMario()
     {
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
@@ -57,6 +46,7 @@ public class MagicBrosMario : Game
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
+        SoundEffectController.LoadSounds();
 
         Texture2D marioSheet = Content.Load<Texture2D>("MarioSpriteSheet");
         Texture2D blockTexture = Content.Load<Texture2D>("blocks");
@@ -68,31 +58,14 @@ public class MagicBrosMario : Game
         ItemTexture.BindTexture(itemSheet);
         MarioTexture.BindTexture(marioSheet);
         FireTexture.BindTexture(fireSheet);
+        font = Content.Load<SpriteFont>("Font");
+        Level1(); // Intializes mario where level1 wants
 
-		Mario = new Player(MarioTexture);
-
-		MarioGameController.Sprint2Controller data = new()
-		{
-			player = Mario,
-			keyb = new KeyboardInfo(),
-			mouse = new MouseInfo(),
-			halfX = Camera.Instance.WindowSize.X / 2,
-			halfY = Camera.Instance.WindowSize.Y / 2
-		};
-		Controller = new MarioGameController(this, ref data);
-
-		_currentState = new TitleScreenState(this);
-
-
-		setController();
+        setController();
     }
-	public void SetState(IGameState newState)
-	{
-		_currentState = newState;
-	}
 
-	private void setController()	{
-        MarioGameController.Sprint2Controller data = new MarioGameController.Sprint2Controller
+    private void setController()	{
+        MarioGameController.PlayerData data = new MarioGameController.PlayerData
         {
             player = Mario,
             mouse = new MouseInfo(),
@@ -105,7 +78,16 @@ public class MagicBrosMario : Game
 
     protected override void Update(GameTime gameTime)
     {
-		_currentState.Update(gameTime);
+        Controller.Update(gameTime);
+        lvl.Update(gameTime);
+        Mario.Update(gameTime);
+
+        int cameraX = Math.Max(Camera.Instance.Position.X, (int)Mario.Position.X - Camera.Instance.WindowSize.X / 2);
+        Camera.Instance.Position = new Point(cameraX, 0);
+        Camera.Instance.Update(gameTime);
+        HUD.Instance.Update(gameTime);
+
+        CollisionController.Instance.Update(gameTime);
     }
 
     protected override void Draw(GameTime gameTime)
@@ -113,9 +95,9 @@ public class MagicBrosMario : Game
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
         _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+        HUD.Instance.Draw(_spriteBatch);
         Camera.Instance.Draw(_spriteBatch);
-		_currentState.Draw(_spriteBatch);
-		_spriteBatch.End();
+        _spriteBatch.End();
 
         base.Draw(gameTime);
     }

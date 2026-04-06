@@ -47,7 +47,7 @@ public static class ItemManager
         return functionName switch
         {
             "Coin" => (x, y) => ItemFactory.CreateCoin(x, y), // wont need anything but coin for sprint3
-            //"Mushroom" => (x, y) => ItemFactory.CreateMushroom(x, y),
+            "Mushroom" => (x, y) => ItemFactory.CreateMushroom(x, y),
             "Fireflower" => (x, y) => ItemFactory.CreateFireFlower(x, y), // all of these items are in the mystery box
             "Star" => (x, y) => ItemFactory.CreateStar(x, y),
             "OneUp" => (x, y) => ItemFactory.CreateOneUp(x, y),

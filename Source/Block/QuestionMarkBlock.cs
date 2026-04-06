@@ -62,8 +62,6 @@ public class QuestionMarkBlock : BlockBase<QuestionMarkBlock>
                 break;
             case InnerItem.Mushroom:
                 // spawn mushroom above
-                MagicBrosMario.INSTANCE.items.Add(new Mushroom(MagicBrosMario.INSTANCE.ItemTexture, Position.X,
-                    Position.Y));
                 break;
             default:
                 throw new Exception("impossible default branch");
