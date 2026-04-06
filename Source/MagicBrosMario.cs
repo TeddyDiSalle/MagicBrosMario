@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using MagicBrosMario.Source.Items;
+using MagicBrosMario.Source.HUDAndScoring;
 
 
 namespace MagicBrosMario.Source;
