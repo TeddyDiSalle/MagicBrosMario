@@ -132,13 +132,12 @@ public class PlayerCollisionHandler
             default:
                 //Nothing
                 break;
-
         }
     }
     public void OnCollideBlock(IBlock block, Collision.CollideDirection direction)
     {
         UnCollide(block.CollisionBox, direction);
-        if(direction == CollideDirection.Down)
+        if (direction == CollideDirection.Down)
         {
             UnjumpOnGroundCollide();
         }
@@ -175,6 +174,7 @@ public class PlayerCollisionHandler
             case Collision.CollideDirection.Down:
                 player.SetPositon(new Vector2(player.Position.X, block.Top - player.CollisionBox.Height));
                 player.SetVelocity(new Vector2(player.Velocity.X, 0));
+                
                 break;
             case Collision.CollideDirection.Left:
                 player.SetPositon(new Vector2(block.Right, player.Position.Y));
@@ -185,6 +185,5 @@ public class PlayerCollisionHandler
                 player.SetVelocity(new Vector2(0, player.Velocity.Y));
                 break;
         }
-
     }
 }
