@@ -7,8 +7,8 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using MagicBrosMario.Source.Items;
+using MagicBrosMario.Source.Sound;
 using MagicBrosMario.Source.HUDAndScoring;
-
 
 namespace MagicBrosMario.Source;
 
@@ -47,6 +47,7 @@ public class MagicBrosMario : Game
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
+        SoundEffectController.LoadSounds();
 
         Texture2D marioSheet = Content.Load<Texture2D>("MarioSpriteSheet");
         Texture2D blockTexture = Content.Load<Texture2D>("blocks");
@@ -65,7 +66,7 @@ public class MagicBrosMario : Game
     }
 
     private void setController()	{
-        MarioGameController.Sprint2Controller data = new MarioGameController.Sprint2Controller
+        MarioGameController.PlayerData data = new MarioGameController.PlayerData
         {
             player = Mario,
             mouse = new MouseInfo(),
