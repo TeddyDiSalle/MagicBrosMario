@@ -1,18 +1,21 @@
 ﻿using MagicBrosMario.Source.Collision;
+using MagicBrosMario.Source.MarioStates;
 using MagicBrosMario.Source.Sprite;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Reflection.Metadata.Ecma335;
-namespace MagicBrosMario.Source;
+namespace MagicBrosMario.Source.HUDAndScoring;
+
+//Vincent Do
 public class HUD
 {
     private readonly SpriteFont font = MagicBrosMario.INSTANCE.font;
-
     private AnimatedSprite coin = new(MagicBrosMario.INSTANCE.ItemTexture, 192, 64, 10, 14, 4, 0.15f);
+    private Player player = MagicBrosMario.INSTANCE.Mario;
     private int score = 123;
     private int coinCount = 0;
     private int level = 0;
     private int time = 0;
+    private int[] stompScores = { 100, 200, 400, 800, 1000, 2000, 4000, 8000 };
     public static HUD Instance { get; } = new();
 
     public void SetLevel(int level)
@@ -27,6 +30,11 @@ public class HUD
     public void IncCoin()
     {
         coinCount++;
+        if(coinCount == 100)
+        {
+            coinCount = 0;
+            player.Lives++;
+        }
     }
     public void Update(GameTime gametime)
     {
