@@ -66,7 +66,7 @@ public class MagicBrosMario : Game
     }
 
     private void setController()	{
-        MarioGameController.Sprint2Controller data = new MarioGameController.Sprint2Controller
+        MarioGameController.PlayerData data = new MarioGameController.PlayerData
         {
             player = Mario,
             mouse = new MouseInfo(),

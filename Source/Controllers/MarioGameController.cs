@@ -12,28 +12,28 @@ public class MarioGameController{
     // This class will call the other's classes move functions and damage functions and such
     private KeysNMouseCommandMapper inputMap;
     private MagicBrosMario game;
-    private Sprint2Controller gameData;
-    public MarioGameController(MagicBrosMario g, ref Sprint2Controller data)
+    private PlayerData gameData;
+    public struct PlayerData {
+        public Player player;
+        public MouseInfo mouse;
+        public  KeyboardInfo keyb;
+        public int halfX;
+        public int halfY;}
+    
+    public MarioGameController(MagicBrosMario g, ref PlayerData data)
     {
         game =g;
         gameData = data;
         Initialize();
     }
 
-    public void Initialize()
+    private void Initialize()
     {
         inputMap = new KeysNMouseCommandMapper();
-        SetSprint3Binds();
+        SetMarioBinds();
+        SetSprintBinds();
     }
-    public struct Sprint2Controller {
-        public Player player;
-        public MouseInfo mouse;
-        public  KeyboardInfo keyb;
-        public int halfX;
-        public int halfY;
-    }
-    // All the binds specified for sprint 2
-    public void SetSprint3Binds()
+    private void SetMarioBinds()
     {
         Player player = gameData.player; 
         //Keyboard inputs
@@ -49,6 +49,12 @@ public class MarioGameController{
         inputMap.Bind(Keys.Z, gt => player.Attack());
         inputMap.Bind(Keys.N, gt =>  player.Attack());
         inputMap.Bind(Keys.E, gt =>  player.TakeDamage());
+    }
+    
+    // All the binds specified for sprint 4
+    private void SetSprintBinds()
+    {
+        //Keyboard inputs
         inputMap.Bind(Keys.Q, gt => game.Exit()); 
         inputMap.Bind(Keys.R, gt => MagicBrosMario.INSTANCE.Level1());
 
@@ -56,6 +62,10 @@ public class MarioGameController{
         inputMap.Bind(m => m.IsButtonDown(MouseButton.Right), () => game.Exit());
         inputMap.Bind(m => m.IsButtonDown(MouseButton.Left) && m.Position.X < gameData.halfX, () => MagicBrosMario.INSTANCE.Debug());//If you click the left side of the screen, call DebugRomm()
         inputMap.Bind(m => m.IsButtonDown(MouseButton.Left) && m.Position.X >= gameData.halfX, () => MagicBrosMario.INSTANCE.Level1()); //If you click the right side of the screen, call Level1()
+    }
+    private void SetStartScreenBinds()
+    {
+        
     }
     public void Update(GameTime gameTime)
     {
