@@ -13,15 +13,9 @@ public class HUD
     private Player player = MagicBrosMario.INSTANCE.Mario;
     private int score = 123;
     private int coinCount = 0;
-    private int level = 0;
     private int time = 0;
     private int[] stompScores = { 100, 200, 400, 800, 1000, 2000, 4000, 8000 };
     public static HUD Instance { get; } = new();
-
-    public void SetLevel(int level)
-    {
-        this.level = level;
-    }
     public void SetTime(int time)
     {
         this.time = time;
@@ -52,7 +46,7 @@ public class HUD
         _spriteBatch.DrawString(font, "x" + numStr, new Vector2(265, 26), Color.White);
 
         _spriteBatch.DrawString(font, "LEVEL", new Vector2(415, 10), Color.White);
-        _spriteBatch.DrawString(font, level.ToString(), new Vector2(447, 26), Color.White);
+        _spriteBatch.DrawString(font, MagicBrosMario.INSTANCE.lvl.Name, new Vector2(447, 26), Color.White);
 
         numStr = time.ToString().PadLeft(3, '0');
         _spriteBatch.DrawString(font, "TIME", new Vector2(565, 10), Color.White);

@@ -24,7 +24,7 @@ public class MagicBrosMario : Game
     public SharedTexture EnemyTexture { get; }
     public SharedTexture FireTexture { get; }
     public SpriteFont font { get; private set; }
-    private ILevel lvl;
+    public ILevel lvl {get; set;}
     public static MagicBrosMario INSTANCE { get; private set; }
 
     public MagicBrosMario()
