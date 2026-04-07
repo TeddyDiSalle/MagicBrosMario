@@ -4,7 +4,8 @@ namespace MagicBrosMario.Source.Sound;
 
 public static class SoundEffectController
 {
-   private static SoundController INSTANCE = new SoundController();        
+    private static SoundController INSTANCE = new SoundController();
+
     public static void LoadSounds()
     {
         INSTANCE.LoadSound(SoundTypes.StageClear, "stage_clear");
@@ -28,17 +29,16 @@ public static class SoundEffectController
         INSTANCE.LoadSound(SoundTypes.PowerDown, "pipe_travel_power_down");
         INSTANCE.LoadSound(SoundTypes.PowerUp, "power_up");
         INSTANCE.LoadSound(SoundTypes.PowerUpAppear, "power_up_appear");
-        INSTANCE.LoadSound(SoundTypes.PowerUpAppear, "power_up_appear");
         INSTANCE.LoadSound(SoundTypes.Stomp, "stomp");
         INSTANCE.LoadSound(SoundTypes.Vine, "vine");
     }
 
-    
+
     public static void PlaySound(SoundTypes type)
     {
-        INSTANCE.sounds[type].Play(1.0, 0.0f, 0.0f);
+        INSTANCE.sounds[type].Play(1.0f, 0.0f, 0.0f);
     }
-    
+
     public static void PlaySound(SoundTypes type, float volume)
     {
         INSTANCE.sounds[type].Play(volume, 0.0f, 0.0f);
