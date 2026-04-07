@@ -1,6 +1,7 @@
 ﻿using MagicBrosMario.Source.Block;
 using MagicBrosMario.Source.Collision;
 using MagicBrosMario.Source.Items;
+using MagicBrosMario.Source.Sound;
 using MagicBrosMario.Source.Sprite;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -108,7 +109,12 @@ public class Player : ICollidable
     }
     public void KillMario()
     {
+        if(PlayerState is not MarioDeadState)
+        {
+            ChangeState(new MarioDeadState(this, Texture, TimeFrame, ScaleFactor));
+        }
         Lives--;
+        //Death Sound
     }
     public void PowerUp(Power power)
     {
@@ -212,7 +218,6 @@ public class Player : ICollidable
         for (int i = fireballs.Count - 1; i >= 0; i--)
         {
             fireballs[i].Update(gameTime);
-
             if (fireballs[i].IsExpired())
             {
                 fireballs.RemoveAt(i);

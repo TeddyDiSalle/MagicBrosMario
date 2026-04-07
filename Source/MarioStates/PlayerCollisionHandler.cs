@@ -1,5 +1,6 @@
 ﻿using MagicBrosMario.Source.Block;
 using MagicBrosMario.Source.Collision;
+using MagicBrosMario.Source.HUDAndScoring;
 using MagicBrosMario.Source.Items;
 using Microsoft.Xna.Framework;
 using System;
@@ -11,7 +12,7 @@ namespace MagicBrosMario.Source.MarioStates;
 //Vincent Do
 public class PlayerCollisionHandler
 {
-    private Player player;
+    private readonly Player player;
     public Rectangle CollisionBox
     {
         get
@@ -32,6 +33,7 @@ public class PlayerCollisionHandler
     }
     public void OnCollideItem(IItems item, Collision.CollideDirection direction)
     {
+        if (!player.IsAlive) { return; }
         switch (item)
         {
             case Cloud cloud:
@@ -46,6 +48,12 @@ public class PlayerCollisionHandler
             case Fireflower:
             case Fireflower_Underground:
                 player.PowerUp(Power.FireFlower);
+                HUD.Instance.SendEvent(new GameEvent
+                {
+                    EventType = GameEventType.PowerupCollected,
+                    Data = item,
+                    EventPosition = new Point(item.CollisionBox.X, item.CollisionBox.Y) + new Point(item.CollisionBox.Width / 2, item.CollisionBox.Height / 2)
+                });
                 break;
             case MovingPlatform_Size1 plat:
                 UnCollide(plat.CollisionBox, direction);
@@ -70,16 +78,30 @@ public class PlayerCollisionHandler
                 break;
             case Mushroom:
                 player.PowerUp(Power.Mushroom);
+                HUD.Instance.SendEvent(new GameEvent
+                {
+                    EventType = GameEventType.PowerupCollected,
+                    Data = item,
+                    EventPosition = new Point(item.CollisionBox.X, item.CollisionBox.Y) + new Point(item.CollisionBox.Width / 2, item.CollisionBox.Height / 2)
+                });
                 break;
             case OneUp:
                 player.Lives++;
-                break;
-            case Spring_Stretched spring:
-                UnCollide(spring.CollisionBox, direction);
-                player.SetVelocity(player.Velocity - new Vector2(0, 15));
+                HUD.Instance.SendEvent(new GameEvent
+                {
+                    EventType = GameEventType.PowerupCollected,
+                    Data = item,
+                    EventPosition = new Point(item.CollisionBox.X, item.CollisionBox.Y) + new Point(item.CollisionBox.Width / 2, item.CollisionBox.Height / 2)
+                });
                 break;
             case Star:
                 player.PowerUp(Power.Star);
+                HUD.Instance.SendEvent(new GameEvent
+                {
+                    EventType = GameEventType.PowerupCollected,
+                    Data = item,
+                    EventPosition = new Point(item.CollisionBox.X, item.CollisionBox.Y) + new Point(item.CollisionBox.Width / 2, item.CollisionBox.Height / 2)
+                });
                 break;
             default:
                 //Nothing
@@ -88,6 +110,7 @@ public class PlayerCollisionHandler
     }
     public void OnCollideEnemy(IEnemy enemy, Collision.CollideDirection direction)
     {
+        if (!player.IsAlive) { return; }
         if (player.Invincible) { return; }
         switch (enemy)
         {
@@ -117,12 +140,9 @@ public class PlayerCollisionHandler
                 {
                     UnCollide(koopa.CollisionBox, direction);
                     player.SetVelocity(player.Velocity - new Vector2(0, 7));
-                }else if((direction == CollideDirection.Right || direction == CollideDirection.Left) && koopa.IsShellMoving())
+                }else if (koopa.IsShellMoving() || koopa.IsWalking())
                 {
-                    //Nothing
-                }
-                else
-                {
+                    UnCollide(koopa.CollisionBox, direction);
                     player.TakeDamage();
                 }
                 break;
@@ -139,6 +159,7 @@ public class PlayerCollisionHandler
     }
     public void OnCollideBlock(IBlock block, Collision.CollideDirection direction)
     {
+        if (!player.IsAlive) { return; }
         UnCollide(block.CollisionBox, direction);
         if (direction == CollideDirection.Down)
         {
@@ -177,7 +198,6 @@ public class PlayerCollisionHandler
             case Collision.CollideDirection.Down:
                 player.SetPositon(new Vector2(player.Position.X, block.Top - player.CollisionBox.Height));
                 player.SetVelocity(new Vector2(player.Velocity.X, 0));
-                
                 break;
             case Collision.CollideDirection.Left:
                 player.SetPositon(new Vector2(block.Right, player.Position.Y));

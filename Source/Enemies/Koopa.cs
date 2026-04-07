@@ -1,10 +1,10 @@
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using MagicBrosMario.Source.Collision;
 using MagicBrosMario.Source.Block;
+using MagicBrosMario.Source.Collision;
 using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.MarioStates;
 using MagicBrosMario.Source.Sprite;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace MagicBrosMario.Source;
 //Roshan Ramamurthy
@@ -143,6 +143,7 @@ public class Koopa : IEnemy, ICollidable
         isAlive = false;
         foreach (var sprite in sprites)
             sprite.Drop();
+
         CollisionController.Instance.RemoveEnemy(this);
     }
 
