@@ -47,7 +47,7 @@ public class HUD
         switch (gameEvent.EventType)
         {
             case GameEventType.EnemyStomped:
-                SoundEffectController.PlaySound(SoundTypes.Stomp, 1.0f);
+                SoundController.PlaySound(SoundType.Stomp, 1.0f);
                 if (stompChainTimer >= stompChainCD)
                 {
                     StompChain = 0;
@@ -62,7 +62,7 @@ public class HUD
                 else
                 {
                     MagicBrosMario.INSTANCE.Mario.Lives++;
-                    SoundEffectController.PlaySound(SoundTypes.OneUp, 0.4f);
+                    SoundController.PlaySound(SoundType.OneUp, 0.4f);
                 }
                 break;
             case GameEventType.LandedOnGround:
@@ -85,38 +85,38 @@ public class HUD
                 coinCount++;
                 score += 200;
                 DisplayScoreGain(gameEvent, 200);
-                SoundEffectController.PlaySound(SoundTypes.Coin, 1.0f);
+                SoundController.PlaySound(SoundType.Coin, 1.0f);
                 if (coinCount == 100)
                 {
                     coinCount = 0;
                     MagicBrosMario.INSTANCE.Mario.Lives++;
-                    SoundEffectController.PlaySound(SoundTypes.OneUp, 0.4f);
+                    SoundController.PlaySound(SoundType.OneUp, 0.4f);
                 }
                 break;
             case GameEventType.BlockBroken:
                 score += 50;
-                SoundEffectController.PlaySound(SoundTypes.Break, 1.0f);
+                SoundController.PlaySound(SoundType.Break, 1.0f);
                 DisplayScoreGain(gameEvent, 50);
                 break;
             case GameEventType.PowerupAppears:
-                SoundEffectController.PlaySound(SoundTypes.PowerUpAppear, 1.0f);
+                SoundController.PlaySound(SoundType.PowerUpAppear, 1.0f);
                 score += 1000;
                 DisplayScoreGain(gameEvent, 1000);
                 break;
             case GameEventType.PowerupCollected:
                 if (gameEvent.Data is not OneUp)
                 {
-                    SoundEffectController.PlaySound(SoundTypes.PowerUp, 1.0f);
+                    SoundController.PlaySound(SoundType.PowerUp, 1.0f);
                     score += 1000;
                     DisplayScoreGain(gameEvent, 1000);
                 }
                 break;
             case GameEventType.FlagpoleReached:
-                SoundEffectController.PlaySound(SoundTypes.Flagpole, 1.0f);
+                SoundController.PlaySound(SoundType.Flagpole, 1.0f);
                 break;
             case GameEventType.EndOfLevel:
                 levelOver = true;
-                SoundEffectController.PlaySound(SoundTypes.GameOver, 1.0f);
+                SoundController.PlaySound(SoundType.GameOver, 1.0f);
                 break;
             default:
                 break;
@@ -141,7 +141,7 @@ public class HUD
             time--;
             FrameCount = 0;
         }
-        if(time == 100 && playtimewarning) { playtimewarning = false;  SoundEffectController.PlaySound(SoundTypes.TimeWarning, 1.0f); }
+        if(time == 100 && playtimewarning) { playtimewarning = false;  SoundController.PlaySound(SoundType.TimeWarning, 1.0f); }
         if (levelOver)
         {
             time--;

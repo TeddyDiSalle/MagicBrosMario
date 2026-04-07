@@ -23,7 +23,7 @@ public class MarioDeadState : IPlayerState
         Mario.SetVelocity(new Vector2(0, -7));
         Mario.IsAlive = false;
         Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 16 * scaleFactor, 16 * scaleFactor);
-        SoundEffectController.PlaySound(SoundTypes.MarioDie, 1.0f);
+        SoundController.PlaySound(SoundType.MarioDie, 1.0f);
     }
     public void Left(GameTime gameTime)
     {

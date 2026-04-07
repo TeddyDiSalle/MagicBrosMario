@@ -114,7 +114,7 @@ public class PlayerCollisionHandler
         if (!player.IsAlive) { return; }
         if (player.Invincible) 
         {
-            SoundEffectController.PlaySound(SoundTypes.Stomp, 1.0f);
+            SoundController.PlaySound(SoundType.Stomp, 1.0f);
             return; 
         }
         switch (enemy)

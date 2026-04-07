@@ -66,7 +66,7 @@ public class KoopaCollisionHandler
 
         if (direction == CollideDirection.Top)
         {
-            SoundEffectController.PlaySound(SoundTypes.Stomp, 1.0f);
+            SoundController.PlaySound(SoundType.Stomp, 1.0f);
             if (koopa.IsWalking()) koopa.Kill();
             else if (koopa.IsShellIdle() || koopa.IsStomped()) koopa.KickShell(player.Position.X < koopa.Position.X);
             else if (koopa.IsShellMoving()) koopa.StopShell();

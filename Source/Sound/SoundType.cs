@@ -1,8 +1,7 @@
 namespace MagicBrosMario.Source.Sound;
 
-public enum SoundTypes
+public enum SoundType
 {
-    BackGroundMusic,
     StageClear,
     WorldClear,
     TimeWarning,
