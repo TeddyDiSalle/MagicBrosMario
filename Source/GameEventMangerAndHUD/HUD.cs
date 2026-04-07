@@ -74,7 +74,7 @@ public class HUD
                 if (coinCount == 100)
                 {
                     coinCount = 0;
-                    player.Lives++;
+                    MagicBrosMario.INSTANCE.Mario.Lives++;
                     SoundEffectController.PlaySound(SoundTypes.OneUp, 0.4f);
                 }
                 break;
