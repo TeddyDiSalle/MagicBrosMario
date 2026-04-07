@@ -16,7 +16,7 @@ public class HUD
     private int score = 0;
     private int coinCount = 70; //For testing and functionality check in
     private int level = 0;
-    private int time = 200;
+    private int time = 150;
     private int FrameCount = 0;
     private bool levelOver = false;
     private bool waitForNextLevel = false;
@@ -136,7 +136,7 @@ public class HUD
             time--;
             FrameCount = 0;
         }
-
+        if(time == 100) { SoundEffectController.PlaySound(SoundTypes.TimeWarning, 1.0f); }
         if (levelOver)
         {
             time--;

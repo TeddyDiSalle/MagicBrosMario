@@ -48,6 +48,7 @@ public class Player : ICollidable
     public void CreateFireball()
     {
         if(FireballTimer < fireballCooldown) { return; }
+        SoundEffectController.PlaySound(SoundTypes.Fireball, 1.0f);
         FireballTimer = 0;
         AnimatedSprite movingFireball = Texture.NewAnimatedSprite(207, 168, 8, 8, 4, TimeFrame);
         Sprite.Sprite explosion = Texture.NewSprite(239, 168, 8, 8);
