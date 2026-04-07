@@ -2,6 +2,7 @@
 using MagicBrosMario.Source.Collision;
 using MagicBrosMario.Source.HUDAndScoring;
 using MagicBrosMario.Source.Items;
+using MagicBrosMario.Source.Sound;
 using Microsoft.Xna.Framework;
 using System;
 using System.Diagnostics;
@@ -111,7 +112,11 @@ public class PlayerCollisionHandler
     public void OnCollideEnemy(IEnemy enemy, Collision.CollideDirection direction)
     {
         if (!player.IsAlive) { return; }
-        if (player.Invincible) { return; }
+        if (player.Invincible) 
+        {
+            SoundEffectController.PlaySound(SoundTypes.Stomp, 1.0f);
+            return; 
+        }
         switch (enemy)
         {
             case Fireball:
@@ -129,6 +134,7 @@ public class PlayerCollisionHandler
                 {
                     UnCollide(goomba.CollisionBox, direction);
                     player.SetVelocity(player.Velocity - new Vector2(0, 7));
+                    SoundEffectController.PlaySound(SoundTypes.Stomp, 1.0f);
                 }
                 else
                 {
@@ -140,7 +146,9 @@ public class PlayerCollisionHandler
                 {
                     UnCollide(koopa.CollisionBox, direction);
                     player.SetVelocity(player.Velocity - new Vector2(0, 7));
-                }else if (koopa.IsShellMoving() || koopa.IsWalking())
+                    SoundEffectController.PlaySound(SoundTypes.Stomp, 1.0f);
+                }
+                else if (koopa.IsShellMoving() || koopa.IsWalking())
                 {
                     UnCollide(koopa.CollisionBox, direction);
                     player.TakeDamage();
