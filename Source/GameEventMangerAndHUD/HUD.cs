@@ -4,14 +4,15 @@ using MagicBrosMario.Source.Sound;
 using MagicBrosMario.Source.Sprite;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
+using System.Diagnostics;
 namespace MagicBrosMario.Source.HUDAndScoring;
 
 //Vincent Do
 public class HUD
 {
     private readonly SpriteFont font = MagicBrosMario.INSTANCE.font;
-    private AnimatedSprite coin = new(MagicBrosMario.INSTANCE.ItemTexture, 192, 64, 10, 14, 4, 0.15f);
-    private Player player = MagicBrosMario.INSTANCE.Mario;
+    private readonly AnimatedSprite coin = new(MagicBrosMario.INSTANCE.ItemTexture, 192, 64, 10, 14, 4, 0.15f);
     private int score = 0;
     private int coinCount = 70; //For testing and functionality check in
     private int level = 0;
@@ -24,7 +25,7 @@ public class HUD
     private readonly double stompChainCD = 1.0;
     private double stompChainTimer = 0;
     public static HUD Instance { get; } = new();
-
+    private List<FloatingText> textsList = [];
     public void SetLevel(int level)
     {
         levelOver = false;
@@ -35,7 +36,11 @@ public class HUD
     {
         this.time = time;
     }
-
+    public void DisplayScoreGain(GameEvent gameEvent, int num)
+    {
+        FloatingText text = new(gameEvent, num);
+        textsList.Add(text);
+    }
     public void SendEvent(GameEvent gameEvent)
     {
         switch (gameEvent.EventType)
@@ -50,27 +55,35 @@ public class HUD
                 if (StompChain < stompScores.Length)
                 {
                     score += stompScores[StompChain];
+                    DisplayScoreGain(gameEvent, stompScores[StompChain]);
                     StompChain++;
                 }
                 else
                 {
-                    player.Lives++;
+                    MagicBrosMario.INSTANCE.Mario.Lives++;
                     SoundEffectController.PlaySound(SoundTypes.OneUp, 0.4f);
                 }
                 break;
             case GameEventType.LandedOnGround:
-                if (player.GetCurrentPower() != Power.Star)
+                if (MagicBrosMario.INSTANCE.Mario.GetCurrentPower() != Power.Star)
                     StompChain = 0;
                 break;
             case GameEventType.EnemyKilledByFireball:
-                if(gameEvent.Data is not Bowser)
+                if (gameEvent.Data is not Bowser)
+                {
                     score += 100;
-                else 
+                    DisplayScoreGain(gameEvent, 100);
+                }
+                else
+                {
                     score += 5000;
+                    DisplayScoreGain(gameEvent, 5000);
+                }
                 break;
             case GameEventType.CoinCollected:
                 coinCount++;
                 score += 200;
+                //DisplayScoreGain(gameEvent, 200);
                 if (coinCount == 100)
                 {
                     coinCount = 0;
@@ -80,13 +93,18 @@ public class HUD
                 break;
             case GameEventType.BlockBroken:
                 score += 50;
+                DisplayScoreGain(gameEvent, 50);
                 break;
             case GameEventType.PowerupAppears:
                 score += 1000;
+                DisplayScoreGain(gameEvent, 1000);
                 break;
             case GameEventType.PowerupCollected:
-                if(gameEvent.Data is not OneUp)
+                if (gameEvent.Data is not OneUp)
+                {
                     score += 1000;
+                    DisplayScoreGain(gameEvent, 1000);
+                }
                 break;
             case GameEventType.FlagpoleReached:
 
@@ -101,6 +119,15 @@ public class HUD
     }
     public void Update(GameTime gametime)
     {
+        stompChainTimer += gametime.ElapsedGameTime.TotalSeconds;
+        for (int i = textsList.Count - 1; i >= 0; i--)
+        {
+            textsList[i].Update(gametime);
+            if (!textsList[i].Display)
+            {
+                textsList.RemoveAt(i);
+            }
+        }
         if (waitForNextLevel) { return; }
         FrameCount++;
         if (FrameCount == 24 && time >0 && !levelOver)
@@ -120,7 +147,7 @@ public class HUD
                 waitForNextLevel = true;
             }
         }
-        else if (time == 0) { player.KillMario(); }
+        else if (time == 0) { MagicBrosMario.INSTANCE.Mario.KillMario(); }
         coin.Position = new Point(Camera.Instance.Position.X + 250, 27);
         coin.Update(gametime);
     }
@@ -140,5 +167,10 @@ public class HUD
         numStr = time.ToString().PadLeft(3, '0');
         _spriteBatch.DrawString(font, "TIME", new Vector2(565, 10), Color.White);
         _spriteBatch.DrawString(font, numStr, new Vector2(580, 26), Color.White);
+
+        for (int i = textsList.Count - 1; i >= 0; i--)
+        {
+            textsList[i].Draw(_spriteBatch);
+        }
     }
 }

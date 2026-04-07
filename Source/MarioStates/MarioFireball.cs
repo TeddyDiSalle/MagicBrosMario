@@ -13,7 +13,7 @@ namespace MagicBrosMario.Source;
 
 public class MarioFireball: Items.IItems, Collision.ICollidable
 {
-    private const int VELOCITY = 5;
+    private const int VELOCITY = 6;
     private const float LIFETIME = 3.0f;
 
     private ISprite CurrentSprite;

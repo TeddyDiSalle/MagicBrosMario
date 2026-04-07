@@ -1,10 +1,11 @@
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using MagicBrosMario.Source.Collision;
 using MagicBrosMario.Source.Block;
+using MagicBrosMario.Source.Collision;
+using MagicBrosMario.Source.HUDAndScoring;
 using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.MarioStates;
 using MagicBrosMario.Source.Sprite;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace MagicBrosMario.Source;
 //Roshan Ramamurthy
@@ -112,6 +113,12 @@ public class PiranhaPlant : IEnemy, ICollidable
         if (player.GetCurrentPower().Equals(Power.Star))
         {
             Kill();
+            HUD.Instance.SendEvent(new GameEvent
+            {
+                EventType = GameEventType.EnemyStomped,
+                EventPosition = Position,
+                Data = this
+            });
             return;
         }
     }
@@ -119,7 +126,15 @@ public class PiranhaPlant : IEnemy, ICollidable
     public void OnCollideItem(IItems item, CollideDirection direction)
     {
         if (item is MarioFireball)
+        {
             Kill();
+            HUD.Instance.SendEvent(new GameEvent
+            {
+                EventType = GameEventType.EnemyKilledByFireball,
+                EventPosition = Position,
+                Data = this
+            });
+        }
     }
 
     public void OnCollideEnemy(IEnemy enemy, CollideDirection direction) { }
