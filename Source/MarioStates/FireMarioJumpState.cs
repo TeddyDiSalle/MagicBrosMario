@@ -66,7 +66,6 @@ public class FireMarioJumpState : IPlayerState
         {
             IsAttacking = true;
             Mario.CreateFireball();
-            SoundEffectController.PlaySound(SoundTypes.Fireball, 1.0f);
         }
     }
     public void TakeDamage()

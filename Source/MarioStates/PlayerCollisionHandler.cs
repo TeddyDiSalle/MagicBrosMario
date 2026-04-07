@@ -134,7 +134,6 @@ public class PlayerCollisionHandler
                 {
                     UnCollide(goomba.CollisionBox, direction);
                     player.SetVelocity(player.Velocity - new Vector2(0, 7));
-                    SoundEffectController.PlaySound(SoundTypes.Stomp, 1.0f);
                 }
                 else
                 {
@@ -146,7 +145,6 @@ public class PlayerCollisionHandler
                 {
                     UnCollide(koopa.CollisionBox, direction);
                     player.SetVelocity(player.Velocity - new Vector2(0, 7));
-                    SoundEffectController.PlaySound(SoundTypes.Stomp, 1.0f);
                 }
                 else if (koopa.IsShellMoving() || koopa.IsWalking())
                 {
