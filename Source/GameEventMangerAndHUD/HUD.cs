@@ -14,7 +14,7 @@ public class HUD
     private readonly SpriteFont font = MagicBrosMario.INSTANCE.font;
     private readonly AnimatedSprite coin = new(MagicBrosMario.INSTANCE.ItemTexture, 192, 64, 10, 14, 4, 0.15f);
     private int score = 0;
-    private int coinCount = 70; //For testing and functionality check in
+    private int coinCount = 82; //For testing and functionality check in
     private int level = 0;
     private int time = 150;
     private int FrameCount = 0;
@@ -84,7 +84,8 @@ public class HUD
             case GameEventType.CoinCollected:
                 coinCount++;
                 score += 200;
-                //DisplayScoreGain(gameEvent, 200);
+                DisplayScoreGain(gameEvent, 200);
+                SoundEffectController.PlaySound(SoundTypes.Coin, 1.0f);
                 if (coinCount == 100)
                 {
                     coinCount = 0;
@@ -94,21 +95,24 @@ public class HUD
                 break;
             case GameEventType.BlockBroken:
                 score += 50;
+                SoundEffectController.PlaySound(SoundTypes.Break, 1.0f);
                 DisplayScoreGain(gameEvent, 50);
                 break;
             case GameEventType.PowerupAppears:
+                SoundEffectController.PlaySound(SoundTypes.PowerUpAppear, 1.0f);
                 score += 1000;
                 DisplayScoreGain(gameEvent, 1000);
                 break;
             case GameEventType.PowerupCollected:
                 if (gameEvent.Data is not OneUp)
                 {
+                    SoundEffectController.PlaySound(SoundTypes.PowerUp, 1.0f);
                     score += 1000;
                     DisplayScoreGain(gameEvent, 1000);
                 }
                 break;
             case GameEventType.FlagpoleReached:
-
+                SoundEffectController.PlaySound(SoundTypes.Flagpole, 1.0f);
                 break;
             case GameEventType.EndOfLevel:
                 levelOver = true;
@@ -133,7 +137,7 @@ public class HUD
         FrameCount++;
         if (FrameCount == 24 && time >0 && !levelOver)
         {
-            SendEvent(new GameEvent { EventType = GameEventType.CoinCollected});//For testing and functionality check in
+            //SendEvent(new GameEvent { EventType = GameEventType.CoinCollected});//For testing and functionality check in
             time--;
             FrameCount = 0;
         }
@@ -154,20 +158,20 @@ public class HUD
     }
     public void Draw(SpriteBatch _spriteBatch)
     {
-        _spriteBatch.DrawString(font, "MARIO", new Vector2(100, 10), Color.White);
+        _spriteBatch.DrawString(font, "MARIO", new Vector2(110, 10), Color.White);
         string numStr = score.ToString().PadLeft(6, '0');
-        _spriteBatch.DrawString(font, numStr, new Vector2(100, 26), Color.White);
+        _spriteBatch.DrawString(font, numStr, new Vector2(110, 26), Color.White);
 
         numStr = coinCount.ToString().PadLeft(2, '0');
         coin.Draw(_spriteBatch);
-        _spriteBatch.DrawString(font, "x" + numStr, new Vector2(265, 26), Color.White);
+        _spriteBatch.DrawString(font, "x" + numStr, new Vector2(275, 26), Color.White);
 
-        _spriteBatch.DrawString(font, "LEVEL", new Vector2(415, 10), Color.White);
-        _spriteBatch.DrawString(font, level.ToString(), new Vector2(447, 26), Color.White);
+        _spriteBatch.DrawString(font, "LEVEL", new Vector2(425, 10), Color.White);
+        _spriteBatch.DrawString(font, level.ToString(), new Vector2(459, 26), Color.White);
 
         numStr = time.ToString().PadLeft(3, '0');
-        _spriteBatch.DrawString(font, "TIME", new Vector2(565, 10), Color.White);
-        _spriteBatch.DrawString(font, numStr, new Vector2(580, 26), Color.White);
+        _spriteBatch.DrawString(font, "TIME", new Vector2(575, 10), Color.White);
+        _spriteBatch.DrawString(font, numStr, new Vector2(590, 26), Color.White);
 
         for (int i = textsList.Count - 1; i >= 0; i--)
         {
