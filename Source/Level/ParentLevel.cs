@@ -30,6 +30,7 @@ public abstract class ParentLevel : ILevel
 	private int levHeight;
 	public int MarioStartPosX {get; protected set; }
 	public int MarioStartPosY {get; protected set; }
+	public String Name {get; protected set; }
 
     public void Initialize(Microsoft.Xna.Framework.Content.ContentManager contentManager, Texture2D bTexture, Texture2D eTexture, Texture2D iTexture)	{
 		tileSize = _blockSize * _scale;
@@ -130,8 +131,8 @@ public abstract class ParentLevel : ILevel
 					{
 						//have to translate our item type to QuestionMarkBlock.InnerItem enum
 						//Temporary fix
-						QuestionMarkBlock.InnerItem qItem = items[r][c] is Coin ? QuestionMarkBlock.InnerItem.Coin :
-							items[r][c] is Mushroom ? QuestionMarkBlock.InnerItem.Mushroom : // Assuming Mushroom is treated as FireFlower for the inner item
+						QuestionMarkBlock.InnerItem qItem =itemId is "00" ? QuestionMarkBlock.InnerItem.Coin :
+							itemId is "01" ? QuestionMarkBlock.InnerItem.Mushroom : // Assuming Mushroom is treated as FireFlower for the inner item
 							items[r][c] is Fireflower ? QuestionMarkBlock.InnerItem.Mushroom :
 							items[r][c] is Star ? QuestionMarkBlock.InnerItem.Star :
 							items[r][c] is OneUp ? QuestionMarkBlock.InnerItem.Mushroom : // OneUp is not implemented yey
