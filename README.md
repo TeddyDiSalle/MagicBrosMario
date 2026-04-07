@@ -57,3 +57,9 @@ Press `t` or `y` to switch between blocks
 ---
 
 # Sprint3 Documentation
+
+
+---
+# Sprint4 Documentation
+
+- FOR SPRINT 4 FUNCTIONALITY: Spam crouch then jump (alternating between the two) in Fire mario form (NOT small mario) to fly up to get over the wall at the end of the level and collect the coins to observe the behavior of collecting 100 coins (you start with 82 to reach 100).

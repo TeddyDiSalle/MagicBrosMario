@@ -1,4 +1,5 @@
-﻿using MagicBrosMario.Source.Sprite;
+﻿using MagicBrosMario.Source.Sound;
+using MagicBrosMario.Source.Sprite;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -65,6 +66,7 @@ public class FireMarioIdleState : IPlayerState
         {
             IsAttacking = true;
             Mario.CreateFireball();
+            
         }
     }
     public void TakeDamage()

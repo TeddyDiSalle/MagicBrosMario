@@ -1,5 +1,6 @@
 ﻿using MagicBrosMario.Source.Block;
 using MagicBrosMario.Source.Collision;
+using MagicBrosMario.Source.HUDAndScoring;
 using MagicBrosMario.Source.MarioStates;
 using MagicBrosMario.Source.Sprite;
 using Microsoft.Xna.Framework;
@@ -47,6 +48,10 @@ namespace MagicBrosMario.Source.Items
 		public void OnCollidePlayer(Player player, CollideDirection direction)
 		{
 			isCollected = true;
+			HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.CoinCollected,
+			EventPosition = sprite.Position,
+			Data = this});
+
 			CollisionController.Instance.RemoveItem(this);
 			sprite.Drop();
 			if (isCollected) return;

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MagicBrosMario.Source.Sound;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MagicBrosMario.Source.MarioStates;
@@ -18,9 +19,11 @@ public class MarioDeadState : IPlayerState
         this.scaleFactor = scaleFactor;
         CurrentSprite = texture.NewSprite(136, 2, 16, 16);
         CurrentSprite.Scale = scaleFactor;
-        Mario.KillMario();
+        Mario.Lives--;
+        Mario.SetVelocity(new Vector2(0, -7));
         Mario.IsAlive = false;
-        Mario.CollisionBox = new Rectangle(0, 0, 0 * scaleFactor, 0 * scaleFactor);
+        Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 16 * scaleFactor, 16 * scaleFactor);
+        SoundEffectController.PlaySound(SoundTypes.MarioDie, 1.0f);
     }
     public void Left(GameTime gameTime)
     {

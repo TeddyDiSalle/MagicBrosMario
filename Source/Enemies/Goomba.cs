@@ -1,10 +1,11 @@
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using MagicBrosMario.Source.Collision;
 using MagicBrosMario.Source.Block;
+using MagicBrosMario.Source.Collision;
+using MagicBrosMario.Source.HUDAndScoring;
 using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.MarioStates;
 using MagicBrosMario.Source.Sprite;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace MagicBrosMario.Source;
 //Roshan Ramamurthy
@@ -79,6 +80,7 @@ public class Goomba : IEnemy, ICollidable
         isAlive = false;
         foreach (var sprite in sprites)
             sprite.Drop();
+
         CollisionController.Instance.RemoveEnemy(this);
     }
 
@@ -104,6 +106,12 @@ public class Goomba : IEnemy, ICollidable
         if (enemy is Bowser || (enemy is Koopa koopa && koopa.IsShellMoving()))
         {
             Kill();
+            HUD.Instance.SendEvent(new GameEvent
+            {
+                EventType = GameEventType.EnemyStomped,
+                EventPosition = Position,
+                Data = this
+            });
             return;
         }
         if (direction == CollideDirection.Left || direction == CollideDirection.Right)
@@ -130,12 +138,26 @@ public class Goomba : IEnemy, ICollidable
         if(player.GetCurrentPower().Equals(Power.Star)|| (direction == CollideDirection.Top))
         {
             Kill();
+            HUD.Instance.SendEvent(new GameEvent
+            {
+                EventType = GameEventType.EnemyStomped,
+                EventPosition = Position,
+                Data = this
+            });
         }
     }
 
     public void OnCollideItem(IItems item, CollideDirection direction)
     {
         if (item is MarioFireball)
+        {
             Kill();
+            HUD.Instance.SendEvent(new GameEvent
+            {
+                EventType = GameEventType.EnemyKilledByFireball,
+                EventPosition = Position,
+                Data = this
+            });
+        }
     }
 }

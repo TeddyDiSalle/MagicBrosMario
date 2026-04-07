@@ -11,6 +11,7 @@
     <LangVersion>preview</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Source\Block\PipeEntryBlock.cs" />
     <Compile Remove="Source\MarioStates\LeftSmallMarioIdleState.cs" />
     <Compile Remove="Source\MarioStates\LeftSmallMarioMoveState.cs" />
     <Compile Remove="Source\MarioStates\MarioCollision.cs" />

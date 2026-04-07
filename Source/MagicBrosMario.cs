@@ -100,6 +100,8 @@ public class MagicBrosMario : Game
 
         _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
         _currentState.Draw(_spriteBatch);
+        Camera.Instance.Draw(_spriteBatch);
+        HUD.Instance.Draw(_spriteBatch);
         _spriteBatch.End();
 
         base.Draw(gameTime);
@@ -128,6 +130,7 @@ public class MagicBrosMario : Game
         lvl.Initialize(Content, blockTexture, enemySheet, itemSheet);
 
         resetMario();
+        resetHUD(1);
     }
 
     private void resetLevel()
@@ -145,5 +148,11 @@ public class MagicBrosMario : Game
         Mario.SetPositon(new Vector2(lvl.MarioStartPosX, lvl.MarioStartPosY));
         Mario.PowerUp(Power.FireFlower);
         setController();
+    }
+
+    private void resetHUD(int x)
+    {
+        HUD.Instance.SetLevel(x);
+        HUD.Instance.SetTime(200);
     }
 }
