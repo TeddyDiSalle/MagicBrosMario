@@ -5,6 +5,7 @@ using MagicBrosMario.Source.Sprite;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using System.Diagnostics;
 namespace MagicBrosMario.Source.HUDAndScoring;
 
 //Vincent Do
@@ -37,7 +38,7 @@ public class HUD
     }
     public void DisplayScoreGain(GameEvent gameEvent, int num)
     {
-        FloatingText text = new FloatingText(gameEvent, num);
+        FloatingText text = new(gameEvent, num);
         textsList.Add(text);
     }
     public void SendEvent(GameEvent gameEvent)
@@ -118,6 +119,15 @@ public class HUD
     }
     public void Update(GameTime gametime)
     {
+        stompChainTimer += gametime.ElapsedGameTime.TotalSeconds;
+        for (int i = textsList.Count - 1; i >= 0; i--)
+        {
+            textsList[i].Update(gametime);
+            if (!textsList[i].Display)
+            {
+                textsList.RemoveAt(i);
+            }
+        }
         if (waitForNextLevel) { return; }
         FrameCount++;
         if (FrameCount == 24 && time >0 && !levelOver)
@@ -157,5 +167,10 @@ public class HUD
         numStr = time.ToString().PadLeft(3, '0');
         _spriteBatch.DrawString(font, "TIME", new Vector2(565, 10), Color.White);
         _spriteBatch.DrawString(font, numStr, new Vector2(580, 26), Color.White);
+
+        for (int i = textsList.Count - 1; i >= 0; i--)
+        {
+            textsList[i].Draw(_spriteBatch);
+        }
     }
 }

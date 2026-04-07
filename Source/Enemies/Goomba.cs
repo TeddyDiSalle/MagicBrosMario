@@ -106,6 +106,12 @@ public class Goomba : IEnemy, ICollidable
         if (enemy is Bowser || (enemy is Koopa koopa && koopa.IsShellMoving()))
         {
             Kill();
+            HUD.Instance.SendEvent(new GameEvent
+            {
+                EventType = GameEventType.EnemyStomped,
+                EventPosition = Position,
+                Data = this
+            });
             return;
         }
         if (direction == CollideDirection.Left || direction == CollideDirection.Right)
@@ -135,7 +141,7 @@ public class Goomba : IEnemy, ICollidable
             HUD.Instance.SendEvent(new GameEvent
             {
                 EventType = GameEventType.EnemyStomped,
-                EventPosition = sprites[1].Position,
+                EventPosition = Position,
                 Data = this
             });
         }
@@ -149,7 +155,7 @@ public class Goomba : IEnemy, ICollidable
             HUD.Instance.SendEvent(new GameEvent
             {
                 EventType = GameEventType.EnemyKilledByFireball,
-                EventPosition = sprites[1].Position,
+                EventPosition = Position,
                 Data = this
             });
         }
