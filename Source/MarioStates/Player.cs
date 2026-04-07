@@ -55,8 +55,8 @@ public class Player : ICollidable
 
         movingFireball.Scale = ScaleFactor;
         explosion.Scale = ScaleFactor;
-        movingFireball.Flipped = Flipped;
-        explosion.Flipped = Flipped;
+        movingFireball.HFlipped = Flipped;
+        explosion.HFlipped = Flipped;
         MarioFireball fireball = new(movingFireball, explosion, Position, !Flipped, ScaleFactor);
         fireballs.Add(fireball);
     }
