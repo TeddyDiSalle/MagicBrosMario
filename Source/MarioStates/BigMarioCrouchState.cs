@@ -111,7 +111,7 @@ public class BigMarioCrouchState : IPlayerState
             SwitchSprite(0);
         }
         CurrentSprite.Update(gameTime);
-        CurrentSprite.Flipped = Mario.Flipped;
+        CurrentSprite.HFlipped = Mario.Flipped;
         CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
         if (!Mario.IsCrouching)
         {

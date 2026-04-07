@@ -113,7 +113,7 @@ public class FireMarioCrouchState : IPlayerState
         }
         CurrentSprite.Update(gameTime);
         CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
-        CurrentSprite.Flipped = Mario.Flipped;
+        CurrentSprite.HFlipped = Mario.Flipped;
         if (!Mario.IsCrouching)
         {
             if (Mario.IsGrounded)

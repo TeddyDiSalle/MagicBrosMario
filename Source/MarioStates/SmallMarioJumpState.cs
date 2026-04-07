@@ -116,7 +116,7 @@ public class SmallMarioJumpState : IPlayerState
         {
             SwitchSprite(0);
         }
-        CurrentSprite.Flipped = Mario.Flipped;
+        CurrentSprite.HFlipped = Mario.Flipped;
         CurrentSprite.Update(gameTime);
         if(Mario.IsGrounded)
         {
