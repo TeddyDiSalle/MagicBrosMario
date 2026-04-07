@@ -24,6 +24,7 @@ public class HUD
     private int StompChain = 0;
     private readonly double stompChainCD = 1.0;
     private double stompChainTimer = 0;
+    private bool playtimewarning = true;
     public static HUD Instance { get; } = new();
     private List<FloatingText> textsList = [];
     public void SetLevel(int level)
@@ -46,8 +47,8 @@ public class HUD
         switch (gameEvent.EventType)
         {
             case GameEventType.EnemyStomped:
-
-                if(stompChainTimer >= stompChainCD)
+                SoundEffectController.PlaySound(SoundTypes.Stomp, 1.0f);
+                if (stompChainTimer >= stompChainCD)
                 {
                     StompChain = 0;
                 }
@@ -136,7 +137,7 @@ public class HUD
             time--;
             FrameCount = 0;
         }
-        if(time == 100) { SoundEffectController.PlaySound(SoundTypes.TimeWarning, 1.0f); }
+        if(time == 100 && playtimewarning) { playtimewarning = false;  SoundEffectController.PlaySound(SoundTypes.TimeWarning, 1.0f); }
         if (levelOver)
         {
             time--;
