@@ -24,7 +24,7 @@ public class HUD
     private readonly double stompChainCD = 1.0;
     private double stompChainTimer = 0;
     public static HUD Instance { get; } = new();
-    private List<FloatingText> textsList;
+    private List<FloatingText> textsList = [];
     public void SetLevel(int level)
     {
         levelOver = false;
@@ -35,7 +35,11 @@ public class HUD
     {
         this.time = time;
     }
-
+    public void DisplayScoreGain(GameEvent gameEvent, int num)
+    {
+        FloatingText text = new FloatingText(gameEvent, num);
+        textsList.Add(text);
+    }
     public void SendEvent(GameEvent gameEvent)
     {
         switch (gameEvent.EventType)
@@ -50,6 +54,7 @@ public class HUD
                 if (StompChain < stompScores.Length)
                 {
                     score += stompScores[StompChain];
+                    DisplayScoreGain(gameEvent, stompScores[StompChain]);
                     StompChain++;
                 }
                 else
@@ -63,14 +68,21 @@ public class HUD
                     StompChain = 0;
                 break;
             case GameEventType.EnemyKilledByFireball:
-                if(gameEvent.Data is not Bowser)
+                if (gameEvent.Data is not Bowser)
+                {
                     score += 100;
-                else 
+                    DisplayScoreGain(gameEvent, 100);
+                }
+                else
+                {
                     score += 5000;
+                    DisplayScoreGain(gameEvent, 5000);
+                }
                 break;
             case GameEventType.CoinCollected:
                 coinCount++;
                 score += 200;
+                //DisplayScoreGain(gameEvent, 200);
                 if (coinCount == 100)
                 {
                     coinCount = 0;
@@ -80,13 +92,18 @@ public class HUD
                 break;
             case GameEventType.BlockBroken:
                 score += 50;
+                DisplayScoreGain(gameEvent, 50);
                 break;
             case GameEventType.PowerupAppears:
                 score += 1000;
+                DisplayScoreGain(gameEvent, 1000);
                 break;
             case GameEventType.PowerupCollected:
-                if(gameEvent.Data is not OneUp)
+                if (gameEvent.Data is not OneUp)
+                {
                     score += 1000;
+                    DisplayScoreGain(gameEvent, 1000);
+                }
                 break;
             case GameEventType.FlagpoleReached:
 
