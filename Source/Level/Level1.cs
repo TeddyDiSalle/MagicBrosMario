@@ -1,6 +1,4 @@
 
-using MagicBrosMario.Source.Sound;
-
 namespace MagicBrosMario.Source.Level;
 public class Level1 : ParentLevel
 {
@@ -8,7 +6,7 @@ public class Level1 : ParentLevel
 		MarioStartPosX = 100;
 		MarioStartPosY = 300;
 		Name = "1-1";
-		backgroundMusic = MusicType.Level1_1;
+		backgroundMusic = Sound.MusicType.Level1_1;
 		
 		Level1BlockCVS = "Content/LevelData/1-1/Blocks1-1.csv";
 		Level1EnemyCVS = "Content/LevelData/1-1/Enemies1-1.csv";

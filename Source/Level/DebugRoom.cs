@@ -8,6 +8,9 @@ public class DebugRoom : ParentLevel
 		MarioStartPosX = 10;
 		MarioStartPosY = 10;
 		Name = "Debug";
+		backgroundMusic = Sound.MusicType.Debug;
+		volume = 0.8f;
+
 		//If you wish to edit the debug room for your own purposes
 		// Look at Blocks.xml, Items.xml, or Enemies.xml in the LevelData folder for the correct object ids
 		blockLines =  ["  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ",
@@ -28,7 +31,7 @@ public class DebugRoom : ParentLevel
 					   "  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ",
 					   "  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,03,  ,  ,  ,  ,  ,  ,  ",
 					   "  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ",
-					   "  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,00,  ,  ,02,  ,  ,  ,  ,  ,  ,,  ,  ,  ,  ",
+					   "  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,00,  ,  ,02,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ",
 					   "  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,01,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ",
 					   "  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ",];
 

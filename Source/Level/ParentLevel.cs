@@ -22,6 +22,7 @@ public abstract class ParentLevel : ILevel
 	protected string Level1ItemCVS;
 	protected string BackgroundPath;
 	protected MusicType backgroundMusic;
+	protected float volume = 0.5f;
 	private int _blockSize = 16;
 	private int _scale = 2;
 	private int tileSize; // _blockSize * _scale
@@ -56,8 +57,7 @@ public abstract class ParentLevel : ILevel
 
 		}
 
-		SoundController.StopMusic(backgroundMusic);
-		SoundController.PlayMusic(backgroundMusic);
+		SoundController.PlayMusic(backgroundMusic, volume);
 
 		InitializeManagers(bTexture, eTexture, iTexture);
 		LoadContent();
@@ -182,5 +182,7 @@ public abstract class ParentLevel : ILevel
 				}
 			}
 		}
+		// Stop our music
+		SoundController.StopMusic(backgroundMusic);
 	}
 }

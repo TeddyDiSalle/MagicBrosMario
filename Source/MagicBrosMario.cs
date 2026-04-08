@@ -87,6 +87,7 @@ public class MagicBrosMario : Game
         Camera.Instance.Update(gameTime);
         HUD.Instance.Update(gameTime);
 
+        SoundController.Update(gameTime);
         CollisionController.Instance.Update(gameTime);
     }
 

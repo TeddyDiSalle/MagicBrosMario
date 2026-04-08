@@ -12,7 +12,6 @@ public static class ItemManager
 {
     private static readonly Dictionary<string, Func<int, int, IItems>> ItemConstructors = new();
     private static string xmlPath = "Content/LevelData/Items.xml";
-    private static readonly int _scale = 2;
 
     public static void Initialize(Texture2D texture)
     {
