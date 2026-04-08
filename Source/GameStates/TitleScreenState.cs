@@ -12,13 +12,13 @@ namespace MagicBrosMario.Source.GameStates
         private SpriteFont _font;
 
         public TitleScreenState(MagicBrosMario game)
-		{
-			_game = game;
-			_titleTexture = _game.Content.Load<Texture2D>("MarioTitleScreen");
+        {
+            _game = game;
+            _titleTexture = _game.Content.Load<Texture2D>("MarioTitleScreen");
             _font = _game.Content.Load<SpriteFont>("font");
         }
 
-		public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime)
 		{
             if (Keyboard.GetState().IsKeyDown(Keys.Enter))
             {

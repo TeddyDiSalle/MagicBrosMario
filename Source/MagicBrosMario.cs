@@ -75,10 +75,12 @@ public class MagicBrosMario : Game
         Texture2D enemySheet = Content.Load<Texture2D>("characters");
         Texture2D fireSheet = Content.Load<Texture2D>("enemies");
 
-        EnemyTexture.BindTexture(enemySheet);
-        ItemTexture.BindTexture(itemSheet);
-        MarioTexture.BindTexture(marioSheet);
-        FireTexture.BindTexture(fireSheet);
+        SoundController.LoadSounds();
+
+        //EnemyTexture.BindTexture(enemySheet);
+        //ItemTexture.BindTexture(itemSheet);
+        //MarioTexture.BindTexture(marioSheet);
+        //FireTexture.BindTexture(fireSheet);
 
         Mario = new Player(MarioTexture);
 
