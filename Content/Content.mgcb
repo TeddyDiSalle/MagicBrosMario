@@ -89,6 +89,15 @@
 #begin LevelData/1-1/Items1-1.csv
 /copy:LevelData/1-1/Items1-1.csv
 
+#begin LevelData/Blocks.xml
+/copy:LevelData/Blocks.xml
+
+#begin LevelData/Enemies.xml
+/copy:LevelData/Enemies.xml
+
+#begin LevelData/Items.xml
+/copy:LevelData/Items.xml
+
 #begin LevelData/SMB_NES_World_1-1_Map.png
 /importer:TextureImporter
 /processor:TextureProcessor
