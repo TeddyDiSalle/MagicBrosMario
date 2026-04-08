@@ -21,7 +21,7 @@ public interface ISprite {
     /// <summary>
     /// if this sprite is flipped horizontally
     /// </summary>
-    public bool Flipped { get; set; }
+    public bool HFlipped { get; set; }
 
     /// <summary>
     /// position of sprite

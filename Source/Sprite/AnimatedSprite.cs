@@ -27,7 +27,7 @@ public class AnimatedSprite(
 {
     public bool Animated => true;
     public bool Visible { get; set; } = true;
-    public bool Flipped { get; set; } = false;
+    public bool HFlipped { get; set; } = false;
 
     public Point Position
     {
@@ -89,7 +89,7 @@ public class AnimatedSprite(
         
         var sourceRect = new Rectangle(offsetX + frameWidth * frame, offsetY, frameWidth, frameHeight);
         
-        if (Flipped)
+        if (HFlipped)
         {
             spriteBatch.Draw(texture.Texture, destRect, sourceRect, Color, 0f, Vector2.Zero,
                 SpriteEffects.FlipHorizontally, 0f);

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MagicBrosMario.Source.Sound;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MagicBrosMario.Source.MarioStates;
@@ -11,7 +12,7 @@ public class FireMarioJumpState : IPlayerState
     private readonly float timeFrame;
     private readonly int scaleFactor;
     private readonly Sprite.ISprite[] Sprites;
-    private const int maxJumpCalls = 6;
+    private const int maxJumpCalls = 7;
     private int JumpCalls = 0;
     private bool IsAttacking = false;
     public FireMarioJumpState(Player Mario, Sprite.SharedTexture texture, float timeFrame, int scaleFactor)
@@ -36,7 +37,8 @@ public class FireMarioJumpState : IPlayerState
         CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
         Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 16 * scaleFactor, 32 * scaleFactor);
         Mario.IsJumping = true;
-        Mario.IsGrounded = false;
+        SoundController.PlaySound(SoundType.JumpSuper, 1.0f);
+        //Mario.IsGrounded = false;
     }
     public void Left(GameTime gameTime)
     {
@@ -125,7 +127,7 @@ public class FireMarioJumpState : IPlayerState
         }
         CurrentSprite.Update(gameTime);
         CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
-        CurrentSprite.Flipped = Mario.Flipped;
+        CurrentSprite.HFlipped = Mario.Flipped;
         if (Mario.IsGrounded)
         {
             Mario.IsJumping = false;

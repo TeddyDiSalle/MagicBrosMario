@@ -23,7 +23,8 @@ public class Sprite(
 {
     public bool Animated => false;
     public bool Visible { get; set; } = true;
-    public bool Flipped { get; set; } = false;
+    public bool HFlipped { get; set; } = false;
+    public bool VFlipped { get; set; } = false;
 
     public Point Position
     {
@@ -59,7 +60,8 @@ public class Sprite(
         UpdateDestRect();
     }
 
-    public void UpdateDestRect() {
+    public void UpdateDestRect()
+    {
         var screenPosition = Camera.Instance.Position;
         destRect = new Rectangle(Position.X - screenPosition.X, Position.Y - screenPosition.Y, Size.X, Size.Y);
         shouldDraw = Camera.Instance.ShouldDraw(destRect);
@@ -70,21 +72,39 @@ public class Sprite(
         // no update for non-animated sprite
     }
 
-    public void Draw(SpriteBatch spriteBatch) {
+    public void Draw(SpriteBatch spriteBatch)
+    {
         if (!(Visible && shouldDraw)) return;
-        
-        if (Flipped)
+
+        if (HFlipped)
         {
-            spriteBatch.Draw(texture.Texture, destRect, sourceRect, Color, 0f, Vector2.Zero,
-                SpriteEffects.FlipHorizontally, 0f);
+            if (VFlipped)
+            {
+                spriteBatch.Draw(texture.Texture, destRect, sourceRect, Color, 180f, Vector2.Zero,
+                    SpriteEffects.None, 0f);
+            }
+            else
+            {
+                spriteBatch.Draw(texture.Texture, destRect, sourceRect, Color, 0f, Vector2.Zero,
+                    SpriteEffects.FlipHorizontally, 0f);
+            }
         }
         else
         {
-            spriteBatch.Draw(texture.Texture, destRect, sourceRect, Color);
+            if (VFlipped)
+            {
+                spriteBatch.Draw(texture.Texture, destRect, sourceRect, Color, 0f, Vector2.Zero,
+                    SpriteEffects.FlipVertically, 0f);
+            }
+            else
+            {
+                spriteBatch.Draw(texture.Texture, destRect, sourceRect, Color);
+            }
         }
     }
 
-    public void Drop() {
+    public void Drop()
+    {
         Camera.Instance.Sprites.Remove(this);
     }
 }

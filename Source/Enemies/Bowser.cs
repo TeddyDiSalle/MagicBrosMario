@@ -1,11 +1,12 @@
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
-using MagicBrosMario.Source.Collision;
 using MagicBrosMario.Source.Block;
+using MagicBrosMario.Source.Collision;
+using MagicBrosMario.Source.HUDAndScoring;
 using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.MarioStates;
 using MagicBrosMario.Source.Sprite;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 
 namespace MagicBrosMario.Source;
 //Roshan Ramamurthy
@@ -67,7 +68,15 @@ public class Bowser : IEnemy, ICollidable
     {
         health--;
         if (health <= 0)
+        {
             Kill();
+            HUD.Instance.SendEvent(new GameEvent
+            {
+                EventType = GameEventType.EnemyKilledByFireball,
+                EventPosition = Position,
+                Data = this
+            });
+        }
     }
 
     public void Update(GameTime gameTime)

@@ -7,6 +7,7 @@ public class DebugRoom : ParentLevel
     public DebugRoom()	{
 		MarioStartPosX = 10;
 		MarioStartPosY = 10;
+		Name = "Debug";
 		//If you wish to edit the debug room for your own purposes
 		// Look at Blocks, Items, or Enemies.xml in the LevelData folder for the correct object ids
 		blockLines =  ["  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ",
@@ -34,7 +35,7 @@ public class DebugRoom : ParentLevel
 		itemLines =  ["  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ",
 					   "  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ",
 					   "  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ",
-					   "  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,00,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ", // one coin outside a mystery block
+					   "  ,  ,  ,  ,  ,  ,  ,  ,00,00,00,00,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ", // one coin outside a mystery block
 					   "  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ",
 					   "  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,00,  ,01,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ", // coin inside a mystery block and mush/ff in a mb
 					   "  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ",

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MagicBrosMario.Source.Sound;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MagicBrosMario.Source.MarioStates;
@@ -31,6 +32,7 @@ public class SmallMarioJumpState : IPlayerState
         CurrentSprite.Visible = true;
         CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
         Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 16 * scaleFactor, 16 * scaleFactor);
+        SoundController.PlaySound(SoundType.JumpSmall, 1.0f);
         Mario.IsJumping = true;
         Mario.IsGrounded = false;
     }
@@ -114,7 +116,7 @@ public class SmallMarioJumpState : IPlayerState
         {
             SwitchSprite(0);
         }
-        CurrentSprite.Flipped = Mario.Flipped;
+        CurrentSprite.HFlipped = Mario.Flipped;
         CurrentSprite.Update(gameTime);
         if(Mario.IsGrounded)
         {

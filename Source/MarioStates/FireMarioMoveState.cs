@@ -1,4 +1,5 @@
-﻿using MagicBrosMario.Source.Sprite;
+﻿using MagicBrosMario.Source.Sound;
+using MagicBrosMario.Source.Sprite;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -194,7 +195,7 @@ public class FireMarioMoveState : IPlayerState
         }
         CurrentSprite.Update(gameTime);
         CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
-        CurrentSprite.Flipped = Mario.Flipped;
+        CurrentSprite.HFlipped = Mario.Flipped;
         IsAttacking = false;
     }
     public void Draw(SpriteBatch spriteBatch)

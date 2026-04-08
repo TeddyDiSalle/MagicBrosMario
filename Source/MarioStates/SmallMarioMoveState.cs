@@ -174,7 +174,7 @@ public class SmallMarioMoveState : IPlayerState
         SwitchSprite(Frame);
         CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
         CurrentSprite.Update(gameTime);
-        CurrentSprite.Flipped = Mario.Flipped;
+        CurrentSprite.HFlipped = Mario.Flipped;
     }
     public void Draw(SpriteBatch spriteBatch)
     {
