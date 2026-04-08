@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MagicBrosMario.Source.Collision;
 using MagicBrosMario.Source.Items;
+using MagicBrosMario.Source.Sound;
 
 namespace MagicBrosMario.Source.Level;
 public abstract class ParentLevel : ILevel
@@ -20,6 +21,7 @@ public abstract class ParentLevel : ILevel
 	protected string Level1EnemyCVS;
 	protected string Level1ItemCVS;
 	protected string BackgroundPath;
+	protected MusicType backgroundMusic;
 	private int _blockSize = 16;
 	private int _scale = 2;
 	private int tileSize; // _blockSize * _scale
@@ -54,6 +56,9 @@ public abstract class ParentLevel : ILevel
 
 		}
 
+		SoundController.StopMusic(backgroundMusic);
+		SoundController.PlayMusic(backgroundMusic);
+
 		InitializeManagers(bTexture, eTexture, iTexture);
 		LoadContent();
 	}
@@ -76,7 +81,8 @@ public abstract class ParentLevel : ILevel
     }
 
     protected void LoadBackground(SpriteBatch sb, Texture2D backgroundTexture)	{
-        sb.Draw(backgroundTexture, new Rectangle(0, 0, levWidth * tileSize, levHeight * tileSize), Color.White);
+        //sb.Draw(backgroundTexture, new Rectangle(0, 0, levWidth * tileSize, levHeight * tileSize), Color.White);
+		//TODO
     }
 	public void Update(GameTime gt)	{
 		//block update
@@ -103,7 +109,8 @@ public abstract class ParentLevel : ILevel
 	}
 
 	protected void LoadContent(){
-		
+		//LoadBackground(Camera.Instance.SpriteBatch, MagicBrosMario.INSTANCE.Content.Load<Texture2D>(BackgroundPath));
+		// TODO
 		for (int r = 0; r < levHeight; r++){
 			string[] blockIds = blockLines[r].Split(',');
 			string[] enemyIds = enemyLines[r].Split(',');
