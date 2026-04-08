@@ -108,6 +108,10 @@ public class Player : ICollidable
             PlayerState.TakeDamage();
         }
     }
+    public void KickInvinsibility()
+    {
+        DamageTimer = DamageCoolDown - 0.2;
+    }
     public void KillMario()
     {
         if(PlayerState is not MarioDeadState)
@@ -223,6 +227,15 @@ public class Player : ICollidable
             {
                 fireballs.RemoveAt(i);
             }
+        }
+        if (Position.X < Camera.Instance.Position.X)
+        {
+            SetPositon(new Vector2(Camera.Instance.Position.X, Position.Y));
+            SetVelocity(new Vector2(0, Velocity.Y));
+        }
+        if (Position.Y > Camera.Instance.Position.Y + Camera.Instance.WindowSize.Y)
+        {
+            KillMario();
         }
         CollisionBox = new Rectangle(
             (int)Math.Ceiling(Position.X),

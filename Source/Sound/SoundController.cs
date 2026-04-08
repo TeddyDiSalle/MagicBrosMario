@@ -4,6 +4,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
 
 namespace MagicBrosMario.Source.Sound;
 
@@ -12,7 +13,7 @@ public class SoundController
     private static readonly SoundController Instance = new();
 
     private readonly Dictionary<SoundType, SoundEffect> SoundEffects = new();
-    private readonly Dictionary<MusicType, SoundEffect> Musics = new();
+    private readonly Dictionary<MusicType, Song> Musics = new();
 
     private void LoadSoundEffect(SoundType type, string soundName)
     {
@@ -21,7 +22,7 @@ public class SoundController
 
     private void LoadMusic(MusicType type, string soundName)
     {
-        Musics.Add(type, MagicBrosMario.INSTANCE.Content.Load<SoundEffect>("Sounds/" + soundName));
+        Musics.Add(type, MagicBrosMario.INSTANCE.Content.Load<Song>("Sounds/" + soundName));
     }
 
     public static void LoadSounds()
@@ -50,7 +51,7 @@ public class SoundController
         Instance.LoadSoundEffect(SoundType.Stomp, "stomp");
         Instance.LoadSoundEffect(SoundType.Vine, "vine");
 
-        Instance.LoadMusic(MusicType.Level1_1, "1-1/smb overworld.mp3");
+        Instance.LoadMusic(MusicType.Level1_1, "1-1/smb overworld");
     }
 
     public static void Update(GameTime gameTime)
@@ -88,19 +89,24 @@ public class SoundController
 
     public static void PlayMusic(MusicType type, float volume)
     {
-        var soundInstance = Instance.Musics[type].CreateInstance();
-        soundInstance.IsLooped = true;
-        Instance.musicInstance.Add(type, soundInstance);
+        //var soundInstance = Instance.Musics[type].CreateInstance();
+        //soundInstance.IsLooped = true;
+        //Instance.musicInstance.Add(type, soundInstance);
+        MediaPlayer.Volume = volume;
+        MediaPlayer.IsRepeating = true;
+        MediaPlayer.Play(Instance.Musics[type]);
     }
 
     public static bool IsMusicPlaying(MusicType type)
     {
-        return Instance.musicInstance.ContainsKey(type);
+        //return Instance.musicInstance.ContainsKey(type);
+        return MediaPlayer.State == MediaState.Playing;
     }
 
     public static void StopMusic(MusicType type)
     {
-        Instance.musicInstance[type].Stop();
-        Instance.musicInstance.Remove(type);
+        //Instance.musicInstance[type].Stop();
+        //Instance.musicInstance.Remove(type);
+        MediaPlayer.Stop();
     }
 }
