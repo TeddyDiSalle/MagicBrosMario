@@ -25,4 +25,5 @@ public enum SoundType
     PowerUpAppear,
     Stomp,
     Vine,
+    Pause,
 }
