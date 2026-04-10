@@ -37,11 +37,6 @@ namespace MagicBrosMario.Source.GameStates
 
 			Collision.CollisionController.Instance.Update(gameTime);
 
-			//Currently broken, crashes game
-            //if (Keyboard.GetState().IsKeyDown(Keys.R))
-            //{
-            //    _game.SetState(new TitleScreenState(_game));
-            //}
 
         }
 

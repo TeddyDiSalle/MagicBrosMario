@@ -20,7 +20,7 @@ public class MagicBrosMario : Game
     private SpriteBatch _spriteBatch;
     private IGameState _currentState;
     public MarioGameController Controller { get; private set; }
-    private IGameState currentState;
+    private IGameState currentState{get ; set;}
 
     public Player Mario;
 
@@ -105,7 +105,6 @@ public class MagicBrosMario : Game
     {
         MarioGameController.Sprint2Controller data = new MarioGameController.Sprint2Controller
         {
-            player = Mario,
             mouse = new MouseInfo(),
             keyb = new KeyboardInfo(),
             halfX = Camera.Instance.WindowSize.X / 2,
@@ -143,7 +142,7 @@ public class MagicBrosMario : Game
 
         base.Draw(gameTime);
     }
-
+/*
     public void Debug()
     {
         resetLevel();
@@ -185,5 +184,5 @@ public class MagicBrosMario : Game
         Mario.PowerUp(Power.FireFlower);
         setController();
     }
-
+*/
 }
