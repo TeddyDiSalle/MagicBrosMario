@@ -89,7 +89,7 @@ public class SoundController
 
         var soundEffect = Instance.SoundEffects[type];
         soundEffect.Play(volume, 0.0f, 0.0f);
-        Instance.soundEffectCooldown.Add(type, soundEffect.Duration.Milliseconds);
+        Instance.soundEffectCooldown.Add(type, 50);
     }
 
     public static bool IsSoundOnCoolDown(SoundType type)
@@ -118,7 +118,8 @@ public class SoundController
 
     public static bool IsMusicPlaying(MusicType type)
     {
-        return Instance.musicInstance.ContainsKey(type);
+        //return Instance.musicInstance.ContainsKey(type);
+        return MediaPlayer.State == MediaState.Playing;
     }
 
     public static void StopMusic(MusicType type)

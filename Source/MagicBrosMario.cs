@@ -60,7 +60,7 @@ public class MagicBrosMario : Game
         ItemTexture = new SharedTexture();
         MarioTexture = new SharedTexture();
         FireTexture = new SharedTexture();
-
+        
         INSTANCE = this;
     }
 
@@ -165,7 +165,7 @@ public class MagicBrosMario : Game
 
         lvl = new Level1();
         lvl.Initialize(Content, blockTexture, enemySheet, itemSheet);
-
+        HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.StartLevel });
         resetMario();
         resetHUD(1);
     }
