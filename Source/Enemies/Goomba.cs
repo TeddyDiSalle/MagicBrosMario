@@ -41,7 +41,7 @@ public class Goomba : IEnemy, ICollidable
     public Goomba(SharedTexture EnemyTexture, int y, int x)
     {
         sprites = [EnemyTexture.NewAnimatedSprite(296, 187, 16, 16, 2, 0.2f), 
-                    EnemyTexture.NewSprite(276, 187, 18, 16)];
+                    EnemyTexture.NewSprite(276, 187, 16, 16)];
         foreach (var sprite in sprites)
         {
             sprite.Scale = SCALE;
