@@ -13,7 +13,7 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin ../../../../../Downloads/MarioTitleScreen.png
+#begin MarioTitleScreen.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -23,9 +23,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Downloads/MarioTitleScreen.png;MarioTitleScreen.png
+/build:MarioTitleScreen.png;MarioTitleScreen.png
 
-#begin ../../../../../Downloads/TransitionScreen.png
+#begin TransitionScreen.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -35,7 +35,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../Downloads/TransitionScreen.png;TransitionScreen.png
+/build:TransitionScreen.png;TransitionScreen.png
 
 #begin blocks.png
 /importer:TextureImporter
