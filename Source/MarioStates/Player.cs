@@ -36,7 +36,7 @@ public class Player : ICollidable
     public Sprite.SharedTexture Texture { get; }
     public bool IsJumping { get; set; } = false;
     private readonly PlayerCollisionHandler PlayerCollision;
-    public Rectangle CollisionBox {get; set; }
+    public Rectangle CollisionBox { get; set; }
 
     public Player(Sprite.SharedTexture texture)
     {

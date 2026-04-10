@@ -1,6 +1,7 @@
 // wav files downloaded from https://themushroomkingdom.net/media/smb/wav
 // made by teddy
 
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -27,31 +28,42 @@ public class SoundController
 
     public static void LoadSounds()
     {
-        Instance.LoadSoundEffect(SoundType.StageClear, "stage_clear");
-        Instance.LoadSoundEffect(SoundType.WorldClear, "world_clear");
-        Instance.LoadSoundEffect(SoundType.TimeWarning, "time_warning");
-        Instance.LoadSoundEffect(SoundType.GameOver, "game_over");
-        Instance.LoadSoundEffect(SoundType.MarioDie, "mario_die");
-        Instance.LoadSoundEffect(SoundType.OneUp, "one_up");
-        Instance.LoadSoundEffect(SoundType.JumpSmall, "jump_small");
-        Instance.LoadSoundEffect(SoundType.JumpSuper, "jump_super");
-        Instance.LoadSoundEffect(SoundType.BowserFalls, "bowser_falls");
-        Instance.LoadSoundEffect(SoundType.BowserFires, "bowser_fires");
-        Instance.LoadSoundEffect(SoundType.Break, "break");
-        Instance.LoadSoundEffect(SoundType.Bump, "bump");
-        Instance.LoadSoundEffect(SoundType.Coin, "coin");
-        Instance.LoadSoundEffect(SoundType.Flagpole, "flagpole");
-        Instance.LoadSoundEffect(SoundType.Fireball, "fireball");
-        Instance.LoadSoundEffect(SoundType.Fireworks, "fireworks");
-        Instance.LoadSoundEffect(SoundType.Kick, "kick");
-        Instance.LoadSoundEffect(SoundType.PipeTravel, "pipe_travel_power_down");
-        Instance.LoadSoundEffect(SoundType.PowerDown, "pipe_travel_power_down");
-        Instance.LoadSoundEffect(SoundType.PowerUp, "power_up");
-        Instance.LoadSoundEffect(SoundType.PowerUpAppear, "power_up_appear");
-        Instance.LoadSoundEffect(SoundType.Stomp, "stomp");
-        Instance.LoadSoundEffect(SoundType.Vine, "vine");
+        string L1Path = "1-1/";
+        string BlocksPath = "Blocks/";
+        string EnemiesPath = "Enemies/";
+        string EnviromentPath = "Enviroment/";
+        string ItemsPath = "Items/";
+        string MarioPath = "Mario/";
+        Instance.LoadMusic(MusicType.Level1_1, L1Path+"smb_overworld");
 
-        Instance.LoadMusic(MusicType.Level1_1, "1-1/smb overworld");
+        Instance.LoadSoundEffect(SoundType.Break, BlocksPath+"break");
+        Instance.LoadSoundEffect(SoundType.Vine, BlocksPath+"vine");
+        
+        Instance.LoadSoundEffect(SoundType.BowserFalls, EnemiesPath+"bowser_falls");
+        Instance.LoadSoundEffect(SoundType.BowserFires, EnemiesPath+"bowser_fires");
+
+        Instance.LoadSoundEffect(SoundType.Bump, EnviromentPath+"bump");
+        Instance.LoadSoundEffect(SoundType.Fireworks, EnviromentPath+"fireworks");
+        Instance.LoadSoundEffect(SoundType.Flagpole, EnviromentPath+"flagpole");
+        Instance.LoadSoundEffect(SoundType.GameOver, EnviromentPath+"game_over");
+        Instance.LoadSoundEffect(SoundType.Pause, EnviromentPath+"pause");
+        Instance.LoadSoundEffect(SoundType.StageClear, EnviromentPath+"stage_clear");
+        Instance.LoadSoundEffect(SoundType.TimeWarning, EnviromentPath+"time_warning");
+        Instance.LoadSoundEffect(SoundType.WorldClear, EnviromentPath+"world_clear");
+
+        Instance.LoadSoundEffect(SoundType.Coin, ItemsPath+"coin");
+        Instance.LoadSoundEffect(SoundType.OneUp, ItemsPath+"one_up");
+        Instance.LoadSoundEffect(SoundType.PowerUp, ItemsPath+"power_up");
+        Instance.LoadSoundEffect(SoundType.PowerUpAppear, ItemsPath+"power_up_appear");
+        
+        Instance.LoadSoundEffect(SoundType.Fireball, MarioPath+"fireball");
+        Instance.LoadSoundEffect(SoundType.JumpSmall, MarioPath+"jump_small");
+        Instance.LoadSoundEffect(SoundType.JumpSuper, MarioPath+"jump_super");
+        Instance.LoadSoundEffect(SoundType.Kick, MarioPath+"kick");
+        Instance.LoadSoundEffect(SoundType.MarioDie, MarioPath+"mario_die");
+        Instance.LoadSoundEffect(SoundType.PipeTravel, MarioPath+"pipe_travel_power_down");
+        Instance.LoadSoundEffect(SoundType.PowerDown, MarioPath+"pipe_travel_power_down");
+        Instance.LoadSoundEffect(SoundType.Stomp, MarioPath+"stomp");
     }
 
     public static void Update(GameTime gameTime)
@@ -87,14 +99,21 @@ public class SoundController
 
     private readonly Dictionary<MusicType, SoundEffectInstance> musicInstance = new();
 
-    public static void PlayMusic(MusicType type, float volume)
+    public static void PlayMusic(MusicType type, float volume = 0.5f)
     {
-        //var soundInstance = Instance.Musics[type].CreateInstance();
-        //soundInstance.IsLooped = true;
-        //Instance.musicInstance.Add(type, soundInstance);
-        MediaPlayer.Volume = volume;
+        var song = Instance.Musics[type];
+        
+        // Set whether the song should repeat when finished
         MediaPlayer.IsRepeating = true;
-        MediaPlayer.Play(Instance.Musics[type]);
+        // Adjust the volume (0.0f to 1.0f)
+        MediaPlayer.Volume = volume;
+        // Check if the media player is already playing, if so, stop it
+        if(MediaPlayer.State == MediaState.Playing){
+            MediaPlayer.Stop();
+        }
+        // Start playing the background music
+        MediaPlayer.Play(song);
+        //Instance.musicInstance.Add(type, null);
     }
 
     public static bool IsMusicPlaying(MusicType type)
@@ -105,8 +124,9 @@ public class SoundController
 
     public static void StopMusic(MusicType type)
     {
-        //Instance.musicInstance[type].Stop();
+        if(MediaPlayer.State == MediaState.Playing){
+            MediaPlayer.Stop();
+        }
         //Instance.musicInstance.Remove(type);
-        MediaPlayer.Stop();
     }
 }

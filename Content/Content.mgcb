@@ -13,6 +13,30 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin MarioTitleScreen.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:MarioTitleScreen.png;MarioTitleScreen.png
+
+#begin TransitionScreen.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:TransitionScreen.png;TransitionScreen.png
+
 #begin blocks.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -89,6 +113,15 @@
 #begin LevelData/1-1/Items1-1.csv
 /copy:LevelData/1-1/Items1-1.csv
 
+#begin LevelData/Blocks.xml
+/copy:LevelData/Blocks.xml
+
+#begin LevelData/Enemies.xml
+/copy:LevelData/Enemies.xml
+
+#begin LevelData/Items.xml
+/copy:LevelData/Items.xml
+
 #begin LevelData/SMB_NES_World_1-1_Map.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -113,153 +146,147 @@
 /processorParam:TextureFormat=Color
 /build:MarioSpriteSheet.png
 
-#begin Sounds/1-1/smb overworld.mp3
+#begin Sounds/1-1/smb_overworld.mp3
 /importer:Mp3Importer
 /processor:SongProcessor
 /processorParam:Quality=Best
-/build:Sounds/1-1/smb overworld.mp3;Sounds/1-1/smb overworld
+/build:Sounds/1-1/smb_overworld.mp3
 
-#begin Sounds/1-1/smb overworld.ogg
-/importer:OggImporter
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:Sounds/1-1/smb overworld.ogg
-
-#begin Sounds/bowser_falls.wav
+#begin Sounds/Blocks/break.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Sounds/bowser_falls.wav
+/build:Sounds/Blocks/break.wav
 
-#begin Sounds/bowser_fires.wav
+#begin Sounds/Blocks/vine.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Sounds/bowser_fires.wav
+/build:Sounds/Blocks/vine.wav
 
-#begin Sounds/break.wav
+#begin Sounds/Enemies/bowser_falls.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Sounds/break.wav
+/build:Sounds/Enemies/bowser_falls.wav
 
-#begin Sounds/bump.wav
+#begin Sounds/Enemies/bowser_fires.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Sounds/bump.wav
+/build:Sounds/Enemies/bowser_fires.wav
 
-#begin Sounds/coin.wav
+#begin Sounds/Enviroment/bump.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Sounds/coin.wav
+/build:Sounds/Enviroment/bump.wav
 
-#begin Sounds/fireball.wav
+#begin Sounds/Enviroment/fireworks.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Sounds/fireball.wav
+/build:Sounds/Enviroment/fireworks.wav
 
-#begin Sounds/fireworks.wav
+#begin Sounds/Enviroment/flagpole.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Sounds/fireworks.wav
+/build:Sounds/Enviroment/flagpole.wav
 
-#begin Sounds/flagpole.wav
+#begin Sounds/Enviroment/game_over.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Sounds/flagpole.wav
+/build:Sounds/Enviroment/game_over.wav
 
-#begin Sounds/game_over.wav
+#begin Sounds/Enviroment/pause.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Sounds/game_over.wav
+/build:Sounds/Enviroment/pause.wav
 
-#begin Sounds/jump_small.wav
+#begin Sounds/Enviroment/stage_clear.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Sounds/jump_small.wav
+/build:Sounds/Enviroment/stage_clear.wav
 
-#begin Sounds/jump_super.wav
+#begin Sounds/Enviroment/time_warning.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Sounds/jump_super.wav
+/build:Sounds/Enviroment/time_warning.wav
 
-#begin Sounds/kick.wav
+#begin Sounds/Enviroment/world_clear.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Sounds/kick.wav
+/build:Sounds/Enviroment/world_clear.wav
 
-#begin Sounds/mario_die.wav
+#begin Sounds/Items/coin.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Sounds/mario_die.wav
+/build:Sounds/Items/coin.wav
 
-#begin Sounds/one_up.wav
+#begin Sounds/Items/one_up.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Sounds/one_up.wav
+/build:Sounds/Items/one_up.wav
 
-#begin Sounds/pause.wav
+#begin Sounds/Items/power_up_appear.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Sounds/pause.wav
+/build:Sounds/Items/power_up_appear.wav
 
-#begin Sounds/pipe_travel_power_down.wav
+#begin Sounds/Items/power_up.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Sounds/pipe_travel_power_down.wav
+/build:Sounds/Items/power_up.wav
 
-#begin Sounds/power_up_appear.wav
+#begin Sounds/Mario/fireball.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Sounds/power_up_appear.wav
+/build:Sounds/Mario/fireball.wav
 
-#begin Sounds/power_up.wav
+#begin Sounds/Mario/jump_small.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Sounds/power_up.wav
+/build:Sounds/Mario/jump_small.wav
 
-#begin Sounds/stage_clear.wav
+#begin Sounds/Mario/jump_super.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Sounds/stage_clear.wav
+/build:Sounds/Mario/jump_super.wav
 
-#begin Sounds/stomp.wav
+#begin Sounds/Mario/kick.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Sounds/stomp.wav
+/build:Sounds/Mario/kick.wav
 
-#begin Sounds/time_warning.wav
+#begin Sounds/Mario/mario_die.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Sounds/time_warning.wav
+/build:Sounds/Mario/mario_die.wav
 
-#begin Sounds/vine.wav
+#begin Sounds/Mario/pipe_travel_power_down.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Sounds/vine.wav
+/build:Sounds/Mario/pipe_travel_power_down.wav
 
-#begin Sounds/world_clear.wav
+#begin Sounds/Mario/stomp.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Sounds/world_clear.wav
+/build:Sounds/Mario/stomp.wav
 

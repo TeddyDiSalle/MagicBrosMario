@@ -9,7 +9,7 @@ public class DebugRoom : ParentLevel
 		MarioStartPosY = 10;
 		Name = "Debug";
 		//If you wish to edit the debug room for your own purposes
-		// Look at Blocks.xml, Items.xml, or Enemies.xml in the LevelData folder for the correct object ids
+		// Look at Blocks, Items, or Enemies.xml in the LevelData folder for the correct object ids
 		blockLines =  ["  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ",
 					   "  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ",
 					   "  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ",
