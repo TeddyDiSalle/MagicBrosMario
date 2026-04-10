@@ -36,6 +36,7 @@ namespace MagicBrosMario.Source.GameStates
 			Camera.Instance.Position = new Point(cameraX, 0);
 			Camera.Instance.Update(gameTime);
             HUD.Instance.Update(gameTime);
+			Sound.SoundController.Update(gameTime);
 
             Collision.CollisionController.Instance.Update(gameTime);
 
