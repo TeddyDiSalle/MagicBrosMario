@@ -20,6 +20,7 @@ namespace MagicBrosMario.Source.Items
 		private int xLimit;
 		private int yLimit;
 		private int xDifference = 0;
+		private bool startMoving = false;
 
         public Rectangle CollisionBox
         {
@@ -35,17 +36,18 @@ namespace MagicBrosMario.Source.Items
             sprite = texture.NewSprite(123, 38, 48, 8); 
 
 			position = new Point(positionX, positionY);
-			sprite.Scale = 3f;
+			sprite.Scale = 2f;
 
 		}
 		public void Update(GameTime gameTime)
 		{
 			float time = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-			xDifference = (int)(direction * speed * time);
-
-			position.X += xDifference;
-
+			if (startMoving)
+			{
+				xDifference = (int)(direction * speed * time);
+				position.X += xDifference;
+			}
 
 			sprite.Position = position;
 
@@ -61,7 +63,14 @@ namespace MagicBrosMario.Source.Items
 			return xDifference;
         }
 
-        public void OnCollidePlayer(Player player, CollideDirection direction) { }
+        public void OnCollidePlayer(Player player, CollideDirection direction) {
+
+			if (direction == CollideDirection.Top)
+			{
+				startMoving = true;
+			}
+
+		}
 
         public void OnCollideItem(IItems item, CollideDirection direction) { }
 

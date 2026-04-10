@@ -29,7 +29,10 @@ public class MagicBrosMario : Game
     public SharedTexture EnemyTexture { get; }
     public SharedTexture FireTexture { get; }
 
-    public SpriteFont font { get; private set; }
+	//TEMP - DELETE THIS
+	private List<IItems> ItemsList;
+
+	public SpriteFont font { get; private set; }
 
     //Use this for now
     public ILevel lvl { get; set; }
@@ -77,12 +80,35 @@ public class MagicBrosMario : Game
 
         SoundController.LoadSounds();
 
-        //EnemyTexture.BindTexture(enemySheet);
-        //ItemTexture.BindTexture(itemSheet);
-        //MarioTexture.BindTexture(marioSheet);
-        //FireTexture.BindTexture(fireSheet);
+		//EnemyTexture.BindTexture(enemySheet);
+		//ItemTexture.BindTexture(itemSheet);
+		//MarioTexture.BindTexture(marioSheet);
+		//FireTexture.BindTexture(fireSheet);
 
-        Mario = new Player(MarioTexture);
+
+		//TEMP - DELETE LATER
+		//----------------------------------------------------------------------------------------------------------------
+		ItemsList = [
+            //new Fireflower(ItemTexture, 700, 368),
+            //new Fireflower_Underground(ItemTexture, ScreenHeight, 600, 150),
+            new Mushroom(ItemTexture, 200, 150),
+            //new Mushroom(ItemTexture, 250, 150),
+            //new OneUp(ItemTexture, 300, 150),
+            //new CollectableCoin(ItemTexture, 400, 250),
+            new Star(ItemTexture, 200, 150),
+            //new MovingPlatform_Size1(ItemTexture, ScreenHeight, 300, 300, 1),
+            //new MovingPlatform_Size2(ItemTexture, ScreenHeight, 300, 200, 1),
+            //new MovingPlatform_Size3(ItemTexture, ScreenHeight, 300, 100, 1),
+            new Cloud(ItemTexture, 200, 350),
+        ];
+
+		foreach (IItems item in ItemsList)
+			CollisionController.Instance.AddItem(item);
+		//----------------------------------------------------------------------------------------------------------------
+
+
+
+		Mario = new Player(MarioTexture);
 
 
         _currentState = new TitleScreenState(this);
@@ -118,30 +144,52 @@ public class MagicBrosMario : Game
     {
         _currentState.Update(gameTime);
 
-        //Temp stuff may need some may not
-        //Controller.Update(gameTime);
-        //lvl.Update(gameTime);
-        //Mario.Update(gameTime);
+		//TEMP - DELETE LATER
+		//----------------------------------------------------------------------------------------------------------------
+		for (int i = 0; i < ItemsList.Count; i++)
+		{
+			ItemsList[i].Update(gameTime);
+			if (ItemsList[i].getCollected())
+			{
+				CollisionController.Instance.RemoveItem(ItemsList[i]);
+			}
+		}
+		//----------------------------------------------------------------------------------------------------------------
 
-        //int cameraX = Math.Max(Camera.Instance.Position.X, (int)Mario.Position.X - Camera.Instance.WindowSize.X / 2);
-        //Camera.Instance.Position = new Point(cameraX, 0);
-        //Camera.Instance.Update(gameTime);
-        //HUD.Instance.Update(gameTime);
 
-        //CollisionController.Instance.Update(gameTime);
+		//Temp stuff may need some may not
+		//Controller.Update(gameTime);
+		//lvl.Update(gameTime);
+		//Mario.Update(gameTime);
 
-    }
+		//int cameraX = Math.Max(Camera.Instance.Position.X, (int)Mario.Position.X - Camera.Instance.WindowSize.X / 2);
+		//Camera.Instance.Position = new Point(cameraX, 0);
+		//Camera.Instance.Update(gameTime);
+		//HUD.Instance.Update(gameTime);
 
-    protected override void Draw(GameTime gameTime)
+		//CollisionController.Instance.Update(gameTime);
+
+	}
+
+	protected override void Draw(GameTime gameTime)
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
-        _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+		_spriteBatch.Begin(samplerState: SamplerState.PointClamp);
         Camera.Instance.Draw(_spriteBatch);
         _currentState.Draw(_spriteBatch);
-        _spriteBatch.End();
 
-        base.Draw(gameTime);
+        //TEMP - DELETE LATER
+		//----------------------------------------------------------------------------------------------------------------
+		foreach (IItems item in ItemsList)
+		{
+			item.Draw(_spriteBatch);
+		}
+		//----------------------------------------------------------------------------------------------------------------
+        _spriteBatch.End();
+         
+
+		base.Draw(gameTime);
     }
 
     public void Debug()
