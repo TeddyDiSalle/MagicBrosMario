@@ -32,7 +32,7 @@ public class MagicBrosMario : Game
     public SpriteFont font { get; private set; }
 
     //Use this for now
-    public ILevel lvl { get; set; }
+    public ILevel level { get; set; }
     //Keep Just In Case
     //private ILevel lvl;
 
@@ -151,8 +151,8 @@ public class MagicBrosMario : Game
         Texture2D itemSheet = Content.Load<Texture2D>("items");
         Texture2D enemySheet = Content.Load<Texture2D>("characters");
 
-        lvl = new DebugRoom();
-        lvl.Initialize(Content, blockTexture, enemySheet, itemSheet);
+        level = new DebugRoom();
+        level.Initialize(Content, blockTexture, enemySheet, itemSheet);
         resetMario();
     }
 
@@ -171,7 +171,7 @@ public class MagicBrosMario : Game
 
     private void resetLevel()
     {
-        if (lvl != null) lvl.Clear();
+        if (level != null) level.Clear();
 
         Camera.Instance.Position = Point.Zero;
         Camera.Instance.Sprites.Clear();
