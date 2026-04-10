@@ -12,7 +12,7 @@ public class DebugRoom : ParentLevel
 		volume = 0.8f;
 
 		//If you wish to edit the debug room for your own purposes
-		// Look at Blocks.xml, Items.xml, or Enemies.xml in the LevelData folder for the correct object ids
+		// Look at Blocks, Items, or Enemies.xml in the LevelData folder for the correct object ids
 		blockLines =  ["  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ",
 					   "  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ",
 					   "  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ",

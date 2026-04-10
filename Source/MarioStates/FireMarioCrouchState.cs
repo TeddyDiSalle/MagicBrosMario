@@ -116,14 +116,7 @@ public class FireMarioCrouchState : IPlayerState
         CurrentSprite.HFlipped = Mario.Flipped;
         if (!Mario.IsCrouching)
         {
-            if (Mario.IsGrounded)
-            {
-                Mario.ChangeState(new FireMarioIdleState(Mario, texture, timeFrame, scaleFactor));
-            }
-            else
-            {
-                Mario.ChangeState(new FireMarioJumpState(Mario, texture, timeFrame, scaleFactor));
-            }
+            Mario.ChangeState(new FireMarioIdleState(Mario, texture, timeFrame, scaleFactor));
         }
     }
     public void Draw(SpriteBatch spriteBatch)

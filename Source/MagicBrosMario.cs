@@ -1,14 +1,16 @@
 ﻿using MagicBrosMario.Source.Collision;
+using MagicBrosMario.Source.GameStates;
+using MagicBrosMario.Source.HUDAndScoring;
+using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.Level;
 using MagicBrosMario.Source.MarioStates;
+using MagicBrosMario.Source.Sound;
 using MagicBrosMario.Source.Sprite;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using MagicBrosMario.Source.Items;
-using MagicBrosMario.Source.Sound;
-using MagicBrosMario.Source.HUDAndScoring;
+
 
 namespace MagicBrosMario.Source;
 
@@ -16,16 +18,36 @@ public class MagicBrosMario : Game
 {
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
-    private MarioGameController Controller;
+    private IGameState _currentState;
+    public MarioGameController Controller { get; private set; }
+    private IGameState currentState;
 
     public Player Mario;
+
     public SharedTexture MarioTexture { get; }
     public SharedTexture ItemTexture { get; }
     public SharedTexture EnemyTexture { get; }
     public SharedTexture FireTexture { get; }
+
     public SpriteFont font { get; private set; }
-    public ILevel level {get; set;}
+
+    //Use this for now
+    public ILevel lvl { get; set; }
+    //Keep Just In Case
+    //private ILevel lvl;
+
     public static MagicBrosMario INSTANCE { get; private set; }
+
+    public List<IItems> items { get; } = new();
+
+    public enum GameState
+    {
+        TitleScreen,
+        Loading,   // The black transition screen
+        Playing,
+        Paused,
+        GameOver
+    }
 
     public MagicBrosMario()
     {
@@ -46,7 +68,6 @@ public class MagicBrosMario : Game
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
-        SoundController.LoadSounds();
 
         Texture2D marioSheet = Content.Load<Texture2D>("MarioSpriteSheet");
         Texture2D blockTexture = Content.Load<Texture2D>("blocks");
@@ -54,18 +75,35 @@ public class MagicBrosMario : Game
         Texture2D enemySheet = Content.Load<Texture2D>("characters");
         Texture2D fireSheet = Content.Load<Texture2D>("enemies");
 
+        SoundController.LoadSounds();
+
+        //EnemyTexture.BindTexture(enemySheet);
+        //ItemTexture.BindTexture(itemSheet);
+        //MarioTexture.BindTexture(marioSheet);
+        //FireTexture.BindTexture(fireSheet);
+
+        Mario = new Player(MarioTexture);
+
+
+        _currentState = new TitleScreenState(this);
+
         EnemyTexture.BindTexture(enemySheet);
         ItemTexture.BindTexture(itemSheet);
         MarioTexture.BindTexture(marioSheet);
         FireTexture.BindTexture(fireSheet);
         font = Content.Load<SpriteFont>("Font");
-        Level1(); // Intializes mario where level1 wants
 
         setController();
     }
 
-    private void setController()	{
-        MarioGameController.PlayerData data = new MarioGameController.PlayerData
+    public void SetState(IGameState newState)
+    {
+        _currentState = newState;
+    }
+
+    private void setController()
+    {
+        MarioGameController.Sprint2Controller data = new MarioGameController.Sprint2Controller
         {
             player = Mario,
             mouse = new MouseInfo(),
@@ -78,17 +116,20 @@ public class MagicBrosMario : Game
 
     protected override void Update(GameTime gameTime)
     {
-        Controller.Update(gameTime);
-        level.Update(gameTime);
-        Mario.Update(gameTime);
+        _currentState.Update(gameTime);
 
-        int cameraX = Math.Max(Camera.Instance.Position.X, (int)Mario.Position.X - Camera.Instance.WindowSize.X / 2);
-        Camera.Instance.Position = new Point(cameraX, 0);
-        Camera.Instance.Update(gameTime);
-        HUD.Instance.Update(gameTime);
+        //Temp stuff may need some may not
+        //Controller.Update(gameTime);
+        //lvl.Update(gameTime);
+        //Mario.Update(gameTime);
 
-        SoundController.Update(gameTime);
-        CollisionController.Instance.Update(gameTime);
+        //int cameraX = Math.Max(Camera.Instance.Position.X, (int)Mario.Position.X - Camera.Instance.WindowSize.X / 2);
+        //Camera.Instance.Position = new Point(cameraX, 0);
+        //Camera.Instance.Update(gameTime);
+        //HUD.Instance.Update(gameTime);
+
+        //CollisionController.Instance.Update(gameTime);
+
     }
 
     protected override void Draw(GameTime gameTime)
@@ -97,7 +138,7 @@ public class MagicBrosMario : Game
 
         _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
         Camera.Instance.Draw(_spriteBatch);
-        HUD.Instance.Draw(_spriteBatch);
+        _currentState.Draw(_spriteBatch);
         _spriteBatch.End();
 
         base.Draw(gameTime);
@@ -109,9 +150,9 @@ public class MagicBrosMario : Game
         Texture2D blockTexture = Content.Load<Texture2D>("blocks");
         Texture2D itemSheet = Content.Load<Texture2D>("items");
         Texture2D enemySheet = Content.Load<Texture2D>("characters");
-        
-        level = new DebugRoom();
-        level.Initialize(Content, blockTexture, enemySheet, itemSheet);
+
+        lvl = new DebugRoom();
+        lvl.Initialize(Content, blockTexture, enemySheet, itemSheet);
         resetMario();
     }
 
@@ -130,15 +171,15 @@ public class MagicBrosMario : Game
 
     private void resetLevel()
     {
-        if(level != null) level.Clear();
-        
+        if (lvl != null) lvl.Clear();
+
         Camera.Instance.Position = Point.Zero;
         Camera.Instance.Sprites.Clear();
     }
 
     private void resetMario()
     {
-        CollisionController.Instance.RemovePlayer();	
+        CollisionController.Instance.RemovePlayer();
         Mario = new Player(MarioTexture);
         Mario.SetPositon(new Vector2(level.MarioStartPosX, level.MarioStartPosY));
         Mario.PowerUp(Power.FireFlower);
