@@ -24,7 +24,7 @@ public class MagicBrosMario : Game
     public SharedTexture EnemyTexture { get; }
     public SharedTexture FireTexture { get; }
     public SpriteFont font { get; private set; }
-    public ILevel lvl {get; set;}
+    public ILevel level {get; set;}
     public static MagicBrosMario INSTANCE { get; private set; }
 
     public MagicBrosMario()
@@ -79,7 +79,7 @@ public class MagicBrosMario : Game
     protected override void Update(GameTime gameTime)
     {
         Controller.Update(gameTime);
-        lvl.Update(gameTime);
+        level.Update(gameTime);
         Mario.Update(gameTime);
 
         int cameraX = Math.Max(Camera.Instance.Position.X, (int)Mario.Position.X - Camera.Instance.WindowSize.X / 2);
@@ -110,8 +110,8 @@ public class MagicBrosMario : Game
         Texture2D itemSheet = Content.Load<Texture2D>("items");
         Texture2D enemySheet = Content.Load<Texture2D>("characters");
         
-        lvl = new DebugRoom();
-        lvl.Initialize(Content, blockTexture, enemySheet, itemSheet);
+        level = new DebugRoom();
+        level.Initialize(Content, blockTexture, enemySheet, itemSheet);
         resetMario();
     }
 
@@ -122,16 +122,15 @@ public class MagicBrosMario : Game
         Texture2D itemSheet = Content.Load<Texture2D>("items");
         Texture2D enemySheet = Content.Load<Texture2D>("characters");
 
-        lvl = new Level1();
-        lvl.Initialize(Content, blockTexture, enemySheet, itemSheet);
+        level = new Level1();
+        level.Initialize(Content, blockTexture, enemySheet, itemSheet);
 
         resetMario();
-        resetHUD(1);
     }
 
     private void resetLevel()
     {
-        if(lvl != null) lvl.Clear();
+        if(level != null) level.Clear();
         
         Camera.Instance.Position = Point.Zero;
         Camera.Instance.Sprites.Clear();
@@ -141,14 +140,9 @@ public class MagicBrosMario : Game
     {
         CollisionController.Instance.RemovePlayer();	
         Mario = new Player(MarioTexture);
-        Mario.SetPositon(new Vector2(lvl.MarioStartPosX, lvl.MarioStartPosY));
+        Mario.SetPositon(new Vector2(level.MarioStartPosX, level.MarioStartPosY));
         Mario.PowerUp(Power.FireFlower);
         setController();
     }
 
-    private void resetHUD(int x)
-    {
-        HUD.Instance.SetLevel(x);
-        HUD.Instance.SetTime(200);
-    }
 }

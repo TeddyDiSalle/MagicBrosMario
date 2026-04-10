@@ -1,5 +1,6 @@
 ﻿using MagicBrosMario.Source.Block;
 using MagicBrosMario.Source.Collision;
+using MagicBrosMario.Source.HUDAndScoring;
 using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.Sound;
 using MagicBrosMario.Source.Sprite;
@@ -40,6 +41,7 @@ public class Player : ICollidable
 
     public Player(Sprite.SharedTexture texture)
     {
+        HUD.Instance.SetTime(200);
         this.Texture = texture;
         CollisionBox = new Rectangle((int)Position.X, (int)Position.Y, 0, 0);
         PlayerState = new SmallMarioIdleState(this, texture, TimeFrame, ScaleFactor);

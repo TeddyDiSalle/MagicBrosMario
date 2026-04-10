@@ -7,7 +7,8 @@ using System.Dynamic;
 namespace MagicBrosMario.Source;
 public interface ILevel
 {
-    String Name { get; }
+    string ToString(){ return Name; }
+    string Name { get; }
     int MarioStartPosX { get; }
     int MarioStartPosY { get; }
     void Update(GameTime gt);

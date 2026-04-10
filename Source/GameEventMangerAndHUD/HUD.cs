@@ -15,7 +15,6 @@ public class HUD
     private readonly AnimatedSprite coin = new(MagicBrosMario.INSTANCE.ItemTexture, 192, 64, 10, 14, 4, 0.15f);
     private int score = 0;
     private int coinCount = 82; //For testing and functionality check in
-    private int level = 0;
     private int time = 150;
     private int FrameCount = 0;
     private bool levelOver = false;
@@ -27,11 +26,16 @@ public class HUD
     private bool playtimewarning = true;
     public static HUD Instance { get; } = new();
     private List<FloatingText> textsList = [];
-    public void SetLevel(int level)
+
+    public void LevelOver()
+    {
+        levelOver = true;
+        waitForNextLevel = true;
+    }
+    public void LevelStart()
     {
         levelOver = false;
         waitForNextLevel = false;
-        this.level = level;
     }
     public void SetTime(int time)
     {
@@ -167,7 +171,7 @@ public class HUD
         _spriteBatch.DrawString(font, "x" + numStr, new Vector2(275, 26), Color.White);
 
         _spriteBatch.DrawString(font, "LEVEL", new Vector2(425, 10), Color.White);
-        _spriteBatch.DrawString(font, level.ToString(), new Vector2(459, 26), Color.White);
+        _spriteBatch.DrawString(font, MagicBrosMario.INSTANCE.level.Name, new Vector2(459, 26), Color.White);
 
         numStr = time.ToString().PadLeft(3, '0');
         _spriteBatch.DrawString(font, "TIME", new Vector2(575, 10), Color.White);
