@@ -119,7 +119,6 @@ public class Player : ICollidable
             ChangeState(new MarioDeadState(this, Texture, TimeFrame, ScaleFactor));
         }
         Lives--;
-        //Death Sound
     }
     public void PowerUp(Power power)
     {
