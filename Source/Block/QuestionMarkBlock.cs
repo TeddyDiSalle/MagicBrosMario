@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using MagicBrosMario.Source.Collision;
 using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.MarioStates;
@@ -53,19 +54,22 @@ public class QuestionMarkBlock : BlockBase<QuestionMarkBlock>
         switch (innerItem)
         {
             case InnerItem.Coin:
-                new Star(MagicBrosMario.INSTANCE.ItemTexture, Position.X + 1, Position.Y - 5);
-                break;
+				new Coin(MagicBrosMario.INSTANCE.ItemTexture, Position.X + 8, Position.Y);
+				break;
             case InnerItem.Star:
-                //Must have Position.X + 1, as star is 14 pixels wide not 16
                 new Star(MagicBrosMario.INSTANCE.ItemTexture, Position.X + 1, Position.Y - 5);
                 break;
             case InnerItem.OneUp:
-                new OneUp(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 3);
-                break;
+				new OneUp(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 5);
+				break;
             case InnerItem.Mushroom:
-                new Mushroom(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 3);
-                break;
-            default:
+				new Mushroom(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 5);
+
+                //Need to make it so that if mario is big, then summons fireflower instead
+				//new Fireflower(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 3);
+
+				break;
+			default:
                 throw new Exception("impossible default branch");
         }
     }

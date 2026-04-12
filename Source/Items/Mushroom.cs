@@ -1,5 +1,4 @@
-﻿
-using MagicBrosMario.Source.Block;
+﻿using MagicBrosMario.Source.Block;
 using MagicBrosMario.Source.Collision;
 using MagicBrosMario.Source.MarioStates;
 using MagicBrosMario.Source.Sprite;
@@ -14,10 +13,8 @@ namespace MagicBrosMario.Source.Items
 		private const float GRAVITY_SPEED = 250f;
 		private const float RISE_SPEED = 30f;
 		private const float X_SPEED = 120f;
-
 		private Sprite.Sprite sprite;
 		private Vector2 floatPosition;
-
 		private int xDirection = 1;
 		private bool isCollected = false;
 		private bool hasRisen = false;
@@ -41,19 +38,16 @@ namespace MagicBrosMario.Source.Items
 		{
 			sprite = texture.NewSprite(184, 34, 16, 16);
 			sprite.Scale = 2f;
-
 			floatPosition = new Vector2(positionX, positionY);
 			sprite.Position = floatPosition.ToPoint();
-
 			CollisionController.Instance.AddItem(this);
+			MagicBrosMario.INSTANCE.items.Add(this);
 		}
 
 		public void Update(GameTime gameTime)
 		{
 			if (isCollected) return;
-
 			float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
-
 			if (!hasRisen)
 			{
 				Rise(dt);
@@ -67,7 +61,6 @@ namespace MagicBrosMario.Source.Items
 				floatPosition.X += (xDirection * X_SPEED * dt);
 			}
 			sprite.Position = floatPosition.ToPoint();
-
 			isOnBlock = false;
 		}
 
@@ -76,7 +69,6 @@ namespace MagicBrosMario.Source.Items
 			float step = RISE_SPEED * dt;
 			floatPosition.Y -= step;
 			riseAmount += step;
-
 			if (riseAmount >= riseTarget)
 			{
 				hasRisen = true;
@@ -91,39 +83,35 @@ namespace MagicBrosMario.Source.Items
 			}
 		}
 
-        public void OnCollideBlock(IBlock block, CollideDirection direction)
-        {
-            if (hasRisen)
+		public void OnCollideBlock(IBlock block, CollideDirection direction)
+		{
+			if (hasRisen)
 			{
-                Rectangle blockBox = block.CollisionBox;
+				Rectangle blockBox = block.CollisionBox;
+				if (direction == CollideDirection.Down)
+				{
+					isOnBlock = true;
+					floatPosition.Y = blockBox.Top - sprite.Size.Y;
+				}
+				else if (direction == CollideDirection.Left)
+				{
+					xDirection = 1;
+					floatPosition.X = blockBox.Right;
+				}
+				else if (direction == CollideDirection.Right)
+				{
+					xDirection = -1;
+					floatPosition.X = blockBox.Left - sprite.Size.X;
+				}
+				else if (direction == CollideDirection.Top)
+				{
+					floatPosition.Y = blockBox.Bottom;
+				}
+				sprite.Position = floatPosition.ToPoint();
+			}
+		}
 
-                if (direction == CollideDirection.Down)
-                {
-                    isOnBlock = true;
-                    floatPosition.Y = blockBox.Top - sprite.Size.Y;
-                }
-                else if (direction == CollideDirection.Left)
-                {
-                    xDirection = 1;
-                    floatPosition.X = blockBox.Right;
-                }
-                else if (direction == CollideDirection.Right)
-                {
-                    xDirection = -1;
-                    floatPosition.X = blockBox.Left - sprite.Size.X;
-                }
-                else if (direction == CollideDirection.Top)
-                {
-                    floatPosition.Y = blockBox.Bottom;
-                }
-
-                sprite.Position = floatPosition.ToPoint();
-            }
-
-
-        }
-
-        public void OnCollidePlayer(Player player, CollideDirection direction)
+		public void OnCollidePlayer(Player player, CollideDirection direction)
 		{
 			if (isCollected) return;
 			isCollected = true;

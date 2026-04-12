@@ -29,8 +29,6 @@ public class MagicBrosMario : Game
     public SharedTexture EnemyTexture { get; }
     public SharedTexture FireTexture { get; }
 
-	//TEMP - DELETE THIS
-	private List<IItems> ItemsList;
 
 	public SpriteFont font { get; private set; }
 
@@ -86,27 +84,6 @@ public class MagicBrosMario : Game
 		//FireTexture.BindTexture(fireSheet);
 
 
-		//TEMP - DELETE LATER
-		//----------------------------------------------------------------------------------------------------------------
-		ItemsList = [
-            //new Fireflower(ItemTexture, 700, 368),
-            //new Fireflower_Underground(ItemTexture, ScreenHeight, 600, 150),
-            new Mushroom(ItemTexture, 200, 150),
-            //new Mushroom(ItemTexture, 250, 150),
-            //new OneUp(ItemTexture, 300, 150),
-            //new CollectableCoin(ItemTexture, 400, 250),
-            new Star(ItemTexture, 200, 150),
-            //new MovingPlatform_Size1(ItemTexture, ScreenHeight, 300, 300, 1),
-            //new MovingPlatform_Size2(ItemTexture, ScreenHeight, 300, 200, 1),
-            //new MovingPlatform_Size3(ItemTexture, ScreenHeight, 300, 100, 1),
-            new Cloud(ItemTexture, 200, 350),
-        ];
-
-		foreach (IItems item in ItemsList)
-			CollisionController.Instance.AddItem(item);
-		//----------------------------------------------------------------------------------------------------------------
-
-
 
 		Mario = new Player(MarioTexture);
 
@@ -144,17 +121,6 @@ public class MagicBrosMario : Game
     {
         
 
-		//TEMP - DELETE LATER
-		//----------------------------------------------------------------------------------------------------------------
-		for (int i = 0; i < ItemsList.Count; i++)
-		{
-			ItemsList[i].Update(gameTime);
-			if (ItemsList[i].getCollected())
-			{
-				CollisionController.Instance.RemoveItem(ItemsList[i]);
-			}
-		}
-        //----------------------------------------------------------------------------------------------------------------
 
         _currentState.Update(gameTime);
 
@@ -180,13 +146,6 @@ public class MagicBrosMario : Game
         Camera.Instance.Draw(_spriteBatch);
         _currentState.Draw(_spriteBatch);
 
-        //TEMP - DELETE LATER
-		//----------------------------------------------------------------------------------------------------------------
-		foreach (IItems item in ItemsList)
-		{
-			item.Draw(_spriteBatch);
-		}
-		//----------------------------------------------------------------------------------------------------------------
         _spriteBatch.End();
          
 
