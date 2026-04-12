@@ -48,20 +48,22 @@ public class QuestionMarkBlock : BlockBase<QuestionMarkBlock>
         Sprite = emptySprite;
         Sprite.Visible = true;
         empty = true;
+;
 
         switch (innerItem)
         {
             case InnerItem.Coin:
-                // spawn coin above
+                new Star(MagicBrosMario.INSTANCE.ItemTexture, Position.X + 1, Position.Y - 5);
                 break;
             case InnerItem.Star:
-                // spawn star above
+                //Must have Position.X + 1, as star is 14 pixels wide not 16
+                new Star(MagicBrosMario.INSTANCE.ItemTexture, Position.X + 1, Position.Y - 5);
                 break;
             case InnerItem.OneUp:
-                // spawn one up above
+                new OneUp(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 3);
                 break;
             case InnerItem.Mushroom:
-                // spawn mushroom above
+                new Mushroom(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 3);
                 break;
             default:
                 throw new Exception("impossible default branch");

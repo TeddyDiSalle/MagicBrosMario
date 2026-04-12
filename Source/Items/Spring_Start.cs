@@ -26,7 +26,7 @@ namespace MagicBrosMario.Source.Items
 			sprite = texture.NewSprite(94, 4, 16, 16);
 
 			sprite.Position = new Point(positionX, positionY);
-			sprite.Scale = 3f;
+			sprite.Scale = 2f;
 
 		}
 

@@ -26,7 +26,7 @@ namespace MagicBrosMario.Source.Items
 			sprite = new AnimatedSprite(texture, 128, 95, 8, 16, 4, 0.05f);
 
 			sprite.Position = new Point(positionX, positionY);
-			sprite.Scale = 3f;
+			sprite.Scale = 2f;
 
 		}
 

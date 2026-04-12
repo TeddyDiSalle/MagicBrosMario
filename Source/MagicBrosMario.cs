@@ -142,7 +142,7 @@ public class MagicBrosMario : Game
 
     protected override void Update(GameTime gameTime)
     {
-        _currentState.Update(gameTime);
+        
 
 		//TEMP - DELETE LATER
 		//----------------------------------------------------------------------------------------------------------------
@@ -154,22 +154,23 @@ public class MagicBrosMario : Game
 				CollisionController.Instance.RemoveItem(ItemsList[i]);
 			}
 		}
-		//----------------------------------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------------------------------
 
+        _currentState.Update(gameTime);
 
-		//Temp stuff may need some may not
-		//Controller.Update(gameTime);
-		//lvl.Update(gameTime);
-		//Mario.Update(gameTime);
+        //Temp stuff may need some may not
+        //Controller.Update(gameTime);
+        //lvl.Update(gameTime);
+        //Mario.Update(gameTime);
 
-		//int cameraX = Math.Max(Camera.Instance.Position.X, (int)Mario.Position.X - Camera.Instance.WindowSize.X / 2);
-		//Camera.Instance.Position = new Point(cameraX, 0);
-		//Camera.Instance.Update(gameTime);
-		//HUD.Instance.Update(gameTime);
+        //int cameraX = Math.Max(Camera.Instance.Position.X, (int)Mario.Position.X - Camera.Instance.WindowSize.X / 2);
+        //Camera.Instance.Position = new Point(cameraX, 0);
+        //Camera.Instance.Update(gameTime);
+        //HUD.Instance.Update(gameTime);
 
-		//CollisionController.Instance.Update(gameTime);
+        //CollisionController.Instance.Update(gameTime);
 
-	}
+    }
 
 	protected override void Draw(GameTime gameTime)
     {
@@ -240,4 +241,6 @@ public class MagicBrosMario : Game
         HUD.Instance.SetLevel(x);
         HUD.Instance.SetTime(200);
     }
+
+
 }

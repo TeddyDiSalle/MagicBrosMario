@@ -37,7 +37,7 @@ namespace MagicBrosMario.Source.Items
 			direction = d;
 
 			position = new Point(positionX, positionY);
-			sprite.Scale = 3f;
+			sprite.Scale = 2f;
 
 		}
 		public void Update(GameTime gameTime)

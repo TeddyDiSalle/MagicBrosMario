@@ -1,4 +1,5 @@
-﻿using MagicBrosMario.Source.Block;
+﻿
+using MagicBrosMario.Source.Block;
 using MagicBrosMario.Source.Collision;
 using MagicBrosMario.Source.MarioStates;
 using MagicBrosMario.Source.Sprite;
@@ -90,36 +91,39 @@ namespace MagicBrosMario.Source.Items
 			}
 		}
 
-		public void OnCollideBlock(IBlock block, CollideDirection direction)
-		{
-			if (!hasRisen) return;
-
-			Rectangle blockBox = block.CollisionBox;
-
-			if (direction == CollideDirection.Down)
+        public void OnCollideBlock(IBlock block, CollideDirection direction)
+        {
+            if (hasRisen)
 			{
-				isOnBlock = true;
-				floatPosition.Y = blockBox.Top - sprite.Size.Y;
-			}
-			else if (direction == CollideDirection.Left)
-			{
-				xDirection = 1;
-				floatPosition.X = blockBox.Right;
-			}
-			else if (direction == CollideDirection.Right)
-			{
-				xDirection = -1;
-				floatPosition.X = blockBox.Left - sprite.Size.X;
-			}
-			else if (direction == CollideDirection.Top)
-			{
-				floatPosition.Y = blockBox.Bottom;
-			}
+                Rectangle blockBox = block.CollisionBox;
 
-			sprite.Position = floatPosition.ToPoint();
-		}
+                if (direction == CollideDirection.Down)
+                {
+                    isOnBlock = true;
+                    floatPosition.Y = blockBox.Top - sprite.Size.Y;
+                }
+                else if (direction == CollideDirection.Left)
+                {
+                    xDirection = 1;
+                    floatPosition.X = blockBox.Right;
+                }
+                else if (direction == CollideDirection.Right)
+                {
+                    xDirection = -1;
+                    floatPosition.X = blockBox.Left - sprite.Size.X;
+                }
+                else if (direction == CollideDirection.Top)
+                {
+                    floatPosition.Y = blockBox.Bottom;
+                }
 
-		public void OnCollidePlayer(Player player, CollideDirection direction)
+                sprite.Position = floatPosition.ToPoint();
+            }
+
+
+        }
+
+        public void OnCollidePlayer(Player player, CollideDirection direction)
 		{
 			if (isCollected) return;
 			isCollected = true;
