@@ -12,7 +12,7 @@ namespace MagicBrosMario.Source.GameStates
         private MagicBrosMario _game;
         private ILevel _nextLevel;
         private Texture2D _transitionTexture;
-        private float _timer = 0f;
+        private float _timer = 1.5f;
 
         public TransitionState(MagicBrosMario game, ILevel nextLevel)
         {
