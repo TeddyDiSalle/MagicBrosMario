@@ -242,6 +242,15 @@ public class Player : ICollidable
             (int)Math.Ceiling(Position.Y),
             CollisionBox.Width, CollisionBox.Height);
         PlayerState.Update(gameTime);
+        if (DamageTimer < DamageCoolDown)
+        {
+            bool visible = Math.Sin(DamageTimer * 35) > 0;
+            PlayerState.SetVisibility(visible);
+        }
+        else
+        {
+            PlayerState.SetVisibility(true);
+        }
     }
 
     public void Draw(SpriteBatch spriteBatch)

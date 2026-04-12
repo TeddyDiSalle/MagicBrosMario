@@ -134,7 +134,6 @@ public class PlayerCollisionHandler
                 {
                     UnCollide(goomba.CollisionBox, direction);
                     player.SetVelocity(player.Velocity - new Vector2(0, 7));
-                    player.InvincibilityOnEnemyContact();
                 }
                 else
                 {
@@ -146,7 +145,6 @@ public class PlayerCollisionHandler
                 {
                     UnCollide(koopa.CollisionBox, direction);
                     player.SetVelocity(player.Velocity - new Vector2(0, 7));
-                    player.InvincibilityOnEnemyContact();
                 }
                 else if (direction == CollideDirection.Top || koopa.IsShellMoving() || koopa.IsWalking())
                 {

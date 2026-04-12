@@ -100,6 +100,10 @@ public class BigMarioMoveState : IPlayerState
             Sprites[i].Drop();
         }
     }
+    public void SetVisibility(bool visible)
+    {
+        CurrentSprite.Visible = visible;
+    }
     private void SwitchSprite(int index)
     {
         CurrentSprite.Visible = false;
