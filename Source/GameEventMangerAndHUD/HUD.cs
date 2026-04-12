@@ -83,6 +83,7 @@ public class HUD
                     score += 5000;
                     DisplayScoreGain(gameEvent, 5000);
                 }
+                SoundController.PlaySound(SoundType.Stomp, 1.0f);
                 break;
             case GameEventType.CoinCollected:
                 coinCount++;
