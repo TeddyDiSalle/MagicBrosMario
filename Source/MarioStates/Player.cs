@@ -108,9 +108,9 @@ public class Player : ICollidable
             PlayerState.TakeDamage();
         }
     }
-    public void KickInvinsibility()
+    public void InvincibilityOnEnemyContact()
     {
-        DamageTimer = DamageCoolDown - 0.2;
+        DamageTimer = DamageCoolDown - 0.1;
     }
     public void KillMario()
     {
