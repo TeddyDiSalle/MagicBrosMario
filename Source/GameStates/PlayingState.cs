@@ -1,4 +1,5 @@
-﻿using MagicBrosMario.Source.Sprite;
+﻿using MagicBrosMario.Source.HUDAndScoring;
+using MagicBrosMario.Source.Sprite;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -44,8 +45,10 @@ namespace MagicBrosMario.Source.GameStates
 			int cameraX = Math.Max(Camera.Instance.Position.X, (int)_game.Mario.Position.X - Camera.Instance.WindowSize.X / 2);
 			Camera.Instance.Position = new Point(cameraX, 0);
 			Camera.Instance.Update(gameTime);
+            HUD.Instance.Update(gameTime);
+			Sound.SoundController.Update(gameTime);
 
-			Collision.CollisionController.Instance.Update(gameTime);
+            Collision.CollisionController.Instance.Update(gameTime);
 
 
 			if (Keyboard.GetState().IsKeyDown(Keys.R))
@@ -58,6 +61,7 @@ namespace MagicBrosMario.Source.GameStates
 		public void Draw(SpriteBatch spriteBatch)
 		{
 			Camera.Instance.Draw(spriteBatch);
-		}
+            HUD.Instance.Draw(spriteBatch);
+        }
 	}
 }

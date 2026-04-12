@@ -146,12 +146,17 @@ public class PlayerCollisionHandler
                     UnCollide(koopa.CollisionBox, direction);
                     player.SetVelocity(player.Velocity - new Vector2(0, 7));
                 }
-                else if (koopa.IsShellMoving() || koopa.IsWalking())
+                else if (direction == CollideDirection.Top || koopa.IsShellMoving() || koopa.IsWalking())
                 {
                     UnCollide(koopa.CollisionBox, direction);
                     player.TakeDamage();
                 }
-                break;
+                else
+                {
+                    player.KickInvinsibility();
+                    SoundController.PlaySound(SoundType.Kick, 1.0f);
+                }
+                    break;
             case RotatingFireBar firebar:
                 if (firebar.IsCollidingWithFireballs(CollisionBox))
                 {

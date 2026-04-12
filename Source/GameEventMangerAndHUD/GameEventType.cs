@@ -3,6 +3,7 @@
 namespace MagicBrosMario.Source.HUDAndScoring;
 //Vincent Do
 public enum GameEventType{
+    StartLevel,
     EnemyStomped,
     LandedOnGround,
     EnemyKilledByFireball,
