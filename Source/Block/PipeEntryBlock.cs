@@ -19,7 +19,9 @@ public class PipeEntryBlock(
     ISprite sprite,
     PipeEntryBlock.PipeDirection facing,
     PipeEntryBlock.PipeDirection half,
-    Point? exit)
+    Point? exit,
+    PipeEntryBlock.PipeDirection? exitDirection
+)
     : BlockBase<PipeEntryBlock>(sprite)
 {
     public enum PipeDirection
@@ -51,6 +53,8 @@ public class PipeEntryBlock(
     public PipeDirection Half { get; } = half;
 
     public Point? Exit { get; } = exit;
+    
+    public PipeDirection? ExitDirection { get; } = exitDirection;
 
     /// <summary>
     /// check if mario is walking toward the pipe before calling this
@@ -115,19 +119,11 @@ public class PipeEntryBlock(
         return result;
     }
 
-    public override void OnCollidePlayer(Player player, CollideDirection direction)
-    {
-    }
+    public override void OnCollidePlayer(Player player, CollideDirection direction) { }
 
-    public override void OnCollideItem(IItems item, CollideDirection direction)
-    {
-    }
+    public override void OnCollideItem(IItems item, CollideDirection direction) { }
 
-    public override void OnCollideEnemy(IEnemy enemy, CollideDirection direction)
-    {
-    }
+    public override void OnCollideEnemy(IEnemy enemy, CollideDirection direction) { }
 
-    public override void OnCollideBlock(IBlock block, CollideDirection direction)
-    {
-    }
+    public override void OnCollideBlock(IBlock block, CollideDirection direction) { }
 }

@@ -50,6 +50,9 @@ public class HUD
     {
         switch (gameEvent.EventType)
         {
+            case GameEventType.StartLevel:
+                SoundController.PlayMusic(MusicType.Level1_1, 1f);
+                break;
             case GameEventType.EnemyStomped:
                 SoundController.PlaySound(SoundType.Stomp, 1.0f);
                 if (stompChainTimer >= stompChainCD)
@@ -116,10 +119,12 @@ public class HUD
                 }
                 break;
             case GameEventType.FlagpoleReached:
+                SoundController.StopMusic();
                 SoundController.PlaySound(SoundType.Flagpole, 1.0f);
                 break;
             case GameEventType.EndOfLevel:
                 levelOver = true;
+                SoundController.StopMusic();
                 SoundController.PlaySound(SoundType.GameOver, 1.0f);
                 break;
             default:
@@ -141,7 +146,6 @@ public class HUD
         FrameCount++;
         if (FrameCount == 24 && time >0 && !levelOver)
         {
-            //SendEvent(new GameEvent { EventType = GameEventType.CoinCollected});//For testing and functionality check in
             time--;
             FrameCount = 0;
         }

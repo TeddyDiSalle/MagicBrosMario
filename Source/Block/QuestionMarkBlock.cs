@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using MagicBrosMario.Source.Collision;
 using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.MarioStates;
@@ -52,18 +53,25 @@ public class QuestionMarkBlock : BlockBase<QuestionMarkBlock>
         switch (innerItem)
         {
             case InnerItem.Coin:
-                // spawn coin above
-                break;
+				new Coin(MagicBrosMario.INSTANCE.ItemTexture, Position.X + 8, Position.Y);
+				break;
             case InnerItem.Star:
-                // spawn star above
+                new Star(MagicBrosMario.INSTANCE.ItemTexture, Position.X + 1, Position.Y - 5);
                 break;
             case InnerItem.OneUp:
-                // spawn one up above
-                break;
+				new OneUp(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 5);
+				break;
             case InnerItem.Mushroom:
-                // spawn mushroom above
-                break;
-            default:
+                if (player.GetCurrentPower() == Power.None)
+                {
+                    new Mushroom(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 5);
+                } 
+                else
+                {
+                    new Fireflower(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 3);
+                }
+				break;
+			default:
                 throw new Exception("impossible default branch");
         }
     }

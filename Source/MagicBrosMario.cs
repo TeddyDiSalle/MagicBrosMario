@@ -29,6 +29,7 @@ public class MagicBrosMario : Game
     public SharedTexture EnemyTexture { get; }
     public SharedTexture FireTexture { get; }
 
+
     public SpriteFont font { get; private set; }
 
     //Use this for now
@@ -80,6 +81,8 @@ public class MagicBrosMario : Game
         //MarioTexture.BindTexture(marioSheet);
         //FireTexture.BindTexture(fireSheet);
 
+
+
         Mario = null;
 
 
@@ -118,6 +121,9 @@ public class MagicBrosMario : Game
 
     protected override void Update(GameTime gameTime)
     {
+
+
+
         _currentState.Update(gameTime);
 
         //Temp stuff may need some may not
@@ -141,7 +147,9 @@ public class MagicBrosMario : Game
         _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
         Camera.Instance.Draw(_spriteBatch);
         _currentState.Draw(_spriteBatch);
+
         _spriteBatch.End();
+
 
         base.Draw(gameTime);
     }
@@ -165,9 +173,9 @@ public class MagicBrosMario : Game
         Texture2D itemSheet = Content.Load<Texture2D>("items");
         Texture2D enemySheet = Content.Load<Texture2D>("characters");
 
-        level = new Level1();
-        level.Initialize(Content, blockTexture, enemySheet, itemSheet);
-
+        lvl = new Level1();
+        lvl.Initialize(Content, blockTexture, enemySheet, itemSheet);
+        HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.StartLevel });
         resetMario();
     }
 
@@ -187,5 +195,12 @@ public class MagicBrosMario : Game
         Mario.PowerUp(Power.FireFlower);
         setController();
     }
+
+    private void resetHUD(int x)
+    {
+        HUD.Instance.SetLevel(x);
+        HUD.Instance.SetTime(200);
+    }
+
 */
 }

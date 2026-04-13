@@ -78,8 +78,7 @@ public static class BlockFactory
                 if (half == Source.Block.PipeEntryBlock.PipeDirection.Left)
                 {
                     sprite = BlockSharedTexture.NewSprite(16, 96, 16, 16);
-                }
-                else
+                } else
                 {
                     sprite = BlockSharedTexture.NewSprite(32, 96, 16, 16);
                 }
@@ -89,8 +88,7 @@ public static class BlockFactory
                 if (half == Source.Block.PipeEntryBlock.PipeDirection.Up)
                 {
                     sprite = BlockSharedTexture.NewSprite(64, 80, 16, 16);
-                }
-                else
+                } else
                 {
                     sprite = BlockSharedTexture.NewSprite(64, 96, 16, 16);
                 }
@@ -100,8 +98,7 @@ public static class BlockFactory
                 if (half == Source.Block.PipeEntryBlock.PipeDirection.Up)
                 {
                     sprite = BlockSharedTexture.NewSprite(80, 80, 16, 16);
-                }
-                else
+                } else
                 {
                     sprite = BlockSharedTexture.NewSprite(80, 96, 16, 16);
                 }
@@ -111,8 +108,7 @@ public static class BlockFactory
                 if (half == Source.Block.PipeEntryBlock.PipeDirection.Up)
                 {
                     sprite = BlockSharedTexture.NewSprite(80, 80, 16, 16);
-                }
-                else
+                } else
                 {
                     sprite = BlockSharedTexture.NewSprite(80, 96, 16, 16);
                 }
@@ -129,7 +125,8 @@ public static class BlockFactory
     public static PipeEntryBlock PipeEntryBlock(
         PipeEntryBlock.PipeDirection facing,
         PipeEntryBlock.PipeDirection half,
-        Point? exit
+        Point? exit,
+        PipeEntryBlock.PipeDirection? exitDirection
     )
     {
         Sprite.Sprite sprite;
@@ -162,6 +159,6 @@ public static class BlockFactory
         }
 
         return new PipeEntryBlock(
-            sprite, facing, half, exit);
+            sprite, facing, half, exit, exitDirection);
     }
 }

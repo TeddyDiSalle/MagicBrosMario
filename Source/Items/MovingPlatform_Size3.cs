@@ -13,7 +13,7 @@ namespace MagicBrosMario.Source.Items
 	internal class MovingPlatform_Size3 : IItems
 	{
 
-		private Sprite.Sprite sprite;
+		private Sprite.ISprite sprite;
 		private Point position;
 		private float speed = 80f;
 		private int direction;
@@ -37,7 +37,7 @@ namespace MagicBrosMario.Source.Items
 			direction = d;
 
 			position = new Point(positionX, positionY);
-			sprite.Scale = 3f;
+			sprite.Scale = 2f;
 
 		}
 		public void Update(GameTime gameTime)
