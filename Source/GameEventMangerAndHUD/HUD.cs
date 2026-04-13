@@ -116,12 +116,12 @@ public class HUD
                 }
                 break;
             case GameEventType.FlagpoleReached:
-                SoundController.StopMusic(MusicType.Level1_1);
+                SoundController.StopMusic();
                 SoundController.PlaySound(SoundType.Flagpole, 1.0f);
                 break;
             case GameEventType.EndOfLevel:
                 levelOver = true;
-                SoundController.StopMusic(MusicType.Level1_1);
+                SoundController.StopMusic();
                 SoundController.PlaySound(SoundType.GameOver, 1.0f);
                 break;
             default:

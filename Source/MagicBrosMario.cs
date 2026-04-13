@@ -29,6 +29,7 @@ public class MagicBrosMario : Game
     public SharedTexture EnemyTexture { get; }
     public SharedTexture FireTexture { get; }
 
+
     public SpriteFont font { get; private set; }
 
     //Use this for now
@@ -60,7 +61,7 @@ public class MagicBrosMario : Game
         ItemTexture = new SharedTexture();
         MarioTexture = new SharedTexture();
         FireTexture = new SharedTexture();
-        
+
         INSTANCE = this;
     }
 
@@ -81,6 +82,8 @@ public class MagicBrosMario : Game
         //ItemTexture.BindTexture(itemSheet);
         //MarioTexture.BindTexture(marioSheet);
         //FireTexture.BindTexture(fireSheet);
+
+
 
         Mario = new Player(MarioTexture);
 
@@ -116,6 +119,9 @@ public class MagicBrosMario : Game
 
     protected override void Update(GameTime gameTime)
     {
+
+
+
         _currentState.Update(gameTime);
 
         //Temp stuff may need some may not
@@ -139,7 +145,9 @@ public class MagicBrosMario : Game
         _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
         Camera.Instance.Draw(_spriteBatch);
         _currentState.Draw(_spriteBatch);
+
         _spriteBatch.End();
+
 
         base.Draw(gameTime);
     }
@@ -192,4 +200,6 @@ public class MagicBrosMario : Game
         HUD.Instance.SetLevel(x);
         HUD.Instance.SetTime(200);
     }
+
+
 }

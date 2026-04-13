@@ -56,7 +56,7 @@ public abstract class ParentLevel : ILevel
 
 		}
 
-		SoundController.StopMusic(backgroundMusic);
+		SoundController.StopMusic();
 		SoundController.PlayMusic(backgroundMusic);
 
 		InitializeManagers(bTexture, eTexture, iTexture);
@@ -92,8 +92,8 @@ public abstract class ParentLevel : ILevel
 					//blocks[r][c].Update(gt);
 				if(enemies[r][c] != null)
 					enemies[r][c].Update(gt);
-				//if(items[r][c] != null)
-					//items[r][c].Update(gt);
+				//if (items[r][c] != null)
+				//	items[r][c].Update(gt);
 			}
 		}
 	}
