@@ -52,8 +52,8 @@ public class Bowser : IEnemy, ICollidable
     public Bowser(SharedTexture EnemyTexture, SharedTexture FireTexture, int y, int x)
     {
         fireTexture = FireTexture;
-        walkingRightSprite = EnemyTexture.NewAnimatedSprite(255, 368, 35, 32, 4, 0.2f);
-        walkingLeftSprite = EnemyTexture.NewAnimatedSprite(116, 368, 35, 32, 2, 0.2f);
+        walkingRightSprite = EnemyTexture.NewAnimatedSprite(257, 368, 32, 32, 4, 0.2f);
+        walkingLeftSprite = EnemyTexture.NewAnimatedSprite(117, 368, 32, 32, 2, 0.2f);
         walkingRightSprite.Visible = true;
         walkingLeftSprite.Visible = false;
         walkingRightSprite.Scale = SCALE;
