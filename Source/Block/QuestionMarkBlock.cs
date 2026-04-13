@@ -49,7 +49,6 @@ public class QuestionMarkBlock : BlockBase<QuestionMarkBlock>
         Sprite = emptySprite;
         Sprite.Visible = true;
         empty = true;
-;
 
         switch (innerItem)
         {
@@ -63,11 +62,14 @@ public class QuestionMarkBlock : BlockBase<QuestionMarkBlock>
 				new OneUp(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 5);
 				break;
             case InnerItem.Mushroom:
-				new Mushroom(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 5);
-
-                //Need to make it so that if mario is big, then summons fireflower instead
-				//new Fireflower(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 3);
-
+                if (player.GetCurrentPower() == Power.None)
+                {
+                    new Mushroom(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 5);
+                } 
+                else
+                {
+                    new Fireflower(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 3);
+                }
 				break;
 			default:
                 throw new Exception("impossible default branch");
