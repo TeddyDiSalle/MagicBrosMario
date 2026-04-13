@@ -172,6 +172,11 @@ public class MagicBrosMario : Game
         isPaused = !isPaused;
     }
 
+    public bool getPaused()
+    {
+        return isPaused;
+    }
+
     /*
         public void Debug()
         {
