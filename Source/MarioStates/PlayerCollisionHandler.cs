@@ -4,8 +4,6 @@ using MagicBrosMario.Source.HUDAndScoring;
 using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.Sound;
 using Microsoft.Xna.Framework;
-using System;
-using System.Diagnostics;
 
 
 
@@ -177,6 +175,7 @@ public class PlayerCollisionHandler
             if (teleportCoordinates.HasValue)
             {
                 Vector2 travelVelocity = Vector2.Zero;
+                Vector2 exitVelocity = Vector2.Zero;
                 player.PipePhase = Player.PipeTravelPhase.Entering;
                 switch (direction)
                 {
@@ -190,8 +189,20 @@ public class PlayerCollisionHandler
                         travelVelocity =  new Vector2(0, -4); break;
                     default:break;
                 }
+                switch (pipe.ExitDirection)
+                {
+                    case PipeEntryBlock.PipeDirection.Left:
+                        exitVelocity = new Vector2(4, 0); break;
+                    case PipeEntryBlock.PipeDirection.Right:
+                        exitVelocity = new Vector2(-4, 0); break;
+                    case PipeEntryBlock.PipeDirection.Up:
+                        exitVelocity = new Vector2(0, -4); break;
+                    case PipeEntryBlock.PipeDirection.Down:
+                        exitVelocity = new Vector2(0, 4); break;
+                    default: break;
+                }
                 player.PipeTravelVelocity = travelVelocity;
-                //player.PipeExitVelocity = exitVelocity;
+                player.PipeExitVelocity = exitVelocity;
                 player.PipeExitPosition = teleportCoordinates.Value.ToVector2();
                 SoundController.PlaySound(SoundType.PipeTravel, 1.0f);
                 return;

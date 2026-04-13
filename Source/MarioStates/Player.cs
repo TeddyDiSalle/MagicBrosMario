@@ -39,8 +39,8 @@ public class Player : ICollidable
     public bool TravelingThroughPipe { get; set; } = false;
     public enum PipeTravelPhase { None, Entering, Exiting }
     public PipeTravelPhase PipePhase { get; set; } = PipeTravelPhase.None;
-    public Vector2 PipeEntryDestination { get; set; }  // where mario fully enters
-    public Vector2 PipeExitPosition { get; set; }       // where mario appears after teleport
+    public Vector2 PipeEntryDestination { get; set; } // where mario fully enters
+    public Vector2 PipeExitPosition { get; set; } // where mario appears after teleport
     public Vector2 PipeTravelVelocity { get; set; }
     public Vector2 PipeExitVelocity { get; set; }
     private readonly PlayerCollisionHandler PlayerCollision;
@@ -211,15 +211,14 @@ public class Player : ICollidable
             if (Vector2.Distance(Position, PipeEntryDestination) < 4f)
             {
                 SetPositon(PipeExitPosition);
-                //PipeTravelVelocity = PipeExitVelocity;
                 PipePhase = PipeTravelPhase.Exiting;
             }
             return;
         }
         if (PipePhase == PipeTravelPhase.Exiting)
         {
-            SetVelocity(PipeTravelVelocity);
-            if (Vector2.Distance(Position, PipeExitPosition + PipeTravelVelocity * 20) < 4f)
+            SetVelocity(PipeExitVelocity);
+            if (Vector2.Distance(Position, PipeExitPosition + PipeExitVelocity * 20) < 4f)
             {
                 SetVelocity(Vector2.Zero);
                 PipePhase = PipeTravelPhase.None;
