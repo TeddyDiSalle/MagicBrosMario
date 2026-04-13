@@ -182,7 +182,7 @@ public class HUD
         }
         if (waitForNextLevel) { return; }
         FrameCount++;
-        if (FrameCount == 24 && time >0 && !levelOver)
+        if (FrameCount >= 24 && time >0 && !levelOver)
         {
             time--;
             FrameCount = 0;
