@@ -139,7 +139,7 @@ public abstract class ParentLevel : ILevel
 					if(itemId == "00") // a coin is the only thing we place in the world right now, ?markblock takes care of the rest
 					{
 						items[r][c] = ItemManager.CreateItem(itemId, c * tileSize, r * tileSize);
-						CollisionController.Instance.AddItem(items[r][c]);
+						//CollisionController.Instance.AddItem(items[r][c]);
 					}
 				}
 				

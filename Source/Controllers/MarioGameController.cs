@@ -22,6 +22,7 @@ public class MarioGameController{
         gameData = data;
         Initialize();
     }
+    private bool muted = false;
 
     public void Initialize()
     {
@@ -63,30 +64,44 @@ public class MarioGameController{
     }
     public void Update(GameTime gameTime)
     {
-        KeyboardInfo keyb = gameData.keyb;
-        MouseInfo mouse = gameData.mouse;
-        keyb.Update();
-        mouse.Update();
-        
-        Player player = MagicBrosMario.INSTANCE.Mario;
-        
-        inputMap.ProcessInput(gameTime, keyb, mouse);// check all the inputs of the mouse and keyboard and run their corresponding function
+        if(!muted){
+            KeyboardInfo keyb = gameData.keyb;
+            MouseInfo mouse = gameData.mouse;
+            keyb.Update();
+            mouse.Update();
+            
+            Player player = MagicBrosMario.INSTANCE.Mario;
+            
+            inputMap.ProcessInput(gameTime, keyb, mouse);// check all the inputs of the mouse and keyboard and run their corresponding function
 
-        if (!keyb.IsKeyDown(Keys.S) && !keyb.IsKeyDown(Keys.Down))
-        {
-            player.ReleaseCrouch();
-        }
+            if (!keyb.IsKeyDown(Keys.S) && !keyb.IsKeyDown(Keys.Down))
+            {
+                player.ReleaseCrouch();
+            }
 
-        bool moving =
-            keyb.IsKeyDown(Keys.A) || keyb.IsKeyDown(Keys.Left) ||
-            keyb.IsKeyDown(Keys.D) || keyb.IsKeyDown(Keys.Right) ||
-            keyb.IsKeyDown(Keys.S) || keyb.IsKeyDown(Keys.Down) ||
-            keyb.IsKeyDown(Keys.W) || keyb.IsKeyDown(Keys.Up);
-        if(!moving)
-        {
-            player.Idle();
+            bool moving =
+                keyb.IsKeyDown(Keys.A) || keyb.IsKeyDown(Keys.Left) ||
+                keyb.IsKeyDown(Keys.D) || keyb.IsKeyDown(Keys.Right) ||
+                keyb.IsKeyDown(Keys.S) || keyb.IsKeyDown(Keys.Down) ||
+                keyb.IsKeyDown(Keys.W) || keyb.IsKeyDown(Keys.Up);
+            if(!moving)
+            {
+                player.Idle();
+            }
         }
-    
+    }
+
+    public bool IsMuted()
+    {
+        return muted;
+    }
+    public void Mute()
+    {
+        muted = true;
+    }
+    public void UnMute()
+    {
+        muted = false;
     }
 
 }

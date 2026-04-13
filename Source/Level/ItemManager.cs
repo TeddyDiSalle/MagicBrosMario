@@ -50,6 +50,7 @@ public static class ItemManager
             "Fireflower" => (x, y) => ItemFactory.CreateFireFlower(x, y), // all of these items are in the mystery box
             "Star" => (x, y) => ItemFactory.CreateStar(x, y),
             "OneUp" => (x, y) => ItemFactory.CreateOneUp(x, y),
+            "FlagPole" => (x, y) => ItemFactory.CreateFlagPole(x, y),
             _ => throw new ArgumentException($"Unknown item function: {functionName}")
         };
     }

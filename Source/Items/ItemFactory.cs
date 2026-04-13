@@ -32,5 +32,9 @@ public static class ItemFactory {
         var item = new OneUp(ITEM_SHARED_TEXTURE, x, y);
         return item;
     }
+    public static IItems CreateFlagPole(int x, int y) {
+        var item = new FlagPole(ITEM_SHARED_TEXTURE, x, y);
+        return item;
+    }
 
 }
