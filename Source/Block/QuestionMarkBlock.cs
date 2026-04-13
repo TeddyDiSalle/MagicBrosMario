@@ -49,7 +49,6 @@ public class QuestionMarkBlock : BlockBase<QuestionMarkBlock>
         Sprite = emptySprite;
         Sprite.Visible = true;
         empty = true;
-;
 
         switch (innerItem)
         {
