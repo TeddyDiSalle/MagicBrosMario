@@ -36,6 +36,13 @@ public class Player : ICollidable
     private double DamageTimer = 0;
     public Sprite.SharedTexture Texture { get; }
     public bool IsJumping { get; set; } = false;
+    public bool TravelingThroughPipe { get; set; } = false;
+    public enum PipeTravelPhase { None, Entering, Exiting }
+    public PipeTravelPhase PipePhase { get; set; } = PipeTravelPhase.None;
+    public Vector2 PipeEntryDestination { get; set; }  // where mario fully enters
+    public Vector2 PipeExitPosition { get; set; }       // where mario appears after teleport
+    public Vector2 PipeTravelVelocity { get; set; }
+    public Vector2 PipeExitVelocity { get; set; }
     private readonly PlayerCollisionHandler PlayerCollision;
     public Rectangle CollisionBox { get; set; }
 
@@ -160,6 +167,7 @@ public class Player : ICollidable
     public void Idle()
     {
         PlayerState.Idle();
+        if (PipePhase != PipeTravelPhase.None) { return; }
         if (Velocity.X < 0)
         {
             Velocity += new Vector2(0.1f, 0);
@@ -192,11 +200,32 @@ public class Player : ICollidable
         {
             DamageTimer += gameTime.ElapsedGameTime.TotalSeconds;
         }
-        if (!WasGrounded)
+        if (!WasGrounded && PipePhase == PipeTravelPhase.None)
         {
             Velocity += new Vector2(0, Gravity);
         }
         Position += Velocity;
+        if (PipePhase == PipeTravelPhase.Entering)
+        {
+            SetVelocity(PipeTravelVelocity);
+            if (Vector2.Distance(Position, PipeEntryDestination) < 4f)
+            {
+                SetPositon(PipeExitPosition);
+                //PipeTravelVelocity = PipeExitVelocity;
+                PipePhase = PipeTravelPhase.Exiting;
+            }
+            return;
+        }
+        if (PipePhase == PipeTravelPhase.Exiting)
+        {
+            SetVelocity(PipeTravelVelocity);
+            if (Vector2.Distance(Position, PipeExitPosition + PipeTravelVelocity * 20) < 4f)
+            {
+                SetVelocity(Vector2.Zero);
+                PipePhase = PipeTravelPhase.None;
+            }
+            return;
+        }
         if (StarTimeRemaining >= StarDuration)
         {
             StarTimeRemaining = 0;
@@ -227,10 +256,7 @@ public class Player : ICollidable
         {
             KillMario();
         }
-        CollisionBox = new Rectangle(
-            (int)Math.Ceiling(Position.X),
-            (int)Math.Ceiling(Position.Y),
-            CollisionBox.Width, CollisionBox.Height);
+        CollisionBox = new Rectangle((int)Math.Ceiling(Position.X),(int)Math.Ceiling(Position.Y),CollisionBox.Width, CollisionBox.Height);
         PlayerState.Update(gameTime);
         if (DamageTimer < DamageCoolDown)
         {

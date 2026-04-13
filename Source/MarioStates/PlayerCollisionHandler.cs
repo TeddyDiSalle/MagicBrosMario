@@ -171,6 +171,33 @@ public class PlayerCollisionHandler
     public void OnCollideBlock(IBlock block, Collision.CollideDirection direction)
     {
         if (!player.IsAlive) { return; }
+        if (block is PipeEntryBlock pipe)
+        {
+            if(player.PipePhase != Player.PipeTravelPhase.None) { return; }
+            Point? teleportCoordinates = pipe.CanEnter(direction, player.CollisionBox);
+            if (teleportCoordinates.HasValue)
+            {
+                Vector2 travelVelocity = Vector2.Zero;
+                player.PipePhase = Player.PipeTravelPhase.Entering;
+                switch (direction)
+                {
+                    case CollideDirection.Left:
+                        travelVelocity = new Vector2(-4, 0); break;
+                    case CollideDirection.Right:
+                        travelVelocity = new Vector2(4, 0); break;
+                    case CollideDirection.Top:
+                        travelVelocity =  new Vector2(0, 4); break;
+                    case CollideDirection.Down:
+                        travelVelocity =  new Vector2(0, -4); break;
+                    default:break;
+                }
+                player.PipeTravelVelocity = travelVelocity;
+                //player.PipeExitVelocity = exitVelocity;
+                player.PipeExitPosition = teleportCoordinates.Value.ToVector2();
+                SoundController.PlaySound(SoundType.PipeTravel, 1.0f);
+                return;
+            }
+        }
         UnCollide(block.CollisionBox, direction);
         if (direction == CollideDirection.Down)
         {
