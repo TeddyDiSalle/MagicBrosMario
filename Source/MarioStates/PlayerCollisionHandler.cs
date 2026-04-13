@@ -47,7 +47,6 @@ public class PlayerCollisionHandler
                 }
                 break;
             case Fireflower:
-            case Fireflower_Underground:
                 player.PowerUp(Power.FireFlower);
                 HUD.Instance.SendEvent(new GameEvent
                 {

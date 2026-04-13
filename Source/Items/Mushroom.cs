@@ -13,7 +13,7 @@ namespace MagicBrosMario.Source.Items
 		private const float GRAVITY_SPEED = 250f;
 		private const float RISE_SPEED = 30f;
 		private const float X_SPEED = 120f;
-		private Sprite.Sprite sprite;
+		private Sprite.ISprite sprite;
 		private Vector2 floatPosition;
 		private int xDirection = 1;
 		private bool isCollected = false;
