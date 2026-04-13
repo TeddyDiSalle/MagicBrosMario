@@ -146,7 +146,15 @@ public class HUD
             time--;
             FrameCount = 0;
         }
-        if(time == 100 && playtimewarning) { playtimewarning = false;  SoundController.PlaySound(SoundType.TimeWarning, 1.0f); }
+        if(time == 100 && playtimewarning) 
+        { 
+            playtimewarning = false;  
+            SoundController.PauseMusic();
+            SoundController.PlaySound(SoundType.TimeWarning, 1.0f);
+        }else if (!playtimewarning && !SoundController.IsSoundOnCoolDown(SoundType.TimeWarning))
+        {
+            SoundController.ResumeMusic();
+        }
         if (levelOver)
         {
             time--;
