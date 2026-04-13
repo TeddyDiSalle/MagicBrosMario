@@ -59,7 +59,14 @@ public static class BlockManager
             "BlueBricks" => (x, y) => BlockFactory.BlueBricks().WithPosition(x, y).WithScale(_scale),
             "BaseBlock" => (x, y) => BlockFactory.BaseBlock().WithPosition(x, y).WithScale(_scale),
             "QuestionMarkBlock" => (x, y) =>BlockFactory.GroundBlock().WithPosition(x, y).WithScale(_scale), // if every called, a huge mistake has happened
-            "EmptyQuestionMarkBlock" => (x, y) => BlockFactory.GroundBlock().WithPosition(x, y).WithScale(_scale), // fix
+            "LeftPipe" => (x, y) => BlockFactory.PipeBlock(BlockFactory.PipeSegmentType.Vertical, PipeEntryBlock.PipeDirection.Left).WithPosition(x, y).WithScale(_scale),
+            "RightPipe" => (x, y) => BlockFactory.PipeBlock(BlockFactory.PipeSegmentType.Vertical, PipeEntryBlock.PipeDirection.Right).WithPosition(x, y).WithScale(_scale),
+            "LeftPipeOpening" => (x, y) => BlockFactory.PipeEntryBlock(PipeEntryBlock.PipeDirection.Up, PipeEntryBlock.PipeDirection.Left, null, null).WithPosition(x, y).WithScale(_scale),
+            "RightPipeOpening" => (x, y) => BlockFactory.PipeEntryBlock(PipeEntryBlock.PipeDirection.Up, PipeEntryBlock.PipeDirection.Right, null, null).WithPosition(x, y).WithScale(_scale),
+            "TopPipe" => (x, y) => BlockFactory.PipeBlock(BlockFactory.PipeSegmentType.Horizontal, PipeEntryBlock.PipeDirection.Up).WithPosition(x, y).WithScale(_scale),
+            "BottomPipe" => (x, y) => BlockFactory.PipeBlock(BlockFactory.PipeSegmentType.Horizontal, PipeEntryBlock.PipeDirection.Down).WithPosition(x, y).WithScale(_scale),
+            "TopPipeOpening" => (x, y) => BlockFactory.PipeEntryBlock(PipeEntryBlock.PipeDirection.Left, PipeEntryBlock.PipeDirection.Up, null, null).WithPosition(x, y).WithScale(_scale),
+            "BottomPipeOpening" => (x, y) => BlockFactory.PipeEntryBlock(PipeEntryBlock.PipeDirection.Left, PipeEntryBlock.PipeDirection.Down, null, null).WithPosition(x, y).WithScale(_scale),
             _ => throw new ArgumentException($"Unknown block function: {functionName}")
         };
     }

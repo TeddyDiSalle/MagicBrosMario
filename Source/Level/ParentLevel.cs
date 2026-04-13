@@ -144,24 +144,18 @@ public abstract class ParentLevel : ILevel
 				}
 				
 				if (string.IsNullOrEmpty(blockId)){
-					blocks[r][c] = null;
-					
+					blocks[r][c] = null;	
 				}else{
-					if(blockId == "07") // ?markblock
-					{
-						//have to translate our item type to QuestionMarkBlock.InnerItem enum
-						//Temporary fix
-						QuestionMarkBlock.InnerItem qItem =itemId is "00" ? QuestionMarkBlock.InnerItem.Coin :
-							itemId is "01" ? QuestionMarkBlock.InnerItem.Mushroom : // Assuming Mushroom is treated as FireFlower for the inner item
-							items[r][c] is Fireflower ? QuestionMarkBlock.InnerItem.Mushroom :
-							items[r][c] is Star ? QuestionMarkBlock.InnerItem.Star :
-							items[r][c] is OneUp ? QuestionMarkBlock.InnerItem.Mushroom : // OneUp is not implemented yey
-							QuestionMarkBlock.InnerItem.Coin; // Default to Coin if not matched
-						
-						blocks[r][c] =   BlockManager.CreateBlock(blockId, c * tileSize, r * tileSize, qItem);
-					}else{
-						blocks[r][c] =   BlockManager.CreateBlock(blockId, c * tileSize, r * tileSize);// x,y - columnb => x, row => y
-					}
+					//have to translate our item type to QuestionMarkBlock.InnerItem enum
+					QuestionMarkBlock.InnerItem qItem =itemId is "00" ? QuestionMarkBlock.InnerItem.Coin :
+						itemId is "01" ? QuestionMarkBlock.InnerItem.Mushroom : // no fireflower in q block, but a mushroom is in
+						itemId is "02" ? QuestionMarkBlock.InnerItem.Star :
+						itemId is "03" ? QuestionMarkBlock.InnerItem.OneUp :
+						itemId is "04" ? QuestionMarkBlock.InnerItem.Mushroom : // OneUp is not implemented yey
+						QuestionMarkBlock.InnerItem.Coin; // Default to Coin if not matched
+					
+					blocks[r][c] =   BlockManager.CreateBlock(blockId, c * tileSize, r * tileSize, qItem);
+					
 					CollisionController.Instance.AddBlock(blocks[r][c]);
 					
 				}

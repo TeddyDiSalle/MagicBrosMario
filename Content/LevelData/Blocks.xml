@@ -8,5 +8,12 @@
     <Block id="05" function="BlueBricks" />
     <Block id="06" function="BaseBlock" />
     <Block id="07" function="QuestionMarkBlock" />
-    <Block id="08" function="EmptyQuestionMarkBlock"/>
+    <Block id="08" function="LeftPipe"/>
+    <Block id="09" function="RightPipe"/>
+    <Block id="10" function="LeftPipeOpening"/>
+    <Block id="11" function="RightPipeOpening"/>
+    <Block id="12" function="TopPipe"/>
+    <Block id="13" function="BottomPipe"/>
+    <Block id="14" function="TopPipeOpening"/>
+    <Block id="15" function="BottomPipeOpening"/>
 </Blocks>
