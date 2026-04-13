@@ -136,8 +136,9 @@ public class Player : ICollidable
         if (PlayerState is not MarioDeadState)
         {
             ChangeState(new MarioDeadState(this, Texture, TimeFrame, ScaleFactor));
+            Lives--;
         }
-        Lives--;
+        
     }
     public void PowerUp(Power power)
     {

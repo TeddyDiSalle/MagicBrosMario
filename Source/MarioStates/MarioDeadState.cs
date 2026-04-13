@@ -20,7 +20,7 @@ public class MarioDeadState : IPlayerState
         this.scaleFactor = scaleFactor;
         CurrentSprite = texture.NewSprite(136, 2, 16, 16);
         CurrentSprite.Scale = scaleFactor;
-        Mario.Lives--;
+        //Mario.Lives--;
         Mario.SetVelocity(new Vector2(0, -7));
         Mario.IsAlive = false;
         Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 16 * scaleFactor, 16 * scaleFactor);

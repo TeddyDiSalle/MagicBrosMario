@@ -18,7 +18,7 @@ namespace MagicBrosMario.Source.GameStates
             _titleTexture = _game.Content.Load<Texture2D>("MarioTitleScreen");
             _font = _game.Content.Load<SpriteFont>("font");
 
-            _game.Mario.Lives = 3;
+            //_game.Mario.Lives = 3;
 
 
 		}
