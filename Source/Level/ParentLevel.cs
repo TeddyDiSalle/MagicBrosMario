@@ -56,7 +56,7 @@ public abstract class ParentLevel : ILevel
 
 		}
 
-		SoundController.StopMusic(backgroundMusic);
+		SoundController.StopMusic();
 		SoundController.PlayMusic(backgroundMusic);
 
 		InitializeManagers(bTexture, eTexture, iTexture);
