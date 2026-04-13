@@ -1,15 +1,9 @@
-﻿using MagicBrosMario.Source.Collision;
-using MagicBrosMario.Source.GameStates;
-using MagicBrosMario.Source.HUDAndScoring;
-using MagicBrosMario.Source.Items;
-using MagicBrosMario.Source.Level;
+﻿using MagicBrosMario.Source.GameStates;
 using MagicBrosMario.Source.MarioStates;
 using MagicBrosMario.Source.Sound;
 using MagicBrosMario.Source.Sprite;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
 
 
 namespace MagicBrosMario.Source;
@@ -34,7 +28,7 @@ public class MagicBrosMario : Game
             {
                 level = newPlayingState._level;
             }
-
+            Camera.Instance.Position = Point.Zero;
             _currentStateDONOUTUSE = value;
             
         }
