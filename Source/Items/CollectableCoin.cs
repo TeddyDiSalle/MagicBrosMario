@@ -27,6 +27,7 @@ namespace MagicBrosMario.Source.Items
 
 			sprite.Position = new Point(positionX, positionY);
 			sprite.Scale = 2f;
+			CollisionController.Instance.AddItem(this);
 		}
 
 		public void Update(GameTime gameTime)

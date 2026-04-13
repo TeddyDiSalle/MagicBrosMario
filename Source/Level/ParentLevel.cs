@@ -61,7 +61,7 @@ public abstract class ParentLevel : ILevel
 
 		SoundController.PlayMusic(backgroundMusic, volume);
 
-		
+		HUD.Instance.LevelStart();
         HUD.Instance.SetTime(TimeLimit);
 
 		InitializeManagers(bTexture, eTexture, iTexture);
@@ -136,7 +136,7 @@ public abstract class ParentLevel : ILevel
 				if (string.IsNullOrEmpty(itemId)){
 					items[r][c] = null;
 				}else{
-					if(itemId == "00") // a coin is the only thing we place in the world right now, ?markblock takes care of the rest
+					if(string.IsNullOrEmpty(blockId)) // a coin is the only thing we place in the world right now, ?markblock takes care of the rest
 					{
 						items[r][c] = ItemManager.CreateItem(itemId, c * tileSize, r * tileSize);
 						//CollisionController.Instance.AddItem(items[r][c]);
@@ -171,6 +171,23 @@ public abstract class ParentLevel : ILevel
 
 	}
 
+	public void AddItem(IItems item)
+	{
+		// Find the first empty slot in the items array and add the item there
+		for (int r = 0; r < levHeight; r++)
+		{
+			for (int c = 0; c < levWidth; c++)
+			{
+				if (items[r][c] == null)
+				{
+					items[r][c] = item;
+					CollisionController.Instance.AddItem(item);
+					return;
+				}
+			}
+		}
+		throw new Exception("No empty slot available to add item");
+	}
 	public void Clear()	{
 		// Clears enemies, blocks, and items from the level and collision controller
 		for(int r = 0; r < levHeight; r++)	{
@@ -190,6 +207,7 @@ public abstract class ParentLevel : ILevel
 			}
 		}
 		// Stop our music
+		HUD.Instance.LevelOver();
 		SoundController.StopMusic();
 	}
 }

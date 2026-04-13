@@ -28,7 +28,7 @@ public class MagicBrosMario : Game
             {
                 level = newPlayingState._level;
             }
-            Camera.Instance.Position = Point.Zero;
+            Camera.Instance.Position = Point.Zero;// Camera has to go to the beginning of the level
             _currentStateDONOUTUSE = value;
             
         }

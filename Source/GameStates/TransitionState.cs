@@ -27,7 +27,7 @@ namespace MagicBrosMario.Source.GameStates
 
             if (_timer <= 0)
             {
-                _game.CurrentState =(new PlayingState(_game, _nextLevel));
+                _game.CurrentState = new PlayingState(_game, _nextLevel);
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.R))

@@ -50,30 +50,33 @@ public class QuestionMarkBlock : BlockBase<QuestionMarkBlock>
         Sprite.Visible = true;
         empty = true;
 
+        IItems item = null;
         switch (innerItem)
         {
             case InnerItem.Coin:
-				new Coin(MagicBrosMario.INSTANCE.ItemTexture, Position.X + 8, Position.Y);
+				item =new Coin(MagicBrosMario.INSTANCE.ItemTexture, Position.X + 8, Position.Y);
 				break;
             case InnerItem.Star:
-                new Star(MagicBrosMario.INSTANCE.ItemTexture, Position.X + 1, Position.Y - 5);
+                item = new Star(MagicBrosMario.INSTANCE.ItemTexture, Position.X + 1, Position.Y - 5);
                 break;
             case InnerItem.OneUp:
-				new OneUp(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 5);
+				item = new OneUp(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 5);
 				break;
             case InnerItem.Mushroom:
                 if (player.GetCurrentPower() == Power.None)
                 {
-                    new Mushroom(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 5);
+                    item = new Mushroom(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 5);
                 } 
                 else
                 {
-                    new Fireflower(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 3);
+                    item =new Fireflower(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 3);
                 }
 				break;
 			default:
                 throw new Exception("impossible default branch");
         }
+
+        MagicBrosMario.INSTANCE.level.AddItem(item);
     }
 
     public override void OnCollideItem(IItems item, CollideDirection direction)

@@ -49,6 +49,7 @@ namespace MagicBrosMario.Source.GameStates
 		public void Draw(SpriteBatch spriteBatch)
 		{
 			Camera.Instance.Draw(spriteBatch);
+			HUD.Instance.Draw(spriteBatch);
 		}
 
         public void Clear()
