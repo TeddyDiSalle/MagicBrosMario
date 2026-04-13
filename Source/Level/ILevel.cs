@@ -9,6 +9,7 @@ public interface ILevel
 {
     string ToString(){ return Name; }
     string Name { get; }
+    int TimeLimit {get;}
     int MarioStartPosX { get; }
     int MarioStartPosY { get; }
     void Update(GameTime gt);

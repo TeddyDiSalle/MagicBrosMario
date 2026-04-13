@@ -8,6 +8,7 @@ public class DebugRoom : ParentLevel
 		MarioStartPosX = 10;
 		MarioStartPosY = 10;
 		Name = "Debug";
+		TimeLimit = 999;
 		backgroundMusic = Sound.MusicType.Debug;
 		volume = 0.8f;
 

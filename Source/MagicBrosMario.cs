@@ -20,7 +20,7 @@ public class MagicBrosMario : Game
     private SpriteBatch _spriteBatch;
     private IGameState _currentState;
     public MarioGameController Controller { get; private set; }
-    private IGameState currentState{get ; set;}
+    public IGameState currentState{ get;} // There is a setState
 
     public Player Mario;
 
@@ -37,8 +37,6 @@ public class MagicBrosMario : Game
     //private ILevel lvl;
 
     public static MagicBrosMario INSTANCE { get; private set; }
-
-    public List<IItems> items { get; } = new();
 
     public enum GameState
     {
@@ -82,7 +80,7 @@ public class MagicBrosMario : Game
         //MarioTexture.BindTexture(marioSheet);
         //FireTexture.BindTexture(fireSheet);
 
-        Mario = new Player(MarioTexture);
+        Mario = null;
 
 
         _currentState = new TitleScreenState(this);
@@ -98,6 +96,11 @@ public class MagicBrosMario : Game
 
     public void SetState(IGameState newState)
     {
+        if (_currentState is PlayingState playingState)
+        {
+            playingState.Clear();
+            //level = ((PlayingState)newState)._level;
+        }
         _currentState = newState;
     }
 

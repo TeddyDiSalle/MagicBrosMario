@@ -40,7 +40,7 @@ public class Player : ICollidable
 
     public Player(Sprite.SharedTexture texture)
     {
-        HUD.Instance.SetTime(200);
+        HUD.Instance.SetTime(MagicBrosMario.INSTANCE.level.TimeLimit);
         this.Texture = texture;
         CollisionBox = new Rectangle((int)Position.X, (int)Position.Y, 0, 0);
         PlayerState = new SmallMarioIdleState(this, texture, TimeFrame, ScaleFactor);

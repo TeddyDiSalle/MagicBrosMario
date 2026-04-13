@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MagicBrosMario.Source.MarioStates;
 using MagicBrosMario.Source.GameStates;
+using System.Diagnostics;
+using MagicBrosMario.Source.Level;
 
 
 namespace MagicBrosMario.Source;
@@ -35,26 +37,25 @@ public class MarioGameController{
     // All the binds specified for sprint 2
     public void SetSprint3Binds()
     {
-        Player player = MagicBrosMario.INSTANCE.Mario; 
         //Keyboard inputs
-        inputMap.Bind(Keys.W, gt => player.Jump(gt));
-        inputMap.Bind(Keys.Up, gt => player.Jump(gt));
-        inputMap.Bind(Keys.Space, gt => player.Jump(gt));
-        inputMap.Bind(Keys.A, gt => player.Left(gt));
-        inputMap.Bind(Keys.Left, gt => player.Left(gt));
-        inputMap.Bind(Keys.S, gt => player.Crouch(gt));
-        inputMap.Bind(Keys.Down, gt => player.Crouch(gt));
-        inputMap.Bind(Keys.D, gt => player.Right(gt));
-        inputMap.Bind(Keys.Right, gt => player.Right(gt));
-        inputMap.Bind(Keys.Z, gt => player.Attack());
-        inputMap.Bind(Keys.N, gt =>  player.Attack());
-        inputMap.Bind(Keys.E, gt =>  player.TakeDamage());
+        inputMap.Bind(Keys.W, gt => MagicBrosMario.INSTANCE.Mario.Jump(gt));
+        inputMap.Bind(Keys.Up, gt => MagicBrosMario.INSTANCE.Mario.Jump(gt));
+        inputMap.Bind(Keys.Space, gt => MagicBrosMario.INSTANCE.Mario.Jump(gt));
+        inputMap.Bind(Keys.A, gt => MagicBrosMario.INSTANCE.Mario.Left(gt));
+        inputMap.Bind(Keys.Left, gt => MagicBrosMario.INSTANCE.Mario.Left(gt));
+        inputMap.Bind(Keys.S, gt => MagicBrosMario.INSTANCE.Mario.Crouch(gt));
+        inputMap.Bind(Keys.Down, gt => MagicBrosMario.INSTANCE.Mario.Crouch(gt));
+        inputMap.Bind(Keys.D, gt => MagicBrosMario.INSTANCE.Mario.Right(gt));
+        inputMap.Bind(Keys.Right, gt => MagicBrosMario.INSTANCE.Mario.Right(gt));
+        inputMap.Bind(Keys.Z, gt => MagicBrosMario.INSTANCE.Mario.Attack());
+        inputMap.Bind(Keys.N, gt =>  MagicBrosMario.INSTANCE.Mario.Attack());
+        inputMap.Bind(Keys.E, gt =>  MagicBrosMario.INSTANCE.Mario.TakeDamage());
         inputMap.Bind(Keys.Q, gt => game.Exit()); 
         inputMap.Bind(Keys.R, gt => MagicBrosMario.INSTANCE.SetState(new TitleScreenState(MagicBrosMario.INSTANCE))); // reset game
 
         // mouse inputs
         inputMap.Bind(m => m.IsButtonDown(MouseButton.Right), () => game.Exit());
-        //inputMap.Bind(m => m.IsButtonDown(MouseButton.Left) && m.Position.X < gameData.halfX, () => MagicBrosMario.INSTANCE.Debug());//If you click the left side of the screen, call DebugRomm()
+        inputMap.Bind(m => m.IsButtonDown(MouseButton.Left) && m.Position.X < gameData.halfX, () => MagicBrosMario.INSTANCE.SetState(new TransitionState(MagicBrosMario.INSTANCE, new DebugRoom())));//If you click the left side of the screen, call DebugRomm()
         inputMap.Bind(m => m.IsButtonDown(MouseButton.Left) && m.Position.X >= gameData.halfX, () => MagicBrosMario.INSTANCE.SetState(new TitleScreenState(MagicBrosMario.INSTANCE))); //If you click the right side of the screen, call Level1()
     }
     public void Update(GameTime gameTime)

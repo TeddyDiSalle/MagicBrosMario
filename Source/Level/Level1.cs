@@ -6,6 +6,7 @@ public class Level1 : ParentLevel
 		MarioStartPosX = 100;
 		MarioStartPosY = 300;
 		Name = "1-1";
+		TimeLimit = 400;
 		backgroundMusic = Sound.MusicType.Level1_1;
 		
 		Level1BlockCVS = "Content/LevelData/1-1/Blocks1-1.csv";
