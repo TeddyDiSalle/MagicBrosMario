@@ -22,6 +22,7 @@ public class Player : ICollidable
     private const float MovementSpeed = 5.0f, Gravity = 0.35f, MaxSpeed = 4.0f, fireballCooldown = 0.2f;
     public float TimeFrame { get; } = 0.15f;
     public bool IsGrounded { get; set; } = false;
+    public bool WasGrounded { get; set; } = false;
     public bool IsCrouching { get; private set; } = false;
     public bool Flipped { get; set; } = false;
     public bool Invincible { get; set; } = false;
@@ -47,7 +48,7 @@ public class Player : ICollidable
     }
     public void CreateFireball()
     {
-        if(FireballTimer < fireballCooldown) { return; }
+        if (FireballTimer < fireballCooldown) { return; }
         SoundController.PlaySound(SoundType.Fireball, 1.0f);
         FireballTimer = 0;
         AnimatedSprite movingFireball = Texture.NewAnimatedSprite(207, 168, 8, 8, 4, TimeFrame);
@@ -97,7 +98,7 @@ public class Player : ICollidable
     }
     public void Attack()
     {
-        if(fireballs.Count < 2)
+        if (fireballs.Count < 2)
             PlayerState.Attack();
     }
     public void TakeDamage()
@@ -114,7 +115,7 @@ public class Player : ICollidable
     }
     public void KillMario()
     {
-        if(PlayerState is not MarioDeadState)
+        if (PlayerState is not MarioDeadState)
         {
             ChangeState(new MarioDeadState(this, Texture, TimeFrame, ScaleFactor));
         }
@@ -137,7 +138,7 @@ public class Player : ICollidable
     {
         float distanceMoved = (float)gameTime.ElapsedGameTime.TotalSeconds * MovementSpeed * factor;
         Velocity -= new Vector2(distanceMoved, 0);
-        if(-Velocity.X > MaxSpeed)
+        if (-Velocity.X > MaxSpeed)
         {
             Velocity = new Vector2(-MaxSpeed, Velocity.Y);
         }
@@ -162,12 +163,12 @@ public class Player : ICollidable
         if (Velocity.X < 0)
         {
             Velocity += new Vector2(0.1f, 0);
-            if(Velocity.X > 0)
+            if (Velocity.X > 0)
             {
                 Velocity = new Vector2(0, Velocity.Y);
             }
         }
-        else if(Velocity.X > 0)
+        else if (Velocity.X > 0)
         {
             Velocity -= new Vector2(0.1f, 0);
             if (Velocity.X < 0)
@@ -177,36 +178,26 @@ public class Player : ICollidable
         }
     }
     //Collision Handling Methods
-    public void OnCollidePlayer(Player player, Collision.CollideDirection direction)
-    {
-        PlayerCollision.OnCollidePlayer(player, direction);
-    }
-    public void OnCollideItem(IItems item, Collision.CollideDirection direction)
-    {
-        PlayerCollision.OnCollideItem(item, direction);
-    }
-    public void OnCollideEnemy(IEnemy enemy, Collision.CollideDirection direction)
-    {
-        PlayerCollision.OnCollideEnemy(enemy, direction);
-    }
-    public void OnCollideBlock(IBlock block, Collision.CollideDirection direction)
-    {
-        PlayerCollision.OnCollideBlock(block, direction);
-    }
+    public void OnCollidePlayer(Player player, Collision.CollideDirection direction) => PlayerCollision.OnCollidePlayer(player, direction);
+    public void OnCollideItem(IItems item, Collision.CollideDirection direction) => PlayerCollision.OnCollideItem(item, direction);
+    public void OnCollideEnemy(IEnemy enemy, Collision.CollideDirection direction) => PlayerCollision.OnCollideEnemy(enemy, direction);
+    public void OnCollideBlock(IBlock block, Collision.CollideDirection direction) => PlayerCollision.OnCollideBlock(block, direction);
+
     //Update and Draw
     public void Update(GameTime gameTime)
     {
-        bool wasGrounded = IsGrounded;
+        WasGrounded = IsGrounded;
         IsGrounded = false;
         if (DamageTimer < DamageCoolDown)
         {
             DamageTimer += gameTime.ElapsedGameTime.TotalSeconds;
         }
-        if (!wasGrounded) { 
+        if (!WasGrounded)
+        {
             Velocity += new Vector2(0, Gravity);
         }
         Position += Velocity;
-        if(StarTimeRemaining >= StarDuration)
+        if (StarTimeRemaining >= StarDuration)
         {
             StarTimeRemaining = 0;
             Invincible = false;
@@ -215,7 +206,7 @@ public class Player : ICollidable
         {
             Idle();
         }
-        if(FireballTimer < fireballCooldown)
+        if (FireballTimer < fireballCooldown)
         {
             FireballTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
@@ -255,7 +246,7 @@ public class Player : ICollidable
     public void Draw(SpriteBatch spriteBatch)
     {
         PlayerState.Draw(spriteBatch);
-        foreach(MarioFireball fireball in fireballs)
+        foreach (MarioFireball fireball in fireballs)
         {
             fireball.Draw(spriteBatch);
         }

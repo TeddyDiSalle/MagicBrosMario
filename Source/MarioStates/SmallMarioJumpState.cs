@@ -32,7 +32,7 @@ public class SmallMarioJumpState : IPlayerState
         CurrentSprite.Visible = true;
         CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
         Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 16 * scaleFactor, 16 * scaleFactor);
-        SoundController.PlaySound(SoundType.JumpSmall, 1.0f);
+        //SoundController.PlaySound(SoundType.JumpSmall, 1.0f);
         Mario.IsJumping = true;
         Mario.IsGrounded = false;
     }

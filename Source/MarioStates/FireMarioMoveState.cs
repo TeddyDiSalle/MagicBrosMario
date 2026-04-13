@@ -58,6 +58,7 @@ public class FireMarioMoveState : IPlayerState
     }
     public void Jump(GameTime gameTime)
     {
+        if (!Mario.IsGrounded && !Mario.WasGrounded) { return; }
         Mario.MoveUp(gameTime);
         Mario.ChangeState(new FireMarioJumpState(Mario, texture, timeFrame, scaleFactor));
     }
