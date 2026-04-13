@@ -34,16 +34,7 @@ namespace MagicBrosMario.Source.GameStates
 			_level.Update(gameTime);
 			_game.Mario.Update(gameTime);
 
-			for (int i = _game.items.Count - 1; i >= 0; i--)
-			{
-				_game.items[i].Update(gameTime);
-				if (_game.items[i].getCollected())
-				{
-					Collision.CollisionController.Instance.RemoveItem(_game.items[i]);
-					_game.items.RemoveAt(i);
-				}
-			}
-
+			
 			int cameraX = Math.Max(Camera.Instance.Position.X, (int)_game.Mario.Position.X - Camera.Instance.WindowSize.X / 2);
 			Camera.Instance.Position = new Point(cameraX, 0);
 			Camera.Instance.Update(gameTime);
@@ -59,5 +50,11 @@ namespace MagicBrosMario.Source.GameStates
 		{
 			Camera.Instance.Draw(spriteBatch);
 		}
-	}
+
+        public void Clear()
+        {
+            _level.Clear();
+			Camera.Instance.Sprites.Clear();
+        }
+    }
 }

@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MagicBrosMario.Source.Collision;
 using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.Sound;
+using MagicBrosMario.Source.HUDAndScoring;
 
 namespace MagicBrosMario.Source.Level;
 public abstract class ParentLevel : ILevel
@@ -60,6 +61,9 @@ public abstract class ParentLevel : ILevel
 
 		SoundController.PlayMusic(backgroundMusic, volume);
 
+		
+        HUD.Instance.SetTime(TimeLimit);
+
 		InitializeManagers(bTexture, eTexture, iTexture);
 		LoadContent();
 	}
@@ -93,8 +97,16 @@ public abstract class ParentLevel : ILevel
 					//blocks[r][c].Update(gt);
 				if(enemies[r][c] != null)
 					enemies[r][c].Update(gt);
-				//if (items[r][c] != null)
-				//	items[r][c].Update(gt);
+				if (items[r][c] != null){
+					items[r][c].Update(gt);
+					if (items[r][c].getCollected())
+					{
+						Collision.CollisionController.Instance.RemoveItem(items[r][c]);
+						items[r][c] = null;
+					}
+				}
+				
+
 			}
 		}
 	}
@@ -184,6 +196,6 @@ public abstract class ParentLevel : ILevel
 			}
 		}
 		// Stop our music
-		SoundController.StopMusic(backgroundMusic);
+		SoundController.StopMusic();
 	}
 }

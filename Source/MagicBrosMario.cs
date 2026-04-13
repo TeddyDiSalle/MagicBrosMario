@@ -18,9 +18,27 @@ public class MagicBrosMario : Game
 {
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
-    private IGameState _currentState;
     public MarioGameController Controller { get; private set; }
-    public IGameState currentState{ get;} // There is a setState
+    private IGameState _currentStateDONOUTUSE;
+
+    public IGameState CurrentState
+    {
+        get => _currentStateDONOUTUSE;
+        set
+        {
+            if (_currentStateDONOUTUSE is PlayingState playingState)
+            {
+                playingState.Clear();
+            }
+            if (value is PlayingState newPlayingState)
+            {
+                level = newPlayingState._level;
+            }
+
+            _currentStateDONOUTUSE = value;
+            
+        }
+    }
 
     public Player Mario;
 
@@ -86,7 +104,7 @@ public class MagicBrosMario : Game
         Mario = null;
 
 
-        _currentState = new TitleScreenState(this);
+        CurrentState = new TitleScreenState(this);
 
         EnemyTexture.BindTexture(enemySheet);
         ItemTexture.BindTexture(itemSheet);
@@ -97,15 +115,6 @@ public class MagicBrosMario : Game
         setController();
     }
 
-    public void SetState(IGameState newState)
-    {
-        if (_currentState is PlayingState playingState)
-        {
-            playingState.Clear();
-            //level = ((PlayingState)newState)._level;
-        }
-        _currentState = newState;
-    }
 
     private void setController()
     {
@@ -124,7 +133,7 @@ public class MagicBrosMario : Game
 
 
 
-        _currentState.Update(gameTime);
+        CurrentState.Update(gameTime);
 
         //Temp stuff may need some may not
         //Controller.Update(gameTime);
@@ -146,7 +155,7 @@ public class MagicBrosMario : Game
 
         _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
         Camera.Instance.Draw(_spriteBatch);
-        _currentState.Draw(_spriteBatch);
+        CurrentState.Draw(_spriteBatch);
 
         _spriteBatch.End();
 

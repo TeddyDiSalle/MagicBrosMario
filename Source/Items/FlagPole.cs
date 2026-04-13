@@ -27,7 +27,6 @@ namespace MagicBrosMario.Source.Items
 			floatPosition = new Vector2(positionX, positionY);
 			sprite.Position = floatPosition.ToPoint();
 			CollisionController.Instance.AddItem(this);
-			MagicBrosMario.INSTANCE.items.Add(this);
 		}
 
 		public void OnCollidePlayer(Player player, CollideDirection direction)

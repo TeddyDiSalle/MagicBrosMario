@@ -28,7 +28,6 @@ namespace MagicBrosMario.Source.Items
 			floatPosition = new Vector2(positionX, positionY);
 			sprite.Position = floatPosition.ToPoint();
 
-			MagicBrosMario.INSTANCE.items.Add(this);
 		}
 
 		public void Update(GameTime gameTime)
