@@ -225,12 +225,13 @@ public class PlayerCollisionHandler
                         break;
                     default: break;
                 }
+                Debug.WriteLine("pipe exit direction: " + pipe.ExitDirection);
                 switch (pipe.ExitDirection)
                 {
                     case PipeEntryBlock.PipeDirection.Left:
-                        exitVelocity = new Vector2(4, 0); break;
-                    case PipeEntryBlock.PipeDirection.Right:
                         exitVelocity = new Vector2(-4, 0); break;
+                    case PipeEntryBlock.PipeDirection.Right:
+                        exitVelocity = new Vector2(4, 0); break;
                     case PipeEntryBlock.PipeDirection.Up:
                         exitVelocity = new Vector2(0, -4); break;
                     case PipeEntryBlock.PipeDirection.Down:
