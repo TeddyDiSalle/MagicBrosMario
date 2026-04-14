@@ -1,28 +1,29 @@
 # Sprint2 Code Review
 
 ## Readability Review by Vincent Do
-
-[MovingPlatform_Size1.cs](../Source/Items/MovingPlatform_Size1.cs) by Brian Perusek
+Source\Block\PipeEntryBlock.cs
+[PipeEntryBlock.cs](../Source\Block\PipeEntryBlock.cs) by Chuang
 
 - Date: 04.13.2026
-- Time: 2 minutes
+- Time: 4 minutes
 
 ### Comments
 
->
+>The logic is a bit confusing and not exactly straight forward but overall what it does is simple.
 
 ---
 
 ## Maintainability Review by Vincent Do
 
-[ItemManager.cs](..\Source\Level\ItemManager.cs) by Teddy DiSalle
+[TitleScreenState.cs](..\Source\GameStates\TitleScreenState.cs) by Brian
 
 - Date: 04.13.2026
-- Time: 2 minutes
+- Time: 1 minutes
 
 ### Comments
 
->
+>Very simple. Could be more maintainable if you can send a type of level that the title screen should go to when you press enter instead of hard coding it to level 1 but in this case there's no other level so its fine.
+___
 ## Readability Review by Brian Perusek
 
 [Class.cs](../Source/Class.cs) by Author
@@ -103,24 +104,24 @@ ___
 
 ## Readability Review by Roshan Ramamurthy
 
-[Camera.cs](../Source/Camera/Camaera.cs) by Chuang-Yun
+[MarioFireball.cs](..\Source\MarioStates\MarioFireball.cs) by Vincent
 
 - Date: 04.13.2026
-- Time: 2 minutes
+- Time: 3 minutes
 
 ### Comments
 
-> 
+> The class is pretty easy to follow — the fireball lifecycle from spawn to explosion to cleanup is laid out in a logical order. The collision handling with UnCollide is straightforward and the bounce behavior on CollideDirection.Down makes sense. Sprite switching between the fireball and explosion is clean and simple. One issue I see is some naming like contantCD which looks like a typo and getCollected which is misleading since it just checks if the fireball expired. 
 
 ---
 
 ## Maintainability Review by Roshan Ramamurthy
 
-[BigMarioJumpState.cs](../Source/MarioStates/BigMarioJumpState.cs) by Vincent
+[HUD.cs](..\Source\GameEventMangerAndHUD\HUD.cs) by Vincent
 
 - Date: 04.13.2026
-- Time: 
+- Time: 3
 
 ### Comments
 
-> 
+> The event system with SendEvent is a nice way to keep scoring logic in one place so other classes don't need to worry about points. Only concern is the class handles sound, scoring, time, and drawing all in one place so changing one thing could accidentally break something else. The class basically controls the game.
