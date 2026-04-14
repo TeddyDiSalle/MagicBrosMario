@@ -19,7 +19,8 @@ public class HUD
     private int time = 150;
     private int FrameCount = 0;
     private bool levelOver = false;
-    private bool waitForNextLevel = false;
+    private bool dead = false;
+    public bool waitForNextLevel { get; private set; } = false;
     private readonly int[] stompScores = { 100, 200, 400, 800, 1000, 2000, 4000, 8000 };
     private int StompChain = 0;
     private readonly double stompChainCD = 1.0;
@@ -159,7 +160,9 @@ public class HUD
                 levelOver = true;
                 SoundController.StopMusic();
                 SoundController.PlaySound(SoundType.GameOver, 1.0f);
-                
+                break;
+            case GameEventType.Death:
+                dead = true;
                 break;
             default:
                 break;
@@ -192,7 +195,7 @@ public class HUD
         {
             SoundController.ResumeMusic();
         }
-        if (levelOver)
+        if (levelOver && !dead)
         {
             time--;
             score += 50;
