@@ -33,7 +33,12 @@ public static class ItemFactory {
         return item;
     }
     public static IItems CreateFlagPole(int x, int y) {
-        var item = new FlagPole(ITEM_SHARED_TEXTURE, x, y);
+        int flagXOffset = -25;
+        int flagYOffset = 20; 
+        int flagPoleXOffset = 5; 
+        int flagPoleYOffset = 0; 
+        new FlagPole(ITEM_SHARED_TEXTURE, x+flagPoleXOffset, y+flagPoleYOffset);
+        var item = new Flag(ITEM_SHARED_TEXTURE, x+flagXOffset+flagPoleXOffset, y+flagYOffset+flagPoleYOffset);
         return item;
     }
 
