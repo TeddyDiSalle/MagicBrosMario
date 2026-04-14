@@ -110,7 +110,7 @@ public class PlayerCollisionHandler
                 float yLandValue = player.CollisionBox.Bottom;
                 player.SetPositon(new Vector2(flagPole.CollisionBox.X - flagPole.CollisionBox.Width, player.Position.Y));
                 player.FlagPoleBottomY = flagPole.CollisionBox.Y + flagPole.CollisionBox.Height-player.CollisionBox.Height;
-                player.CastleEntranceX = player.Position.X + 100;
+                player.CastleEntranceX = player.Position.X + 230;
                 player.EndPhase = EndLevelPhase.SlidingDown;
                 IPlayerState sliding = null;
                 switch (player.GetCurrentPower())

@@ -195,6 +195,11 @@ public class Player : ICollidable
             }
         }
     }
+
+    public void SetVisibility(bool visible)
+    {
+        PlayerState.SetVisibility(visible);
+    }
     //Collision Handling Methods
     public void OnCollidePlayer(Player player, Collision.CollideDirection direction) => PlayerCollision.OnCollidePlayer(player, direction);
     public void OnCollideItem(IItems item, Collision.CollideDirection direction) => PlayerCollision.OnCollideItem(item, direction);
@@ -256,6 +261,7 @@ public class Player : ICollidable
                 SetVelocity(Vector2.Zero);
                 EndPhase = EndLevelPhase.None;
                 HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.EndOfLevel });
+                SetVisibility(false);
             }
         }
         if (StarTimeRemaining >= StarDuration)

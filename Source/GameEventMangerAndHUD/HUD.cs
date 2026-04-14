@@ -159,6 +159,7 @@ public class HUD
                 levelOver = true;
                 SoundController.StopMusic();
                 SoundController.PlaySound(SoundType.GameOver, 1.0f);
+                
                 break;
             default:
                 break;
