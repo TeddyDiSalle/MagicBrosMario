@@ -108,7 +108,7 @@ internal sealed class DeferredPipeLinkResolver
                 );
             }
 
-            /*if (group.Pipe1 != null)
+            if (group.Pipe1 != null)
             {
                 BuildSourcePipe(
                     group.Pipe1,
@@ -116,7 +116,7 @@ internal sealed class DeferredPipeLinkResolver
                     blocks,
                     tileSize
                 );
-            }*/
+            }/*
             if (group.Pipe1 != null)
             {
                 BuildEndPipe(
@@ -124,7 +124,7 @@ internal sealed class DeferredPipeLinkResolver
                     blocks,
                     tileSize
                 );
-            }
+            }*/
             
 
             if (group.Pipe0 == null && group.Pipe1 == null)
