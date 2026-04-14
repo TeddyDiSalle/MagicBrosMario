@@ -97,7 +97,7 @@ ___
 
 ### Comments
 
-> 
+> Everything is set up in the constructor which makes it easy to find where things get loaded. The game loop in Update is simple and the item loop works well. The reset with the R key is simple and easy to change later. Only thing is Update does a lot of stuff � input, entities, camera, HUD, sound, collision, so it might be low coupling.
 
 ---
 
