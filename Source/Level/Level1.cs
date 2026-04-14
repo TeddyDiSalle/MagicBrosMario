@@ -3,7 +3,8 @@ namespace MagicBrosMario.Source.Level;
 public class Level1 : ParentLevel
 {
 	public Level1()	{
-		MarioStartPosX = 100;
+		
+		MarioStartPosX = 6100; // 100
 		MarioStartPosY = 300;
 		Name = "1-1";
 		TimeLimit = 400;
