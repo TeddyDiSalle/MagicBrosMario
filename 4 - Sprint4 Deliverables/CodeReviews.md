@@ -52,52 +52,52 @@ ___
 
 ## Readability Review by Teddy DiSalle
 
-[Class.cs](../Source/Class.cs) by Author
+[Class.cs](Source/GameStates/PlayingState.cs) by Brian
 
 - Date: 04.13.2026
 - Time: 3 minutes
 ### Comments
 
-> 
+> The state class keeps level update flow centralized and readable. It is a good place for high-level orchestration, but it should avoid absorbing gameplay logic. As more features are added, it may need stricter boundaries between level setup, camera logic, and player lifecycle management. Maybe make a Parent class so the repeated logic can be changed in one spot since some things don't have to change between IGameStates
 
 ---
 
 ## Maintainability Review by Teddy DiSalle
 
-[Class.cs](../Source/Class.cs) by Author
+[Class.cs](Source/Enemies/Goomba.cs) by Roshan
 
 - Date: 04.13.2026
-- Time: 3 minutes
+- Time:  4 minutes
 
 ### Comments
 
->
+>Enemy behavior is reasonably isolated from level loading. Collision and update behavior are straightforward. Shared enemy patterns could eventually be moved into a base behavior helper if more enemies are added. If the team wanted to add enemy activation based on camera position, the current structure could support it because enemies are already managed through the level update cycle.
 
 ___
 
 ## Readability Review by Chuang-Yun Huang
 
-[Class.cs](../Source/Class.cs) by Author
+[Class.cs](Source/MarioStates/PlayerCollisionHandler.cs) by Vincent
 
 - Date: 04.13.2026
 - Time: 3 minutes
 
 ### Comments
 
->
+>Collision response is centralized, which helps avoid scattering collision logic across multiple classes. The file is becoming large and would benefit from extracting pipe travel or item/enemy collision helpers. A future change such as adding more environment-specific collision types may make this file harder to maintain unless helpers are introduced. If the game added multiple pipe destination types or scripted exits, the current implementation could support it, but it would be easier with a dedicated pipe travel service/helper.
 
 ---
 
 ## Maintainability Review by Chuang-Yun Huang
 
-[Class.cs](../Source/Class.cs) by Author
+[Class.cs](Source/Level/ParentLevel.cs) by Teddy
 
 - Date: 04.13.2026
 - Time: 3 minutes
 
 ### Comments
 
-> 
+> The class handles many responsibilities and is a candidate for helper classes. The flow of loading blocks, items, enemies, and deferred pipes is understandable but long. Naming and method extraction are moving in the right direction.
 
 ---
 
@@ -110,7 +110,7 @@ ___
 
 ### Comments
 
-> The class is pretty easy to follow — the fireball lifecycle from spawn to explosion to cleanup is laid out in a logical order. The collision handling with UnCollide is straightforward and the bounce behavior on CollideDirection.Down makes sense. Sprite switching between the fireball and explosion is clean and simple. One issue I see is some naming like contantCD which looks like a typo and getCollected which is misleading since it just checks if the fireball expired. 
+> The class is pretty easy to follow ï¿½ the fireball lifecycle from spawn to explosion to cleanup is laid out in a logical order. The collision handling with UnCollide is straightforward and the bounce behavior on CollideDirection.Down makes sense. Sprite switching between the fireball and explosion is clean and simple. One issue I see is some naming like contantCD which looks like a typo and getCollected which is misleading since it just checks if the fireball expired. 
 
 ---
 
