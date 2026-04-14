@@ -103,7 +103,7 @@ public class PipeEntryBlock(
 
                 var pipeWidth = 2 * CollisionBox.Width;
                 var maxOffset = pipeWidth - mario.Width;
-                var marioOffset = mario.Top - pipeLeft;
+                var marioOffset = mario.Left - pipeLeft;
 
                 if (0 <= marioOffset && marioOffset < maxOffset)
                 {
