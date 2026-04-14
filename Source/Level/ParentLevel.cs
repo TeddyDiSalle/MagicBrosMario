@@ -49,6 +49,7 @@ public abstract class ParentLevel : ILevel
     public int TimeLimit { get; protected set; }
 
     private readonly DeferredPipeLinkResolver _pipeResolver = new();
+    private readonly HashSet<IEnemy> _activatedEnemies = new();
 
     public void Initialize(
         Microsoft.Xna.Framework.Content.ContentManager contentManager,
@@ -137,20 +138,29 @@ public abstract class ParentLevel : ILevel
 
     public void Update(GameTime gt)
     {
+        Rectangle activationBounds = GetEnemyActivationBounds();
+
         for (int r = 0; r < levHeight; r++)
         {
             for (int c = 0; c < levWidth; c++)
             {
                 if (enemies[r][c] != null)
-                    enemies[r][c].Update(gt);
+                {
+                    IEnemy enemy = enemies[r][c];
+
+                    if (_activatedEnemies.Contains(enemy) || ShouldActivateEnemy(enemy, activationBounds))
+                    {
+                        _activatedEnemies.Add(enemy);
+                        enemy.Update(gt);
+                    }
+                }
 
                 if (items[r][c] != null)
                 {
                     items[r][c].Update(gt);
-
                     if (items[r][c].getCollected())
                     {
-                        CollisionController.Instance.RemoveItem(items[r][c]);
+                        Collision.CollisionController.Instance.RemoveItem(items[r][c]);
                         items[r][c] = null;
                     }
                 }
@@ -250,6 +260,25 @@ public abstract class ParentLevel : ILevel
         CollisionController.Instance.AddEnemy(enemies[row][col]);
     }
 
+        private Rectangle GetEnemyActivationBounds()
+    {
+        const int leftBufferTiles = 2;
+        const int rightBufferTiles = 6;
+        const int verticalBufferTiles = 2;
+
+        return new Rectangle(
+            Camera.Instance.Position.X - leftBufferTiles * tileSize,
+            Camera.Instance.Position.Y - verticalBufferTiles * tileSize,
+            Camera.Instance.WindowSize.X + (leftBufferTiles + rightBufferTiles) * tileSize,
+            Camera.Instance.WindowSize.Y + (2 * verticalBufferTiles) * tileSize
+        );
+    }
+
+    private bool ShouldActivateEnemy(IEnemy enemy, Rectangle activationBounds)
+    {
+        return enemy.CollisionBox.Intersects(activationBounds);
+    }
+
     public void AddItem(IItems item)
     {
         for (int r = 0; r < levHeight; r++)
@@ -270,7 +299,7 @@ public abstract class ParentLevel : ILevel
 
     public void Clear()
     {
-        _pipeResolver.Clear();
+        _activatedEnemies.Clear();
 
         for (int r = 0; r < levHeight; r++)
         {
@@ -281,13 +310,11 @@ public abstract class ParentLevel : ILevel
                     CollisionController.Instance.RemoveBlock(blocks[r][c]);
                     blocks[r][c] = null;
                 }
-
                 if (enemies[r][c] != null)
                 {
                     CollisionController.Instance.RemoveEnemy(enemies[r][c]);
                     enemies[r][c] = null;
                 }
-
                 if (items[r][c] != null)
                 {
                     CollisionController.Instance.RemoveItem(items[r][c]);
