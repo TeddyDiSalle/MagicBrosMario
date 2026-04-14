@@ -15,7 +15,7 @@ public static class BlockManager
     private static readonly int _scale = 2;
     public readonly record struct PipeTeleport(
         Point ExitTile,
-        PipeEntryBlock.PipeDirection ExitDirection
+        PipeEntryBlock.PipeDirection? ExitDirection
     );
 
     public static void Initialize(Texture2D texture)
@@ -64,7 +64,6 @@ public static class BlockManager
                     pipeTeleport.Value.ExitTile.Y * tileSize
                 );
                 exitDirection = pipeTeleport.Value.ExitDirection;
-                Console.WriteLine($"Creating pipe entry block with exit at tile {pipeTeleport.Value.ExitTile} ({exitPixels.Value}) and direction {exitDirection}");
             }
 
             return CreatePipeEntryBlock(blockId, x, y, exitPixels, exitDirection);
@@ -148,6 +147,9 @@ public static class BlockManager
             "BottomPipe" => (x, y) => BlockFactory.PipeBlock(BlockFactory.PipeSegmentType.Horizontal, PipeEntryBlock.PipeDirection.Down).WithPosition(x, y).WithScale(_scale),
             "TopPipeOpening" => (x, y) => BlockFactory.PipeEntryBlock(PipeEntryBlock.PipeDirection.Left, PipeEntryBlock.PipeDirection.Up, null, null).WithPosition(x, y).WithScale(_scale),
             "BottomPipeOpening" => (x, y) => BlockFactory.PipeEntryBlock(PipeEntryBlock.PipeDirection.Left, PipeEntryBlock.PipeDirection.Down, null, null).WithPosition(x, y).WithScale(_scale),
+            "UpsideDownLeftPipeOpening" => (x, y) => BlockFactory.PipeEntryBlock(PipeEntryBlock.PipeDirection.Down, PipeEntryBlock.PipeDirection.Left, null, null).WithPosition(x, y).WithScale(_scale),
+            "UpsideDownRightPipeOpening" => (x, y) => BlockFactory.PipeEntryBlock(PipeEntryBlock.PipeDirection.Down, PipeEntryBlock.PipeDirection.Right, null, null).WithPosition(x, y).WithScale(_scale),
+
             _ => throw new ArgumentException($"Unknown block function: {functionName}")
         };
     }
