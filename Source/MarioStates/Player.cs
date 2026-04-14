@@ -228,7 +228,7 @@ public class Player : ICollidable
             if (Vector2.Distance(Position, PipeEntryDestination) < 20f)
             {
                 SetPositon(PipeExitPosition);
-                Debug.WriteLine(PipeExitPosition);
+                Debug.WriteLine("Pipe exit pos: "+PipeExitPosition);
                 PipePhase = PipeTravelPhase.Exiting;
             }
             return;
@@ -236,7 +236,7 @@ public class Player : ICollidable
         if (PipePhase == PipeTravelPhase.Exiting)
         {
             SetVelocity(PipeExitVelocity);
-            Debug.WriteLine(PipeExitVelocity);
+            Debug.WriteLine("pipe exit vel :" +PipeExitVelocity);
             if (Vector2.Distance(Position, PipeExitPosition + PipeExitVelocity * 20) < 20f)
             {
                 SetVelocity(Vector2.Zero);
