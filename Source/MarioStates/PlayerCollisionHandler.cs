@@ -245,6 +245,7 @@ public class PlayerCollisionHandler
                 return;
             }
         }
+        if(player.PipePhase == PipeTravelPhase.Exiting || player.PipePhase == PipeTravelPhase.Exiting) { return; }
         UnCollide(block.CollisionBox, direction);
         if (direction == CollideDirection.Down)
         {
