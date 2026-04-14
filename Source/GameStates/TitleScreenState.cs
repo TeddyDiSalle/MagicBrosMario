@@ -22,7 +22,7 @@ namespace MagicBrosMario.Source.GameStates
 		{
             if (Keyboard.GetState().IsKeyDown(Keys.Enter))
             {
-                _game.SetState(new TransitionState(_game, new Level.Level1()));
+                _game.CurrentState = new TransitionState(_game, new Level.Level1());
             }
         }
 
@@ -44,5 +44,10 @@ namespace MagicBrosMario.Source.GameStates
 
 
         }
-	}
+
+        public void Clear()
+        {
+            throw new System.NotImplementedException();
+        }
+    }
 }

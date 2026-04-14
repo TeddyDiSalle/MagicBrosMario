@@ -5,4 +5,5 @@
     <Item id="02" function="Star" />
     <Item id="03" function="OneUp" />
     <Item id="04" function="Mushroom" />
+    <Item id="05" function="FlagPole" />
 </Items>

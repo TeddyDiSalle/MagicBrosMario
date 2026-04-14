@@ -27,12 +27,12 @@ namespace MagicBrosMario.Source.GameStates
 
             if (_timer <= 0)
             {
-                _game.SetState(new PlayingState(_game, _nextLevel));
+                _game.CurrentState = new PlayingState(_game, _nextLevel);
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.R))
             {
-                _game.SetState(new TitleScreenState(_game));
+                _game.CurrentState = new TitleScreenState(_game);
             }
         }
 
@@ -41,6 +41,11 @@ namespace MagicBrosMario.Source.GameStates
             spriteBatch.Draw(_transitionTexture, new Rectangle(0, 0,
                 _game.GraphicsDevice.Viewport.Width,
                 _game.GraphicsDevice.Viewport.Height), Color.White);
+        }
+
+        public void Clear()
+        {
+            throw new NotImplementedException();
         }
     }
 }

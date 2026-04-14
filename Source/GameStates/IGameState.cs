@@ -10,5 +10,6 @@ namespace MagicBrosMario.Source.GameStates
 		{
 			void Update(GameTime gameTime);
 			void Draw(SpriteBatch spriteBatch);
+			void Clear();
 		}
 }

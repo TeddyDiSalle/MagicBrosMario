@@ -1,5 +1,5 @@
 // wav files downloaded from https://themushroomkingdom.net/media/smb/wav
-// made by teddy
+// made by Chuang
 
 using System;
 using System.Collections.Generic;
@@ -29,12 +29,14 @@ public class SoundController
     public static void LoadSounds()
     {
         string L1Path = "1-1/";
+        string DebugPath = "Debug/";
         string BlocksPath = "Blocks/";
         string EnemiesPath = "Enemies/";
         string EnviromentPath = "Enviroment/";
         string ItemsPath = "Items/";
         string MarioPath = "Mario/";
-        Instance.LoadMusic(MusicType.Level1_1, L1Path + "smb_overworld");
+        Instance.LoadMusic(MusicType.Level1_1, L1Path+"smb_overworld");
+        Instance.LoadMusic(MusicType.Debug, DebugPath+"Aria_Math");
 
         Instance.LoadSoundEffect(SoundType.Break, BlocksPath + "break");
         Instance.LoadSoundEffect(SoundType.Vine, BlocksPath + "vine");

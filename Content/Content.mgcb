@@ -164,6 +164,12 @@
 /processorParam:Quality=Best
 /build:Sounds/Blocks/vine.wav
 
+#begin Sounds/Debug/Aria_Math.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Sounds/Debug/Aria_Math.mp3
+
 #begin Sounds/Enemies/bowser_falls.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor

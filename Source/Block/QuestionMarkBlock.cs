@@ -51,6 +51,7 @@ public class QuestionMarkBlock : BlockBase<QuestionMarkBlock>
         Sprite.Visible = true;
         empty = true;
 
+        IItems item = null;
         switch (innerItem)
         {
             case InnerItem.Coin:
@@ -65,20 +66,30 @@ public class QuestionMarkBlock : BlockBase<QuestionMarkBlock>
 				new OneUp(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 5);
                 HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.PowerupAppears, EventPosition = Position });
                 break;
+				item =new Coin(MagicBrosMario.INSTANCE.ItemTexture, Position.X + 8, Position.Y);
+				break;
+            case InnerItem.Star:
+                item = new Star(MagicBrosMario.INSTANCE.ItemTexture, Position.X + 1, Position.Y - 5);
+                break;
+            case InnerItem.OneUp:
+				item = new OneUp(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 5);
+				break;
             case InnerItem.Mushroom:
                 if (player.GetCurrentPower() == Power.None)
                 {
-                    new Mushroom(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 5);
+                    item = new Mushroom(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 5);
                 } 
                 else
                 {
-                    new Fireflower(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 3);
+                    item =new Fireflower(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 3);
                 }
                 HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.PowerupAppears, EventPosition = Position });
                 break;
 			default:
                 throw new Exception("impossible default branch");
         }
+
+        MagicBrosMario.INSTANCE.level.AddItem(item);
     }
 
     public override void OnCollideItem(IItems item, CollideDirection direction)

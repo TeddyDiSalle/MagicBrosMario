@@ -12,7 +12,6 @@ public static class EnemyManager
 {
     private static readonly Dictionary<string, Func<int, int, IEnemy>> EnemyConstructors = new();
     private static string xmlPath = "Content/LevelData/Enemies.xml";
-    private static readonly int _scale = 2;
 
     public static void Initialize(Texture2D texture)
     {

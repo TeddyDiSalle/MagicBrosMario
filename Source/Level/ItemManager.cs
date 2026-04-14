@@ -12,7 +12,6 @@ public static class ItemManager
 {
     private static readonly Dictionary<string, Func<int, int, IItems>> ItemConstructors = new();
     private static string xmlPath = "Content/LevelData/Items.xml";
-    private static readonly int _scale = 2;
 
     public static void Initialize(Texture2D texture)
     {
@@ -51,6 +50,7 @@ public static class ItemManager
             "Fireflower" => (x, y) => ItemFactory.CreateFireFlower(x, y), // all of these items are in the mystery box
             "Star" => (x, y) => ItemFactory.CreateStar(x, y),
             "OneUp" => (x, y) => ItemFactory.CreateOneUp(x, y),
+            "FlagPole" => (x, y) => ItemFactory.CreateFlagPole(x, y),
             _ => throw new ArgumentException($"Unknown item function: {functionName}")
         };
     }

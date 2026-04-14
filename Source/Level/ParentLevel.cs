@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MagicBrosMario.Source.Collision;
 using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.Sound;
+using MagicBrosMario.Source.HUDAndScoring;
 
 namespace MagicBrosMario.Source.Level;
 public abstract class ParentLevel : ILevel
@@ -22,6 +23,7 @@ public abstract class ParentLevel : ILevel
 	protected string Level1ItemCVS;
 	protected string BackgroundPath;
 	protected MusicType backgroundMusic;
+	protected float volume = 0.5f;
 	private int _blockSize = 16;
 	private int _scale = 2;
 	private int tileSize; // _blockSize * _scale
@@ -33,6 +35,7 @@ public abstract class ParentLevel : ILevel
 	public int MarioStartPosX {get; protected set; }
 	public int MarioStartPosY {get; protected set; }
 	public String Name {get; protected set; }
+	public int TimeLimit {get; protected set; }
 
     public void Initialize(Microsoft.Xna.Framework.Content.ContentManager contentManager, Texture2D bTexture, Texture2D eTexture, Texture2D iTexture)	{
 		tileSize = _blockSize * _scale;
@@ -56,8 +59,10 @@ public abstract class ParentLevel : ILevel
 
 		}
 
-		SoundController.StopMusic();
-		SoundController.PlayMusic(backgroundMusic);
+		SoundController.PlayMusic(backgroundMusic, volume);
+
+		HUD.Instance.LevelStart();
+        HUD.Instance.SetTime(TimeLimit);
 
 		InitializeManagers(bTexture, eTexture, iTexture);
 		LoadContent();
@@ -92,8 +97,16 @@ public abstract class ParentLevel : ILevel
 					//blocks[r][c].Update(gt);
 				if(enemies[r][c] != null)
 					enemies[r][c].Update(gt);
-				//if (items[r][c] != null)
-				//	items[r][c].Update(gt);
+				if (items[r][c] != null){
+					items[r][c].Update(gt);
+					if (items[r][c].getCollected())
+					{
+						Collision.CollisionController.Instance.RemoveItem(items[r][c]);
+						items[r][c] = null;
+					}
+				}
+				
+
 			}
 		}
 	}
@@ -123,32 +136,26 @@ public abstract class ParentLevel : ILevel
 				if (string.IsNullOrEmpty(itemId)){
 					items[r][c] = null;
 				}else{
-					if(itemId == "00") // a coin is the only thing we place in the world right now, ?markblock takes care of the rest
+					if(string.IsNullOrEmpty(blockId)) // a coin is the only thing we place in the world right now, ?markblock takes care of the rest
 					{
 						items[r][c] = ItemManager.CreateItem(itemId, c * tileSize, r * tileSize);
-						CollisionController.Instance.AddItem(items[r][c]);
+						//CollisionController.Instance.AddItem(items[r][c]);
 					}
 				}
 				
 				if (string.IsNullOrEmpty(blockId)){
-					blocks[r][c] = null;
-					
+					blocks[r][c] = null;	
 				}else{
-					if(blockId == "07") // ?markblock
-					{
-						//have to translate our item type to QuestionMarkBlock.InnerItem enum
-						//Temporary fix
-						QuestionMarkBlock.InnerItem qItem =itemId is "00" ? QuestionMarkBlock.InnerItem.Coin :
-							itemId is "01" ? QuestionMarkBlock.InnerItem.Mushroom : // Assuming Mushroom is treated as FireFlower for the inner item
-							items[r][c] is Fireflower ? QuestionMarkBlock.InnerItem.Mushroom :
-							items[r][c] is Star ? QuestionMarkBlock.InnerItem.Star :
-							items[r][c] is OneUp ? QuestionMarkBlock.InnerItem.Mushroom : // OneUp is not implemented yey
-							QuestionMarkBlock.InnerItem.Coin; // Default to Coin if not matched
-						
-						blocks[r][c] =   BlockManager.CreateBlock(blockId, c * tileSize, r * tileSize, qItem);
-					}else{
-						blocks[r][c] =   BlockManager.CreateBlock(blockId, c * tileSize, r * tileSize);// x,y - columnb => x, row => y
-					}
+					//have to translate our item type to QuestionMarkBlock.InnerItem enum
+					QuestionMarkBlock.InnerItem qItem =itemId is "00" ? QuestionMarkBlock.InnerItem.Coin :
+						itemId is "01" ? QuestionMarkBlock.InnerItem.Mushroom : // no fireflower in q block, but a mushroom is in
+						itemId is "02" ? QuestionMarkBlock.InnerItem.Star :
+						itemId is "03" ? QuestionMarkBlock.InnerItem.OneUp :
+						itemId is "04" ? QuestionMarkBlock.InnerItem.Mushroom : // OneUp is not implemented yey
+						QuestionMarkBlock.InnerItem.Coin; // Default to Coin if not matched
+					
+					blocks[r][c] =   BlockManager.CreateBlock(blockId, c * tileSize, r * tileSize, qItem);
+					
 					CollisionController.Instance.AddBlock(blocks[r][c]);
 					
 				}
@@ -164,6 +171,23 @@ public abstract class ParentLevel : ILevel
 
 	}
 
+	public void AddItem(IItems item)
+	{
+		// Find the first empty slot in the items array and add the item there
+		for (int r = 0; r < levHeight; r++)
+		{
+			for (int c = 0; c < levWidth; c++)
+			{
+				if (items[r][c] == null)
+				{
+					items[r][c] = item;
+					CollisionController.Instance.AddItem(item);
+					return;
+				}
+			}
+		}
+		throw new Exception("No empty slot available to add item");
+	}
 	public void Clear()	{
 		// Clears enemies, blocks, and items from the level and collision controller
 		for(int r = 0; r < levHeight; r++)	{
@@ -182,5 +206,8 @@ public abstract class ParentLevel : ILevel
 				}
 			}
 		}
+		// Stop our music
+		HUD.Instance.LevelOver();
+		SoundController.StopMusic();
 	}
 }
