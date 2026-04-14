@@ -63,7 +63,7 @@ public class BigMarioSlideState : IPlayerState
     }
     public Power GetCurrentPower()
     {
-        return Power.None;
+        return Power.Mushroom;
     }
     public void Idle()
     {

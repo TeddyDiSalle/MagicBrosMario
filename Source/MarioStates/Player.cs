@@ -239,7 +239,6 @@ public class Player : ICollidable
         {
             SetVelocity(new Vector2(0, 3));
             ApplyGravity = false;
-            Debug.WriteLine(Position.Y);
             if (Position.Y >= FlagPoleBottomY)
             {
                 SetPositon(new Vector2(Position.X, FlagPoleBottomY));
@@ -247,7 +246,6 @@ public class Player : ICollidable
                 EndPhase = EndLevelPhase.Walking;
                 ApplyGravity = true;
             }
-            //return;
         }
         if (EndPhase == EndLevelPhase.Walking)
         {
@@ -257,10 +255,8 @@ public class Player : ICollidable
             {
                 SetVelocity(Vector2.Zero);
                 EndPhase = EndLevelPhase.None;
-                // trigger level end here
                 HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.EndOfLevel });
             }
-            //return;
         }
         if (StarTimeRemaining >= StarDuration)
         {

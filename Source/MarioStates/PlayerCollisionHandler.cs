@@ -4,6 +4,7 @@ using MagicBrosMario.Source.HUDAndScoring;
 using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.Sound;
 using Microsoft.Xna.Framework;
+using System.Diagnostics;
 using static MagicBrosMario.Source.MarioStates.Player;
 
 
@@ -245,7 +246,6 @@ public class PlayerCollisionHandler
         player.IsGrounded = true;
         if (!player.IsJumping || !player.IsAlive) { return; }
         player.IsJumping = false;
-        
         switch (player.GetCurrentPower())
         {
             case Power.None:
