@@ -64,6 +64,7 @@ public static class BlockManager
                     pipeTeleport.Value.ExitTile.Y * tileSize
                 );
                 exitDirection = pipeTeleport.Value.ExitDirection;
+                Console.WriteLine($"Creating pipe entry block with exit at tile {pipeTeleport.Value.ExitTile} ({exitPixels.Value}) and direction {exitDirection}");
             }
 
             return CreatePipeEntryBlock(blockId, x, y, exitPixels, exitDirection);
