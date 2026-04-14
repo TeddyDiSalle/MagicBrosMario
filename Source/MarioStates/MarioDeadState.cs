@@ -1,4 +1,5 @@
-﻿using MagicBrosMario.Source.Sound;
+﻿using MagicBrosMario.Source.HUDAndScoring;
+using MagicBrosMario.Source.Sound;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -25,6 +26,7 @@ public class MarioDeadState : IPlayerState
         Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 16 * scaleFactor, 16 * scaleFactor);
         SoundController.StopMusic();
         SoundController.PlaySound(SoundType.MarioDie, 1.0f);
+        HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.Death });
     }
     public void Left(GameTime gameTime)
     {
