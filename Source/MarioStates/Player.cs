@@ -1,5 +1,6 @@
 ﻿using MagicBrosMario.Source.Block;
 using MagicBrosMario.Source.Collision;
+using MagicBrosMario.Source.HUDAndScoring;
 using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.Sound;
 using MagicBrosMario.Source.Sprite;
@@ -33,16 +34,23 @@ public class Player : ICollidable
     public int Lives { get; set; } = 3;
     public bool IsAlive { get; set; } = true;
     private const double DamageCoolDown = 2.0;
-    private double DamageTimer = 0;
+    private double DamageTimer = 2;
     public Sprite.SharedTexture Texture { get; }
     public bool IsJumping { get; set; } = false;
-    public bool TravelingThroughPipe { get; set; } = false;
+    public bool ApplyGravity { get; set; } = true;
+    //For traveling through pipe
     public enum PipeTravelPhase { None, Entering, Exiting }
     public PipeTravelPhase PipePhase { get; set; } = PipeTravelPhase.None;
     public Vector2 PipeEntryDestination { get; set; } // where mario fully enters
     public Vector2 PipeExitPosition { get; set; } // where mario appears after teleport
     public Vector2 PipeTravelVelocity { get; set; }
     public Vector2 PipeExitVelocity { get; set; }
+    //For sliding down flag pole and going into castle
+    public enum EndLevelPhase { None, SlidingDown, Walking }
+    public EndLevelPhase EndPhase { get; set; } = EndLevelPhase.None;
+    public float FlagPoleBottomY { get; set; }
+    public float CastleEntranceX { get; set; }
+
     private readonly PlayerCollisionHandler PlayerCollision;
     public Rectangle CollisionBox { get; set; }
 
@@ -138,6 +146,7 @@ public class Player : ICollidable
     }
     public void ChangeState(IPlayerState state)
     {
+        //if(EndPhase != EndLevelPhase.None) { return; }
         PlayerState.StateChangePrep();
         PlayerState = state;
     }
@@ -166,6 +175,7 @@ public class Player : ICollidable
     }
     public void Idle()
     {
+        if (EndPhase == EndLevelPhase.Walking) { return; }
         PlayerState.Idle();
         if (PipePhase != PipeTravelPhase.None) { return; }
         if (Velocity.X < 0)
@@ -200,7 +210,7 @@ public class Player : ICollidable
         {
             DamageTimer += gameTime.ElapsedGameTime.TotalSeconds;
         }
-        if (!WasGrounded && PipePhase == PipeTravelPhase.None)
+        if (!WasGrounded && PipePhase == PipeTravelPhase.None && ApplyGravity)
         {
             Velocity += new Vector2(0, Gravity);
         }
@@ -224,6 +234,33 @@ public class Player : ICollidable
                 PipePhase = PipeTravelPhase.None;
             }
             return;
+        }
+        if (EndPhase == EndLevelPhase.SlidingDown)
+        {
+            SetVelocity(new Vector2(0, 3));
+            ApplyGravity = false;
+            Debug.WriteLine(Position.Y);
+            if (Position.Y >= FlagPoleBottomY)
+            {
+                SetPositon(new Vector2(Position.X, FlagPoleBottomY));
+                SetVelocity(Vector2.Zero);
+                EndPhase = EndLevelPhase.Walking;
+                ApplyGravity = true;
+            }
+            //return;
+        }
+        if (EndPhase == EndLevelPhase.Walking)
+        {
+            SetVelocity(new Vector2(3,0));
+            Right(gameTime);
+            if (Position.X >= CastleEntranceX)
+            {
+                SetVelocity(Vector2.Zero);
+                EndPhase = EndLevelPhase.None;
+                // trigger level end here
+                HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.EndOfLevel });
+            }
+            //return;
         }
         if (StarTimeRemaining >= StarDuration)
         {

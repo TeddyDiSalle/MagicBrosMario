@@ -4,6 +4,7 @@ using MagicBrosMario.Source.HUDAndScoring;
 using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.Sound;
 using Microsoft.Xna.Framework;
+using static MagicBrosMario.Source.MarioStates.Player;
 
 
 
@@ -12,6 +13,7 @@ namespace MagicBrosMario.Source.MarioStates;
 public class PlayerCollisionHandler
 {
     private readonly Player player;
+    private bool ReachedFlagpole = false;
     public Rectangle CollisionBox
     {
         get
@@ -100,6 +102,30 @@ public class PlayerCollisionHandler
                     Data = item,
                     EventPosition = new Point(item.CollisionBox.X, item.CollisionBox.Y) + new Point(item.CollisionBox.Width / 2, item.CollisionBox.Height / 2)
                 });
+                break;
+            case FlagPole flagPole:
+                if (ReachedFlagpole) { return; }
+                ReachedFlagpole = true;
+                float yLandValue = player.CollisionBox.Bottom;
+                player.SetPositon(new Vector2(flagPole.CollisionBox.X - flagPole.CollisionBox.Width, player.Position.Y));
+                player.FlagPoleBottomY = flagPole.CollisionBox.Y + flagPole.CollisionBox.Height-player.CollisionBox.Height;
+                player.CastleEntranceX = player.Position.X + 100;
+                player.EndPhase = EndLevelPhase.SlidingDown;
+                IPlayerState sliding = null;
+                switch (player.GetCurrentPower())
+                {
+                    case Power.Mushroom:
+                        sliding = new BigMarioSlideState(player, player.Texture, player.TimeFrame, player.ScaleFactor);
+                        break;
+                    case Power.FireFlower:
+                        sliding = new FireMarioSlideState(player, player.Texture, player.TimeFrame, player.ScaleFactor);
+                        break;
+                    default:
+                        sliding = new SmallMarioSlideState(player, player.Texture, player.TimeFrame, player.ScaleFactor);
+                        break;
+                }
+                player.ChangeState(sliding);
+                HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.FlagpoleReached, EventPosition = new Point(flagPole.CollisionBox.X, flagPole.CollisionBox.Y), Data = (yLandValue, flagPole.CollisionBox) });
                 break;
             default:
                 //Nothing

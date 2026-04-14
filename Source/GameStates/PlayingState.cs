@@ -24,6 +24,7 @@ namespace MagicBrosMario.Source.GameStates
 			_level.Initialize(_game.Content, blockTex, enemySheet, itemSheet);
 
 			_game.Mario.SetPositon(new Vector2(_level.MarioStartPosX, _level.MarioStartPosY));
+			_game.Mario.PowerUp(MarioStates.Power.Mushroom);
 		}
 
 		public void Update(GameTime gameTime)
