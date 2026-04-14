@@ -39,6 +39,7 @@ public class Player : ICollidable
     public bool IsJumping { get; set; } = false;
     public bool ApplyGravity { get; set; } = true;
     //For traveling through pipe
+    public bool isPressingDown {get; set;} = false;
     public enum PipeTravelPhase { None, Entering, Exiting }
     public PipeTravelPhase PipePhase { get; set; } = PipeTravelPhase.None;
     public Vector2 PipeEntryDestination { get; set; } // where mario fully enters
@@ -95,6 +96,7 @@ public class Player : ICollidable
     {
         IsCrouching = true;
         PlayerState.Crouch(gameTime);
+        isPressingDown = true;
     }
     public void SetPositon(Vector2 pos)
     {
