@@ -8,7 +8,7 @@ public class Level1 : ParentLevel
 	int  rightBeforeFlagpoleX = 6100;
 	int secretRoomX = 6700;
 	public Level1()	{
-		MarioStartPosX = normalStartx;
+		MarioStartPosX = secretRoomX;
 		MarioStartPosY = 300;
 		Name = "1-1";
 		TimeLimit = 400;
