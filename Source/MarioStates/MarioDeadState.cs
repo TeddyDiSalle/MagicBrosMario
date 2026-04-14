@@ -67,6 +67,10 @@ public class MarioDeadState : IPlayerState
         CurrentSprite.Visible = false;
         CurrentSprite.Drop();
     }
+    public void SetVisibility(bool visible)
+    {
+        CurrentSprite.Visible = true;
+    }
 
     public void Update(GameTime gameTime)
     {

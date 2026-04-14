@@ -30,7 +30,7 @@ public class MagicBrosMario : Game
             }
             Camera.Instance.Position = Point.Zero;// Camera has to go to the beginning of the level
             _currentStateDONOUTUSE = value;
-            
+
         }
     }
 
@@ -156,54 +156,54 @@ public class MagicBrosMario : Game
 
         base.Draw(gameTime);
     }
-/*
-    public void Debug()
-    {
-        resetLevel();
-        Texture2D blockTexture = Content.Load<Texture2D>("blocks");
-        Texture2D itemSheet = Content.Load<Texture2D>("items");
-        Texture2D enemySheet = Content.Load<Texture2D>("characters");
+    /*
+        public void Debug()
+        {
+            resetLevel();
+            Texture2D blockTexture = Content.Load<Texture2D>("blocks");
+            Texture2D itemSheet = Content.Load<Texture2D>("items");
+            Texture2D enemySheet = Content.Load<Texture2D>("characters");
 
-        level = new DebugRoom();
-        level.Initialize(Content, blockTexture, enemySheet, itemSheet);
-        resetMario();
-    }
+            level = new DebugRoom();
+            level.Initialize(Content, blockTexture, enemySheet, itemSheet);
+            resetMario();
+        }
 
-    public void Level1()
-    {
-        resetLevel();
-        Texture2D blockTexture = Content.Load<Texture2D>("blocks");
-        Texture2D itemSheet = Content.Load<Texture2D>("items");
-        Texture2D enemySheet = Content.Load<Texture2D>("characters");
+        public void Level1()
+        {
+            resetLevel();
+            Texture2D blockTexture = Content.Load<Texture2D>("blocks");
+            Texture2D itemSheet = Content.Load<Texture2D>("items");
+            Texture2D enemySheet = Content.Load<Texture2D>("characters");
 
-        lvl = new Level1();
-        lvl.Initialize(Content, blockTexture, enemySheet, itemSheet);
-        HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.StartLevel });
-        resetMario();
-    }
+            lvl = new Level1();
+            lvl.Initialize(Content, blockTexture, enemySheet, itemSheet);
+            HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.StartLevel });
+            resetMario();
+        }
 
-    private void resetLevel()
-    {
-        if (level != null) level.Clear();
+        private void resetLevel()
+        {
+            if (level != null) level.Clear();
 
-        Camera.Instance.Position = Point.Zero;
-        Camera.Instance.Sprites.Clear();
-    }
+            Camera.Instance.Position = Point.Zero;
+            Camera.Instance.Sprites.Clear();
+        }
 
-    private void resetMario()
-    {
-        CollisionController.Instance.RemovePlayer();
-        Mario = new Player(MarioTexture);
-        Mario.SetPositon(new Vector2(level.MarioStartPosX, level.MarioStartPosY));
-        Mario.PowerUp(Power.FireFlower);
-        setController();
-    }
+        private void resetMario()
+        {
+            CollisionController.Instance.RemovePlayer();
+            Mario = new Player(MarioTexture);
+            Mario.SetPositon(new Vector2(level.MarioStartPosX, level.MarioStartPosY));
+            Mario.PowerUp(Power.FireFlower);
+            setController();
+        }
 
-    private void resetHUD(int x)
-    {
-        HUD.Instance.SetLevel(x);
-        HUD.Instance.SetTime(200);
-    }
+        private void resetHUD(int x)
+        {
+            HUD.Instance.SetLevel(x);
+            HUD.Instance.SetTime(200);
+        }
 
-*/
+    */
 }

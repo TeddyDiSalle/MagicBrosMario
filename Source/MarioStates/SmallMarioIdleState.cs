@@ -44,6 +44,7 @@ public class SmallMarioIdleState : IPlayerState
 
     public void Jump(GameTime gameTime)
     {
+        if (!Mario.IsGrounded && !Mario.WasGrounded) { return; }
         Mario.MoveUp(gameTime);
         Mario.ChangeState(new SmallMarioJumpState(Mario, texture, timeFrame, scaleFactor));
     }
@@ -93,6 +94,10 @@ public class SmallMarioIdleState : IPlayerState
         {
             Sprites[i].Drop();
         }
+    }
+    public void SetVisibility(bool visible)
+    {
+        CurrentSprite.Visible = visible;
     }
     private void SwitchSprite(int index)
     {

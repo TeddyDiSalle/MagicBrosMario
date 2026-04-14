@@ -23,6 +23,7 @@ public class Player : ICollidable
     private const float MovementSpeed = 5.0f, Gravity = 0.35f, MaxSpeed = 4.0f, fireballCooldown = 0.2f;
     public float TimeFrame { get; } = 0.15f;
     public bool IsGrounded { get; set; } = false;
+    public bool WasGrounded { get; set; } = false;
     public bool IsCrouching { get; private set; } = false;
     public bool Flipped { get; set; } = false;
     public bool Invincible { get; set; } = false;
@@ -33,9 +34,23 @@ public class Player : ICollidable
     public int Lives { get; set; } = 3;
     public bool IsAlive { get; set; } = true;
     private const double DamageCoolDown = 2.0;
-    private double DamageTimer = 0;
+    private double DamageTimer = 2;
     public Sprite.SharedTexture Texture { get; }
     public bool IsJumping { get; set; } = false;
+    public bool ApplyGravity { get; set; } = true;
+    //For traveling through pipe
+    public enum PipeTravelPhase { None, Entering, Exiting }
+    public PipeTravelPhase PipePhase { get; set; } = PipeTravelPhase.None;
+    public Vector2 PipeEntryDestination { get; set; } // where mario fully enters
+    public Vector2 PipeExitPosition { get; set; } // where mario appears after teleport
+    public Vector2 PipeTravelVelocity { get; set; }
+    public Vector2 PipeExitVelocity { get; set; }
+    //For sliding down flag pole and going into castle
+    public enum EndLevelPhase { None, SlidingDown, Walking }
+    public EndLevelPhase EndPhase { get; set; } = EndLevelPhase.None;
+    public float FlagPoleBottomY { get; set; }
+    public float CastleEntranceX { get; set; }
+
     private readonly PlayerCollisionHandler PlayerCollision;
     public Rectangle CollisionBox { get; set; }
 
@@ -48,7 +63,7 @@ public class Player : ICollidable
     }
     public void CreateFireball()
     {
-        if(FireballTimer < fireballCooldown) { return; }
+        if (FireballTimer < fireballCooldown) { return; }
         SoundController.PlaySound(SoundType.Fireball, 1.0f);
         FireballTimer = 0;
         AnimatedSprite movingFireball = Texture.NewAnimatedSprite(207, 168, 8, 8, 4, TimeFrame);
@@ -98,7 +113,7 @@ public class Player : ICollidable
     }
     public void Attack()
     {
-        if(fireballs.Count < 2)
+        if (fireballs.Count < 2)
             PlayerState.Attack();
     }
     public void TakeDamage()
@@ -109,18 +124,17 @@ public class Player : ICollidable
             PlayerState.TakeDamage();
         }
     }
-    public void KickInvinsibility()
+    public void InvincibilityOnEnemyContact()
     {
-        DamageTimer = DamageCoolDown - 0.2;
+        DamageTimer = DamageCoolDown - 0.1;
     }
     public void KillMario()
     {
-        if(PlayerState is not MarioDeadState)
+        if (PlayerState is not MarioDeadState)
         {
             ChangeState(new MarioDeadState(this, Texture, TimeFrame, ScaleFactor));
         }
         Lives--;
-        //Death Sound
     }
     public void PowerUp(Power power)
     {
@@ -132,6 +146,7 @@ public class Player : ICollidable
     }
     public void ChangeState(IPlayerState state)
     {
+        //if(EndPhase != EndLevelPhase.None) { return; }
         PlayerState.StateChangePrep();
         PlayerState = state;
     }
@@ -139,7 +154,7 @@ public class Player : ICollidable
     {
         float distanceMoved = (float)gameTime.ElapsedGameTime.TotalSeconds * MovementSpeed * factor;
         Velocity -= new Vector2(distanceMoved, 0);
-        if(-Velocity.X > MaxSpeed)
+        if (-Velocity.X > MaxSpeed)
         {
             Velocity = new Vector2(-MaxSpeed, Velocity.Y);
         }
@@ -160,16 +175,18 @@ public class Player : ICollidable
     }
     public void Idle()
     {
+        if (EndPhase == EndLevelPhase.Walking) { return; }
         PlayerState.Idle();
+        if (PipePhase != PipeTravelPhase.None) { return; }
         if (Velocity.X < 0)
         {
             Velocity += new Vector2(0.1f, 0);
-            if(Velocity.X > 0)
+            if (Velocity.X > 0)
             {
                 Velocity = new Vector2(0, Velocity.Y);
             }
         }
-        else if(Velocity.X > 0)
+        else if (Velocity.X > 0)
         {
             Velocity -= new Vector2(0.1f, 0);
             if (Velocity.X < 0)
@@ -179,36 +196,73 @@ public class Player : ICollidable
         }
     }
     //Collision Handling Methods
-    public void OnCollidePlayer(Player player, Collision.CollideDirection direction)
-    {
-        PlayerCollision.OnCollidePlayer(player, direction);
-    }
-    public void OnCollideItem(IItems item, Collision.CollideDirection direction)
-    {
-        PlayerCollision.OnCollideItem(item, direction);
-    }
-    public void OnCollideEnemy(IEnemy enemy, Collision.CollideDirection direction)
-    {
-        PlayerCollision.OnCollideEnemy(enemy, direction);
-    }
-    public void OnCollideBlock(IBlock block, Collision.CollideDirection direction)
-    {
-        PlayerCollision.OnCollideBlock(block, direction);
-    }
+    public void OnCollidePlayer(Player player, Collision.CollideDirection direction) => PlayerCollision.OnCollidePlayer(player, direction);
+    public void OnCollideItem(IItems item, Collision.CollideDirection direction) => PlayerCollision.OnCollideItem(item, direction);
+    public void OnCollideEnemy(IEnemy enemy, Collision.CollideDirection direction) => PlayerCollision.OnCollideEnemy(enemy, direction);
+    public void OnCollideBlock(IBlock block, Collision.CollideDirection direction) => PlayerCollision.OnCollideBlock(block, direction);
+
     //Update and Draw
     public void Update(GameTime gameTime)
     {
-        bool wasGrounded = IsGrounded;
+        WasGrounded = IsGrounded;
         IsGrounded = false;
         if (DamageTimer < DamageCoolDown)
         {
             DamageTimer += gameTime.ElapsedGameTime.TotalSeconds;
         }
-        if (!wasGrounded) { 
+        if (!WasGrounded && PipePhase == PipeTravelPhase.None && ApplyGravity)
+        {
             Velocity += new Vector2(0, Gravity);
         }
         Position += Velocity;
-        if(StarTimeRemaining >= StarDuration)
+        if (PipePhase == PipeTravelPhase.Entering)
+        {
+            SetVelocity(PipeTravelVelocity);
+            if (Vector2.Distance(Position, PipeEntryDestination) < 4f)
+            {
+                SetPositon(PipeExitPosition);
+                PipePhase = PipeTravelPhase.Exiting;
+            }
+            return;
+        }
+        if (PipePhase == PipeTravelPhase.Exiting)
+        {
+            SetVelocity(PipeExitVelocity);
+            if (Vector2.Distance(Position, PipeExitPosition + PipeExitVelocity * 20) < 4f)
+            {
+                SetVelocity(Vector2.Zero);
+                PipePhase = PipeTravelPhase.None;
+            }
+            return;
+        }
+        if (EndPhase == EndLevelPhase.SlidingDown)
+        {
+            SetVelocity(new Vector2(0, 3));
+            ApplyGravity = false;
+            Debug.WriteLine(Position.Y);
+            if (Position.Y >= FlagPoleBottomY)
+            {
+                SetPositon(new Vector2(Position.X, FlagPoleBottomY));
+                SetVelocity(Vector2.Zero);
+                EndPhase = EndLevelPhase.Walking;
+                ApplyGravity = true;
+            }
+            //return;
+        }
+        if (EndPhase == EndLevelPhase.Walking)
+        {
+            SetVelocity(new Vector2(3,0));
+            Right(gameTime);
+            if (Position.X >= CastleEntranceX)
+            {
+                SetVelocity(Vector2.Zero);
+                EndPhase = EndLevelPhase.None;
+                // trigger level end here
+                HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.EndOfLevel });
+            }
+            //return;
+        }
+        if (StarTimeRemaining >= StarDuration)
         {
             StarTimeRemaining = 0;
             Invincible = false;
@@ -217,7 +271,7 @@ public class Player : ICollidable
         {
             Idle();
         }
-        if(FireballTimer < fireballCooldown)
+        if (FireballTimer < fireballCooldown)
         {
             FireballTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
@@ -238,17 +292,23 @@ public class Player : ICollidable
         {
             KillMario();
         }
-        CollisionBox = new Rectangle(
-            (int)Math.Ceiling(Position.X),
-            (int)Math.Ceiling(Position.Y),
-            CollisionBox.Width, CollisionBox.Height);
+        CollisionBox = new Rectangle((int)Math.Ceiling(Position.X),(int)Math.Ceiling(Position.Y),CollisionBox.Width, CollisionBox.Height);
         PlayerState.Update(gameTime);
+        if (DamageTimer < DamageCoolDown)
+        {
+            bool visible = Math.Sin(DamageTimer * 35) > 0;
+            PlayerState.SetVisibility(visible);
+        }
+        else
+        {
+            PlayerState.SetVisibility(true);
+        }
     }
 
     public void Draw(SpriteBatch spriteBatch)
     {
         PlayerState.Draw(spriteBatch);
-        foreach(MarioFireball fireball in fireballs)
+        foreach (MarioFireball fireball in fireballs)
         {
             fireball.Draw(spriteBatch);
         }
