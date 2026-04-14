@@ -19,7 +19,7 @@ public class HUD
     private int time = 150;
     private int FrameCount = 0;
     private bool levelOver = false;
-    private bool dead = false;
+    public bool dead { get; private set; } = false;
     public bool waitForNextLevel { get; private set; } = false;
     private readonly int[] stompScores = { 100, 200, 400, 800, 1000, 2000, 4000, 8000 };
     private int StompChain = 0;
@@ -38,6 +38,7 @@ public class HUD
     {
         levelOver = false;
         waitForNextLevel = false;
+        dead = false;
     }
     public void SetTime(int time)
     {
