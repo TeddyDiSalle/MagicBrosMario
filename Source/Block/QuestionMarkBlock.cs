@@ -55,25 +55,17 @@ public class QuestionMarkBlock : BlockBase<QuestionMarkBlock>
         switch (innerItem)
         {
             case InnerItem.Coin:
-				new Coin(MagicBrosMario.INSTANCE.ItemTexture, Position.X + 8, Position.Y);
+				item = new Coin(MagicBrosMario.INSTANCE.ItemTexture, Position.X + 8, Position.Y);
                 HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.CoinCollected, EventPosition = Position});
 				break;
             case InnerItem.Star:
-                new Star(MagicBrosMario.INSTANCE.ItemTexture, Position.X + 1, Position.Y - 5);
-                HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.PowerupAppears, EventPosition = Position });
-                break;
-            case InnerItem.OneUp:
-				new OneUp(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 5);
-                HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.PowerupAppears, EventPosition = Position });
-                break;
-				item =new Coin(MagicBrosMario.INSTANCE.ItemTexture, Position.X + 8, Position.Y);
-				break;
-            case InnerItem.Star:
                 item = new Star(MagicBrosMario.INSTANCE.ItemTexture, Position.X + 1, Position.Y - 5);
+                HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.PowerupAppears, EventPosition = Position });
                 break;
             case InnerItem.OneUp:
 				item = new OneUp(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 5);
-				break;
+                HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.PowerupAppears, EventPosition = Position });
+                break;
             case InnerItem.Mushroom:
                 if (player.GetCurrentPower() == Power.None)
                 {
