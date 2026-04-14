@@ -201,20 +201,29 @@ public class PlayerCollisionHandler
             Point? teleportCoordinates = pipe.CanEnter(direction, player.CollisionBox);
             if (teleportCoordinates.HasValue)
             {
+                Debug.WriteLine(direction);
                 Vector2 travelVelocity = Vector2.Zero;
                 Vector2 exitVelocity = Vector2.Zero;
                 player.PipePhase = Player.PipeTravelPhase.Entering;
                 switch (direction)
                 {
                     case CollideDirection.Left:
-                        travelVelocity = new Vector2(-4, 0); break;
+                        travelVelocity = new Vector2(-4, 0);
+                        player.PipeEntryDestination = new Vector2(pipe.CollisionBox.Left - player.CollisionBox.Width, player.Position.Y);
+                        break;
                     case CollideDirection.Right:
-                        travelVelocity = new Vector2(4, 0); break;
+                        travelVelocity = new Vector2(4, 0);
+                        player.PipeEntryDestination = new Vector2(pipe.CollisionBox.Right, player.Position.Y);
+                        break;
                     case CollideDirection.Top:
-                        travelVelocity =  new Vector2(0, 4); break;
+                        travelVelocity = new Vector2(0, 4);
+                        player.PipeEntryDestination = new Vector2(player.Position.X, pipe.CollisionBox.Bottom);
+                        break;
                     case CollideDirection.Down:
-                        travelVelocity =  new Vector2(0, -4); break;
-                    default:break;
+                        travelVelocity = new Vector2(0, -4);
+                        player.PipeEntryDestination = new Vector2(player.Position.X, pipe.CollisionBox.Top - player.CollisionBox.Height);
+                        break;
+                    default: break;
                 }
                 switch (pipe.ExitDirection)
                 {
