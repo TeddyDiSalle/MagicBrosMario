@@ -45,6 +45,7 @@ public class Player : ICollidable
     public Vector2 PipeExitPosition { get; set; } // where mario appears after teleport
     public Vector2 PipeTravelVelocity { get; set; }
     public Vector2 PipeExitVelocity { get; set; }
+    public Vector2 PipeExitDestination { get; set; }
     //For sliding down flag pole and going into castle
     public enum EndLevelPhase { None, SlidingDown, Walking }
     public EndLevelPhase EndPhase { get; set; } = EndLevelPhase.None;
@@ -228,7 +229,12 @@ public class Player : ICollidable
             if (Vector2.Distance(Position, PipeEntryDestination) < 20f)
             {
                 SetPositon(PipeExitPosition);
-                Debug.WriteLine(PipeExitPosition);
+
+                Camera.Instance.Position = new Point(
+                    Math.Max(0, (int)PipeExitPosition.X - Camera.Instance.WindowSize.X / 2),
+                    Camera.Instance.Position.Y
+                );
+
                 PipePhase = PipeTravelPhase.Exiting;
             }
             return;

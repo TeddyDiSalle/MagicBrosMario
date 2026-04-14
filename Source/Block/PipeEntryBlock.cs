@@ -105,7 +105,7 @@ public class PipeEntryBlock(
                 var maxOffset = pipeWidth - mario.Width;
                 var marioOffset = mario.Left - pipeLeft;
 
-                if (0 <= marioOffset && marioOffset < maxOffset)
+                if (0 <= marioOffset && marioOffset <= maxOffset)
                 {
                     result = Exit;
                 }

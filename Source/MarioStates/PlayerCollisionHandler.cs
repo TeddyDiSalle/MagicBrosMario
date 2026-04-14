@@ -225,21 +225,12 @@ public class PlayerCollisionHandler
                         break;
                     default: break;
                 }
-                switch (pipe.ExitDirection)
-                {
-                    case PipeEntryBlock.PipeDirection.Left:
-                        exitVelocity = new Vector2(4, 0); break;
-                    case PipeEntryBlock.PipeDirection.Right:
-                        exitVelocity = new Vector2(-4, 0); break;
-                    case PipeEntryBlock.PipeDirection.Up:
-                        exitVelocity = new Vector2(0, -4); break;
-                    case PipeEntryBlock.PipeDirection.Down:
-                        exitVelocity = new Vector2(0, 4); break;
-                    default: break;
-                }
                 player.PipeTravelVelocity = travelVelocity;
-                player.PipeExitVelocity = exitVelocity;
-                player.PipeExitPosition = teleportCoordinates.Value.ToVector2();
+
+                var exitData = GetPipeExitData(teleportCoordinates.Value, pipe.ExitDirection);
+                player.PipeExitPosition = exitData.start;
+                player.PipeExitDestination = exitData.finish;
+                player.PipeExitVelocity = exitData.velocity;
                 SoundController.PlaySound(SoundType.PipeTravel, 1.0f);
                 return;
             }
@@ -250,6 +241,50 @@ public class PlayerCollisionHandler
             UnjumpOnGroundCollide();
         }
     }
+
+    private (Vector2 start, Vector2 finish, Vector2 velocity) GetPipeExitData(
+    Point anchor,
+    PipeEntryBlock.PipeDirection? exitDirection)
+{
+    int tile = 16 * player.ScaleFactor;   // 32
+    int pipeSpan = tile * 2;              // 64
+
+    float centeredX = anchor.X + (pipeSpan - player.CollisionBox.Width) / 2f;
+    float centeredY = anchor.Y + (pipeSpan - player.CollisionBox.Height) / 2f;
+
+    return exitDirection switch
+    {
+        PipeEntryBlock.PipeDirection.Up => (
+            new Vector2(centeredX, anchor.Y + tile),
+            new Vector2(centeredX, anchor.Y - player.CollisionBox.Height),
+            new Vector2(0, -4)
+        ),
+
+        PipeEntryBlock.PipeDirection.Down => (
+            new Vector2(centeredX, anchor.Y - player.CollisionBox.Height),
+            new Vector2(centeredX, anchor.Y + tile),
+            new Vector2(0, 4)
+        ),
+
+        PipeEntryBlock.PipeDirection.Left => (
+            new Vector2(anchor.X + tile, centeredY),
+            new Vector2(anchor.X - player.CollisionBox.Width, centeredY),
+            new Vector2(-4, 0)
+        ),
+
+        PipeEntryBlock.PipeDirection.Right => (
+            new Vector2(anchor.X - player.CollisionBox.Width, centeredY),
+            new Vector2(anchor.X + tile, centeredY),
+            new Vector2(4, 0)
+        ),
+
+        _ => (
+            anchor.ToVector2(),
+            anchor.ToVector2(),
+            Vector2.Zero
+        )
+    };
+}
     private void UnjumpOnGroundCollide()
     {
         player.IsGrounded = true;
