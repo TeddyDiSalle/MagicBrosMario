@@ -26,27 +26,27 @@ Source\Block\PipeEntryBlock.cs
 ___
 ## Readability Review by Brian Perusek
 
-[Class.cs](../Source/Class.cs) by Author
+[Class.cs](../Source/Level/DebugRoom.cs) by Teddy
 
 - Date: 04.13.2026
 - Time: 2 minutes
 
 ### Comments
 
->
+>Very readable. Pretty simple class for the most part. the way you drew the map out lined up perfectly with the actual debug room so it was very easy to understand
 
 ---
 
 ## Maintainability Review by Brian Perusek
 
-[Class.cs](../Source/Class.cs) by Author
+[Class.cs](../Source/Enemies/Fireball.cs) by Roshan
 
 - Date: 04.13.2026
 - Time: 3 minutes
 
 ### Comments
 
->
+>Pretty nice class. The naming conventions are a little confusing to understand, so the maintainability is kind of iffy, but once you get a hang of it its not too bad.
 
 ---
 

@@ -88,17 +88,17 @@ public class MagicBrosMario : Game
 
         SoundController.LoadSounds();
 
-        //EnemyTexture.BindTexture(enemySheet);
-        //ItemTexture.BindTexture(itemSheet);
-        //MarioTexture.BindTexture(marioSheet);
-        //FireTexture.BindTexture(fireSheet);
+		//EnemyTexture.BindTexture(enemySheet);
+		//ItemTexture.BindTexture(itemSheet);
+		//MarioTexture.BindTexture(marioSheet);
+		//FireTexture.BindTexture(fireSheet);
 
 
 
-        Mario = null;
+		this.Mario = new Player(MarioTexture);
 
 
-        CurrentState = new TitleScreenState(this);
+		CurrentState = new TitleScreenState(this);
 
         EnemyTexture.BindTexture(enemySheet);
         ItemTexture.BindTexture(itemSheet);
