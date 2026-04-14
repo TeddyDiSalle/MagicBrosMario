@@ -23,5 +23,15 @@ Lines of Executable code: 1,987
 
 
 
-Week 3:
+4/13/2026:
+Project: MagicBrosMario
+Configuration: Debug
+Scope: Assembly
+Maintainability Index: 83
+Cyclomatic Complexity: 1,674
+Depth of Inheritance: 2
+Class Coupling: 164
+Lines of Source code: 8,404
+Lines of Executable code: 2,526
+
 
