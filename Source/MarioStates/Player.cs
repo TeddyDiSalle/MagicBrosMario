@@ -195,6 +195,11 @@ public class Player : ICollidable
             }
         }
     }
+
+    public void SetVisibility(bool visible)
+    {
+        PlayerState.SetVisibility(visible);
+    }
     //Collision Handling Methods
     public void OnCollidePlayer(Player player, Collision.CollideDirection direction) => PlayerCollision.OnCollidePlayer(player, direction);
     public void OnCollideItem(IItems item, Collision.CollideDirection direction) => PlayerCollision.OnCollideItem(item, direction);
@@ -217,10 +222,13 @@ public class Player : ICollidable
         Position += Velocity;
         if (PipePhase == PipeTravelPhase.Entering)
         {
+            Debug.WriteLine("Entering pipe: " + Position + "  " + PipeEntryDestination + " " + Vector2.Distance(Position, PipeEntryDestination));
             SetVelocity(PipeTravelVelocity);
-            if (Vector2.Distance(Position, PipeEntryDestination) < 4f)
+
+            if (Vector2.Distance(Position, PipeEntryDestination) < 20f)
             {
                 SetPositon(PipeExitPosition);
+                Debug.WriteLine(PipeExitPosition);
                 PipePhase = PipeTravelPhase.Exiting;
             }
             return;
@@ -228,7 +236,8 @@ public class Player : ICollidable
         if (PipePhase == PipeTravelPhase.Exiting)
         {
             SetVelocity(PipeExitVelocity);
-            if (Vector2.Distance(Position, PipeExitPosition + PipeExitVelocity * 20) < 4f)
+            Debug.WriteLine(PipeExitVelocity);
+            if (Vector2.Distance(Position, PipeExitPosition + PipeExitVelocity * 20) < 20f)
             {
                 SetVelocity(Vector2.Zero);
                 PipePhase = PipeTravelPhase.None;
@@ -256,6 +265,7 @@ public class Player : ICollidable
                 SetVelocity(Vector2.Zero);
                 EndPhase = EndLevelPhase.None;
                 HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.EndOfLevel });
+                SetVisibility(false);
             }
         }
         if (StarTimeRemaining >= StarDuration)
