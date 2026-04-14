@@ -228,6 +228,7 @@ public class Player : ICollidable
             if (Vector2.Distance(Position, PipeEntryDestination) < 20f)
             {
                 SetPositon(PipeExitPosition);
+                Camera.Instance.Position = new Point((int)Position.X - Camera.Instance.WindowSize.X/2, Camera.Instance.Position.Y);
                 Debug.WriteLine("Pipe exit pos: "+PipeExitPosition);
                 PipePhase = PipeTravelPhase.Exiting;
             }
