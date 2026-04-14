@@ -1,65 +1,133 @@
 # MagicBrosMario
-The Magic Bros create Mario in C#
 
-# Sprint2 Documentation
+MagicBrosMario is a Super Mario Bros. built in C# with MonoGame. The project includes a playable first level, a debug/testing room, a title screen, HUD, enemies, items, question blocks, level loading from CSV/XML data, music and sound effects, and pipe-based transitions.
 
+## Team
+- Brian
+- Chuang
+- Vincent
+- Roshan
+- Teddy DiSalle
 
-## Texture and Sprites
-We implemented a system where only one Texture2D instance is created for each sprite sheet and only one animation algorithm is used across different part of the game.
+## Current Sprint 4 Highlights
+- Playable first level and debug room
+- Title screen and transition state
+- HUD with time limit
+- Question blocks that hold items and coins
+- Floating coins
+- Pipes and level transitions
+- Sound effects and background music
+- Mouse shortcuts for quick room switching during testing
 
-### Texture
-- The [SharedTexture](Source/Sprite/SharedTexture.cs) class is just a wrapper with two method for creating non-animated and animated sprite
-- Since the sprites reference the SharedTexture, we can put every sprite creation inside constructor and bind the texture later in the LoadContent phase.
+## Controls
+### Keyboard
+- `W`, `Up Arrow`, or `Space` - Jump
+- `A` or `Left Arrow` - Move left
+- `D` or `Right Arrow` - Move right
+- `S` or `Down Arrow` - Crouch / enter some pipes
+- `Z` or `N` - Attack / fireball when powered up
+- `E` - Take damage (debug/testing)
+- `R` - Reset to the title screen
+- `Q` - Quit the game
 
-### Sprites
-- The [sprite](Source/Sprite/Sprite.cs) class represents a non-ainmated sprite with public properties including position and scale
-- The [sprite](Source/Sprite/AnimatedSprite.cs) class represents a ainmated sprite with public properties including position and scale, and increments the frame based on the gameTime.
-- With these two classes, every items, blocks, enemies and player can hold one or more sprite internally to avoid having to implement the drawing logic
+### Mouse
+- **Left click on left half of the screen** - Load the `DebugRoom`
+- **Left click on right half of the screen** - Load `Level1`
+- **Right click** - Quit the game
 
-## Items
+## How to Run
+### Requirements
+- .NET SDK compatible with the project file
+- MonoGame DesktopGL dependencies
 
-### Controls 
-Press `i` to switch to the next item and `u` to switch to the previous item
+### Build and run
+1. Open `MagicBrosMario.sln` in Visual Studio **or** run from the command line.
+2. Restore tools and packages if needed.
+3. Build the project.
+4. Run the DesktopGL target.
 
-### How Item Classes Work
-- Each class works by taking in parameters of (texture, screenWidth, screenHeight, positionx, positionY). 
-- Not all parameters are used by every class, but each item takes in the same ones as a way to make it more universal and easier to remember when calling the item.
-- The non moving sprites are simple, just put on the screen with the given x and y coordinates.
-- The moving sprites are a little more complicated, requires more variables such as speed and direction. In Update(), the sprite's position is calculated and it moves until it reaches the screen boundary, then moves the other way.
-- The Star sprite is a little special, where it's y value increases until it reaches a certain spot,then it falls down to another given spot, all while going right/left until it reaches screen boundary.
+Example command line flow:
 
-### Problems
-- Theres only two issues that need to be worked on. The first is the coin class. In the game, once a question block it hit, the coin moves up a few pixels then dissappears. 
-- I wasn't sure how we were gonna make it work in our game so I left that part out, but it's a very simple fix and wouldn't take long to implement.
-- The other problem is a little trickier. The star class goes up and down diagonally, instead of a smooth curve when bouncing. 
-- I wasn't really sure how to implement this, i'm sure it wouldn't take too long to fix though.
+```bash
+ dotnet restore
+ dotnet build MagicBrosMario.sln
+ dotnet run --project MagicBrosMario.csproj
+```
 
-## Blocks
+## Project Layout
+```text
+MagicBrosMario/
+├── Content/                  # Sprite sheets, fonts, sounds, and level data
+├── Source/
+│   ├── Block/                # Blocks, pipe entry blocks, question blocks
+│   ├── Collision/            # Collision interfaces and controller
+│   ├── Controllers/          # Keyboard/mouse input and command mapping
+│   ├── Enemies/              # Goomba, Koopa, Bowser, Piranha Plant, etc.
+│   ├── GameStates/           # Title, transition, and playing states
+│   ├── Items/                # Coins, mushrooms, star, platforms, flagpole
+│   ├── Level/                # Level loading, block/item/enemy managers
+│   ├── MarioStates/          # Mario power states, movement, collision handling
+│   ├── Sound/                # Music and sound effect management
+│   └── Sprite/               # Shared textures, animated sprites, camera
+├── CodeReviews/              # Sprint review notes
+├── 3 - Sprint3 Deliverables/
+├── 4 - Sprint4 Deliverables/
+└── README.md
+```
 
-### Controls 
-Press `t` or `y` to switch between blocks
+## Architecture Overview
+### Shared textures and sprites
+The game uses a shared texture approach so only one `Texture2D` is created per sprite sheet. Individual sprites and animations reference a shared texture wrapper rather than each loading their own texture.
 
-### Implementation Details
-- There are 4 total classes for the blocks currently.
-    - IBlock interface that describes the behavior for every class
-    - BlockBase abstract class that have general methods(tracking position and size)
-    - Block concret class for all the simple blocks(both animated and non-animated)
-    - BlockFactory functional class with convenient methods to create different blocks
-- Currently, the blocks are just a wrapper for the sprite(introduced above) with no additional functionality, more block features(like collision and events) will be implemented in sprint 3
+### Game states
+The game currently uses separate states for:
+- Title screen
+- Transition screen
+- Playing state
 
-### Problems
-- The main problem is what method we should use to deserialize each level from a csv, json or even a blob file.
-    - The csv approach seems to be the best since we can assign each block a number and some metadata like 0001,67,67 and editing the csv would be as easy as editing the correct row and column. However, this approaches requires us to write a lot of deserializing code to achieve the desire effect
-    - Using json would be a lot easier, but the json format has too many freedom that makes the json a lot harder to read compare to csvs and we most likely would not need it
-- Another minor problem is how are we going to integrate the mario and the blocks together to achieve collision, event triggering. We should be able to figure this out during sprint 3
+This helps keep setup, input flow, and drawing behavior separated.
 
+### Levels
+Levels are loaded from CSV and XML-backed data. The current system supports:
+- Block layout
+- Enemy placement
+- Item placement
+- Pipe links and deferred pipe endpoint resolution
+- A dedicated debug room for testing features quickly
 
----
+### Mario and collision
+Mario behavior is organized through state classes for small, big, and fire forms. Collision handling is separated into a player collision handler so movement/state logic and collision response are not all mixed into one class.
 
-# Sprint3 Documentation
+## Implemented Features
+- Title screen
+- Transition state between scenes
+- Debug room for testing
+- Playable first level
+- Player state system
+- Enemies with collision
+- Blocks and question blocks
+- Items and power-ups
+- Floating coin behavior
+- HUD and time limit
+- Pipe travel system
+- Sound effects and music
+- Reset and quick room switching for testing
 
+## Known Issues
+- The game does not always fully end after Mario reaches the flagpole.
+- Pipe behavior is still being refined, and some pipe interactions can still kill Mario unexpectedly.
+- Some pipe/camera transitions may still need adjustment in special cases.
 
----
-# Sprint4 Documentation
+## Testing Notes
+The project intentionally keeps several debug-friendly controls in place:
+- Quick reset with `R`
+- Force damage with `E`
+- Mouse-based room switching between the debug room and Level 1
 
-- FOR SPRINT 4 FUNCTIONALITY: Spam crouch then jump (alternating between the two) in Fire mario form (NOT small mario) to fly up to get over the wall at the end of the level and collect the coins to observe the behavior of collecting 100 coins (you start with 82 to reach 100).
+These controls are useful during development and sprint demos.
+
+## Sprint 4 Documentation Notes
+For Sprint 4, the team focused on completing the first level, maintaining a debug/testing room, improving state transitions, and documenting code reviews and sprint reflection work.
+
+## Credits
+This project was created by the Magic Bros team.
