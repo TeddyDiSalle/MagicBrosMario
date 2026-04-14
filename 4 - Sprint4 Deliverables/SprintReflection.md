@@ -1,0 +1,1 @@
+Very rushed this sprint due to underestimating difficulty of remain features such as pipe entry blocks. There are still a number of bugs left in this submission. Overall burndown chart is about the same as last time since team has alot of other priorities this sprint.
