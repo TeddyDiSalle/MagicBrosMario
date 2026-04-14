@@ -4,8 +4,7 @@ using MagicBrosMario.Source.HUDAndScoring;
 using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.Sound;
 using Microsoft.Xna.Framework;
-using System;
-using System.Diagnostics;
+using static MagicBrosMario.Source.MarioStates.Player;
 
 
 
@@ -14,6 +13,7 @@ namespace MagicBrosMario.Source.MarioStates;
 public class PlayerCollisionHandler
 {
     private readonly Player player;
+    private bool ReachedFlagpole = false;
     public Rectangle CollisionBox
     {
         get
@@ -103,6 +103,30 @@ public class PlayerCollisionHandler
                     EventPosition = new Point(item.CollisionBox.X, item.CollisionBox.Y) + new Point(item.CollisionBox.Width / 2, item.CollisionBox.Height / 2)
                 });
                 break;
+            case FlagPole flagPole:
+                if (ReachedFlagpole) { return; }
+                ReachedFlagpole = true;
+                float yLandValue = player.CollisionBox.Bottom;
+                player.SetPositon(new Vector2(flagPole.CollisionBox.X - flagPole.CollisionBox.Width, player.Position.Y));
+                player.FlagPoleBottomY = flagPole.CollisionBox.Y + flagPole.CollisionBox.Height-player.CollisionBox.Height;
+                player.CastleEntranceX = player.Position.X + 100;
+                player.EndPhase = EndLevelPhase.SlidingDown;
+                IPlayerState sliding = null;
+                switch (player.GetCurrentPower())
+                {
+                    case Power.Mushroom:
+                        sliding = new BigMarioSlideState(player, player.Texture, player.TimeFrame, player.ScaleFactor);
+                        break;
+                    case Power.FireFlower:
+                        sliding = new FireMarioSlideState(player, player.Texture, player.TimeFrame, player.ScaleFactor);
+                        break;
+                    default:
+                        sliding = new SmallMarioSlideState(player, player.Texture, player.TimeFrame, player.ScaleFactor);
+                        break;
+                }
+                player.ChangeState(sliding);
+                HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.FlagpoleReached, EventPosition = new Point(flagPole.CollisionBox.X, flagPole.CollisionBox.Y), Data = (yLandValue, flagPole.CollisionBox) });
+                break;
             default:
                 //Nothing
                 break;
@@ -152,7 +176,7 @@ public class PlayerCollisionHandler
                 }
                 else
                 {
-                    player.KickInvinsibility();
+                    player.InvincibilityOnEnemyContact();
                     SoundController.PlaySound(SoundType.Kick, 1.0f);
                 }
                     break;
@@ -170,6 +194,46 @@ public class PlayerCollisionHandler
     public void OnCollideBlock(IBlock block, Collision.CollideDirection direction)
     {
         if (!player.IsAlive) { return; }
+        if (block is PipeEntryBlock pipe)
+        {
+            if(player.PipePhase != Player.PipeTravelPhase.None) { return; }
+            Point? teleportCoordinates = pipe.CanEnter(direction, player.CollisionBox);
+            if (teleportCoordinates.HasValue)
+            {
+                Vector2 travelVelocity = Vector2.Zero;
+                Vector2 exitVelocity = Vector2.Zero;
+                player.PipePhase = Player.PipeTravelPhase.Entering;
+                switch (direction)
+                {
+                    case CollideDirection.Left:
+                        travelVelocity = new Vector2(-4, 0); break;
+                    case CollideDirection.Right:
+                        travelVelocity = new Vector2(4, 0); break;
+                    case CollideDirection.Top:
+                        travelVelocity =  new Vector2(0, 4); break;
+                    case CollideDirection.Down:
+                        travelVelocity =  new Vector2(0, -4); break;
+                    default:break;
+                }
+                switch (pipe.ExitDirection)
+                {
+                    case PipeEntryBlock.PipeDirection.Left:
+                        exitVelocity = new Vector2(4, 0); break;
+                    case PipeEntryBlock.PipeDirection.Right:
+                        exitVelocity = new Vector2(-4, 0); break;
+                    case PipeEntryBlock.PipeDirection.Up:
+                        exitVelocity = new Vector2(0, -4); break;
+                    case PipeEntryBlock.PipeDirection.Down:
+                        exitVelocity = new Vector2(0, 4); break;
+                    default: break;
+                }
+                player.PipeTravelVelocity = travelVelocity;
+                player.PipeExitVelocity = exitVelocity;
+                player.PipeExitPosition = teleportCoordinates.Value.ToVector2();
+                SoundController.PlaySound(SoundType.PipeTravel, 1.0f);
+                return;
+            }
+        }
         UnCollide(block.CollisionBox, direction);
         if (direction == CollideDirection.Down)
         {

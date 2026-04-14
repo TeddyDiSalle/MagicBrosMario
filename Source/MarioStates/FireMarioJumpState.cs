@@ -38,7 +38,6 @@ public class FireMarioJumpState : IPlayerState
         Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 16 * scaleFactor, 32 * scaleFactor);
         Mario.IsJumping = true;
         SoundController.PlaySound(SoundType.JumpSuper, 1.0f);
-        //Mario.IsGrounded = false;
     }
     public void Left(GameTime gameTime)
     {
@@ -107,6 +106,10 @@ public class FireMarioJumpState : IPlayerState
         {
             Sprites[i].Drop();
         }
+    }
+    public void SetVisibility(bool visible)
+    {
+        CurrentSprite.Visible = visible;
     }
     private void SwitchSprite(int index)
     {

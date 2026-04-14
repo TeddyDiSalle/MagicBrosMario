@@ -4,6 +4,7 @@ using MagicBrosMario.Source.Sound;
 using MagicBrosMario.Source.Sprite;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 namespace MagicBrosMario.Source.HUDAndScoring;
@@ -87,6 +88,7 @@ public class HUD
                     score += 5000;
                     DisplayScoreGain(gameEvent, 5000);
                 }
+                SoundController.PlaySound(SoundType.Stomp, 1.0f);
                 break;
             case GameEventType.CoinCollected:
                 coinCount++;
@@ -121,6 +123,37 @@ public class HUD
             case GameEventType.FlagpoleReached:
                 SoundController.StopMusic();
                 SoundController.PlaySound(SoundType.Flagpole, 1.0f);
+                var (YContact, flagCollisionBox) = ((float, Rectangle))gameEvent.Data;
+                float yContactDiff = (float)gameEvent.EventPosition.Y - YContact;
+                float flagPoleHeight = flagCollisionBox.Height;
+                float ratio = Math.Abs(yContactDiff / flagPoleHeight);
+                
+                gameEvent.EventPosition += new Point(0, -8);
+                if (ratio <= 0.2f)
+                {
+                    score += 5000;
+                    DisplayScoreGain(gameEvent, 5000);
+                }
+                else if (ratio <= 0.4f)
+                {
+                    score += 2000;
+                    DisplayScoreGain(gameEvent, 2000);
+                }
+                else if (ratio <= 0.6f)
+                {
+                    score += 1000;
+                    DisplayScoreGain(gameEvent, 1000);
+                }
+                else if (ratio <= 0.8f)
+                {
+                    score += 500;
+                    DisplayScoreGain(gameEvent, 500);
+                }
+                else
+                {
+                    score += 100;
+                    DisplayScoreGain(gameEvent, 100);
+                }
                 break;
             case GameEventType.EndOfLevel:
                 levelOver = true;
@@ -149,13 +182,21 @@ public class HUD
             time--;
             FrameCount = 0;
         }
-        if(time == 100 && playtimewarning) { playtimewarning = false;  SoundController.PlaySound(SoundType.TimeWarning, 1.0f); }
+        if(time == 100 && playtimewarning && !levelOver) 
+        { 
+            playtimewarning = false;  
+            SoundController.PauseMusic();
+            SoundController.PlaySound(SoundType.TimeWarning, 1.0f);
+        }else if (!playtimewarning && !SoundController.IsSoundOnCoolDown(SoundType.TimeWarning))
+        {
+            SoundController.ResumeMusic();
+        }
         if (levelOver)
         {
             time--;
             score += 50;
             //Point incrementing sound
-            if (score == 0)
+            if (time == 0)
             {
                 waitForNextLevel = true;
             }

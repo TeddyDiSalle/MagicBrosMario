@@ -26,6 +26,7 @@ namespace MagicBrosMario.Source.GameStates
 			_game.Mario = new Player(_game.MarioTexture); // This will have to change so we can keep track of lives and the power of mario between levels
 			// But if you die right now, there is no way to come back to live
 			_game.Mario.SetPositon(new Vector2(_level.MarioStartPosX, _level.MarioStartPosY));
+			_game.Mario.PowerUp(MarioStates.Power.Mushroom);
 		}
 
 		public void Update(GameTime gameTime)

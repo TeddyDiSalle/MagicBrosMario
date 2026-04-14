@@ -14,6 +14,7 @@ public interface IPlayerState
     void PowerUp(Power power);
     Power GetCurrentPower();
     void StateChangePrep();
+    void SetVisibility(bool visible);
     void Idle();
     void Update(GameTime gameTime);
     void Draw(SpriteBatch spriteBatch);

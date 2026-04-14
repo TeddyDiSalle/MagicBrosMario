@@ -53,6 +53,7 @@ public class FireMarioIdleState : IPlayerState
 
     public void Jump(GameTime gameTime)
     {
+        if (!Mario.IsGrounded && !Mario.WasGrounded) { return; }
         Mario.MoveUp(gameTime);
         Mario.ChangeState(new FireMarioJumpState(Mario, texture, timeFrame, scaleFactor));
     }
@@ -107,6 +108,10 @@ public class FireMarioIdleState : IPlayerState
         {
             Sprites[i].Drop();
         }
+    }
+    public void SetVisibility(bool visible)
+    {
+        CurrentSprite.Visible = visible;
     }
     private void SwitchSprite(int index)
     {

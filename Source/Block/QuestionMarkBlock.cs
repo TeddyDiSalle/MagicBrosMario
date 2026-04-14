@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using MagicBrosMario.Source.Collision;
+using MagicBrosMario.Source.HUDAndScoring;
 using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.MarioStates;
 using MagicBrosMario.Source.Sprite;
@@ -54,6 +55,17 @@ public class QuestionMarkBlock : BlockBase<QuestionMarkBlock>
         switch (innerItem)
         {
             case InnerItem.Coin:
+				new Coin(MagicBrosMario.INSTANCE.ItemTexture, Position.X + 8, Position.Y);
+                HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.CoinCollected, EventPosition = Position});
+				break;
+            case InnerItem.Star:
+                new Star(MagicBrosMario.INSTANCE.ItemTexture, Position.X + 1, Position.Y - 5);
+                HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.PowerupAppears, EventPosition = Position });
+                break;
+            case InnerItem.OneUp:
+				new OneUp(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 5);
+                HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.PowerupAppears, EventPosition = Position });
+                break;
 				item =new Coin(MagicBrosMario.INSTANCE.ItemTexture, Position.X + 8, Position.Y);
 				break;
             case InnerItem.Star:
@@ -71,7 +83,8 @@ public class QuestionMarkBlock : BlockBase<QuestionMarkBlock>
                 {
                     item =new Fireflower(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 3);
                 }
-				break;
+                HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.PowerupAppears, EventPosition = Position });
+                break;
 			default:
                 throw new Exception("impossible default branch");
         }
