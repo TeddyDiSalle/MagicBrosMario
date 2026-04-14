@@ -1,4 +1,5 @@
 ﻿using MagicBrosMario.Source.Level;
+using MagicBrosMario.Source.MarioStates;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -16,7 +17,11 @@ namespace MagicBrosMario.Source.GameStates
             _game = game;
             _titleTexture = _game.Content.Load<Texture2D>("MarioTitleScreen");
             _font = _game.Content.Load<SpriteFont>("font");
-        }
+
+            _game.Mario.Lives = 3;
+
+
+		}
 
         public void Update(GameTime gameTime)
 		{
