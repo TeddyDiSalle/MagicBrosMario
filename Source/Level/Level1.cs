@@ -2,9 +2,12 @@
 namespace MagicBrosMario.Source.Level;
 public class Level1 : ParentLevel
 {
+	
+	// x= 100 is start, x= 6100 is right before flagpole
+	int normalStartx = 100;
+	int  rightBeforeFlagpoleX = 6100;
 	public Level1()	{
-		// x= 100 is start, x= 6100 is right before flagpole
-		MarioStartPosX = 100;
+		MarioStartPosX = normalStartx;
 		MarioStartPosY = 300;
 		Name = "1-1";
 		TimeLimit = 400;
@@ -13,7 +16,7 @@ public class Level1 : ParentLevel
 		Level1BlockCVS = "Content/LevelData/1-1/Blocks1-1.csv";
 		Level1EnemyCVS = "Content/LevelData/1-1/Enemies1-1.csv";
 		Level1ItemCVS = "Content/LevelData/1-1/Items1-1.csv";
-		BackgroundPath = "Content/LevelData/1-1/1-1LazyDebugBackground.png";
+		BackgroundName = "1-1LazyDebugBackground";
 		ReadFromCSV();
 	}
 	

@@ -22,7 +22,9 @@ public abstract class ParentLevel : ILevel
     protected string Level1BlockCVS;
 	protected string Level1EnemyCVS;
 	protected string Level1ItemCVS;
-	protected string BackgroundPath;
+	protected string BackgroundName;
+    protected int backWidth;
+    protected int backHeight;
 	protected MusicType backgroundMusic;
 	protected float volume = 0.5f;
 	private int _blockSize = 16;
@@ -106,8 +108,16 @@ private readonly Dictionary<string, PendingPipeEntrance> _pendingPipeEntrances =
 		itemLines = File.ReadLines(Level1ItemCVS).ToArray();
     }
 
-    protected void LoadBackground(SpriteBatch sb, Texture2D backgroundTexture)	{
-        //sb.Draw(backgroundTexture, new Rectangle(0, 0, levWidth * tileSize, levHeight * tileSize), Color.White);
+    protected void LoadBackground()	{
+    
+        Texture2D backgroundTexture = MagicBrosMario.INSTANCE.Content.Load<Texture2D>("LevelData/"+Name+"/"+BackgroundName);
+        backWidth = backgroundTexture.Width;
+        backHeight = backgroundTexture.Height;
+        SharedTexture backgroundSharedTexture = new SharedTexture();
+        backgroundSharedTexture.BindTexture(backgroundTexture);
+        ISprite backgroundSprite = backgroundSharedTexture.NewSprite(0, 0, backWidth, backHeight);
+        backgroundSprite.Scale = (float)tileSize / _blockSize; // scale background to match block size
+        backgroundSprite.Visible = true;
 		//TODO
     }
 	public void Update(GameTime gt)	{
@@ -143,91 +153,93 @@ private readonly Dictionary<string, PendingPipeEntrance> _pendingPipeEntrances =
 	}
 
 	protected void LoadContent(){
-		//LoadBackground(Camera.Instance.SpriteBatch, MagicBrosMario.INSTANCE.Content.Load<Texture2D>(BackgroundPath));
+		if(BackgroundName != null)	{
+            LoadBackground();
+        }
 		// TODO
-		 _pendingPipeEntrances.Clear();
+        _pendingPipeEntrances.Clear();
 
-    for (int r = 0; r < levHeight; r++)
-    {
-        string[] blockIds = blockLines[r].Split(',');
-        string[] enemyIds = enemyLines[r].Split(',');
-        string[] itemIds = itemLines[r].Split(',');
-
-        for (int c = 0; c < levWidth; c++)
+        for (int r = 0; r < levHeight; r++)
         {
-            string rawBlockToken = blockIds[c].Trim();
-            string enemyId = enemyIds[c].Trim();
-            string itemId = itemIds[c].Trim();
+            string[] blockIds = blockLines[r].Split(',');
+            string[] enemyIds = enemyLines[r].Split(',');
+            string[] itemIds = itemLines[r].Split(',');
 
-            var (blockId, pipeLabel) = ParseBlockToken(rawBlockToken);
+            for (int c = 0; c < levWidth; c++)
+            {
+                string rawBlockToken = blockIds[c].Trim();
+                string enemyId = enemyIds[c].Trim();
+                string itemId = itemIds[c].Trim();
 
-            if (string.IsNullOrEmpty(itemId))
-            {
-                items[r][c] = null;
-            }
-            else
-            {
-                if (string.IsNullOrEmpty(blockId))
+                var (blockId, pipeLabel) = ParseBlockToken(rawBlockToken);
+
+                if (string.IsNullOrEmpty(itemId))
                 {
-                    items[r][c] = ItemManager.CreateItem(itemId, c * tileSize, r * tileSize);
-                    // CollisionController.Instance.AddItem(items[r][c]);
-                }
-            }
-
-            if (string.IsNullOrEmpty(blockId))
-            {
-                blocks[r][c] = null;
-            }
-            else
-            {
-                // If this is a tagged pipe entry tile, defer it until all blocks are scanned
-                if (!string.IsNullOrEmpty(pipeLabel))
-                {
-                    if (!IsPipeEntryBlockId(blockId))
-                    {
-                        throw new Exception(
-                            $"Block token '{rawBlockToken}' uses a pipe label, " +
-                            $"but block id '{blockId}' is not a pipe entry block.");
-                    }
-
-                    RegisterPendingPipeHalf(blockId, r, c, pipeLabel);
+                    items[r][c] = null;
                 }
                 else
                 {
-                    QuestionMarkBlock.InnerItem qItem =
-                        itemId is "00" ? QuestionMarkBlock.InnerItem.Coin :
-                        itemId is "01" ? QuestionMarkBlock.InnerItem.Mushroom :
-                        itemId is "02" ? QuestionMarkBlock.InnerItem.Star :
-                        itemId is "03" ? QuestionMarkBlock.InnerItem.OneUp :
-                        itemId is "04" ? QuestionMarkBlock.InnerItem.Mushroom :
-                        QuestionMarkBlock.InnerItem.Coin;
+                    if (string.IsNullOrEmpty(blockId))
+                    {
+                        items[r][c] = ItemManager.CreateItem(itemId, c * tileSize, r * tileSize);
+                        // CollisionController.Instance.AddItem(items[r][c]);
+                    }
+                }
 
-                    blocks[r][c] = BlockManager.CreateBlock(
-                        blockId,
-                        c * tileSize,
-                        r * tileSize,
-                        qItem,
-                        null,
-                        tileSize
-                    );
+                if (string.IsNullOrEmpty(blockId))
+                {
+                    blocks[r][c] = null;
+                }
+                else
+                {
+                    // If this is a tagged pipe entry tile, defer it until all blocks are scanned
+                    if (!string.IsNullOrEmpty(pipeLabel))
+                    {
+                        if (!IsPipeEntryBlockId(blockId))
+                        {
+                            throw new Exception(
+                                $"Block token '{rawBlockToken}' uses a pipe label, " +
+                                $"but block id '{blockId}' is not a pipe entry block.");
+                        }
 
-                    CollisionController.Instance.AddBlock(blocks[r][c]);
+                        RegisterPendingPipeHalf(blockId, r, c, pipeLabel);
+                    }
+                    else
+                    {
+                        QuestionMarkBlock.InnerItem qItem =
+                            itemId is "00" ? QuestionMarkBlock.InnerItem.Coin :
+                            itemId is "01" ? QuestionMarkBlock.InnerItem.Mushroom :
+                            itemId is "02" ? QuestionMarkBlock.InnerItem.Star :
+                            itemId is "03" ? QuestionMarkBlock.InnerItem.OneUp :
+                            itemId is "04" ? QuestionMarkBlock.InnerItem.Mushroom :
+                            QuestionMarkBlock.InnerItem.Coin;
+
+                        blocks[r][c] = BlockManager.CreateBlock(
+                            blockId,
+                            c * tileSize,
+                            r * tileSize,
+                            qItem,
+                            null,
+                            tileSize
+                        );
+
+                        CollisionController.Instance.AddBlock(blocks[r][c]);
+                    }
+                }
+
+                if (string.IsNullOrEmpty(enemyId))
+                {
+                    enemies[r][c] = null;
+                }
+                else
+                {
+                    enemies[r][c] = EnemyManager.CreateEnemy(enemyId, c * tileSize, r * tileSize);
+                    CollisionController.Instance.AddEnemy(enemies[r][c]);
                 }
             }
-
-            if (string.IsNullOrEmpty(enemyId))
-            {
-                enemies[r][c] = null;
-            }
-            else
-            {
-                enemies[r][c] = EnemyManager.CreateEnemy(enemyId, c * tileSize, r * tileSize);
-                CollisionController.Instance.AddEnemy(enemies[r][c]);
-            }
         }
-    }
 
-    FinalizePendingPipeEntrances();
+        FinalizePendingPipeEntrances();
 
 	}
 
@@ -272,191 +284,191 @@ private readonly Dictionary<string, PendingPipeEntrance> _pendingPipeEntrances =
 	}
 
 
-private static (string blockId, string? pipeLabel) ParseBlockToken(string token)
-{
-    token = token.Trim();
-
-    if (string.IsNullOrEmpty(token))
-        return ("", null);
-
-    int open = token.IndexOf('[');
-    if (open < 0)
-        return (token, null);
-
-    int close = token.IndexOf(']', open + 1);
-    if (close < 0)
-        throw new FormatException($"Invalid block token '{token}'. Expected format like 10[A0].");
-
-    string blockId = token.Substring(0, open).Trim();
-    string pipeLabel = token.Substring(open + 1, close - open - 1).Trim();
-
-    return (blockId, pipeLabel);
-}
-
-private static bool IsPipeEntryBlockId(string blockId)
-{
-    return blockId is "10" or "11" or "14" or "15";
-}
-
-private void RegisterPendingPipeHalf(string blockId, int row, int col, string pipeLabel)
-{
-    if (!_pendingPipeEntrances.TryGetValue(pipeLabel, out var entrance))
+    private static (string blockId, string? pipeLabel) ParseBlockToken(string token)
     {
-        entrance = new PendingPipeEntrance(pipeLabel);
-        _pendingPipeEntrances[pipeLabel] = entrance;
+        token = token.Trim();
+
+        if (string.IsNullOrEmpty(token))
+            return ("", null);
+
+        int open = token.IndexOf('[');
+        if (open < 0)
+            return (token, null);
+
+        int close = token.IndexOf(']', open + 1);
+        if (close < 0)
+            throw new FormatException($"Invalid block token '{token}'. Expected format like 10[A0].");
+
+        string blockId = token.Substring(0, open).Trim();
+        string pipeLabel = token.Substring(open + 1, close - open - 1).Trim();
+
+        return (blockId, pipeLabel);
     }
 
-    if (entrance.HalvesByBlockId.ContainsKey(blockId))
+    private static bool IsPipeEntryBlockId(string blockId)
     {
-        throw new Exception($"Pipe label '{pipeLabel}' has duplicate block id '{blockId}'.");
+        return blockId is "10" or "11" or "14" or "15";
     }
 
-    entrance.HalvesByBlockId[blockId] = new Point(col, row); // tile coordinates
-}
-
-private static void ParsePipeLabel(string pipeLabel, out string group, out int endpoint)
-{
-    if (string.IsNullOrWhiteSpace(pipeLabel) || pipeLabel.Length < 2)
-        throw new Exception($"Invalid pipe label '{pipeLabel}'. Use labels like A0 or B1.");
-
-    char last = pipeLabel[^1];
-    if (last != '0' && last != '1')
-        throw new Exception($"Invalid pipe label '{pipeLabel}'. Final character must be 0 or 1.");
-
-    group = pipeLabel.Substring(0, pipeLabel.Length - 1);
-    endpoint = last - '0';
-}
-
-private static bool IsUpPipeEntrance(PendingPipeEntrance entrance)
-{
-    return entrance.HalvesByBlockId.ContainsKey("10") && entrance.HalvesByBlockId.ContainsKey("11");
-}
-
-private static bool IsLeftPipeEntrance(PendingPipeEntrance entrance)
-{
-    return entrance.HalvesByBlockId.ContainsKey("14") && entrance.HalvesByBlockId.ContainsKey("15");
-}
-
-private static void ValidateEntrance(PendingPipeEntrance entrance)
-{
-    bool upPipe = IsUpPipeEntrance(entrance);
-    bool leftPipe = IsLeftPipeEntrance(entrance);
-
-    if (upPipe && entrance.HalvesByBlockId.Count != 2)
-        throw new Exception($"Pipe '{entrance.Label}' must contain exactly 10 and 11.");
-
-    if (leftPipe && entrance.HalvesByBlockId.Count != 2)
-        throw new Exception($"Pipe '{entrance.Label}' must contain exactly 14 and 15.");
-
-    if (!upPipe && !leftPipe)
+    private void RegisterPendingPipeHalf(string blockId, int row, int col, string pipeLabel)
     {
-        throw new Exception(
-            $"Pipe '{entrance.Label}' is invalid. " +
-            $"It must contain either [10,11] or [14,15].");
-    }
-}
-
-private static Point GetAnchorTile(PendingPipeEntrance entrance)
-{
-    // top-left tile of the two-tile entrance
-    int minX = int.MaxValue;
-    int minY = int.MaxValue;
-
-    foreach (Point p in entrance.HalvesByBlockId.Values)
-    {
-        if (p.X < minX) minX = p.X;
-        if (p.Y < minY) minY = p.Y;
-    }
-
-    return new Point(minX, minY);
-}
-
-private static PipeEntryBlock.PipeDirection GetExitDirectionFromDestination(PendingPipeEntrance destination)
-{
-    if (IsUpPipeEntrance(destination))
-        return PipeEntryBlock.PipeDirection.Up;
-
-    if (IsLeftPipeEntrance(destination))
-        return PipeEntryBlock.PipeDirection.Left;
-
-    throw new Exception($"Could not determine exit direction for pipe '{destination.Label}'.");
-}
-
-private void BuildPipeEntranceBlocks(PendingPipeEntrance source, PendingPipeEntrance destination)
-{
-    Point exitTile = GetAnchorTile(destination);
-    PipeEntryBlock.PipeDirection exitDirection = GetExitDirectionFromDestination(destination);
-
-    BlockManager.PipeTeleport teleport = new BlockManager.PipeTeleport(exitTile, exitDirection);
-
-    foreach (var kvp in source.HalvesByBlockId)
-    {
-        string blockId = kvp.Key;
-        Point tile = kvp.Value;
-
-        IBlock block = BlockManager.CreateBlock(
-            blockId,
-            tile.X * tileSize,
-            tile.Y * tileSize,
-            QuestionMarkBlock.InnerItem.Coin,
-            teleport,
-            tileSize
-        );
-
-        blocks[tile.Y][tile.X] = block;
-        CollisionController.Instance.AddBlock(block);
-    }
-}
-
-private void FinalizePendingPipeEntrances()
-{
-    var grouped = new Dictionary<string, PendingPipePair>();
-
-    foreach (var entrance in _pendingPipeEntrances.Values)
-    {
-        ValidateEntrance(entrance);
-
-        ParsePipeLabel(entrance.Label, out string group, out int endpoint);
-
-        if (!grouped.TryGetValue(group, out var pair))
+        if (!_pendingPipeEntrances.TryGetValue(pipeLabel, out var entrance))
         {
-            pair = new PendingPipePair();
-            grouped[group] = pair;
+            entrance = new PendingPipeEntrance(pipeLabel);
+            _pendingPipeEntrances[pipeLabel] = entrance;
         }
 
-        if (endpoint == 0)
+        if (entrance.HalvesByBlockId.ContainsKey(blockId))
         {
-            if (pair.End0 != null)
-                throw new Exception($"Pipe group '{group}' has more than one 0 endpoint.");
-            pair.End0 = entrance;
+            throw new Exception($"Pipe label '{pipeLabel}' has duplicate block id '{blockId}'.");
         }
-        else
-        {
-            if (pair.End1 != null)
-                throw new Exception($"Pipe group '{group}' has more than one 1 endpoint.");
-            pair.End1 = entrance;
-        }
+
+        entrance.HalvesByBlockId[blockId] = new Point(col, row); // tile coordinates
     }
 
-    foreach (var kvp in grouped)
+    private static void ParsePipeLabel(string pipeLabel, out string group, out int endpoint)
     {
-        string group = kvp.Key;
-        PendingPipePair pair = kvp.Value;
+        if (string.IsNullOrWhiteSpace(pipeLabel) || pipeLabel.Length < 2)
+            throw new Exception($"Invalid pipe label '{pipeLabel}'. Use labels like A0 or B1.");
 
-        if (pair.End0 == null || pair.End1 == null)
+        char last = pipeLabel[^1];
+        if (last != '0' && last != '1')
+            throw new Exception($"Invalid pipe label '{pipeLabel}'. Final character must be 0 or 1.");
+
+        group = pipeLabel.Substring(0, pipeLabel.Length - 1);
+        endpoint = last - '0';
+    }
+
+        private static bool IsUpPipeEntrance(PendingPipeEntrance entrance)
+        {
+            return entrance.HalvesByBlockId.ContainsKey("10") && entrance.HalvesByBlockId.ContainsKey("11");
+        }
+
+        private static bool IsLeftPipeEntrance(PendingPipeEntrance entrance)
+        {
+            return entrance.HalvesByBlockId.ContainsKey("14") && entrance.HalvesByBlockId.ContainsKey("15");
+        }
+
+    private static void ValidateEntrance(PendingPipeEntrance entrance)
+    {
+        bool upPipe = IsUpPipeEntrance(entrance);
+        bool leftPipe = IsLeftPipeEntrance(entrance);
+
+        if (upPipe && entrance.HalvesByBlockId.Count != 2)
+            throw new Exception($"Pipe '{entrance.Label}' must contain exactly 10 and 11.");
+
+        if (leftPipe && entrance.HalvesByBlockId.Count != 2)
+            throw new Exception($"Pipe '{entrance.Label}' must contain exactly 14 and 15.");
+
+        if (!upPipe && !leftPipe)
         {
             throw new Exception(
-                $"Pipe group '{group}' is incomplete. " +
-                $"Both {group}0 and {group}1 must exist.");
+                $"Pipe '{entrance.Label}' is invalid. " +
+                $"It must contain either [10,11] or [14,15].");
         }
-
-        // 0 goes to 1
-        BuildPipeEntranceBlocks(pair.End0, pair.End1);
-
-        // 1 goes to 0
-        BuildPipeEntranceBlocks(pair.End1, pair.End0);
     }
 
-    _pendingPipeEntrances.Clear();
-}
+    private static Point GetAnchorTile(PendingPipeEntrance entrance)
+    {
+        // top-left tile of the two-tile entrance
+        int minX = int.MaxValue;
+        int minY = int.MaxValue;
+
+        foreach (Point p in entrance.HalvesByBlockId.Values)
+        {
+            if (p.X < minX) minX = p.X;
+            if (p.Y < minY) minY = p.Y;
+        }
+
+        return new Point(minX, minY);
+    }
+
+    private static PipeEntryBlock.PipeDirection GetExitDirectionFromDestination(PendingPipeEntrance destination)
+    {
+        if (IsUpPipeEntrance(destination))
+            return PipeEntryBlock.PipeDirection.Up;
+
+        if (IsLeftPipeEntrance(destination))
+            return PipeEntryBlock.PipeDirection.Left;
+
+        throw new Exception($"Could not determine exit direction for pipe '{destination.Label}'.");
+    }
+
+    private void BuildPipeEntranceBlocks(PendingPipeEntrance source, PendingPipeEntrance destination)
+    {
+        Point exitTile = GetAnchorTile(destination);
+        PipeEntryBlock.PipeDirection exitDirection = GetExitDirectionFromDestination(destination);
+
+        BlockManager.PipeTeleport teleport = new BlockManager.PipeTeleport(exitTile, exitDirection);
+
+        foreach (var kvp in source.HalvesByBlockId)
+        {
+            string blockId = kvp.Key;
+            Point tile = kvp.Value;
+
+            IBlock block = BlockManager.CreateBlock(
+                blockId,
+                tile.X * tileSize,
+                tile.Y * tileSize,
+                QuestionMarkBlock.InnerItem.Coin,
+                teleport,
+                tileSize
+            );
+
+            blocks[tile.Y][tile.X] = block;
+            CollisionController.Instance.AddBlock(block);
+        }
+    }
+
+    private void FinalizePendingPipeEntrances()
+    {
+        var grouped = new Dictionary<string, PendingPipePair>();
+
+        foreach (var entrance in _pendingPipeEntrances.Values)
+        {
+            ValidateEntrance(entrance);
+
+            ParsePipeLabel(entrance.Label, out string group, out int endpoint);
+
+            if (!grouped.TryGetValue(group, out var pair))
+            {
+                pair = new PendingPipePair();
+                grouped[group] = pair;
+            }
+
+            if (endpoint == 0)
+            {
+                if (pair.End0 != null)
+                    throw new Exception($"Pipe group '{group}' has more than one 0 endpoint.");
+                pair.End0 = entrance;
+            }
+            else
+            {
+                if (pair.End1 != null)
+                    throw new Exception($"Pipe group '{group}' has more than one 1 endpoint.");
+                pair.End1 = entrance;
+            }
+        }
+
+        foreach (var kvp in grouped)
+        {
+            string group = kvp.Key;
+            PendingPipePair pair = kvp.Value;
+
+            if (pair.End0 == null || pair.End1 == null)
+            {
+                throw new Exception(
+                    $"Pipe group '{group}' is incomplete. " +
+                    $"Both {group}0 and {group}1 must exist.");
+            }
+
+            // 0 goes to 1
+            BuildPipeEntranceBlocks(pair.End0, pair.End1);
+
+            // 1 goes to 0
+            BuildPipeEntranceBlocks(pair.End1, pair.End0);
+        }
+
+        _pendingPipeEntrances.Clear();
+    }
 }
