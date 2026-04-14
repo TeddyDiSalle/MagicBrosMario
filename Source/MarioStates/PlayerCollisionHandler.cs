@@ -199,8 +199,18 @@ public class PlayerCollisionHandler
         {
             if(player.PipePhase != Player.PipeTravelPhase.None) { return; }
             Point? teleportCoordinates = pipe.CanEnter(direction, player.CollisionBox);
+            
             if (teleportCoordinates.HasValue)
             {
+                if (direction == CollideDirection.Down && !player.isPressingDown)
+                {
+                    UnCollide(block.CollisionBox, direction);
+                    if (direction == CollideDirection.Down)
+                    {
+                        UnjumpOnGroundCollide();
+                    }
+                    return; 
+                }
                 Debug.WriteLine(direction);
                 Vector2 travelVelocity = Vector2.Zero;
                 Vector2 exitVelocity = Vector2.Zero;
@@ -236,6 +246,7 @@ public class PlayerCollisionHandler
                 return;
             }
         }
+        if(player.PipePhase == PipeTravelPhase.Exiting || player.PipePhase == PipeTravelPhase.Exiting) { return; }
         UnCollide(block.CollisionBox, direction);
         if (direction == CollideDirection.Down)
         {
