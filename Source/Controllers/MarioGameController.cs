@@ -53,7 +53,10 @@ public class MarioGameController{
         inputMap.Bind(Keys.E, gt =>  MagicBrosMario.INSTANCE.Mario.TakeDamage());
         inputMap.Bind(Keys.Q, gt => game.Exit());
 		inputMap.Bind(Keys.R, gt => MagicBrosMario.INSTANCE.CurrentState = new TitleScreenState(MagicBrosMario.INSTANCE)); // reset game
-		//inputMap.Bind(Keys.P, gt => MagicBrosMario.INSTANCE.changePaused()); // reset game
+
+		//Need to make it so it can be unpaused through here
+		//inputMap.Bind(Keys.P, gt => MagicBrosMario.INSTANCE.changePaused());
+		//inputMap.Bind(Keys.Escape, gt => MagicBrosMario.INSTANCE.changePaused());
 
 		// mouse inputs
 		inputMap.Bind(m => m.IsButtonDown(MouseButton.Right), () => game.Exit());
