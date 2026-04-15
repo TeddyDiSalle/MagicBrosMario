@@ -36,10 +36,11 @@ public static class MarioGameController{
     public static void SetSprint3Binds()
     {
 
-
+        double pauseIDelay= 0.5;
+        double pauseRInterval = 1.0;
         //Need to make it so it can be unpaused through here
-		inputMap.Bind(Keys.P, gt => MagicBrosMario.INSTANCE.changePaused());
-		inputMap.Bind(Keys.Escape, gt => MagicBrosMario.INSTANCE.changePaused());
+		inputMap.Bind(Keys.P, gt => MagicBrosMario.INSTANCE.changePaused(), pauseIDelay, pauseRInterval);
+		inputMap.Bind(Keys.Escape, gt => MagicBrosMario.INSTANCE.changePaused(), pauseIDelay, pauseRInterval);
 
         inputMap.Bind(Keys.Q, gt => MagicBrosMario.INSTANCE.Exit()); 
         inputMap.Bind(Keys.R, gt => MagicBrosMario.INSTANCE.CurrentState =new TitleScreenState(MagicBrosMario.INSTANCE)); // reset game

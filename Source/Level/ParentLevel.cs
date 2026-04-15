@@ -148,7 +148,7 @@ public abstract class ParentLevel : ILevel
                 {
                     IEnemy enemy = enemies[r][c];
 
-                    if (_activatedEnemies.Contains(enemy) || ShouldActivateEnemy(enemy, activationBounds) || enemy.AlwaysActive)
+                    if (enemy.AlwaysActive|| _activatedEnemies.Contains(enemy) || ShouldActivateEnemy(enemy, activationBounds))
                     {
                         _activatedEnemies.Add(enemy);
                         enemy.Update(gt);
