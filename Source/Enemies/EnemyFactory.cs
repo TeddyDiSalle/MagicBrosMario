@@ -39,5 +39,10 @@ public static class EnemyFactory {
         return enemy;
     }
 
+    public static IEnemy CreateMeteorMage(int x, int y) {
+        var enemy = new MeteorMage(ENEMY_SHARED_TEXTURE,y,x);
+        return enemy;
+    }
+
     //then on and so forth
 }

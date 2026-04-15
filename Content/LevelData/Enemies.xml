@@ -5,4 +5,5 @@
     <Enemy id="02" function="Bowser" />
     <Enemy id="03" function="PiranhaPlant" />
     <Enemy id="04" function="RotatingFireBar" />
+    <Enemy id="05" function="MeteorMage" />
 </Enemies>
