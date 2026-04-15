@@ -5,27 +5,24 @@ using MagicBrosMario.Source.MarioStates;
 using MagicBrosMario.Source.GameStates;
 using System.Diagnostics;
 using MagicBrosMario.Source.Level;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 
 namespace MagicBrosMario.Source;
 
-public class MarioGameController{
+public static class MarioGameController{
     // Classes should not worry about game actions not if "w" is pressed or mouse is over here or over there.
     // This allows the game to work whether the player is using a keyboard or a potato
     // This class will call the other's classes move functions and damage functions and such
-    private KeysNMouseCommandMapper inputMap;
-    private MagicBrosMario game;
-    private Sprint2Controller gameData;
-    public MarioGameController(MagicBrosMario g, ref Sprint2Controller data)
-    {
-        game =g;
-        gameData = data;
-        Initialize();
-    }
-    private bool muted = false;
+    private static KeysNMouseCommandMapper inputMap;
+    private static Sprint2Controller gameData;
+    private static bool muted = false;
 
-    public void Initialize()
+    public static void Initialize( ref Sprint2Controller data)
     {
+        
+        gameData = data;
         inputMap = new KeysNMouseCommandMapper();
         SetSprint3Binds();
     }
@@ -35,8 +32,23 @@ public class MarioGameController{
         public int halfX;
         public int halfY;
     }
-    // All the binds specified for sprint 2
-    public void SetSprint3Binds()
+    // All the binds specified for sprint 3
+    public static void SetSprint3Binds()
+    {
+        MarioBinds();
+        inputMap.Bind(Keys.Q, gt => MagicBrosMario.INSTANCE.Exit()); 
+        inputMap.Bind(Keys.R, gt => MagicBrosMario.INSTANCE.CurrentState =new TitleScreenState(MagicBrosMario.INSTANCE)); // reset game
+
+        // mouse inputs
+        inputMap.Bind(m => m.IsButtonDown(MouseButton.Right), () => MagicBrosMario.INSTANCE.Exit());
+        inputMap.Bind(m => m.IsButtonDown(MouseButton.Left) && m.Position.X < gameData.halfX, () => 
+                MagicBrosMario.INSTANCE.CurrentState = new TransitionState(MagicBrosMario.INSTANCE, new DebugRoom()));//If you click the left side of the screen, call DebugRomm()
+        
+        inputMap.Bind(m => m.IsButtonDown(MouseButton.Left) && m.Position.X >= gameData.halfX, () => 
+                MagicBrosMario.INSTANCE.CurrentState = new TransitionState(MagicBrosMario.INSTANCE, new Level1())); //If you click the right side of the screen, call Level1()
+    }
+
+    public static void MarioBinds()
     {
         //Keyboard inputs
         inputMap.Bind(Keys.W, gt => MagicBrosMario.INSTANCE.Mario.Jump(gt));
@@ -51,18 +63,8 @@ public class MarioGameController{
         inputMap.Bind(Keys.Z, gt => MagicBrosMario.INSTANCE.Mario.Attack());
         inputMap.Bind(Keys.N, gt =>  MagicBrosMario.INSTANCE.Mario.Attack());
         inputMap.Bind(Keys.E, gt =>  MagicBrosMario.INSTANCE.Mario.TakeDamage());
-        inputMap.Bind(Keys.Q, gt => game.Exit()); 
-        inputMap.Bind(Keys.R, gt => MagicBrosMario.INSTANCE.CurrentState =new TitleScreenState(MagicBrosMario.INSTANCE)); // reset game
-
-        // mouse inputs
-        inputMap.Bind(m => m.IsButtonDown(MouseButton.Right), () => game.Exit());
-        inputMap.Bind(m => m.IsButtonDown(MouseButton.Left) && m.Position.X < gameData.halfX, () => 
-                MagicBrosMario.INSTANCE.CurrentState = new TransitionState(MagicBrosMario.INSTANCE, new DebugRoom()));//If you click the left side of the screen, call DebugRomm()
-        
-        inputMap.Bind(m => m.IsButtonDown(MouseButton.Left) && m.Position.X >= gameData.halfX, () => 
-                MagicBrosMario.INSTANCE.CurrentState = new TransitionState(MagicBrosMario.INSTANCE, new Level1())); //If you click the right side of the screen, call Level1()
     }
-    public void Update(GameTime gameTime)
+    public static void Update(GameTime gameTime)
     {
         if(!muted){
             KeyboardInfo keyb = gameData.keyb;
@@ -91,17 +93,22 @@ public class MarioGameController{
         }
     }
 
-    public bool IsMuted()
+    public static bool IsMuted()
     {
         return muted;
     }
-    public void Mute()
+    public static void Mute()
     {
         muted = true;
     }
-    public void UnMute()
+    public static void UnMute()
     {
         muted = false;
+    }
+
+    public static bool IsKeyDown(Keys k)
+    {
+        return gameData.keyb.IsKeyDown(k);
     }
 
 }

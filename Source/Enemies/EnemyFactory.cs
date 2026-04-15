@@ -35,7 +35,7 @@ public static class EnemyFactory {
     }
 
     public static IEnemy CreateRotatingFireBar(int x, int y) {
-        var enemy = new RotatingFireBar(ENEMY_SHARED_TEXTURE,y,x, 6, 16);
+        var enemy = new RotatingFireBar(MagicBrosMario.INSTANCE.FireTexture,y,x, 6, 16);
         return enemy;
     }
 

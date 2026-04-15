@@ -30,7 +30,7 @@ namespace MagicBrosMario.Source.GameStates
 
 		public void Update(GameTime gameTime)
 		{
-			_game.Controller.Update(gameTime);
+			MarioGameController.Update(gameTime);
 			_level.Update(gameTime);
 			_game.Mario.Update(gameTime);
 
