@@ -11,6 +11,7 @@ namespace MagicBrosMario.Source;
 
 public class Meteor : IEnemy, ICollidable
 {
+    public bool AlwaysActive => true;
     private const float GRAVITY = 0.5f;
     private const float LIFETIME = 5.0f;
 

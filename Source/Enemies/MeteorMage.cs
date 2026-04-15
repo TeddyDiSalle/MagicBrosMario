@@ -13,6 +13,7 @@ namespace MagicBrosMario.Source;
 
 public class MeteorMage : IEnemy, ICollidable
 {
+    public bool AlwaysActive => true;
     private const float METEOR_COOLDOWN = 2.0f;
     private const int MAX_HEALTH = 6;
     private const float GRAVITY = 0.35f;
@@ -84,7 +85,7 @@ public class MeteorMage : IEnemy, ICollidable
     private void SpawnMeteor()
     {
         int marioX = Camera.Instance.Position.X + Camera.Instance.WindowSize.X / 2;
-        int targetX = marioX + random.Next(-25, 25);
+        int targetX = marioX + random.Next(-10, 10);
         int spawnY = Camera.Instance.Position.Y - 20;
 
         var meteorSprite = meteorTexture.NewSprite(372, 241, 14, 16);
