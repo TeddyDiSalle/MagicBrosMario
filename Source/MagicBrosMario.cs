@@ -4,6 +4,7 @@ using MagicBrosMario.Source.Sound;
 using MagicBrosMario.Source.Sprite;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 
 namespace MagicBrosMario.Source;
@@ -14,6 +15,7 @@ public class MagicBrosMario : Game
     private SpriteBatch _spriteBatch;
     public MarioGameController Controller { get; private set; }
     private IGameState _currentStateDONOUTUSE;
+    private bool isPaused = false;
 
     public IGameState CurrentState
     {
@@ -125,9 +127,17 @@ public class MagicBrosMario : Game
     protected override void Update(GameTime gameTime)
     {
 
+		KeyboardState kState = Keyboard.GetState();
 
+		if (kState.IsKeyDown(Keys.P))
+		{
+            changePaused();
+		}
 
-        CurrentState.Update(gameTime);
+		if (!isPaused)
+        {
+			CurrentState.Update(gameTime);
+		}
 
         //Temp stuff may need some may not
         //Controller.Update(gameTime);
@@ -156,6 +166,13 @@ public class MagicBrosMario : Game
 
         base.Draw(gameTime);
     }
+
+
+    public void changePaused()
+    {
+        isPaused = !isPaused;
+    }
+
     /*
         public void Debug()
         {

@@ -51,11 +51,12 @@ public class MarioGameController{
         inputMap.Bind(Keys.Z, gt => MagicBrosMario.INSTANCE.Mario.Attack());
         inputMap.Bind(Keys.N, gt =>  MagicBrosMario.INSTANCE.Mario.Attack());
         inputMap.Bind(Keys.E, gt =>  MagicBrosMario.INSTANCE.Mario.TakeDamage());
-        inputMap.Bind(Keys.Q, gt => game.Exit()); 
-        inputMap.Bind(Keys.R, gt => MagicBrosMario.INSTANCE.CurrentState =new TitleScreenState(MagicBrosMario.INSTANCE)); // reset game
+        inputMap.Bind(Keys.Q, gt => game.Exit());
+		inputMap.Bind(Keys.R, gt => MagicBrosMario.INSTANCE.CurrentState = new TitleScreenState(MagicBrosMario.INSTANCE)); // reset game
+		//inputMap.Bind(Keys.P, gt => MagicBrosMario.INSTANCE.changePaused()); // reset game
 
-        // mouse inputs
-        inputMap.Bind(m => m.IsButtonDown(MouseButton.Right), () => game.Exit());
+		// mouse inputs
+		inputMap.Bind(m => m.IsButtonDown(MouseButton.Right), () => game.Exit());
         inputMap.Bind(m => m.IsButtonDown(MouseButton.Left) && m.Position.X < gameData.halfX, () => 
                 MagicBrosMario.INSTANCE.CurrentState = new TransitionState(MagicBrosMario.INSTANCE, new DebugRoom()));//If you click the left side of the screen, call DebugRomm()
         
