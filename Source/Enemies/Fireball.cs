@@ -9,6 +9,7 @@ namespace MagicBrosMario.Source;
 //Roshan Ramamurthy
 public class Fireball : IEnemy, ICollidable
 {
+    public bool AlwaysActive => true;
     private const int VELOCITY = 150;
     private const float LIFETIME = 3.0f;
 

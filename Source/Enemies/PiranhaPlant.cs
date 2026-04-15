@@ -11,6 +11,7 @@ namespace MagicBrosMario.Source;
 //Roshan Ramamurthy
 public class PiranhaPlant : IEnemy, ICollidable
 {
+    public bool AlwaysActive => false;
     private const float RISE_SPEED = 100f;
     private const float PAUSE_DURATION = 0f;
     private const int RISE_HEIGHT = 48;
