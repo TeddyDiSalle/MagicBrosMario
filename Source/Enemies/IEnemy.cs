@@ -12,6 +12,7 @@ public interface IEnemy : ICollidable
     // 3. Interact with the environment (platforms, etc.)
     // 4. Be destroyed (when the player jumps on it, etc.)
     // 5. State transitions
+    public bool AlwaysActive { get; }
     public bool GetIsAlive();
     public void Update(GameTime gametime);
     public void Draw(SpriteBatch spriteBatch);

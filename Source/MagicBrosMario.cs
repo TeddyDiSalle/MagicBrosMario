@@ -1,4 +1,5 @@
-﻿using MagicBrosMario.Source.GameStates;
+﻿using System.Dynamic;
+using MagicBrosMario.Source.GameStates;
 using MagicBrosMario.Source.MarioStates;
 using MagicBrosMario.Source.Sound;
 using MagicBrosMario.Source.Sprite;
@@ -126,12 +127,8 @@ public class MagicBrosMario : Game
     protected override void Update(GameTime gameTime)
     {
 
-		KeyboardState kState = Keyboard.GetState();
-
-		if (kState.IsKeyDown(Keys.P) || kState.IsKeyDown(Keys.Escape))
-		{
-            changePaused();
-		}
+		
+        MarioGameController.Update(gameTime);
 
 		if (!isPaused)
         {

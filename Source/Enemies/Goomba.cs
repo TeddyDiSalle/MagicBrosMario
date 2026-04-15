@@ -11,6 +11,7 @@ namespace MagicBrosMario.Source;
 //Roshan Ramamurthy
 public class Goomba : IEnemy, ICollidable
 {
+    public bool AlwaysActive => false;
     private const int VELOCITY = 100;
     private const float SCALE = 2f;
     private const float GRAVITY = 0.35f;

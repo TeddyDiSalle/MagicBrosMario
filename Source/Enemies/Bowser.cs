@@ -12,6 +12,7 @@ namespace MagicBrosMario.Source;
 //Roshan Ramamurthy
 public class Bowser : IEnemy, ICollidable
 {
+    public bool AlwaysActive => false;
     private const int VELOCITY = 100;
     private const float FIRE_COOLDOWN = 3.0f;
     private const float GRAVITY = 0.35f;

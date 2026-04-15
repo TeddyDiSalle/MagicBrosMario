@@ -10,6 +10,7 @@ namespace MagicBrosMario.Source;
 //Roshan Ramamurthy
 public class Koopa : IEnemy, ICollidable
 {
+    public bool AlwaysActive => false;
     private const int VELOCITY = 100;
     private const int SHELL_VELOCITY = 200;
     private const float RECOVERY_TIME = 3.0f;

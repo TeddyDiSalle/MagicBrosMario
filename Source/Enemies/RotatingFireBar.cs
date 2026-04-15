@@ -11,6 +11,7 @@ namespace MagicBrosMario.Source;
 //Roshan Ramamurthy
 public class RotatingFireBar : IEnemy, ICollidable
 {
+    public bool AlwaysActive => true;
     private const float ROTATION_SPEED = 1.0f;
     private const float SCALE = 4f;
 
