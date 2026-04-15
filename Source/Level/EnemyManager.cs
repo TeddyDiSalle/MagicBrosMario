@@ -52,6 +52,7 @@ public static class EnemyManager
             "Bowser" => (x, y) => EnemyFactory.CreateBowser(x, y, MagicBrosMario.INSTANCE.FireTexture),
             "PiranhaPlant" => (x, y) => EnemyFactory.CreatePiranhaPlant(x, y),
             "RotatingFireBar" => (x, y) => EnemyFactory.CreateRotatingFireBar(x, y),
+            "MeteorMage" => (x, y) => EnemyFactory.CreateMeteorMage(x, y),
             _ => throw new ArgumentException($"Unknown enemy function: {functionName}")
         };
     }
