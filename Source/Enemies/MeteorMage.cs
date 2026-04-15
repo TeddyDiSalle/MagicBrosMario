@@ -85,7 +85,7 @@ public class MeteorMage : IEnemy, ICollidable
     private void SpawnMeteor()
     {
         int marioX = Camera.Instance.Position.X + Camera.Instance.WindowSize.X / 2;
-        int targetX = marioX + random.Next(-10, 10);
+        int targetX = marioX + random.Next(-25, 25);
         int spawnY = Camera.Instance.Position.Y - 20;
 
         var meteorSprite = meteorTexture.NewSprite(372, 241, 14, 16);
