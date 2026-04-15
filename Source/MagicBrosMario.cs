@@ -129,7 +129,7 @@ public class MagicBrosMario : Game
 
 		KeyboardState kState = Keyboard.GetState();
 
-		if (kState.IsKeyDown(Keys.P))
+		if (kState.IsKeyDown(Keys.P) || kState.IsKeyDown(Keys.Escape))
 		{
             changePaused();
 		}
