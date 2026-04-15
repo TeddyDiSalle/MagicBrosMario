@@ -13,7 +13,6 @@ public class MagicBrosMario : Game
 {
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
-    public MarioGameController Controller { get; private set; }
     private IGameState _currentStateDONOUTUSE;
     private bool isPaused = false;
 
@@ -121,7 +120,7 @@ public class MagicBrosMario : Game
             halfX = Camera.Instance.WindowSize.X / 2,
             halfY = Camera.Instance.WindowSize.Y / 2
         };
-        Controller = new MarioGameController(this, ref data);
+        MarioGameController.Initialize(ref data);
     }
 
     protected override void Update(GameTime gameTime)
