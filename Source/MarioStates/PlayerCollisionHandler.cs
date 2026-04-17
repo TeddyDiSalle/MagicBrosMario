@@ -202,7 +202,7 @@ public class PlayerCollisionHandler
             
             if (teleportCoordinates.HasValue)
             {
-                if (direction == CollideDirection.Down && !player.isPressingDown)
+                if (direction == CollideDirection.Down && !MarioGameController.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.S))
                 {
                     UnCollide(block.CollisionBox, direction);
                     if (direction == CollideDirection.Down)
@@ -211,7 +211,7 @@ public class PlayerCollisionHandler
                     }
                     return; 
                 }
-                Debug.WriteLine(direction);
+                
                 Vector2 travelVelocity = Vector2.Zero;
                 Vector2 exitVelocity = Vector2.Zero;
                 player.PipePhase = Player.PipeTravelPhase.Entering;
@@ -235,7 +235,7 @@ public class PlayerCollisionHandler
                         break;
                     default: break;
                 }
-                Debug.WriteLine("pipe exit direction: " + pipe.ExitDirection);
+                
                 player.PipeTravelVelocity = travelVelocity;
 
             var exitData = GetPipeExitData(teleportCoordinates.Value, pipe.ExitDirection);
