@@ -4,10 +4,9 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 namespace MagicBrosMario.Source;
-public class KeysNMouseCommandMapper
+public class GamePadNStickCommandMapper
 {
-    //private Dictionary<Keys, Action<GameTime>> _held = new();
-     private sealed class RepeatBinding
+    private sealed class RepeatBinding
     {
         public Action<GameTime> Action = default!;
         public double InitialDelay;
@@ -17,40 +16,30 @@ public class KeysNMouseCommandMapper
         public bool WasDown;
         public double TimeUntilNext;
     }
+    private readonly Dictionary<Buttons, RepeatBinding> _button = new();
 
-    private readonly Dictionary<Keys, RepeatBinding> _held = new();
-
-    private Dictionary<Func<MouseInfo,bool>, RepeatBinding> _clicks = new();
     
     //public void Bind(Keys key, Action<GameTime> command){// keyboard binding
     //    _held[key] = command;
     //}
 
-    public void Bind(Keys key, Action<GameTime> action,
+    public void Bind(Buttons key, Action<GameTime> action,
         double initialDelaySeconds = 0.01, double repeatIntervalSeconds = 0.01)
     {
-        _held[key] = new RepeatBinding{
+        _button[key] = new RepeatBinding{
             Action = action,
             InitialDelay = initialDelaySeconds,
             RepeatInterval = repeatIntervalSeconds
         };
     }
 
-    public void Bind(Func<MouseInfo, bool> condition, Action<GameTime> command, double initialDelaySeconds = 0.01, double repeatIntervalSeconds = 0.01){//mouse binding
-        _clicks[condition] = new RepeatBinding{
-            Action = command,
-            InitialDelay = initialDelaySeconds,
-            RepeatInterval = repeatIntervalSeconds
-        };
-    }
-
-    public void ProcessInput(GameTime time, KeyboardInfo keyboard, MouseInfo mouse){
+    public void ProcessInput(GameTime time, GamePadInfo gamepad){
         
         double dt = time.ElapsedGameTime.TotalSeconds;
         
         // check keyboard
-        foreach (var (key, b) in _held){
-            bool isDown = keyboard.IsKeyDown(key);
+        foreach (var (key, b) in _button){
+            bool isDown = gamepad.IsButtonDown(key);
 
             if (!isDown)
             {
@@ -79,11 +68,5 @@ public class KeysNMouseCommandMapper
             }
         }
 
-        // check mouse
-        foreach (var click in _clicks){
-            if (click.Key.Invoke(mouse)){
-                click.Value.Action(time);
-            }
-        }
     }
 }
