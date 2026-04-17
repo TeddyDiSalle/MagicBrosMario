@@ -8,16 +8,26 @@ namespace MagicBrosMario.Source.Block;
 
 public class BrickBlock(ISprite sprite) : BlockBase<BrickBlock>(sprite)
 {
-    public override void OnCollidePlayer(Player player, CollideDirection direction)
+    public override void OnCollidePlayer(Player mario, CollideDirection direction)
     {
-        if (direction == CollideDirection.Down )
+        if (direction != CollideDirection.Down)
+            return;
+
+        switch (mario.GetCurrentPower())
         {
-            // if mario is in big state
-            sprite.Drop();
-            CollisionController.Instance.RemoveBlock(this);
+            case Power.FireFlower:
+            case Power.Mushroom:
+                break;
+            case Power.None:
+            case Power.Star:
+            default: return;
         }
-        
+
+        // if mario is in big state
+        sprite.Drop();
+        CollisionController.Instance.RemoveBlock(this);
     }
+
     public override void OnCollideItem(IItems item, CollideDirection direction) { }
     public override void OnCollideEnemy(IEnemy enemy, CollideDirection direction) { }
     public override void OnCollideBlock(IBlock block, CollideDirection direction) { }
