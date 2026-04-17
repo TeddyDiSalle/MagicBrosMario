@@ -15,7 +15,8 @@ public static class MarioGameController{
     // Classes should not worry about game actions not if "w" is pressed or mouse is over here or over there.
     // This allows the game to work whether the player is using a keyboard or a potato
     // This class will call the other's classes move functions and damage functions and such
-    private static KeysNMouseCommandMapper inputMap;
+    private static KeysNMouseCommandMapper keysNMouseInputMap;
+    private static GamePadNStickCommandMapper gamePadNStickInputMap;
     private static Sprint2Controller gameData;
     private static bool muted = false;
 
@@ -23,7 +24,7 @@ public static class MarioGameController{
     {
         
         gameData = data;
-        inputMap = new KeysNMouseCommandMapper();
+        keysNMouseInputMap = new KeysNMouseCommandMapper();
         SetSprint3Binds();
     }
     public struct Sprint2Controller {
@@ -39,17 +40,17 @@ public static class MarioGameController{
         double pauseIDelay= 0.5;
         double pauseRInterval = 1.0;
         //Need to make it so it can be unpaused through here
-		inputMap.Bind(Keys.P, gt => MagicBrosMario.INSTANCE.changePaused(), pauseIDelay, pauseRInterval);
-		inputMap.Bind(Keys.Escape, gt => MagicBrosMario.INSTANCE.changePaused(), pauseIDelay, pauseRInterval);
+		keysNMouseInputMap.Bind(Keys.P, gt => MagicBrosMario.INSTANCE.changePaused(), pauseIDelay, pauseRInterval);
+		keysNMouseInputMap.Bind(Keys.Escape, gt => MagicBrosMario.INSTANCE.changePaused(), pauseIDelay, pauseRInterval);
 
-        inputMap.Bind(Keys.Q, gt => MagicBrosMario.INSTANCE.Exit()); 
-        inputMap.Bind(Keys.R, gt => MagicBrosMario.INSTANCE.CurrentState =new TitleScreenState(MagicBrosMario.INSTANCE)); // reset game
+        keysNMouseInputMap.Bind(Keys.Q, gt => MagicBrosMario.INSTANCE.Exit()); 
+        keysNMouseInputMap.Bind(Keys.R, gt => MagicBrosMario.INSTANCE.CurrentState =new TitleScreenState(MagicBrosMario.INSTANCE)); // reset game
         // mouse inputs
-        inputMap.Bind(m => m.IsButtonDown(MouseButton.Right), () => MagicBrosMario.INSTANCE.Exit());
-        inputMap.Bind(m => m.IsButtonDown(MouseButton.Left) && m.Position.X < gameData.halfX, () => 
+        keysNMouseInputMap.Bind(m => m.IsButtonDown(MouseButton.Right), () => MagicBrosMario.INSTANCE.Exit());
+        keysNMouseInputMap.Bind(m => m.IsButtonDown(MouseButton.Left) && m.Position.X < gameData.halfX, () => 
                 MagicBrosMario.INSTANCE.CurrentState = new TransitionState(MagicBrosMario.INSTANCE, new DebugRoom()));//If you click the left side of the screen, call DebugRomm()
         
-        inputMap.Bind(m => m.IsButtonDown(MouseButton.Left) && m.Position.X >= gameData.halfX, () => 
+        keysNMouseInputMap.Bind(m => m.IsButtonDown(MouseButton.Left) && m.Position.X >= gameData.halfX, () => 
                 MagicBrosMario.INSTANCE.CurrentState = new TransitionState(MagicBrosMario.INSTANCE, new Level1())); //If you click the right side of the screen, call Level1()
 
         MarioBinds();
@@ -59,27 +60,27 @@ public static class MarioGameController{
     public static void MarioBinds()
     {
         //Keyboard inputs
-        inputMap.Bind(Keys.W, gt => MagicBrosMario.INSTANCE.Mario.Jump(gt));
-        inputMap.Bind(Keys.Up, gt => MagicBrosMario.INSTANCE.Mario.Jump(gt));
-        inputMap.Bind(Keys.Space, gt => MagicBrosMario.INSTANCE.Mario.Jump(gt));
-        inputMap.Bind(Keys.A, gt => MagicBrosMario.INSTANCE.Mario.Left(gt));
-        inputMap.Bind(Keys.Left, gt => MagicBrosMario.INSTANCE.Mario.Left(gt));
-        inputMap.Bind(Keys.S, gt => MagicBrosMario.INSTANCE.Mario.Crouch(gt));
-        inputMap.Bind(Keys.Down, gt => MagicBrosMario.INSTANCE.Mario.Crouch(gt));
-        inputMap.Bind(Keys.D, gt => MagicBrosMario.INSTANCE.Mario.Right(gt));
-        inputMap.Bind(Keys.Right, gt => MagicBrosMario.INSTANCE.Mario.Right(gt));
-        inputMap.Bind(Keys.Z, gt => MagicBrosMario.INSTANCE.Mario.Attack());
-        inputMap.Bind(Keys.N, gt =>  MagicBrosMario.INSTANCE.Mario.Attack());
-        inputMap.Bind(Keys.E, gt =>  MagicBrosMario.INSTANCE.Mario.TakeDamage());
-        inputMap.Bind(Keys.Q, gt => MagicBrosMario.INSTANCE.Exit()); 
-        inputMap.Bind(Keys.R, gt => MagicBrosMario.INSTANCE.CurrentState =new TitleScreenState(MagicBrosMario.INSTANCE)); // reset MagicBrosMario.INSTANCE
+        keysNMouseInputMap.Bind(Keys.W, gt => MagicBrosMario.INSTANCE.Mario.Jump(gt));
+        keysNMouseInputMap.Bind(Keys.Up, gt => MagicBrosMario.INSTANCE.Mario.Jump(gt));
+        keysNMouseInputMap.Bind(Keys.Space, gt => MagicBrosMario.INSTANCE.Mario.Jump(gt));
+        keysNMouseInputMap.Bind(Keys.A, gt => MagicBrosMario.INSTANCE.Mario.Left(gt));
+        keysNMouseInputMap.Bind(Keys.Left, gt => MagicBrosMario.INSTANCE.Mario.Left(gt));
+        keysNMouseInputMap.Bind(Keys.S, gt => MagicBrosMario.INSTANCE.Mario.Crouch(gt));
+        keysNMouseInputMap.Bind(Keys.Down, gt => MagicBrosMario.INSTANCE.Mario.Crouch(gt));
+        keysNMouseInputMap.Bind(Keys.D, gt => MagicBrosMario.INSTANCE.Mario.Right(gt));
+        keysNMouseInputMap.Bind(Keys.Right, gt => MagicBrosMario.INSTANCE.Mario.Right(gt));
+        keysNMouseInputMap.Bind(Keys.Z, gt => MagicBrosMario.INSTANCE.Mario.Attack());
+        keysNMouseInputMap.Bind(Keys.N, gt =>  MagicBrosMario.INSTANCE.Mario.Attack());
+        keysNMouseInputMap.Bind(Keys.E, gt =>  MagicBrosMario.INSTANCE.Mario.TakeDamage());
+        keysNMouseInputMap.Bind(Keys.Q, gt => MagicBrosMario.INSTANCE.Exit()); 
+        keysNMouseInputMap.Bind(Keys.R, gt => MagicBrosMario.INSTANCE.CurrentState =new TitleScreenState(MagicBrosMario.INSTANCE)); // reset MagicBrosMario.INSTANCE
 
         // mouse inputs
-        inputMap.Bind(m => m.IsButtonDown(MouseButton.Right), () => MagicBrosMario.INSTANCE.Exit());
-        inputMap.Bind(m => m.IsButtonDown(MouseButton.Left) && m.Position.X < gameData.halfX, () => 
+        keysNMouseInputMap.Bind(m => m.IsButtonDown(MouseButton.Right), () => MagicBrosMario.INSTANCE.Exit());
+        keysNMouseInputMap.Bind(m => m.IsButtonDown(MouseButton.Left) && m.Position.X < gameData.halfX, () => 
                 MagicBrosMario.INSTANCE.CurrentState = new TransitionState(MagicBrosMario.INSTANCE, new DebugRoom()));//If you click the left side of the screen, call DebugRomm()
         
-        inputMap.Bind(m => m.IsButtonDown(MouseButton.Left) && m.Position.X >= gameData.halfX, () => 
+        keysNMouseInputMap.Bind(m => m.IsButtonDown(MouseButton.Left) && m.Position.X >= gameData.halfX, () => 
                 MagicBrosMario.INSTANCE.CurrentState = new TransitionState(MagicBrosMario.INSTANCE, new Level1())); //If you click the right side of the screen, call Level1()
     }
     public static void Update(GameTime gameTime)
@@ -92,7 +93,7 @@ public static class MarioGameController{
             
             Player player = MagicBrosMario.INSTANCE.Mario;
             
-            inputMap.ProcessInput(gameTime, keyb, mouse);// check all the inputs of the mouse and keyboard and run their corresponding function
+            keysNMouseInputMap.ProcessInput(gameTime, keyb, mouse);// check all the inputs of the mouse and keyboard and run their corresponding function
 
             if (!keyb.IsKeyDown(Keys.S) && !keyb.IsKeyDown(Keys.Down))
             {
