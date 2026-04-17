@@ -16,7 +16,6 @@ namespace MagicBrosMario.Source.MarioStates;
 public class Player : ICollidable
 {
     private IPlayerState PlayerState { get; set; }
-
     public Vector2 Position { get; private set; } = new Vector2(400, 240);
     public Vector2 Velocity { get; private set; }
     public int ScaleFactor { get; } = 2;
@@ -39,7 +38,6 @@ public class Player : ICollidable
     public bool IsJumping { get; set; } = false;
     public bool ApplyGravity { get; set; } = true;
     //For traveling through pipe
-    public bool isPressingDown {get; set;} = false;
     public enum PipeTravelPhase { None, Entering, Exiting }
     public PipeTravelPhase PipePhase { get; set; } = PipeTravelPhase.None;
     public Vector2 PipeEntryDestination { get; set; } // where mario fully enters

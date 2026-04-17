@@ -202,7 +202,7 @@ public class PlayerCollisionHandler
             
             if (teleportCoordinates.HasValue)
             {
-                if (direction == CollideDirection.Down && !MarioGameController.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.S))
+                if (direction == CollideDirection.Down && !MarioGameController.IsMarioDown())
                 {
                     UnCollide(block.CollisionBox, direction);
                     if (direction == CollideDirection.Down)
