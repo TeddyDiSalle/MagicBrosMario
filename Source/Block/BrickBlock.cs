@@ -1,5 +1,6 @@
 using System.Runtime.InteropServices.Swift;
 using MagicBrosMario.Source.Collision;
+using MagicBrosMario.Source.HUDAndScoring;
 using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.MarioStates;
 using MagicBrosMario.Source.Sprite;
@@ -13,6 +14,7 @@ public class BrickBlock(ISprite sprite) : BlockBase<BrickBlock>(sprite)
         if (direction != CollideDirection.Down)
             return;
 
+        // if mario is in big state
         switch (mario.GetCurrentPower())
         {
             case Power.FireFlower:
@@ -23,9 +25,13 @@ public class BrickBlock(ISprite sprite) : BlockBase<BrickBlock>(sprite)
             default: return;
         }
 
-        // if mario is in big state
         sprite.Drop();
         CollisionController.Instance.RemoveBlock(this);
+        HUD.Instance.SendEvent(new GameEvent
+        {
+            EventType = GameEventType.BlockBroken,
+            EventPosition = Position
+        });
     }
 
     public override void OnCollideItem(IItems item, CollideDirection direction) { }
