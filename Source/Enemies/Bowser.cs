@@ -153,7 +153,19 @@ public class Bowser : IEnemy, ICollidable
     // Camera handles drawing
     public void Draw(SpriteBatch _spriteBatch) { }
 
-    public void OnCollidePlayer(Player player, CollideDirection direction) { }
+    public void OnCollidePlayer(Player player, CollideDirection direction)
+    {
+        if(player.GetCurrentPower().Equals(Power.Star)|| (direction == CollideDirection.Top))
+        {
+            Kill();
+            HUD.Instance.SendEvent(new GameEvent
+            {
+                EventType = GameEventType.EnemyStomped,
+                EventPosition = Position,
+                Data = this
+            });
+        }
+    }
 
     public void OnCollideItem(IItems item, CollideDirection direction)
     {
