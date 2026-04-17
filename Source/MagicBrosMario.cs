@@ -114,10 +114,11 @@ public class MagicBrosMario : Game
 
     private void setController()
     {
-        MarioGameController.Sprint2Controller data = new MarioGameController.Sprint2Controller
+        MarioGameController.Sprint5Controller data = new MarioGameController.Sprint5Controller
         {
             mouse = new MouseInfo(),
             keyb = new KeyboardInfo(),
+            gamepad = new GamePadInfo(),
             halfX = Camera.Instance.WindowSize.X / 2,
             halfY = Camera.Instance.WindowSize.Y / 2
         };

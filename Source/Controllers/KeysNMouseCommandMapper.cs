@@ -20,7 +20,7 @@ public class KeysNMouseCommandMapper
 
     private readonly Dictionary<Keys, RepeatBinding> _held = new();
 
-    private Dictionary<Func<MouseInfo,bool>, Action> _clicks = new();
+    private Dictionary<Func<MouseInfo,bool>, RepeatBinding> _clicks = new();
     
     //public void Bind(Keys key, Action<GameTime> command){// keyboard binding
     //    _held[key] = command;
@@ -36,8 +36,12 @@ public class KeysNMouseCommandMapper
         };
     }
 
-    public void Bind(Func<MouseInfo, bool> condition, Action command){//mouse binding
-        _clicks[condition] = command;
+    public void Bind(Func<MouseInfo, bool> condition, Action<GameTime> command, double initialDelaySeconds = 0.01, double repeatIntervalSeconds = 0.01){//mouse binding
+        _clicks[condition] = new RepeatBinding{
+            Action = command,
+            InitialDelay = initialDelaySeconds,
+            RepeatInterval = repeatIntervalSeconds
+        };
     }
 
     public void ProcessInput(GameTime time, KeyboardInfo keyboard, MouseInfo mouse){
@@ -78,7 +82,7 @@ public class KeysNMouseCommandMapper
         // check mouse
         foreach (var click in _clicks){
             if (click.Key.Invoke(mouse)){
-                click.Value.Invoke();
+                click.Value.Action(time);
             }
         }
     }
