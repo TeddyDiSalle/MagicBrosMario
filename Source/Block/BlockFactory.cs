@@ -29,10 +29,10 @@ public static class BlockFactory
         return block;
     }
 
-    public static Block Bricks()
+    public static BrickBlock Bricks()
     {
         var sprite = BlockSharedTexture.NewSprite(48, 32, 16, 16);
-        var block = new Block(sprite);
+        var block = new BrickBlock(sprite);
         return block;
     }
 
