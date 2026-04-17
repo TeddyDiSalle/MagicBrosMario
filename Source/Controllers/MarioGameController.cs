@@ -38,7 +38,7 @@ public static class MarioGameController{
         public int halfY;
     }
     // All the binds specified for sprint 3
-    public static void SetSprint5Binds()
+    private static void SetSprint5Binds()
     {
         double pauseIDelay= 0.5;
         double pauseRInterval = 1.0;
@@ -61,9 +61,11 @@ public static class MarioGameController{
 
         MarioBinds();
 
+        SetGamePad();
+
     }
 
-    public static void MarioBinds()
+    private static void MarioBinds()
     {
         //Keyboard inputs
         keysNMouseInputMap.Bind(Keys.W, gt => MagicBrosMario.INSTANCE.Mario.Jump(gt));
@@ -81,17 +83,30 @@ public static class MarioGameController{
         keysNMouseInputMap.Bind(Keys.Q, gt => MagicBrosMario.INSTANCE.Exit()); 
         keysNMouseInputMap.Bind(Keys.R, gt => MagicBrosMario.INSTANCE.CurrentState =new TitleScreenState(MagicBrosMario.INSTANCE)); // reset MagicBrosMario.INSTANCE
     }
+
+    private static void SetGamePad()
+    {
+        gamePadNStickInputMap = new GamePadNStickCommandMapper();
+        gamePadNStickInputMap.SetFromKeyboardMapper(keysNMouseInputMap);
+    }
     public static void Update(GameTime gameTime)
     {
         if(!muted){
-            KeyboardInfo keyb = gameData.keyb;
+            MNKUpdate(gameTime);
+
+        }
+    }
+
+    private static void MNKUpdate(GameTime gt)
+    {
+        KeyboardInfo keyb = gameData.keyb;
             MouseInfo mouse = gameData.mouse;
             keyb.Update();
             mouse.Update();
             
             Player player = MagicBrosMario.INSTANCE.Mario;
             
-            keysNMouseInputMap.ProcessInput(gameTime, keyb, mouse);// check all the inputs of the mouse and keyboard and run their corresponding function
+            keysNMouseInputMap.ProcessInput(gt, keyb, mouse);// check all the inputs of the mouse and keyboard and run their corresponding function
 
             if (!keyb.IsKeyDown(Keys.S) && !keyb.IsKeyDown(Keys.Down))
             {
@@ -107,6 +122,30 @@ public static class MarioGameController{
             {
                 player.Idle();
             }
+    }
+
+    private static void GPUpdate(GameTime gt)
+    {
+        GamePadInfo gamepad = gameData.gamepad;
+        gamepad.Update();
+
+        Player player = MagicBrosMario.INSTANCE.Mario;
+
+        gamePadNStickInputMap.ProcessInput(gt, gamepad);
+
+        if (!gamepad.IsButtonDown(Buttons.LeftThumbstickDown) && !gamepad.IsButtonDown(Buttons.DPadDown))
+        {
+            player.ReleaseCrouch();
+        }
+
+        bool moving =
+            gamepad.IsButtonDown(Buttons.LeftThumbstickLeft) || gamepad.IsButtonDown(Buttons.DPadLeft) ||
+            gamepad.IsButtonDown(Buttons.LeftThumbstickRight) || gamepad.IsButtonDown(Buttons.DPadRight) ||
+            gamepad.IsButtonDown(Buttons.LeftThumbstickDown) || gamepad.IsButtonDown(Buttons.DPadDown) ||
+            gamepad.IsButtonDown(Buttons.LeftThumbstickUp) || gamepad.IsButtonDown(Buttons.DPadUp);
+        if(!moving)
+        {
+            player.Idle();
         }
     }
 

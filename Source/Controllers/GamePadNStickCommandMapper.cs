@@ -69,4 +69,13 @@ public class GamePadNStickCommandMapper
         }
 
     }
+
+    public void SetFromKeyboardMapper(KeysNMouseCommandMapper keyboardMapper)
+    {
+        foreach (var (key, binding) in keyboardMapper.GetKeys())
+        {
+            Buttons button = (Buttons)KeysAndButtonsConverter.ToButton(key);
+            Bind(button, binding.Action, binding.InitialDelay, binding.RepeatInterval);
+        }
+    }   
 }

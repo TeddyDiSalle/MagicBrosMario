@@ -7,7 +7,7 @@ namespace MagicBrosMario.Source;
 public class KeysNMouseCommandMapper
 {
     //private Dictionary<Keys, Action<GameTime>> _held = new();
-     private sealed class RepeatBinding
+    public class RepeatBinding
     {
         public Action<GameTime> Action = default!;
         public double InitialDelay;
@@ -85,5 +85,10 @@ public class KeysNMouseCommandMapper
                 click.Value.Action(time);
             }
         }
+    }
+
+    public Dictionary<Keys, RepeatBinding> GetKeys()
+    {
+        return _held;
     }
 }
