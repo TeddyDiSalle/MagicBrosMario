@@ -43,7 +43,7 @@ public class MagicBrosMario : Game
     public SharedTexture EnemyTexture { get; }
     public SharedTexture FireTexture { get; }
 
-
+    public Texture2D TitleScreen { get; private set; }
     public SpriteFont font { get; private set; }
 
     //Use this for now
@@ -90,18 +90,10 @@ public class MagicBrosMario : Game
 
         SoundController.LoadSounds();
 
-		//EnemyTexture.BindTexture(enemySheet);
-		//ItemTexture.BindTexture(itemSheet);
-		//MarioTexture.BindTexture(marioSheet);
-		//FireTexture.BindTexture(fireSheet);
-
-
 
 		this.Mario = new Player(MarioTexture);
-
-
-		CurrentState = new TitleScreenState(this);
-
+        TitleScreen = Content.Load<Texture2D>("MarioTitleScreen");
+        
         EnemyTexture.BindTexture(enemySheet);
         ItemTexture.BindTexture(itemSheet);
         MarioTexture.BindTexture(marioSheet);
@@ -109,6 +101,7 @@ public class MagicBrosMario : Game
         font = Content.Load<SpriteFont>("Font");
 
         setController();
+        CurrentState = new TitleScreenState();
     }
 
 
