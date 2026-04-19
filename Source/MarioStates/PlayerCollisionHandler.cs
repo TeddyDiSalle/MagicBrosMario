@@ -86,6 +86,10 @@ public class PlayerCollisionHandler
                     EventPosition = new Point(item.CollisionBox.X, item.CollisionBox.Y) + new Point(item.CollisionBox.Width / 2, item.CollisionBox.Height / 2)
                 });
                 break;
+            case PoisonMushroom:
+                player.DamageTimer = 2;
+                player.TakeDamage();
+                break;
             case OneUp:
                 player.Lives++;
                 HUD.Instance.SendEvent(new GameEvent
