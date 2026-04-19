@@ -33,7 +33,7 @@ public class Player : ICollidable
     public int Lives { get; set; } = 3;
     public bool IsAlive { get; set; } = true;
     private const double DamageCoolDown = 2.0;
-    private double DamageTimer = 2;
+    public double DamageTimer = 2;
     public Sprite.SharedTexture Texture { get; }
     public bool IsJumping { get; set; } = false;
     public bool ApplyGravity { get; set; } = true;
