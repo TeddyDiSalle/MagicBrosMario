@@ -16,7 +16,6 @@ namespace MagicBrosMario.Source.MarioStates;
 public class Player : ICollidable
 {
     private IPlayerState PlayerState { get; set; }
-
     public Vector2 Position { get; private set; } = new Vector2(400, 240);
     public Vector2 Velocity { get; private set; }
     public int ScaleFactor { get; } = 2;
@@ -39,7 +38,6 @@ public class Player : ICollidable
     public bool IsJumping { get; set; } = false;
     public bool ApplyGravity { get; set; } = true;
     //For traveling through pipe
-    public bool isPressingDown {get; set;} = false;
     public enum PipeTravelPhase { None, Entering, Exiting }
     public PipeTravelPhase PipePhase { get; set; } = PipeTravelPhase.None;
     public Vector2 PipeEntryDestination { get; set; } // where mario fully enters
@@ -48,7 +46,7 @@ public class Player : ICollidable
     public Vector2 PipeExitVelocity { get; set; }
     public Vector2 PipeExitDestination { get; set; }
     //For sliding down flag pole and going into castle
-    public enum EndLevelPhase { None, SlidingDown, Walking }
+    public enum EndLevelPhase { None, SlidingDown, Walking, InCastleGate }
     public EndLevelPhase EndPhase { get; set; } = EndLevelPhase.None;
     public float FlagPoleBottomY { get; set; }
     public float CastleEntranceX { get; set; }
@@ -96,7 +94,6 @@ public class Player : ICollidable
     {
         IsCrouching = true;
         PlayerState.Crouch(gameTime);
-        isPressingDown = true;
     }
     public void SetPositon(Vector2 pos)
     {
@@ -219,16 +216,18 @@ public class Player : ICollidable
         {
             DamageTimer += gameTime.ElapsedGameTime.TotalSeconds;
         }
-        if (!WasGrounded && PipePhase == PipeTravelPhase.None && ApplyGravity)
+        if (!WasGrounded || ApplyGravity)
         {
             Velocity += new Vector2(0, Gravity);
         }
         Position += Velocity;
         if (PipePhase == PipeTravelPhase.Entering)
         {
+            MarioGameController.Mute();
+            SetVisibility(true);
             Debug.WriteLine("Entering pipe: " + Position + "  " + PipeEntryDestination + " " + Vector2.Distance(Position, PipeEntryDestination));
             SetVelocity(PipeTravelVelocity);
-
+            ApplyGravity = false;
             if (Vector2.Distance(Position, PipeEntryDestination) < 20f)
             {
                 SetPositon(PipeExitPosition);
@@ -246,11 +245,15 @@ public class Player : ICollidable
             {
                 SetVelocity(Vector2.Zero);
                 PipePhase = PipeTravelPhase.None;
+                MarioGameController.UnMute();
+                ApplyGravity = true;
             }
             return;
         }
         if (EndPhase == EndLevelPhase.SlidingDown)
         {
+            SetVisibility(true);
+            MarioGameController.Mute();
             SetVelocity(new Vector2(0, 3));
             ApplyGravity = false;
             if (Position.Y >= FlagPoleBottomY)
@@ -263,14 +266,15 @@ public class Player : ICollidable
         }
         if (EndPhase == EndLevelPhase.Walking)
         {
-            SetVelocity(new Vector2(3,0));
+            SetVelocity(new Vector2(3,0) + new Vector2(0, Velocity.Y));
             Right(gameTime);
             if (Position.X >= CastleEntranceX)
             {
                 SetVelocity(Vector2.Zero);
-                EndPhase = EndLevelPhase.None;
+                EndPhase = EndLevelPhase.InCastleGate;
                 HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.EndOfLevel });
                 SetVisibility(false);
+                MarioGameController.UnMute();
             }
         }
         if (StarTimeRemaining >= StarDuration)
@@ -305,14 +309,15 @@ public class Player : ICollidable
         }
         CollisionBox = new Rectangle((int)Math.Ceiling(Position.X),(int)Math.Ceiling(Position.Y),CollisionBox.Width, CollisionBox.Height);
         PlayerState.Update(gameTime);
+        if(EndPhase != EndLevelPhase.None || PipePhase != PipeTravelPhase.None || EndPhase == EndLevelPhase.InCastleGate) { return; }
         if (DamageTimer < DamageCoolDown)
         {
             bool visible = Math.Sin(DamageTimer * 35) > 0;
-            PlayerState.SetVisibility(visible);
+            SetVisibility(visible);
         }
         else
         {
-            PlayerState.SetVisibility(true);
+            SetVisibility(true);
         }
     }
 
