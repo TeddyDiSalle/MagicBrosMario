@@ -52,7 +52,8 @@ public static class BlockManager
                     return BlockFactory.QuestionMarkBlock((QuestionMarkBlock.InnerItem)innerItem)
                         .WithPosition(x, y)
                         .WithScale(_scale);
-                case null:
+                case "":
+                    Console.WriteLine("question mark invis with block id: " + blockId + " at the position " + x + ", " + y);
                     return BlockFactory.InvisQuestionMarkBlock((QuestionMarkBlock.InnerItem)innerItem)
                         .WithPosition(x, y)
                         .WithScale(_scale);
