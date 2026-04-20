@@ -60,9 +60,10 @@ public static class BlockFactory
 
     public static QuestionMarkBlock InvisQuestionMarkBlock(QuestionMarkBlock.InnerItem item)
     {
-        AnimatedSprite sprite = null;
+        AnimatedSprite invisSprite = BlockSharedTexture.NewAnimatedSprite(16, 48, 16, 16, 1, 0.0f);
+        invisSprite.Visible = false;
         var emptySprite = BlockSharedTexture.NewSprite(64, 48, 16, 16);
-        var block = new QuestionMarkBlock(sprite, emptySprite, item);
+        var block = new QuestionMarkBlock(invisSprite, emptySprite, item);
         return block;
     }
 
