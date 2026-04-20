@@ -52,25 +52,25 @@ public static class BlockFactory
 
     public static QuestionMarkBlock QuestionMarkBlock(QuestionMarkBlock.InnerItem item)
     {
-        var sprite = BlockSharedTexture.NewSprite(48, 32, 16, 16);
-        var emptySprite = BlockSharedTexture.NewSprite(64, 48, 16, 16);
-        var block = new QuestionMarkBlock(sprite, emptySprite, item);
-        return block;
-    }
-
-    public static QuestionMarkBlock InvisQuestioMarkBlock(QuestionMarkBlock.InnerItem item)
-    {
-        var sprite = null;
-        var emptySprite = BlockSharedTexture.NewSprite(64, 48, 16, 16);
-        var block = new QuestionMarkBlock(sprite, emptySprite, item);
-        return block;
-    }
-
-    public static QuestionMarkBlock BrickQuestioMarkBlock(QuestionMarkBlock.InnerItem item)
-    {
         var sprite = BlockSharedTexture.NewAnimatedSprite(16, 48, 16, 16, 3, 0.2f);
         var emptySprite = BlockSharedTexture.NewSprite(64, 48, 16, 16);
         var block = new QuestionMarkBlock(sprite, emptySprite, item);
+        return block;
+    }
+
+    public static QuestionMarkBlock InvisQuestionMarkBlock(QuestionMarkBlock.InnerItem item)
+    {
+        AnimatedSprite sprite = null;
+        var emptySprite = BlockSharedTexture.NewSprite(64, 48, 16, 16);
+        var block = new QuestionMarkBlock(sprite, emptySprite, item);
+        return block;
+    }
+
+    public static QuestionMarkBlock BrickQuestionMarkBlock(QuestionMarkBlock.InnerItem item)
+    {
+        var bricksSprite = BlockSharedTexture.NewAnimatedSprite(48, 32, 16, 16, 1, 0.0f);
+        var emptySprite = BlockSharedTexture.NewSprite(64, 48, 16, 16);
+        var block = new QuestionMarkBlock(bricksSprite, emptySprite, item);
         return block;
     }
 
