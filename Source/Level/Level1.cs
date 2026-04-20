@@ -1,4 +1,3 @@
-
 namespace MagicBrosMario.Source.Level;
 public class Level1 : ParentLevel
 {
