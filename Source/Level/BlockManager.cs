@@ -41,15 +41,30 @@ public static class BlockManager
         string blockId,
         int x,
         int y,
-        QuestionMarkBlock.InnerItem innerItem = QuestionMarkBlock.InnerItem.Coin,
+        QuestionMarkBlock.InnerItem innerItem = null,
         PipeTeleport? pipeTeleport = null,
         int tileSize = 32)
     {
-        if (blockId == "07") // ? mark block
+        if (innerItem != null) // ? mark block
         {
-            return BlockFactory.QuestionMarkBlock(innerItem)
-                .WithPosition(x, y)
-                .WithScale(_scale);
+            switch blockId:
+                case "07":
+                    return BlockFactory.QuestionMarkBlock(innerItem)
+                        .WithPosition(x, y)
+                        .WithScale(_scale);
+                case null:
+                    return BlockFactory.InvisQuestionMarkBlock(innerItem)
+                        .WithPosition(x, y)
+                        .WithScale(_scale);
+                case "04":
+                    return BlockFactory.BrickQuestionMarkBlock(innerItem)
+                        .WithPosition(x, y)
+                        .WithScale(_scale);
+                default:
+                    
+                    return BlockFactory.QuestionMarkBlock(innerItem)
+                        .WithPosition(x, y)
+                        .WithScale(_scale);
         }
 
         if (IsPipeEntryBlock(blockId))
