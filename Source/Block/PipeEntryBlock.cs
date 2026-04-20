@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using MagicBrosMario.Source.Collision;
 using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.MarioStates;
@@ -84,8 +85,9 @@ public class PipeEntryBlock(
                 var pipeHeight = 2 * CollisionBox.Height;
                 var maxOffset = pipeHeight - mario.Height;
                 var marioOffset = mario.Top - pipeTop;
+                
 
-                if (0 <= marioOffset && marioOffset < maxOffset)
+                if (0 <= marioOffset && marioOffset <= maxOffset)
                 {
                     result = Exit;
                 }

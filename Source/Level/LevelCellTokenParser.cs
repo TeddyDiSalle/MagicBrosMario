@@ -47,7 +47,7 @@ internal static class LevelCellTokenParser
         endpoint = last - '0';
     }
 
-    public static QuestionMarkBlock.InnerItem ToQuestionBlockItem(string itemId)
+    public static QuestionMarkBlock.InnerItem? ToQuestionBlockItem(string itemId)
     {
         return itemId switch
         {
@@ -56,7 +56,7 @@ internal static class LevelCellTokenParser
             "02" => QuestionMarkBlock.InnerItem.Star,
             "03" => QuestionMarkBlock.InnerItem.OneUp,
             "04" => QuestionMarkBlock.InnerItem.Mushroom,
-            _ => QuestionMarkBlock.InnerItem.Coin
+            _ => null
         };
     }
 }

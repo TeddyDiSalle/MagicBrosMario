@@ -29,6 +29,7 @@ public class SoundController
     public static void LoadSounds()
     {
         string L1Path = "1-1/";
+        string L2Path = "1-2/";
         string DebugPath = "Debug/";
         string BlocksPath = "Blocks/";
         string EnemiesPath = "Enemies/";
@@ -37,6 +38,7 @@ public class SoundController
         string MarioPath = "Mario/";
         Instance.LoadMusic(MusicType.Level1_1, L1Path+"smb_overworld");
         Instance.LoadMusic(MusicType.Debug, DebugPath+"Aria_Math");
+        Instance.LoadMusic(MusicType.Level1_2, DebugPath+"Aria_Math");
 
         Instance.LoadSoundEffect(SoundType.Break, BlocksPath + "break");
         Instance.LoadSoundEffect(SoundType.Vine, BlocksPath + "vine");
