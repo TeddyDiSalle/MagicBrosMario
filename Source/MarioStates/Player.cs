@@ -1,5 +1,6 @@
 ﻿using MagicBrosMario.Source.Block;
 using MagicBrosMario.Source.Collision;
+using MagicBrosMario.Source.GameStates;
 using MagicBrosMario.Source.HUDAndScoring;
 using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.Sound;
@@ -136,10 +137,12 @@ public class Player : ICollidable
             Lives--;
         }
         
+
     }
     public void ResetPlayer()
     {
         ChangeState(new SmallMarioIdleState(this, Texture, TimeFrame, ScaleFactor));
+        IsAlive = true;
     }
     public void PowerUp(Power power)
     {

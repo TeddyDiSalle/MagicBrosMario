@@ -1,4 +1,5 @@
-﻿using MagicBrosMario.Source.Items;
+﻿using MagicBrosMario.Source.GameStates;
+using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.MarioStates;
 using MagicBrosMario.Source.Sound;
 using MagicBrosMario.Source.Sprite;
@@ -7,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Xml.Linq;
 namespace MagicBrosMario.Source.HUDAndScoring;
 
 //Vincent Do
@@ -19,6 +21,8 @@ public class HUD
     private int time = 150;
     private int FrameCount = 0;
     private bool levelOver = false;
+    private bool goToTransition = false;
+    private float TransitionTimer = 3f;
     public bool dead { get; private set; } = false;
     public bool waitForNextLevel { get; private set; } = false;
     private readonly int[] stompScores = { 100, 200, 400, 800, 1000, 2000, 4000, 8000 };
@@ -164,6 +168,7 @@ public class HUD
                 break;
             case GameEventType.Death:
                 dead = true;
+                goToTransition = true;
                 break;
             default:
                 break;
@@ -209,6 +214,19 @@ public class HUD
         else if (time == 0) { MagicBrosMario.INSTANCE.Mario.KillMario(); }
         coin.Position = new Point(Camera.Instance.Position.X + 250, 27);
         coin.Update(gametime);
+
+        if (goToTransition)
+        {
+            TransitionTimer -= (float)gametime.ElapsedGameTime.TotalSeconds;
+
+            if (TransitionTimer <= 0)
+            {
+                MagicBrosMario.INSTANCE.CurrentState = new TransitionState(new Level.Level1());
+                goToTransition = false;
+                TransitionTimer = 3f;
+}
+        }
+
     }
     public void Draw(SpriteBatch _spriteBatch)
     {

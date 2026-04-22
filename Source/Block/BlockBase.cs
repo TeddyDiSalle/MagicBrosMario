@@ -10,10 +10,13 @@ namespace MagicBrosMario.Source.Block;
 /// </summary>
 /// <param name="sprite">sprite object from shared texture, both sprite and animated sprite works</param>
 /// <typeparam name="TBlock">type of self for self referencing</typeparam>
-public abstract class BlockBase<TBlock>(Sprite.ISprite sprite) : IBlock where TBlock : BlockBase<TBlock> {
-    public Sprite.ISprite Sprite {
+public abstract class BlockBase<TBlock>(Sprite.ISprite sprite) : IBlock where TBlock : BlockBase<TBlock>
+{
+    public Sprite.ISprite Sprite
+    {
         get;
-        set {
+        set
+        {
             // sync the sprite data
             value.Position = Position;
             value.Scale = Scale;
@@ -21,37 +24,45 @@ public abstract class BlockBase<TBlock>(Sprite.ISprite sprite) : IBlock where TB
         }
     } = sprite;
 
-    public bool Visible {
+    public bool Visible
+    {
         get => Sprite.Visible;
         set => Sprite.Visible = value;
     }
 
-    public TBlock WithVisibility(bool visibility) {
+    public TBlock WithVisibility(bool visibility)
+    {
         Visible = visibility;
         return (TBlock)this;
     }
 
-    public Point Position {
+    public Point Position
+    {
         get => Sprite.Position;
         set => Sprite.Position = value;
     }
 
-    public TBlock WithPosition(int x, int y) {
+    public TBlock WithPosition(int x, int y)
+    {
         Position = new Point(x, y);
         return (TBlock)this;
     }
 
     public Point Size => Sprite.Size;
 
-    public float Scale {
+    public float Scale
+    {
         get => Sprite.Scale;
         set => Sprite.Scale = value;
     }
 
-    public TBlock WithScale(float scale) {
+    public TBlock WithScale(float scale)
+    {
         Scale = scale;
         return (TBlock)this;
     }
+
+    public virtual void Update(GameTime gameTime) { }
 
     public Rectangle CollisionBox => new(sprite.Position.X, sprite.Position.Y, sprite.Size.X, sprite.Size.Y);
 
