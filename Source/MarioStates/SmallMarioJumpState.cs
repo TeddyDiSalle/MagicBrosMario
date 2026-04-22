@@ -64,7 +64,7 @@ public class SmallMarioJumpState : IPlayerState
     {
         if (!Mario.Invincible)
         {
-            Mario.ChangeState(new MarioDeadState(Mario, texture, timeFrame, scaleFactor));
+            Mario.KillMario();
         }
     }
     public void PowerUp(Power power)
