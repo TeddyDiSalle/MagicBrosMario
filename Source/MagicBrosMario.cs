@@ -77,7 +77,7 @@ public class MagicBrosMario : Game
 
         INSTANCE = this;
 
-		MagicBrosMario.INSTANCE.Mario = new Player(MagicBrosMario.INSTANCE.MarioTexture);
+		Mario = new Player(MagicBrosMario.INSTANCE.MarioTexture);
 	}
 
 
