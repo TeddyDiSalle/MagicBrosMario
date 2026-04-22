@@ -86,6 +86,10 @@ public class PlayerCollisionHandler
                     EventPosition = new Point(item.CollisionBox.X, item.CollisionBox.Y) + new Point(item.CollisionBox.Width / 2, item.CollisionBox.Height / 2)
                 });
                 break;
+            case PoisonMushroom:
+                player.DamageTimer = 2;
+                player.TakeDamage();
+                break;
             case OneUp:
                 player.Lives++;
                 HUD.Instance.SendEvent(new GameEvent
@@ -202,7 +206,7 @@ public class PlayerCollisionHandler
             
             if (teleportCoordinates.HasValue)
             {
-                if (direction == CollideDirection.Down && !player.isPressingDown)
+                if (direction == CollideDirection.Down && !MarioGameController.IsMarioDown())
                 {
                     UnCollide(block.CollisionBox, direction);
                     if (direction == CollideDirection.Down)
@@ -211,7 +215,7 @@ public class PlayerCollisionHandler
                     }
                     return; 
                 }
-                Debug.WriteLine(direction);
+                
                 Vector2 travelVelocity = Vector2.Zero;
                 Vector2 exitVelocity = Vector2.Zero;
                 player.PipePhase = Player.PipeTravelPhase.Entering;
@@ -235,7 +239,7 @@ public class PlayerCollisionHandler
                         break;
                     default: break;
                 }
-                Debug.WriteLine("pipe exit direction: " + pipe.ExitDirection);
+                
                 player.PipeTravelVelocity = travelVelocity;
 
             var exitData = GetPipeExitData(teleportCoordinates.Value, pipe.ExitDirection);

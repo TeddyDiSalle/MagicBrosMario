@@ -17,6 +17,7 @@ public class QuestionMarkBlock : BlockBase<QuestionMarkBlock>
         Star,
         OneUp,
         Mushroom,
+        PoisonMushroom,
     }
 
     public Rectangle CollisionBox => new(sprite.Position.X, sprite.Position.Y, sprite.Size.X, sprite.Size.Y);
@@ -56,7 +57,7 @@ public class QuestionMarkBlock : BlockBase<QuestionMarkBlock>
         {
             case InnerItem.Coin:
 				item = new Coin(MagicBrosMario.INSTANCE.ItemTexture, Position.X + 8, Position.Y);
-                HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.CoinCollected, EventPosition = Position});
+				HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.CoinCollected, EventPosition = Position});
 				break;
             case InnerItem.Star:
                 item = new Star(MagicBrosMario.INSTANCE.ItemTexture, Position.X + 1, Position.Y - 5);
@@ -66,17 +67,21 @@ public class QuestionMarkBlock : BlockBase<QuestionMarkBlock>
                 item = new OneUp(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 5);
                 HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.PowerupAppears, EventPosition = Position });
                 break;
-            case InnerItem.Mushroom:
-                if (player.GetCurrentPower() == Power.None)
-                {
-                    item = new Mushroom(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 5);
-                } 
-                else
-                {
-                    item =new Fireflower(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 3);
-                }
-                HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.PowerupAppears, EventPosition = Position });
-                break;
+			case InnerItem.Mushroom:
+				if (player.GetCurrentPower() == Power.None)
+				{
+					item = new Mushroom(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 5);
+				}
+				else
+				{
+					item = new Fireflower(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 3);
+				}
+				HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.PowerupAppears, EventPosition = Position });
+				break;
+			case InnerItem.PoisonMushroom:
+					item = new PoisonMushroom(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 5);
+				HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.PowerupAppears, EventPosition = Position });
+				break;
 			default:
                 throw new Exception("impossible default branch");
         }

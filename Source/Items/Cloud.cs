@@ -10,7 +10,7 @@ using System.Text;
 
 namespace MagicBrosMario.Source.Items
 {
-	internal class Cloud : IItems
+	internal class Cloud : IItems, ICollidable
 	{
 
 		private Sprite.ISprite sprite;

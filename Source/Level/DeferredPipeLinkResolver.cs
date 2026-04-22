@@ -300,7 +300,7 @@ internal sealed class DeferredPipeLinkResolver
                 blockId,
                 tile.X * tileSize,
                 tile.Y * tileSize,
-                QuestionMarkBlock.InnerItem.Coin,
+                null,
                 teleport,
                 tileSize
             );
@@ -324,7 +324,7 @@ internal sealed class DeferredPipeLinkResolver
                 blockId,
                 tile.X * tileSize,
                 tile.Y * tileSize,
-                QuestionMarkBlock.InnerItem.Coin,
+                null,
                 null,
                 tileSize
             );

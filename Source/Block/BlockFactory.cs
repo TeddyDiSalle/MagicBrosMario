@@ -58,6 +58,24 @@ public static class BlockFactory
         return block;
     }
 
+    public static QuestionMarkBlock InvisQuestionMarkBlock(QuestionMarkBlock.InnerItem item)
+    {
+        AnimatedSprite invisSprite = BlockSharedTexture.NewAnimatedSprite(16, 48, 16, 16, 1, 0.0f);
+        invisSprite.Visible = false;
+        var emptySprite = BlockSharedTexture.NewSprite(64, 48, 16, 16);
+        var block = new QuestionMarkBlock(invisSprite, emptySprite, item);
+        return block;
+    }
+
+    public static QuestionMarkBlock BrickQuestionMarkBlock(QuestionMarkBlock.InnerItem item)
+    {
+        var bricksSprite = BlockSharedTexture.NewAnimatedSprite(48, 32, 16, 16, 1, 0.0f);
+        var emptySprite = BlockSharedTexture.NewSprite(64, 48, 16, 16);
+        var block = new QuestionMarkBlock(bricksSprite, emptySprite, item);
+        return block;
+    }
+
+
     public enum PipeSegmentType
     {
         Vertical,
@@ -160,5 +178,18 @@ public static class BlockFactory
 
         return new PipeEntryBlock(
             sprite, facing, half, exit, exitDirection);
+    }
+    
+    /// <summary>
+    /// bridge block
+    /// </summary>
+    /// <param name="group">group number, blocks of same bridge should be in the same group</param>
+    /// <param name="order">collapse ordering of the blocks, start from 1(first), avoid having same order for two blocks</param>
+    /// <returns></returns>
+    public static BridgeBlock BridgeBlock(int group, int order)
+    {
+        var sprite = BlockSharedTexture.NewSprite(96, 32, 16, 16);
+        var block = new BridgeBlock(sprite, group, order);
+        return block;
     }
 }

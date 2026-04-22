@@ -322,7 +322,6 @@ public abstract class ParentLevel : ILevel
                 }
             }
         }
-
         HUD.Instance.LevelOver();
         SoundController.StopMusic();
     }
