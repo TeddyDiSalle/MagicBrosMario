@@ -32,5 +32,7 @@ public interface IBlock : ICollidable
     /// <value>scale of this block</value>
     float Scale { get; set; }
 
-    Sprite.ISprite Sprite { get;set; }
+    Sprite.ISprite Sprite { get; set; }
+
+    void Update(GameTime gameTime);
 }
