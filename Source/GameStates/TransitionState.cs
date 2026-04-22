@@ -24,8 +24,10 @@ namespace MagicBrosMario.Source.GameStates
 
             _font = MagicBrosMario.INSTANCE.font;
 
+			MagicBrosMario.INSTANCE.Mario.ResetPlayer();
 
-        }
+
+		}
 
         public void Update(GameTime gameTime)
         {

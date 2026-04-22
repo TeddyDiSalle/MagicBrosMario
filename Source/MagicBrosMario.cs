@@ -53,6 +53,7 @@ public class MagicBrosMario : Game
 
     public static MagicBrosMario INSTANCE { get; private set; }
 
+
     public enum GameState
     {
         TitleScreen,
@@ -75,7 +76,9 @@ public class MagicBrosMario : Game
         FireTexture = new SharedTexture();
 
         INSTANCE = this;
-    }
+
+		MagicBrosMario.INSTANCE.Mario = new Player(MagicBrosMario.INSTANCE.MarioTexture);
+	}
 
 
     protected override void LoadContent()
