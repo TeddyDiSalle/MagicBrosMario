@@ -18,6 +18,7 @@ public class QuestionMarkBlock : BlockBase<QuestionMarkBlock>
         OneUp,
         Mushroom,
         PoisonMushroom,
+        AntiGravityCloud,
     }
 
     public Rectangle CollisionBox => new(sprite.Position.X, sprite.Position.Y, sprite.Size.X, sprite.Size.Y);
@@ -56,8 +57,8 @@ public class QuestionMarkBlock : BlockBase<QuestionMarkBlock>
         switch (innerItem)
         {
             case InnerItem.Coin:
-				item = new Coin(MagicBrosMario.INSTANCE.ItemTexture, Position.X + 8, Position.Y);
-				HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.CoinCollected, EventPosition = Position});
+                item = new Coin(MagicBrosMario.INSTANCE.ItemTexture, Position.X + 8, Position.Y);
+                HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.CoinCollected, EventPosition = Position});
 				break;
             case InnerItem.Star:
                 item = new Star(MagicBrosMario.INSTANCE.ItemTexture, Position.X + 1, Position.Y - 5);
@@ -78,11 +79,15 @@ public class QuestionMarkBlock : BlockBase<QuestionMarkBlock>
 				}
 				HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.PowerupAppears, EventPosition = Position });
 				break;
-			case InnerItem.PoisonMushroom:
-					item = new PoisonMushroom(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 5);
-				HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.PowerupAppears, EventPosition = Position });
-				break;
-			default:
+            case InnerItem.PoisonMushroom:
+                item = new PoisonMushroom(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 5);
+                HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.PowerupAppears, EventPosition = Position });
+                break;
+            case InnerItem.AntiGravityCloud:
+                item = new AntiGravityCloud(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y + 2);
+                HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.PowerupAppears, EventPosition = Position });
+                break;
+            default:
                 throw new Exception("impossible default branch");
         }
 
