@@ -142,6 +142,7 @@ public class Player : ICollidable
     public void ResetPlayer()
     {
         ChangeState(new SmallMarioIdleState(this, Texture, TimeFrame, ScaleFactor));
+        IsAlive = true;
     }
     public void PowerUp(Power power)
     {
