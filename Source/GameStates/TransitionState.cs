@@ -35,7 +35,14 @@ namespace MagicBrosMario.Source.GameStates
 
             if (_timer <= 0)
             {
-                MagicBrosMario.INSTANCE.CurrentState = new PlayingState(_nextLevel);
+            if (MagicBrosMario.INSTANCE.Mario.Lives > 0) {
+				MagicBrosMario.INSTANCE.CurrentState = new PlayingState(_nextLevel);
+			}
+            else
+            {
+                MagicBrosMario.INSTANCE.CurrentState = new TitleScreenState();
+            }
+                
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.R))
