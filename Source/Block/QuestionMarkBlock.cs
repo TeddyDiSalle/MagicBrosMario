@@ -57,8 +57,7 @@ public class QuestionMarkBlock : BlockBase<QuestionMarkBlock>
         switch (innerItem)
         {
             case InnerItem.Coin:
-                //item = new Coin(MagicBrosMario.INSTANCE.ItemTexture, Position.X + 8, Position.Y);
-                item = new AntiGravityCloud(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y + 2);
+                item = new Coin(MagicBrosMario.INSTANCE.ItemTexture, Position.X + 8, Position.Y);
                 HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.CoinCollected, EventPosition = Position});
 				break;
             case InnerItem.Star:
