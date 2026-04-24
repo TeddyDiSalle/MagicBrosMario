@@ -84,7 +84,7 @@ public abstract class ParentLevel : ILevel
 
         if (enemyLines[0].Split(',').Length != levWidth || itemLines[0].Split(',').Length != levWidth)
         {
-            throw new Exception("Level: Enemy or Item CSV file has different width than Block CSV file");
+            throw new Exception($"Level: Enemy or Item CSV file has different width than Block CSV file {levWidth} vs {enemyLines[0].Split(',').Length} vs {itemLines[0].Split(',').Length}");
         }
     }
 
@@ -192,6 +192,7 @@ public abstract class ParentLevel : ILevel
 
             for (int c = 0; c < levWidth; c++)
             {
+                //Console.WriteLine($"Loading cell at row {r}, col {c} with blockId '{blockIds[c]}', enemyId '{enemyIds[c]}', itemId '{itemIds[c]}'");
                 LevelCellToken token = LevelCellTokenParser.ParseBlockToken(blockIds[c]);
                 string enemyId = enemyIds[c].Trim();
                 string itemId = itemIds[c].Trim();
