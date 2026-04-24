@@ -42,8 +42,8 @@ public static class ItemFactory {
         return item;
     }
 
-    public static IItems CreateAxe(int x, int y) {
-        var item = new Axe(ITEM_SHARED_TEXTURE, x, y, 0);
+    public static IItems CreateAxe(int x, int y, int group) {
+        var item = new Axe(ITEM_SHARED_TEXTURE, x, y, group);
         return item;
     }
 

@@ -15,6 +15,12 @@ public static class BlockFactory
         BlockSharedTexture.BindTexture(texture);
     }
 
+    public static Block VoidBlock()
+    {
+        var sprite = BlockSharedTexture.NewSprite(16, 16, 16, 16);
+        var block = new Block(sprite);
+        return block;
+    }
     public static Block GroundBlock()
     {
         var sprite = BlockSharedTexture.NewSprite(16, 32, 16, 16);

@@ -1,12 +1,13 @@
 // Made By Teddy
 
+using Microsoft.Xna.Framework;
+
 namespace MagicBrosMario.Source.Level;
 
 public class DebugRoom : ParentLevel
 {
     public DebugRoom()	{
-		MarioStartPosX = 10;
-		MarioStartPosY = 10;
+		MarioStartPos = new Point(10, 10);
 		Name = "Debug";
 		TimeLimit = 999;
 		backgroundMusic = Sound.MusicType.Debug;

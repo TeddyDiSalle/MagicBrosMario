@@ -11,8 +11,7 @@ public interface ILevel
     string ToString(){ return Name; }
     string Name { get; }
     int TimeLimit {get;}
-    int MarioStartPosX { get; }
-    int MarioStartPosY { get; }
+    Point MarioStartPos { get; }
     void Update(GameTime gt);
     void Draw(SpriteBatch sb);
     void AddItem(IItems item);

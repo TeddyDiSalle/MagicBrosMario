@@ -5,14 +5,13 @@ public class Level1 : ParentLevel
 {
 	
 	// x= 100 is start, x= 6100 is right before flagpole
-	int normalStartx = 100;
+	int normalStartx = 3*tileSize;
 	int  rightBeforeFlagpoleX = 6100;
 	int secretRoomX = 6700;
 	public Level1()	{
-		MarioStartPosX = normalStartx;
-		MarioStartPosY = 300;
+		MarioStartPos = new Point(normalStartx, 10*tileSize);
 
-		checkpointPositions.Add(new Point(300, 300));
+		checkpointPositions.Add(new Point(1315, 10*tileSize));
 		
 		Name = "1-1";
 		TimeLimit = 400;

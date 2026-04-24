@@ -34,9 +34,9 @@ public abstract class ParentLevel : ILevel
     protected MusicType backgroundMusic;
     protected float volume = 0.5f;
 
-    private readonly int _blockSize = 16;
-    private readonly int _scale = 2;
-    private int tileSize;
+    private readonly static int _blockSize = 16;
+    private readonly static int _scale = 2;
+    protected static int tileSize= _blockSize * _scale;
 
     protected string[] blockLines;
     protected string[] enemyLines;
@@ -46,8 +46,7 @@ public abstract class ParentLevel : ILevel
     private int levHeight;
     protected List<Point> checkpointPositions = new List<Point>(); 
 
-    public int MarioStartPosX { get; protected set; }
-    public int MarioStartPosY { get; protected set; }
+    public Point MarioStartPos { get; protected set; }
     public string Name { get; protected set; }
     public int TimeLimit { get; protected set; }
 
@@ -64,7 +63,7 @@ public abstract class ParentLevel : ILevel
         Texture2D eTexture,
         Texture2D iTexture)
     {
-        tileSize = _blockSize * _scale;
+        MagicBrosMario.INSTANCE.Mario.LevelStartPosition = MarioStartPos;
          
         ValidateCsvDimensions();
         InitializeLevelArrays();
@@ -152,8 +151,8 @@ public abstract class ParentLevel : ILevel
         {
             if(MagicBrosMario.INSTANCE.Mario.Position.X > checkpointPositions[i].X)
             {
-                MarioStartPosX = checkpointPositions[i].X;
-                MarioStartPosY = checkpointPositions[i].Y;
+                Console.WriteLine("Checkpoint reached at position: " + checkpointPositions[i]);
+                MagicBrosMario.INSTANCE.Mario.LevelStartPosition = checkpointPositions[i];
                 checkpointPositions.RemoveAt(i);
             }
         }
@@ -231,7 +230,14 @@ public abstract class ParentLevel : ILevel
 
         if (string.IsNullOrEmpty(token.BlockId))
         {
-            items[row][col] = ItemManager.CreateItem(itemId, col * tileSize, row * tileSize);
+            int? group = null;
+            if(itemId == "20"){ // axe has appeared so there is a new group of bridge blocks coming up
+                bridgeGroupCounter++;
+                bridgeOrderCounter = 0;
+                group = bridgeGroupCounter;
+            }
+
+            items[row][col] = ItemManager.CreateItem(itemId, col * tileSize, row * tileSize, group);
         }
     }
 
@@ -259,8 +265,7 @@ public abstract class ParentLevel : ILevel
         int? order = null;
         if(token.BlockId == "16") {// bridge block
             if(!(blocks[row][col-1] is BridgeBlock)){ // new bridge group
-                bridgeGroupCounter++;
-                bridgeOrderCounter = 0;
+                //We take care of a new bridge group when the axe shows up on row-1
             }else{ // there is already a bridge block to the left, same group
                 bridgeOrderCounter++;
             }
@@ -336,7 +341,10 @@ public abstract class ParentLevel : ILevel
         blocks = [];
         items = [];
         enemies = [];
-        backgroundSprite.Drop();
+        if(backgroundSprite != null) {
+            backgroundSprite.Drop();
+            backgroundSprite = null;
+        }
         HUD.Instance.LevelOver();
         SoundController.StopMusic();
     }

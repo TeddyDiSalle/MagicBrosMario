@@ -31,8 +31,11 @@ public static class ItemManager
         ItemFactory.BindTexture(texture);
     }
 
-    public static IItems CreateItem(string itemId, int x, int y)
-    {
+    public static IItems CreateItem(string itemId, int x, int y, int? group = null)
+    {   
+        if(group != null) {
+            return ItemFactory.CreateAxe(x, y, (int)group);
+        }
         if (ItemConstructors.TryGetValue(itemId, out var constructor))
         {
              return constructor(x, y);
@@ -51,7 +54,7 @@ public static class ItemManager
             "Star" => (x, y) => ItemFactory.CreateStar(x, y),
             "OneUp" => (x, y) => ItemFactory.CreateOneUp(x, y),
             "FlagPole" => (x, y) => ItemFactory.CreateFlagPole(x, y),
-            "Axe" => (x, y) => ItemFactory.CreateAxe(x, y),
+            "Axe" => (x, y) => ItemFactory.CreateAxe(x, y,0), // should never be called
             "Up1Platform" => (x, y) => ItemFactory.CreateMovingPlatform(x, y, 1, true),
             "Up2Platform" => (x, y) => ItemFactory.CreateMovingPlatform(x, y, 2, true),
             "Up3Platform" => (x, y) => ItemFactory.CreateMovingPlatform(x, y, 3, true),

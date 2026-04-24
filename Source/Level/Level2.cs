@@ -4,9 +4,12 @@ namespace MagicBrosMario.Source.Level;
 public class Level2 : ParentLevel
 {
 	public Level2()	{
-		MarioStartPosX = 25;
-		MarioStartPosY = 300;
-		checkpointPositions.Add(new Point(2000, 300));
+		MarioStartPos = new Point(1*tileSize, 10*tileSize);
+		
+		checkpointPositions.Add(new Point(50, 10*tileSize));
+		checkpointPositions.Add(new Point(2000, 10*tileSize));
+		checkpointPositions.Add(new Point(2000, 10*tileSize));
+		checkpointPositions.Add(new Point(2000, 10*tileSize));
 
 		Name = "1-2";
 		TimeLimit = 500;
