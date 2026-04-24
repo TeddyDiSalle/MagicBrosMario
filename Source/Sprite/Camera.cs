@@ -29,6 +29,7 @@ public class Camera {
         private set;
     }
 
+    public ISprite backgroundSprite { get; set; } = null;
     public HashSet<ISprite> Sprites { get; } = [];
 
     public Point WindowSize {
@@ -74,6 +75,9 @@ public class Camera {
     }
 
     public void Draw(SpriteBatch spriteBatch) {
+        if(backgroundSprite != null){
+            backgroundSprite.Draw(spriteBatch);
+        }
         foreach (var sprite in Sprites) {
             sprite.Draw(spriteBatch);
         }

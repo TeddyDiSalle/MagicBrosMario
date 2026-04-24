@@ -33,7 +33,7 @@ public class QuestionMarkBlock : BlockBase<QuestionMarkBlock>
         this.sprite = sprite;
         this.emptySprite = emptySprite;
         this.innerItem = innerItem;
-        sprite.Visible = true;
+        //sprite.Visible = true;
         emptySprite.Visible = false;
     }
 

@@ -134,6 +134,9 @@ public abstract class ParentLevel : ILevel
         ISprite backgroundSprite = backgroundSharedTexture.NewSprite(0, 0, backWidth, backHeight);
         backgroundSprite.Scale = (float)tileSize / _blockSize;
         backgroundSprite.Visible = true;
+        
+        Camera.Instance.Sprites.Remove(backgroundSprite);
+        Camera.Instance.backgroundSprite = backgroundSprite;
     }
 
     public void Update(GameTime gt)
@@ -300,7 +303,7 @@ public abstract class ParentLevel : ILevel
     public void Clear()
     {
         _activatedEnemies.Clear();
-
+        Camera.Instance.backgroundSprite = null;
         for (int r = 0; r < levHeight; r++)
         {
             for (int c = 0; c < levWidth; c++)

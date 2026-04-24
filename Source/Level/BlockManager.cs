@@ -52,7 +52,8 @@ public static class BlockManager
                     return BlockFactory.QuestionMarkBlock((QuestionMarkBlock.InnerItem)innerItem)
                         .WithPosition(x, y)
                         .WithScale(_scale);
-                case null:
+                case "01":
+                    Console.WriteLine("question mark invis with block id: " + blockId + " at the position " + x + ", " + y);
                     return BlockFactory.InvisQuestionMarkBlock((QuestionMarkBlock.InnerItem)innerItem)
                         .WithPosition(x, y)
                         .WithScale(_scale);
@@ -148,7 +149,7 @@ public static class BlockManager
         return functionName switch
         {
             "VoidBlock" => (x, y) => BlockFactory.GroundBlock().WithPosition(x, y).WithScale(_scale), // fix xml
-            "SkyBlock" => (x, y) => BlockFactory.GroundBlock().WithPosition(x, y).WithScale(_scale), // fix xml
+            "SkyBlock" => (x, y) => BlockFactory.BlueBricks().WithPosition(x, y).WithScale(_scale), // fix xml
             "GroundBlock" => (x, y) => BlockFactory.GroundBlock().WithPosition(x, y).WithScale(_scale),
             "BlueGroundBlock" => (x, y) => BlockFactory.BlueGroundBlock().WithPosition(x, y).WithScale(_scale),
             "Bricks" => (x, y) => BlockFactory.Bricks().WithPosition(x, y).WithScale(_scale),

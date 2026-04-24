@@ -68,18 +68,6 @@
 /processorParam:TextureFormat=Color
 /build:items.png
 
-#begin items.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:items.png
-
 #begin LevelData/1-1/1-1LazyDebugBackground.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -100,6 +88,15 @@
 
 #begin LevelData/1-1/Items1-1.csv
 /copy:LevelData/1-1/Items1-1.csv
+
+#begin LevelData/1-2/Blocks1-2.csv
+/copy:LevelData/1-2/Blocks1-2.csv
+
+#begin LevelData/1-2/Enemies1-2.csv
+/copy:LevelData/1-2/Enemies1-2.csv
+
+#begin LevelData/1-2/Items1-2.csv
+/copy:LevelData/1-2/Items1-2.csv
 
 #begin LevelData/Blocks.xml
 /copy:LevelData/Blocks.xml
