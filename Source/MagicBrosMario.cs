@@ -26,13 +26,14 @@ public class MagicBrosMario : Game
             {
                 playingState.Clear();
             }
+
             if (value is PlayingState newPlayingState)
             {
                 level = newPlayingState._level;
             }
-            Camera.Instance.Position = Point.Zero;// Camera has to go to the beginning of the level
-            _currentStateDONOUTUSE = value;
 
+            Camera.Instance.Position = Point.Zero; // Camera has to go to the beginning of the level
+            _currentStateDONOUTUSE = value;
         }
     }
 
@@ -57,7 +58,7 @@ public class MagicBrosMario : Game
     public enum GameState
     {
         TitleScreen,
-        Loading,   // The black transition screen
+        Loading, // The black transition screen
         Playing,
         Paused,
         GameOver
@@ -77,8 +78,8 @@ public class MagicBrosMario : Game
 
         INSTANCE = this;
 
-		Mario = new Player(MagicBrosMario.INSTANCE.MarioTexture);
-	}
+        Mario = new Player(MagicBrosMario.INSTANCE.MarioTexture);
+    }
 
 
     protected override void LoadContent()
@@ -94,9 +95,8 @@ public class MagicBrosMario : Game
         SoundController.LoadSounds();
 
 
-	
         TitleScreen = Content.Load<Texture2D>("MarioTitleScreen");
-        
+
         EnemyTexture.BindTexture(enemySheet);
         ItemTexture.BindTexture(itemSheet);
         MarioTexture.BindTexture(marioSheet);
@@ -124,14 +124,12 @@ public class MagicBrosMario : Game
 
     protected override void Update(GameTime gameTime)
     {
-
-		
         MarioGameController.Update(gameTime);
 
-		if (!isPaused)
+        if (!isPaused)
         {
-			CurrentState.Update(gameTime);
-		}
+            CurrentState.Update(gameTime);
+        }
 
         //Temp stuff may need some may not
         //Controller.Update(gameTime);
@@ -144,14 +142,13 @@ public class MagicBrosMario : Game
         //HUD.Instance.Update(gameTime);
 
         //CollisionController.Instance.Update(gameTime);
-
     }
 
     protected override void Draw(GameTime gameTime)
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
-        _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+        _spriteBatch.Begin(samplerState: SamplerState.PointClamp, sortMode: SpriteSortMode.BackToFront);
         Camera.Instance.Draw(_spriteBatch);
         CurrentState.Draw(_spriteBatch);
 

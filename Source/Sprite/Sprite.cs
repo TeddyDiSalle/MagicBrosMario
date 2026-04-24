@@ -49,6 +49,7 @@ public class Sprite(
     public Point Size { get; private set; }
 
     public Color Color { get; set; } = Color.White;
+    public float Depth { get; set; } = 1.0f;
 
     private readonly Rectangle sourceRect = new(offsetX, offsetY, width, height);
     private Rectangle destRect = new(0, 0, width, height);
@@ -81,24 +82,22 @@ public class Sprite(
             if (VFlipped)
             {
                 spriteBatch.Draw(texture.Texture, destRect, sourceRect, Color, 180f, Vector2.Zero,
-                    SpriteEffects.None, 0f);
-            }
-            else
+                    SpriteEffects.None, Depth);
+            } else
             {
                 spriteBatch.Draw(texture.Texture, destRect, sourceRect, Color, 0f, Vector2.Zero,
-                    SpriteEffects.FlipHorizontally, 0f);
+                    SpriteEffects.FlipHorizontally, Depth);
             }
-        }
-        else
+        } else
         {
             if (VFlipped)
             {
                 spriteBatch.Draw(texture.Texture, destRect, sourceRect, Color, 0f, Vector2.Zero,
-                    SpriteEffects.FlipVertically, 0f);
-            }
-            else
+                    SpriteEffects.FlipVertically, Depth);
+            } else
             {
-                spriteBatch.Draw(texture.Texture, destRect, sourceRect, Color);
+                spriteBatch.Draw(texture.Texture, destRect, sourceRect, Color, 0f, Vector2.Zero,
+                    SpriteEffects.None, Depth);
             }
         }
     }
@@ -106,5 +105,15 @@ public class Sprite(
     public void Drop()
     {
         Camera.Instance.Sprites.Remove(this);
+    }
+
+    public void Background()
+    {
+        Depth = 0.0f;
+    }
+
+    public void Midground()
+    {
+        Depth = 0.5f;
     }
 }

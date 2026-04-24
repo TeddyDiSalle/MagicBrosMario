@@ -44,6 +44,11 @@ public interface ISprite {
     public Color Color { get; set; }
 
     /// <summary>
+    /// between 0.0 and 1.0
+    /// </summary>
+    public float Depth { get; set; }
+
+    /// <summary>
     /// update function for destination rectangle, used by camera
     /// </summary>
     public void UpdateDestRect();
@@ -66,4 +71,14 @@ public interface ISprite {
     /// destroy this sprite
     /// </summary>
     public void Drop();
+    
+    /// <summary>
+    /// set Depth to 0.0
+    /// </summary>
+    public void Background();
+    
+    /// <summary>
+    /// set Depth to 0.5
+    /// </summary>
+    public void Midground();
 }

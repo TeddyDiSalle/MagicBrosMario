@@ -52,6 +52,7 @@ public class AnimatedSprite(
     public Point Size { get; private set; }
     
     public Color Color { get; set; } = Color.White;
+    public float Depth { get; set; } = 1.0f;
 
     private Rectangle destRect = new(0, 0, frameWidth, frameHeight);
 
@@ -92,15 +93,25 @@ public class AnimatedSprite(
         if (HFlipped)
         {
             spriteBatch.Draw(texture.Texture, destRect, sourceRect, Color, 0f, Vector2.Zero,
-                SpriteEffects.FlipHorizontally, 0f);
+                SpriteEffects.FlipHorizontally, Depth);
         }
         else
         {
-            spriteBatch.Draw(texture.Texture, destRect, sourceRect, Color);
+            spriteBatch.Draw(texture.Texture, destRect, sourceRect, Color, 0f, Vector2.Zero,
+                SpriteEffects.FlipHorizontally, Depth);
         }
     }
 
     public void Drop() {
         Camera.Instance.Sprites.Remove(this);
+    }
+
+    public void Background()
+    {
+        Depth = 0.0f;
+    }
+    public void Midground()
+    {
+        Depth = 0.5f;
     }
 }
