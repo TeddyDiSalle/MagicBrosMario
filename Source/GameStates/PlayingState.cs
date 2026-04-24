@@ -21,12 +21,12 @@ namespace MagicBrosMario.Source.GameStates
 			Texture2D itemSheet = MagicBrosMario.INSTANCE.Content.Load<Texture2D>("items");
 
 			_level.Initialize(MagicBrosMario.INSTANCE.Content, blockTex, enemySheet, itemSheet);
-			 
 
-            //MagicBrosMario.INSTANCE.Mario = new Player(MagicBrosMario.INSTANCE.MarioTexture); // This will have to change so we can keep track of lives and the power of mario between levels
-																							  // But if you die right now, there is no way to come back to live
 
-				
+			//MagicBrosMario.INSTANCE.Mario = new Player(MagicBrosMario.INSTANCE.MarioTexture); // This will have to change so we can keep track of lives and the power of mario between levels
+			// But if you die right now, there is no way to come back to live
+
+			MagicBrosMario.INSTANCE.Mario.SetVelocity(new Vector2(0,0));
             MagicBrosMario.INSTANCE.Mario.SetPositon(new Vector2(_level.MarioStartPosX, _level.MarioStartPosY));
 		}
 
@@ -34,19 +34,21 @@ namespace MagicBrosMario.Source.GameStates
 		{
 			MarioGameController.Update(gameTime);
 			_level.Update(gameTime);
-            MagicBrosMario.INSTANCE.Mario.Update(gameTime);
+            
 
 			
 			int cameraX = Math.Max(Camera.Instance.Position.X, (int)MagicBrosMario.INSTANCE.Mario.Position.X - Camera.Instance.WindowSize.X / 2);
 			Camera.Instance.Position = new Point(cameraX, 0);
 			Camera.Instance.Update(gameTime);
+            MagicBrosMario.INSTANCE.Mario.Update(gameTime);
             HUD.Instance.Update(gameTime);
 			Sound.SoundController.Update(gameTime);
 
             Collision.CollisionController.Instance.Update(gameTime);
+            
 
 
-		}
+        }
 
 		public void Draw(SpriteBatch spriteBatch)
 		{
