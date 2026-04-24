@@ -17,13 +17,13 @@ public class FireMarioIdleState : IPlayerState
 
     private bool IsAttacking = false;
 
-    public FireMarioIdleState(Player Mario, Sprite.SharedTexture texture, float timeFrame, int scaleFactor)
+    public FireMarioIdleState(Player Mario)
     {
         this.Mario = Mario;
-        this.texture = texture;
-        this.timeFrame = timeFrame;
-        this.scaleFactor = scaleFactor;
-        
+        this.texture = Mario.Texture;
+        this.timeFrame = Mario.TimeFrame;
+        this.scaleFactor = Mario.ScaleFactor;
+
         Sprites = [
             texture.NewSprite(2, 164, 16, 32),
             texture.NewAnimatedSprite(2, 164, 16, 32, 4, timeFrame/4),
@@ -43,23 +43,23 @@ public class FireMarioIdleState : IPlayerState
     public void Left(GameTime gameTime)
     {
         Mario.MoveLeft(gameTime);
-        Mario.ChangeState(new FireMarioMoveState(Mario, texture, timeFrame, scaleFactor));
+        Mario.ChangeState(new FireMarioMoveState(Mario));
     }
     public void Right(GameTime gameTime)
     {
         Mario.MoveRight(gameTime);
-        Mario.ChangeState(new FireMarioMoveState(Mario, texture, timeFrame, scaleFactor));
+        Mario.ChangeState(new FireMarioMoveState(Mario));
     }
 
     public void Jump(GameTime gameTime)
     {
         if (!Mario.IsGrounded && !Mario.WasGrounded) { return; }
         Mario.MoveUp(gameTime);
-        Mario.ChangeState(new FireMarioJumpState(Mario, texture, timeFrame, scaleFactor));
+        Mario.ChangeState(new FireMarioJumpState(Mario));
     }
     public void Crouch(GameTime gameTime)
     {
-        Mario.ChangeState(new FireMarioCrouchState(Mario, texture, timeFrame, scaleFactor));
+        Mario.ChangeState(new FireMarioCrouchState(Mario));
     }
     public void Attack()
     {
@@ -74,7 +74,7 @@ public class FireMarioIdleState : IPlayerState
     {
         if (!Mario.Invincible)
         {
-            Mario.ChangeState(new SmallMarioIdleState(Mario, texture, timeFrame, scaleFactor));
+            Mario.ChangeState(new SmallMarioIdleState(Mario));
         }
     }
     public void PowerUp(Power power)
@@ -85,11 +85,14 @@ public class FireMarioIdleState : IPlayerState
                 //Nothing
                 break;
             case Power.Mushroom:
-                Mario.ChangeState(new BigMarioIdleState(Mario, texture, timeFrame, scaleFactor));
+                Mario.ChangeState(new BigMarioIdleState(Mario));
                 break;
             case Power.Star:
                 Mario.Invincible = true;
                 Mario.StarTimeRemaining = 0;
+                break;
+            case Power.Cloud:
+                //Nothing
                 break;
         }
     }

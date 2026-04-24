@@ -94,7 +94,7 @@ public class MagicBrosMario : Game
         SoundController.LoadSounds();
 
 
-		this.Mario = new Player(MarioTexture);
+	
         TitleScreen = Content.Load<Texture2D>("MarioTitleScreen");
         
         EnemyTexture.BindTexture(enemySheet);
@@ -105,6 +105,7 @@ public class MagicBrosMario : Game
 
         setController();
         CurrentState = new TitleScreenState();
+        this.Mario = new Player(MarioTexture);
     }
 
 
