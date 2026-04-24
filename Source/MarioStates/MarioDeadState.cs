@@ -1,5 +1,6 @@
 ﻿using MagicBrosMario.Source.HUDAndScoring;
 using MagicBrosMario.Source.Sound;
+using MagicBrosMario.Source.Sprite;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -12,16 +13,16 @@ public class MarioDeadState : IPlayerState
     private readonly Sprite.Sprite CurrentSprite;
     private readonly float timeFrame;
     private readonly int scaleFactor;
-    public MarioDeadState(Player Mario, Sprite.SharedTexture texture, float timeFrame, int scaleFactor)
+    public MarioDeadState(Player Mario)
     {
         this.Mario = Mario;
-        this.texture = texture;
-        this.timeFrame = timeFrame;
-        this.scaleFactor = scaleFactor;
+        this.texture = Mario.Texture;
+        this.timeFrame = Mario.TimeFrame;
+        this.scaleFactor = Mario.ScaleFactor;
         CurrentSprite = texture.NewSprite(136, 2, 16, 16);
         CurrentSprite.Scale = scaleFactor;
-        //Mario.Lives--;
-        Mario.SetVelocity(new Vector2(0, -7));
+        CurrentSprite.Visible = true;
+        Mario.SetVelocity(new Vector2(0, -6));
         Mario.IsAlive = false;
         Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 16 * scaleFactor, 16 * scaleFactor);
         SoundController.StopMusic();
@@ -77,6 +78,10 @@ public class MarioDeadState : IPlayerState
     public void Update(GameTime gameTime)
     {
         CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
+        if (CurrentSprite.Position.Y > Camera.Instance.Position.Y + Camera.Instance.WindowSize.Y)
+        {
+            Mario.SetVelocity(Vector2.Zero);
+        }
     }
     public void Draw(SpriteBatch spriteBatch)
     {

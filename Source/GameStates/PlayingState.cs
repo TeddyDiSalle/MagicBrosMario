@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MagicBrosMario.Source.MarioStates;
 using System;
+using MagicBrosMario.Source.Collision;
 namespace MagicBrosMario.Source.GameStates
 {
 	public class PlayingState : IGameState
@@ -58,6 +59,7 @@ namespace MagicBrosMario.Source.GameStates
             _level.Clear();
 			//MagicBrosMario.INSTANCE.Mario.Lives--;
 			Camera.Instance.Sprites.Clear();
+			CollisionController.Instance.RemoveAll();
         }
     }
 }

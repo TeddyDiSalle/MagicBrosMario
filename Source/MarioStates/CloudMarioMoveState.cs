@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MagicBrosMario.Source.MarioStates;
 //Vincent Do
-public class BigMarioMoveState : IPlayerState
+public class CloudMarioMoveState : IPlayerState
 {
     private readonly Player Mario;
     private readonly Sprite.SharedTexture texture;
@@ -17,17 +17,17 @@ public class BigMarioMoveState : IPlayerState
 
     private readonly Sprite.ISprite[] Sprites;
     private bool Braking;
-    public BigMarioMoveState(Player Mario)
+    public CloudMarioMoveState(Player Mario)
     {
         this.Mario = Mario;
         this.texture = Mario.Texture;
         this.timeFrame = Mario.TimeFrame;
         this.scaleFactor = Mario.ScaleFactor;
         Sprites = [
-            texture.NewAnimatedSprite(2, 94, 16, 32, 4, timeFrame),
-            texture.NewAnimatedSprite(2, 129, 16, 32, 16, timeFrame/4),
-            texture.NewSprite(69, 94, 16, 32),
-            texture.NewAnimatedSprite(69, 94, 16, 32, 4, timeFrame/4)
+            texture.NewAnimatedSprite(2, 374, 16, 32, 4, timeFrame),
+            texture.NewAnimatedSprite(2, 409, 16, 32, 16, timeFrame/4),
+            texture.NewSprite(69, 374, 16, 32),
+            texture.NewAnimatedSprite(69, 374, 16, 32, 4, timeFrame/4)
         ];
         for (int i = 0; i < Sprites.Length; i++)
         {
@@ -51,11 +51,11 @@ public class BigMarioMoveState : IPlayerState
     {
         if (!Mario.IsGrounded && !Mario.WasGrounded) { return; }
         Mario.MoveUp(gameTime);
-        Mario.ChangeState(new BigMarioJumpState(Mario));
+        Mario.ChangeState(new CloudMarioJumpState(Mario));
     }
     public void Crouch(GameTime gameTime)
     {
-        Mario.ChangeState(new BigMarioCrouchState(Mario));
+        Mario.ChangeState(new CloudMarioCrouchState(Mario));
     }
     public void Attack()
     {
@@ -83,18 +83,18 @@ public class BigMarioMoveState : IPlayerState
                 Mario.StarTimeRemaining = 0;
                 break;
             case Power.Cloud:
-                Mario.ChangeState(new CloudMarioMoveState(Mario));
+                //Nothing
                 break;
         }
     }
 
     public Power GetCurrentPower()
     {
-        return Power.Mushroom;
+        return Power.Cloud;
     }
     public void Idle()
     {
-        Mario.ChangeState(new BigMarioIdleState(Mario));
+        Mario.ChangeState(new CloudMarioIdleState(Mario));
     }
     public void StateChangePrep()
     {

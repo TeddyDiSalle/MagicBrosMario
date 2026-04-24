@@ -21,12 +21,12 @@ public class SmallMarioMoveState : IPlayerState
     private readonly Sprite.ISprite[] Sprites;
     private bool Braking;
 
-    public SmallMarioMoveState(Player Mario, Sprite.SharedTexture texture, float timeFrame, int scaleFactor)
+    public SmallMarioMoveState(Player Mario)
     {
         this.Mario = Mario;
-        this.texture = texture;
-        this.timeFrame = timeFrame;
-        this.scaleFactor = scaleFactor;
+        this.texture = Mario.Texture;
+        this.timeFrame = Mario.TimeFrame;
+        this.scaleFactor = Mario.ScaleFactor;
         Sprites = [
             texture.NewAnimatedSprite(2, 21, 16, 16, 4, timeFrame),
             texture.NewAnimatedSprite(2, 40, 16, 16, 16, timeFrame/4),
@@ -55,7 +55,7 @@ public class SmallMarioMoveState : IPlayerState
     {
         if (!Mario.IsGrounded && !Mario.WasGrounded) { return; }
         Mario.MoveUp(gameTime);
-        Mario.ChangeState(new SmallMarioJumpState(Mario, texture, timeFrame, scaleFactor));
+        Mario.ChangeState(new SmallMarioJumpState(Mario));
     }
     public void Crouch(GameTime gameTime)
     {
@@ -77,14 +77,17 @@ public class SmallMarioMoveState : IPlayerState
         switch (power)
         {
             case Power.FireFlower:
-                Mario.ChangeState(new FireMarioMoveState(Mario, texture, timeFrame, scaleFactor));
+                Mario.ChangeState(new FireMarioMoveState(Mario));
                 break;
             case Power.Mushroom:
-                Mario.ChangeState(new BigMarioMoveState(Mario, texture, timeFrame, scaleFactor));
+                Mario.ChangeState(new BigMarioMoveState(Mario));
                 break;
             case Power.Star:
                 Mario.Invincible = true;
                 Mario.StarTimeRemaining = 0;
+                break;
+            case Power.Cloud:
+                Mario.ChangeState(new CloudMarioMoveState(Mario));
                 break;
         }
     }
@@ -94,7 +97,7 @@ public class SmallMarioMoveState : IPlayerState
     }
     public void Idle()
     {
-        Mario.ChangeState(new SmallMarioIdleState(Mario, texture, timeFrame, scaleFactor));
+        Mario.ChangeState(new SmallMarioIdleState(Mario));
     }
     public void StateChangePrep()
     {
