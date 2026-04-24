@@ -108,6 +108,15 @@ public class PlayerCollisionHandler
                     EventPosition = new Point(item.CollisionBox.X, item.CollisionBox.Y) + new Point(item.CollisionBox.Width / 2, item.CollisionBox.Height / 2)
                 });
                 break;
+            case AntiGravityCloud:
+                player.PowerUp(Power.Cloud);
+                HUD.Instance.SendEvent(new GameEvent
+                {
+                    EventType = GameEventType.PowerupCollected,
+                    Data = item,
+                    EventPosition = new Point(item.CollisionBox.X, item.CollisionBox.Y) + new Point(item.CollisionBox.Width / 2, item.CollisionBox.Height / 2)
+                });
+                break;
             case FlagPole flagPole:
                 if (ReachedFlagpole) { return; }
                 ReachedFlagpole = true;
@@ -120,13 +129,13 @@ public class PlayerCollisionHandler
                 switch (player.GetCurrentPower())
                 {
                     case Power.Mushroom:
-                        sliding = new BigMarioSlideState(player, player.Texture, player.TimeFrame, player.ScaleFactor);
+                        sliding = new BigMarioSlideState(player);
                         break;
                     case Power.FireFlower:
-                        sliding = new FireMarioSlideState(player, player.Texture, player.TimeFrame, player.ScaleFactor);
+                        sliding = new FireMarioSlideState(player);
                         break;
                     default:
-                        sliding = new SmallMarioSlideState(player, player.Texture, player.TimeFrame, player.ScaleFactor);
+                        sliding = new SmallMarioSlideState(player);
                         break;
                 }
                 player.ChangeState(sliding);
@@ -262,16 +271,20 @@ public class PlayerCollisionHandler
         player.IsGrounded = true;
         if (!player.IsJumping || !player.IsAlive) { return; }
         player.IsJumping = false;
+        player.JumpCalls = 0;
         switch (player.GetCurrentPower())
         {
             case Power.None:
-                player.ChangeState(new SmallMarioIdleState(player, player.Texture, player.TimeFrame, player.ScaleFactor));
+                player.ChangeState(new SmallMarioIdleState(player));
                 break;
             case Power.Mushroom:
-                player.ChangeState(new BigMarioIdleState(player, player.Texture, player.TimeFrame, player.ScaleFactor));
+                player.ChangeState(new BigMarioIdleState(player));
                 break;
             case Power.FireFlower: 
-                player.ChangeState(new FireMarioIdleState(player, player.Texture, player.TimeFrame, player.ScaleFactor));
+                player.ChangeState(new FireMarioIdleState(player));
+                break;
+            case Power.Cloud:
+                player.ChangeState(new CloudMarioIdleState(player));
                 break;
             default:
                 break;

@@ -28,10 +28,8 @@ namespace MagicBrosMario.Source.Items
         public Rectangle CollisionBox
         {
             get
-            {
-                int width = (int)(14 * sprite.Scale) - 4;
-                int height = (int)(16 * sprite.Scale) - 1;
-                return new Rectangle(sprite.Position.X + 2, sprite.Position.Y, width, height);
+            { 
+                return new Rectangle(sprite.Position.X + 2, sprite.Position.Y, sprite.Size.X, sprite.Size.Y);
             }
         }
 
@@ -129,9 +127,6 @@ namespace MagicBrosMario.Source.Items
             }
         }
 
-        public bool getCollected()
-        {
-            return isCollected;
-        }
+        public bool getCollected() => isCollected;
     }
 }

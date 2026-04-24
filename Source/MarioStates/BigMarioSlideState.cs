@@ -15,12 +15,12 @@ public class BigMarioSlideState : IPlayerState
     private readonly Sprite.ISprite[] Sprites;
     private double LandingTimer = 0;
 
-    public BigMarioSlideState(Player Mario, Sprite.SharedTexture texture, float timeFrame, int scaleFactor)
+    public BigMarioSlideState(Player Mario)
     {
         this.Mario = Mario;
-        this.texture = texture;
-        this.timeFrame = timeFrame;
-        this.scaleFactor = scaleFactor;
+        this.texture = Mario.Texture;
+        this.timeFrame = Mario.TimeFrame;
+        this.scaleFactor = Mario.ScaleFactor;
         Sprites = [texture.NewSprite(203, 199, 16, 32),
             texture.NewSprite(220, 199, 16, 32)];
         for (int i = 0; i < Sprites.Length; i++)
@@ -98,7 +98,7 @@ public class BigMarioSlideState : IPlayerState
             LandingTimer += gameTime.ElapsedGameTime.TotalSeconds;
             if (LandingTimer >= 0.5)
             {
-                Mario.ChangeState(new BigMarioMoveState(Mario, texture, timeFrame, scaleFactor));
+                Mario.ChangeState(new BigMarioMoveState(Mario));
                 Mario.EndPhase = Player.EndLevelPhase.Walking;
             }
         }

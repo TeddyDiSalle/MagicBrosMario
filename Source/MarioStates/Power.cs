@@ -6,5 +6,6 @@ public enum Power
     None,
     Mushroom,
     FireFlower,
-    Star
+    Star,
+    Cloud
 }
