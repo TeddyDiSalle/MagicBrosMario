@@ -149,9 +149,9 @@ public class MagicBrosMario : Game
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
         _spriteBatch.Begin(samplerState: SamplerState.PointClamp, sortMode: SpriteSortMode.BackToFront);
-        Camera.Instance.Draw(_spriteBatch);
+        
         CurrentState.Draw(_spriteBatch);
-
+        Camera.Instance.Draw(_spriteBatch);
         _spriteBatch.End();
 
 

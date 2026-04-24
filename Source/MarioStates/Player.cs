@@ -279,6 +279,7 @@ public class Player : ICollidable
                 SetVelocity(Vector2.Zero);
                 EndPhase = EndLevelPhase.Walking;
                 ApplyGravity = true;
+                SoundController.PlaySound(SoundType.StageClear, 1.0f);
             }
         }
         if (EndPhase == EndLevelPhase.Walking)
@@ -291,7 +292,6 @@ public class Player : ICollidable
                 EndPhase = EndLevelPhase.InCastleGate;
                 HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.EndOfLevel });
                 SetVisibility(false);
-                MarioGameController.UnMute();
             }
         }
         if (StarTimeRemaining >= StarDuration)
@@ -327,6 +327,7 @@ public class Player : ICollidable
 
         PlayerState.Update(gameTime);
         CollisionBox = new Rectangle((int)Math.Ceiling(Position.X), (int)Math.Ceiling(Position.Y), CollisionBox.Width, CollisionBox.Height);
+        if(EndPhase == EndLevelPhase.InCastleGate) { SetVisibility(false); }
         if (EndPhase != EndLevelPhase.None || PipePhase != PipeTravelPhase.None || EndPhase == EndLevelPhase.InCastleGate) { return; }
         if (DamageTimer < DamageCoolDown)
         {

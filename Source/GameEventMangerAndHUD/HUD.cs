@@ -164,7 +164,6 @@ public class HUD
             case GameEventType.EndOfLevel:
                 levelOver = true;
                 SoundController.StopMusic();
-                SoundController.PlaySound(SoundType.GameOver, 1.0f);
                 break;
             case GameEventType.Death:
                 dead = true;
@@ -201,22 +200,25 @@ public class HUD
         {
             SoundController.ResumeMusic();
         }
-        if (levelOver && !dead)
+        if (levelOver && !dead && !goToTransition)
         {
             time--;
             score += 50;
             //Point incrementing sound
             if (time == 0)
             {
-                waitForNextLevel = true;
+                //waitForNextLevel = true;
+                goToTransition = true;
             }
         }
-        else if (time == 0) { MagicBrosMario.INSTANCE.Mario.KillMario(); }
+        else if (time == 0 && !levelOver) { MagicBrosMario.INSTANCE.Mario.KillMario(); }
         coin.Position = new Point(Camera.Instance.Position.X + 250, 27);
         coin.Update(gametime);
 
         if (goToTransition)
         {
+            MagicBrosMario.INSTANCE.Mario.SetVisibility(false);
+            MarioGameController.Mute();
             TransitionTimer -= (float)gametime.ElapsedGameTime.TotalSeconds;
 
             if (TransitionTimer <= 0)
