@@ -30,10 +30,11 @@ namespace MagicBrosMario.Source.GameStates
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_titleTexture, new Rectangle(0, 0, _titleTexture.Width, _titleTexture.Height),
+            spriteBatch.Draw(_titleTexture,
                 new Rectangle(0, 0,
                     MagicBrosMario.INSTANCE.GraphicsDevice.Viewport.Width,
                     MagicBrosMario.INSTANCE.GraphicsDevice.Viewport.Height),
+                new Rectangle(0, 0, _titleTexture.Width, _titleTexture.Height),
                 Color.White, 0f, Vector2.Zero, SpriteEffects.None, 1.0f);
 
             string text = "Press Enter to Start\n\n  Press R to Reset";
