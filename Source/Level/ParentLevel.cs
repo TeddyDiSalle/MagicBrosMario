@@ -192,6 +192,7 @@ public abstract class ParentLevel : ILevel
 
             for (int c = 0; c < levWidth; c++)
             {
+                //Console.WriteLine($"Loading cell at row {r}, col {c} with blockId '{blockIds[c]}', enemyId '{enemyIds[c]}', itemId '{itemIds[c]}'");
                 LevelCellToken token = LevelCellTokenParser.ParseBlockToken(blockIds[c]);
                 string enemyId = enemyIds[c].Trim();
                 string itemId = itemIds[c].Trim();
