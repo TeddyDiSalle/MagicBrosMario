@@ -26,7 +26,7 @@ public class KoopaCollisionHandler
         }
         if (direction == CollideDirection.Left || direction == CollideDirection.Right)
         {
-            if (koopa.IsWalking())
+            if (koopa.IsWalking() && enemy is not RotatingFireBar)
                 koopa.UnCollide(Rectangle.Intersect(koopa.CollisionBox, enemy.CollisionBox), direction);
         }
     }

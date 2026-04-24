@@ -97,6 +97,7 @@ public class MarioFireball: Items.IItems, Collision.ICollidable
 
     public void OnCollideEnemy(IEnemy enemy, CollideDirection direction)
     {
+        if (enemy is RotatingFireBar) { return; }
         Contact();
     }
 

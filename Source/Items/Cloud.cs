@@ -37,8 +37,9 @@ namespace MagicBrosMario.Source.Items
 
 			position = new Point(positionX, positionY);
 			sprite.Scale = 2f;
+            CollisionController.Instance.AddItem(this);
 
-		}
+        }
 		public void Update(GameTime gameTime)
 		{
 			float time = (float)gameTime.ElapsedGameTime.TotalSeconds;

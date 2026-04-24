@@ -51,6 +51,7 @@ public class PiranhaPlant : IEnemy, ICollidable
         hiddenY = pipeY;
         visibleY = pipeY - RISE_HEIGHT;
         aliveSprite = EnemyTexture.NewAnimatedSprite(125, 180, 16, 23, 2, 0.2f);
+        aliveSprite.Midground();
         aliveSprite.Scale = SCALE;
         Position = new Point(pipeX+15, hiddenY);
         isAlive = true;
