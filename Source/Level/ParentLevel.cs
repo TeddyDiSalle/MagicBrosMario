@@ -84,7 +84,7 @@ public abstract class ParentLevel : ILevel
 
         if (enemyLines[0].Split(',').Length != levWidth || itemLines[0].Split(',').Length != levWidth)
         {
-            throw new Exception("Level: Enemy or Item CSV file has different width than Block CSV file");
+            throw new Exception($"Level: Enemy or Item CSV file has different width than Block CSV file {levWidth} vs {enemyLines[0].Split(',').Length} vs {itemLines[0].Split(',').Length}");
         }
     }
 
