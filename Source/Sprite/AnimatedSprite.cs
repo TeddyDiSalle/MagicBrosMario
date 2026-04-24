@@ -98,7 +98,7 @@ public class AnimatedSprite(
         else
         {
             spriteBatch.Draw(texture.Texture, destRect, sourceRect, Color, 0f, Vector2.Zero,
-                SpriteEffects.FlipHorizontally, Depth);
+                SpriteEffects.None, Depth);
         }
     }
 
