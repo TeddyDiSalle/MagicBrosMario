@@ -49,11 +49,13 @@ public static class KeysAndButtonsConverter{
                 return Buttons.A;
             case Keys.B:
                 return Buttons.B;
-            case Keys.X:
+            case Keys.D0:
                 return Buttons.X;
-            case Keys.Y:
+            case Keys.D1:
                 return Buttons.Y;
             case Keys.Z:
+                return Buttons.RightShoulder;
+            case Keys.N:
                 return Buttons.RightShoulder;
             case Keys.Q:
                 return Buttons.None;
