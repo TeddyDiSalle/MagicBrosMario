@@ -81,7 +81,6 @@ public static class MarioGameController{
         keysNMouseInputMap.Bind(Keys.D, gt => MagicBrosMario.INSTANCE.Mario.Right(gt));
         keysNMouseInputMap.Bind(Keys.Right, gt => MagicBrosMario.INSTANCE.Mario.Right(gt));
         keysNMouseInputMap.Bind(Keys.Z, gt => MagicBrosMario.INSTANCE.Mario.Attack());
-        keysNMouseInputMap.Bind(Keys.N, gt =>  MagicBrosMario.INSTANCE.Mario.Attack());
         keysNMouseInputMap.Bind(Keys.E, gt =>  MagicBrosMario.INSTANCE.Mario.TakeDamage());
         keysNMouseInputMap.Bind(Keys.Q, gt => MagicBrosMario.INSTANCE.Exit()); 
         keysNMouseInputMap.Bind(Keys.R, gt => MagicBrosMario.INSTANCE.CurrentState =new TitleScreenState()); // reset MagicBrosMario.INSTANCE
