@@ -59,8 +59,6 @@ public static class BlockFactory
     {
         var sprite = BlockSharedTexture.NewAnimatedSprite(16, 48, 16, 16, 3, 0.2f);
         var emptySprite = BlockSharedTexture.NewSprite(64, 48, 16, 16);
-        sprite.Midground();
-        emptySprite.Midground();
         var block = new QuestionMarkBlock(sprite, emptySprite, item);
         return block;
     }
@@ -70,19 +68,15 @@ public static class BlockFactory
         AnimatedSprite invisSprite = BlockSharedTexture.NewAnimatedSprite(16, 48, 16, 16, 1, 0.0f);
         invisSprite.Visible = false;
         var emptySprite = BlockSharedTexture.NewSprite(64, 48, 16, 16);
-        invisSprite.Midground();
-        emptySprite.Midground();
         var block = new QuestionMarkBlock(invisSprite, emptySprite, item);
         return block;
     }
 
     public static QuestionMarkBlock BrickQuestionMarkBlock(QuestionMarkBlock.InnerItem item)
     {
-        var sprite = BlockSharedTexture.NewAnimatedSprite(48, 32, 16, 16, 1, 0.0f);
+        var bricksSprite = BlockSharedTexture.NewAnimatedSprite(48, 32, 16, 16, 1, 0.0f);
         var emptySprite = BlockSharedTexture.NewSprite(64, 48, 16, 16);
-        sprite.Midground();
-        emptySprite.Midground();
-        var block = new QuestionMarkBlock(sprite, emptySprite, item);
+        var block = new QuestionMarkBlock(bricksSprite, emptySprite, item);
         return block;
     }
 
@@ -235,8 +229,6 @@ public static class BlockFactory
     {
         var sprite = BlockSharedTexture.NewAnimatedSprite(64, 208, 16, 16, 3, 0.2f);
         var emptySprite = BlockSharedTexture.NewSprite(80, 208, 16, 16);
-        sprite.Midground();
-        emptySprite.Midground();
         var block = new QuestionMarkBlock(sprite, emptySprite, item);
         return block;
     }
