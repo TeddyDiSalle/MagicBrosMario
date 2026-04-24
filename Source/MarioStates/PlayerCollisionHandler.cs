@@ -194,6 +194,12 @@ public class PlayerCollisionHandler
                     SoundController.PlaySound(SoundType.Kick, 1.0f);
                 }
                     break;
+            case MeteorMage:
+                player.TakeDamage();
+                break;
+            case Meteor:
+                player.TakeDamage();
+                break;
             case RotatingFireBar firebar:
                 if (firebar.IsCollidingWithFireballs(CollisionBox))
                 {
