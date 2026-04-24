@@ -301,8 +301,7 @@ internal sealed class DeferredPipeLinkResolver
                 tile.X * tileSize,
                 tile.Y * tileSize,
                 null,
-                teleport,
-                tileSize
+                teleport
             );
 
             blocks[tile.Y][tile.X] = block;
@@ -323,10 +322,7 @@ internal sealed class DeferredPipeLinkResolver
             IBlock block = BlockManager.CreateBlock(
                 blockId,
                 tile.X * tileSize,
-                tile.Y * tileSize,
-                null,
-                null,
-                tileSize
+                tile.Y * tileSize
             );
 
             blocks[tile.Y][tile.X] = block;

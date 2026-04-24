@@ -1,3 +1,5 @@
+using Microsoft.Xna.Framework;
+
 namespace MagicBrosMario.Source.Level;
 public class Level1 : ParentLevel
 {
@@ -9,6 +11,9 @@ public class Level1 : ParentLevel
 	public Level1()	{
 		MarioStartPosX = normalStartx;
 		MarioStartPosY = 300;
+
+		checkpointPositions.Add(new Point(300, 300));
+		
 		Name = "1-1";
 		TimeLimit = 400;
 		backgroundMusic = Sound.MusicType.Level1_1;

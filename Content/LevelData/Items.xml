@@ -6,4 +6,11 @@
     <Item id="03" function="OneUp" />
     <Item id="04" function="Mushroom" />
     <Item id="05" function="FlagPole" />
+    <Item id= "06" function="Axe" />
+    <Item id= "07" function="Up1Platform" />
+    <Item id= "08" function="Up2Platform" />
+    <Item id= "09" function="Up3Platform" />
+    <Item id= "10" function="Down1Platform" />
+    <Item id= "11" function="Down2Platform" />
+    <Item id= "12" function="Down3Platform" />
 </Items>

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using MagicBrosMario.Source.Block;
 using MagicBrosMario.Source.Collision;
 using MagicBrosMario.Source.HUDAndScoring;
@@ -43,6 +44,7 @@ public abstract class ParentLevel : ILevel
 
     private int levWidth;
     private int levHeight;
+    protected List<Point> checkpointPositions = new List<Point>(); 
 
     public int MarioStartPosX { get; protected set; }
     public int MarioStartPosY { get; protected set; }
@@ -51,6 +53,8 @@ public abstract class ParentLevel : ILevel
 
     private readonly DeferredPipeLinkResolver _pipeResolver = new();
     private readonly HashSet<IEnemy> _activatedEnemies = new();
+    private int bridgeGroupCounter = 0;
+    private int bridgeOrderCounter = 0;
 
     private ISprite backgroundSprite;
 
@@ -61,7 +65,7 @@ public abstract class ParentLevel : ILevel
         Texture2D iTexture)
     {
         tileSize = _blockSize * _scale;
-
+         
         ValidateCsvDimensions();
         InitializeLevelArrays();
 
@@ -144,6 +148,16 @@ public abstract class ParentLevel : ILevel
     public void Update(GameTime gt)
     {
         Rectangle activationBounds = GetEnemyActivationBounds();
+        for (int i = 0; i < checkpointPositions.Count; i++)
+        {
+            if(MagicBrosMario.INSTANCE.Mario.Position.X > checkpointPositions[i].X)
+            {
+                MarioStartPosX = checkpointPositions[i].X;
+                MarioStartPosY = checkpointPositions[i].Y;
+                checkpointPositions.RemoveAt(i);
+            }
+        }
+
 
         for (int r = 0; r < levHeight; r++)
         {
@@ -241,13 +255,27 @@ public abstract class ParentLevel : ILevel
             return;
         }
 
+        int? group = null;
+        int? order = null;
+        if(token.BlockId == "16") {// bridge block
+            if(!(blocks[row][col-1] is BridgeBlock)){ // new bridge group
+                bridgeGroupCounter++;
+                bridgeOrderCounter = 0;
+            }else{ // there is already a bridge block to the left, same group
+                bridgeOrderCounter++;
+            }
+            group = bridgeGroupCounter;
+            order = bridgeOrderCounter;
+        }
+
         blocks[row][col] = BlockManager.CreateBlock(
             token.BlockId,
             col * tileSize,
             row * tileSize,
             LevelCellTokenParser.ToQuestionBlockItem(itemId),
             null,
-            tileSize
+            group,
+            order
         );
 
         CollisionController.Instance.AddBlock(blocks[row][col]);
@@ -265,8 +293,7 @@ public abstract class ParentLevel : ILevel
         CollisionController.Instance.AddEnemy(enemies[row][col]);
     }
 
-    private Rectangle GetEnemyActivationBounds()
-    {
+        private Rectangle GetEnemyActivationBounds(){
         const int leftBufferTiles = 2;
         const int rightBufferTiles = 6;
         const int verticalBufferTiles = 2;

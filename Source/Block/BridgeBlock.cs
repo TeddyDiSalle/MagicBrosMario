@@ -44,6 +44,7 @@ public class BridgeBlock(ISprite sprite, int group, int order) : BlockBase<Brick
         CollisionController.Instance.RemoveBlock(this);
     }
 
+
     public override void OnCollidePlayer(Player player, CollideDirection direction) { }
     public override void OnCollideItem(IItems item, CollideDirection direction) { }
     public override void OnCollideEnemy(IEnemy enemy, CollideDirection direction) { }

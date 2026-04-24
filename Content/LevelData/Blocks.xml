@@ -16,4 +16,12 @@
     <Block id="13" function="BottomPipe"/>
     <Block id="14" function="TopPipeOpening"/>
     <Block id="15" function="BottomPipeOpening"/>
+    <Block id="16" function="BridgeBlock"/>
+    <Block id="17" function="MinecraftLogBlock"/>
+    <Block id="18" function="MinecraftLeafBlock"/>
+    <Block id="19" function="MinecraftCobblestoneBlock"/>
+    <Block id="20" function="MinecraftChestBlock"/>
+    <Block id="21" function="MinecraftObsidianBlock"/>
+    <Block id="22" function="MinecraftBricksBlock"/>
+
 </Blocks>

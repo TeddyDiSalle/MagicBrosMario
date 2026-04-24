@@ -43,6 +43,8 @@ public static class BlockManager
         int y,
         QuestionMarkBlock.InnerItem? innerItem = null,
         PipeTeleport? pipeTeleport = null,
+        int? group = null,
+        int? order = null,
         int tileSize = 32)
     {
         if (innerItem != null) // ? mark block
@@ -59,6 +61,10 @@ public static class BlockManager
                         .WithScale(_scale);
                 case "04":
                     return BlockFactory.BrickQuestionMarkBlock((QuestionMarkBlock.InnerItem)innerItem)
+                        .WithPosition(x, y)
+                        .WithScale(_scale);
+                case "20":
+                    return BlockFactory.MinecraftChestBlock((QuestionMarkBlock.InnerItem)innerItem)
                         .WithPosition(x, y)
                         .WithScale(_scale);
                 default:
@@ -84,6 +90,13 @@ public static class BlockManager
             }
 
             return CreatePipeEntryBlock(blockId, x, y, exitPixels, exitDirection);
+        }
+
+        if(order != null) // bridge block
+        {
+            return BlockFactory.BridgeBlock((int)group, (int)order)
+                .WithPosition(x, y)
+                .WithScale(_scale);
         }
 
         if (BlockConstructors.TryGetValue(blockId, out var constructor))
@@ -166,6 +179,13 @@ public static class BlockManager
             "BottomPipeOpening" => (x, y) => BlockFactory.PipeEntryBlock(PipeEntryBlock.PipeDirection.Left, PipeEntryBlock.PipeDirection.Down, null, null).WithPosition(x, y).WithScale(_scale),
             "UpsideDownLeftPipeOpening" => (x, y) => BlockFactory.PipeEntryBlock(PipeEntryBlock.PipeDirection.Down, PipeEntryBlock.PipeDirection.Left, null, null).WithPosition(x, y).WithScale(_scale),
             "UpsideDownRightPipeOpening" => (x, y) => BlockFactory.PipeEntryBlock(PipeEntryBlock.PipeDirection.Down, PipeEntryBlock.PipeDirection.Right, null, null).WithPosition(x, y).WithScale(_scale),
+            "BridgeBlock" => (x, y) => BlockFactory.BridgeBlock(0,0).WithPosition(x, y).WithScale(_scale),// should never be called directly
+            "MinecraftLogBlock" => (x, y) => BlockFactory.MinecraftLogBlock().WithPosition(x, y).WithScale(_scale),
+             "MinecraftLeafBlock" => (x, y) => BlockFactory.MinecraftLeafBlock().WithPosition(x, y).WithScale(_scale),
+             "MinecraftCobblestoneBlock" => (x, y) => BlockFactory.MinecraftCobblestoneBlock().WithPosition(x, y).WithScale(_scale),
+             "MinecraftChestBlock" => (x, y) => BlockFactory.GroundBlock().WithPosition(x, y).WithScale(_scale), // should never be called directly
+             "MinecraftObsidianBlock" => (x, y) => BlockFactory.MinecraftObsidianBlock().WithPosition(x, y).WithScale(_scale),
+             "MinecraftBricksBlock" => (x, y) => BlockFactory.MinecraftBricksBlock().WithPosition(x, y).WithScale(_scale),
 
             _ => throw new ArgumentException($"Unknown block function: {functionName}")
         };
