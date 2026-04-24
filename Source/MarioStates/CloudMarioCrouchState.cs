@@ -80,7 +80,7 @@ public class CloudMarioCrouchState : IPlayerState
                 break;
         }
     }
-    public Power GetCurrentPower()
+    public Power GetCurrentMode()
     {
         return Power.Cloud;
     }

@@ -25,9 +25,10 @@ namespace MagicBrosMario.Source.GameStates
             _font = MagicBrosMario.INSTANCE.font;
 
 			MagicBrosMario.INSTANCE.Mario.ResetPlayer();
+            MagicBrosMario.INSTANCE.Mario.SetVisibility(false);
 
 
-		}
+        }
 
         public void Update(GameTime gameTime)
         {

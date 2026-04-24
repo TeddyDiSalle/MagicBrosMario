@@ -126,7 +126,7 @@ public class PlayerCollisionHandler
                 player.CastleEntranceX = player.Position.X + 230;
                 player.EndPhase = EndLevelPhase.SlidingDown;
                 IPlayerState sliding = null;
-                switch (player.GetCurrentPower())
+                switch (player.GetCurrentMode())
                 {
                     case Power.Mushroom:
                         sliding = new BigMarioSlideState(player);
@@ -134,8 +134,11 @@ public class PlayerCollisionHandler
                     case Power.FireFlower:
                         sliding = new FireMarioSlideState(player);
                         break;
-                    default:
+                    case Power.None:
                         sliding = new SmallMarioSlideState(player);
+                        break;
+                    case Power.Cloud:
+                        sliding = new CloudMarioSlideState(player);
                         break;
                 }
                 player.ChangeState(sliding);
@@ -151,7 +154,6 @@ public class PlayerCollisionHandler
         if (!player.IsAlive) { return; }
         if (player.Invincible) 
         {
-            SoundController.PlaySound(SoundType.Stomp, 1.0f);
             return; 
         }
         switch (enemy)
@@ -278,7 +280,7 @@ public class PlayerCollisionHandler
         if (!player.IsJumping || !player.IsAlive) { return; }
         player.IsJumping = false;
         player.JumpCalls = 0;
-        switch (player.GetCurrentPower())
+        switch (player.GetCurrentMode())
         {
             case Power.None:
                 player.ChangeState(new SmallMarioIdleState(player));

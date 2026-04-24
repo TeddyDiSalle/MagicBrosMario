@@ -86,7 +86,7 @@ public class BigMarioIdleState : IPlayerState
                 break;
         }
     }
-    public Power GetCurrentPower()
+    public Power GetCurrentMode()
     {
         return Power.Mushroom;
     }

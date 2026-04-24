@@ -31,6 +31,7 @@ namespace MagicBrosMario.Source.Items
 			sprite.Scale = 2f;
 			floatPosition = new Vector2(positionX, positionY);
 			sprite.Position = floatPosition.ToPoint();
+			sprite.Midground();
 			CollisionController.Instance.AddItem(this);
 		}
 

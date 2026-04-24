@@ -153,9 +153,14 @@ public class Player : ICollidable
     {
         PlayerState.PowerUp(power);
     }
+    public Power GetCurrentMode()
+    {
+        return PlayerState.GetCurrentMode();
+    }
     public Power GetCurrentPower()
     {
-        return PlayerState.GetCurrentPower();
+        
+        return (Invincible) ? Power.Star : PlayerState.GetCurrentMode();
     }
     public void ChangeState(IPlayerState state)
     {
@@ -230,7 +235,7 @@ public class Player : ICollidable
         }
         if (!WasGrounded || ApplyGravity)
         {
-            Velocity += new Vector2(0, (PlayerState.GetCurrentPower() == Power.Cloud) ? Gravity*3/4 : Gravity);
+            Velocity += new Vector2(0, (PlayerState.GetCurrentMode() == Power.Cloud) ? Gravity*3/4 : Gravity);
         }
         Position += Velocity;
         if (PipePhase == PipeTravelPhase.Entering)
@@ -318,9 +323,10 @@ public class Player : ICollidable
         {
             KillMario();
         }
-        CollisionBox = new Rectangle((int)Math.Ceiling(Position.X),(int)Math.Ceiling(Position.Y),CollisionBox.Width, CollisionBox.Height);
+
         PlayerState.Update(gameTime);
-        if(EndPhase != EndLevelPhase.None || PipePhase != PipeTravelPhase.None || EndPhase == EndLevelPhase.InCastleGate) { return; }
+        CollisionBox = new Rectangle((int)Math.Ceiling(Position.X), (int)Math.Ceiling(Position.Y), CollisionBox.Width, CollisionBox.Height);
+        if (EndPhase != EndLevelPhase.None || PipePhase != PipeTravelPhase.None || EndPhase == EndLevelPhase.InCastleGate) { return; }
         if (DamageTimer < DamageCoolDown)
         {
             bool visible = Math.Sin(DamageTimer * 35) > 0;
