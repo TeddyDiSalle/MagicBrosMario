@@ -42,4 +42,35 @@ public static class ItemFactory {
         return item;
     }
 
+    public static IItems CreateAxe(int x, int y) {
+        var item = new Axe(ITEM_SHARED_TEXTURE, x, y, 0);
+        return item;
+    }
+
+    public static IItems CreateMovingPlatform(int x, int y, int size, bool goUp) {
+        int direction = goUp ? -1 : 1;
+
+        IItems item;
+        switch (size)
+        {   case 1:
+                item = new MovingPlatform_Size1(ITEM_SHARED_TEXTURE, Camera.Instance.WindowSize.Y, x, y, direction);
+                break;
+            case 2:
+                item = new MovingPlatform_Size2(ITEM_SHARED_TEXTURE, Camera.Instance.WindowSize.Y, x, y, direction);
+                break;
+            case 3:
+                item = new MovingPlatform_Size3(ITEM_SHARED_TEXTURE, Camera.Instance.WindowSize.Y, x, y, direction);
+                break;
+            default:
+                item = new MovingPlatform_Size1(ITEM_SHARED_TEXTURE, Camera.Instance.WindowSize.Y, x, y, direction);
+                break;
+        }
+        return item;
+    }
+
+    public static IItems CreateAntiGravityCloud(int x, int y) {
+        var item = new AntiGravityCloud(ITEM_SHARED_TEXTURE, x, y);
+        return item;
+    }
+
 }

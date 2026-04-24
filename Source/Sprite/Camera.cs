@@ -68,6 +68,10 @@ public class Camera {
     }
 
     public void Update(GameTime gameTime) {
+        if(backgroundSprite != null){
+            backgroundSprite.Update(gameTime);
+            backgroundSprite.UpdateDestRect();
+        }
         foreach (var sprite in Sprites) {
             sprite.Update(gameTime);
             sprite.UpdateDestRect();
