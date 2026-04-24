@@ -95,7 +95,7 @@ public class PiranhaPlant : IEnemy, ICollidable
                 Position = new Point(Position.X, newY);
         }
 
-        aliveSprite.Visible = isAlive;
+        aliveSprite.Visible = isAlive && Position.Y < hiddenY;
     }
 
     public void Kill()
