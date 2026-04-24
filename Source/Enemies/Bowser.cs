@@ -1,6 +1,5 @@
 using MagicBrosMario.Source.Block;
 using MagicBrosMario.Source.Collision;
-using MagicBrosMario.Source.HUDAndScoring;
 using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.MarioStates;
 using MagicBrosMario.Source.Sprite;
@@ -18,22 +17,27 @@ public class Bowser : IEnemy, ICollidable
     private const float GRAVITY = 0.35f;
     private const int MAX_HEALTH = 20;
     private const float SCALE = 2f;
+    private const float MIN_DIRECTION_CHANGE_TIME = 1.0f;
+    private const float MAX_DIRECTION_CHANGE_TIME = 3.0f;
 
     private Sprite.AnimatedSprite walkingRightSprite;
     private Sprite.AnimatedSprite walkingLeftSprite;
     private SharedTexture fireTexture;
     private List<Fireball> activeFireballs = new();
+    private BowserCollisionHandler collisionHandler;
 
     private bool movingRight = true;
     private bool isAlive = true;
     private float fireCooldownTimer = 0f;
     private float velocityY = 0f;
     private int health = MAX_HEALTH;
+    private static readonly System.Random random = new System.Random();
+    private float directionChangeTimer;
 
     public Point Position
     {
         get => walkingRightSprite.Position;
-        private set
+        set
         {
             walkingRightSprite.Position = value;
             walkingLeftSprite.Position = value;
@@ -61,9 +65,17 @@ public class Bowser : IEnemy, ICollidable
         walkingLeftSprite.Scale = SCALE;
         Position = new Point(x, y);
         fireCooldownTimer = FIRE_COOLDOWN;
+        directionChangeTimer = GetRandomDirectionTime();
+        collisionHandler = new BowserCollisionHandler(this);
+    }
+
+    private float GetRandomDirectionTime()
+    {
+        return MIN_DIRECTION_CHANGE_TIME + (float)random.NextDouble() * (MAX_DIRECTION_CHANGE_TIME - MIN_DIRECTION_CHANGE_TIME);
     }
 
     public bool GetIsAlive() => isAlive;
+    public bool IsMovingRight() => movingRight;
 
     public void TakeDamage()
     {
@@ -71,9 +83,9 @@ public class Bowser : IEnemy, ICollidable
         if (health <= 0)
         {
             Kill();
-            HUD.Instance.SendEvent(new GameEvent
+            HUDAndScoring.HUD.Instance.SendEvent(new HUDAndScoring.GameEvent
             {
-                EventType = GameEventType.EnemyKilledByFireball,
+                EventType = HUDAndScoring.GameEventType.EnemyKilledByFireball,
                 EventPosition = Position,
                 Data = this
             });
@@ -122,6 +134,13 @@ public class Bowser : IEnemy, ICollidable
         var sec = gameTime.ElapsedGameTime.TotalSeconds;
         var dx = (int)(sec * VELOCITY);
 
+        directionChangeTimer -= (float)sec;
+        if (directionChangeTimer <= 0)
+        {
+            movingRight = !movingRight;
+            directionChangeTimer = GetRandomDirectionTime();
+        }
+
         if (movingRight)
             Position = new Point(Position.X + dx, Position.Y);
         else
@@ -136,7 +155,9 @@ public class Bowser : IEnemy, ICollidable
         CollisionController.Instance.RemoveEnemy(this);
     }
 
-    private void UnCollide(Rectangle intersect, CollideDirection direction)
+    public void ResetGravity() => velocityY = 0;
+
+    public void UnCollide(Rectangle intersect, CollideDirection direction)
     {
         if (direction == CollideDirection.Left)
         {
@@ -153,28 +174,8 @@ public class Bowser : IEnemy, ICollidable
     // Camera handles drawing
     public void Draw(SpriteBatch _spriteBatch) { }
 
-    public void OnCollidePlayer(Player player, CollideDirection direction) { }
-
-    public void OnCollideItem(IItems item, CollideDirection direction)
-    {
-        if (item is MarioFireball)
-            TakeDamage();
-    }
-
-    public void OnCollideEnemy(IEnemy enemy, CollideDirection direction) { }
-
-    public void OnCollideBlock(IBlock block, CollideDirection direction)
-    {
-        if (direction == CollideDirection.Down)
-        {
-            Rectangle intersect = Rectangle.Intersect(CollisionBox, block.CollisionBox);
-            Position = new Point(Position.X, Position.Y - intersect.Height);
-            velocityY = 0;
-        }
-        else if (direction == CollideDirection.Left || direction == CollideDirection.Right)
-        {
-            if (block.CollisionBox.Y < Position.Y + CollisionBox.Height - 4)
-                UnCollide(Rectangle.Intersect(CollisionBox, block.CollisionBox), direction);
-        }
-    }
+    public void OnCollidePlayer(Player player, CollideDirection direction) => collisionHandler.OnCollidePlayer(player, direction);
+    public void OnCollideItem(IItems item, CollideDirection direction) => collisionHandler.OnCollideItem(item, direction);
+    public void OnCollideEnemy(IEnemy enemy, CollideDirection direction) => collisionHandler.OnCollideEnemy(enemy, direction);
+    public void OnCollideBlock(IBlock block, CollideDirection direction) => collisionHandler.OnCollideBlock(block, direction);
 }
