@@ -95,7 +95,7 @@ public static class MarioGameController{
     {
         if(!muted){
             MNKUpdate(gameTime);
-            GPUpdate(gameTime);
+            //GPUpdate(gameTime);
         }
     }
 
