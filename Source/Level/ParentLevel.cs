@@ -309,8 +309,11 @@ public abstract class ParentLevel : ILevel
         blocks = [];
         items = [];
         enemies = [];
-        backgroundSprite.Drop();
-        HUD.Instance.LevelOver();
+        if (backgroundSprite != null)
+        {
+            backgroundSprite.Drop();
+        }
+            HUD.Instance.LevelOver();
         SoundController.StopMusic();
     }
 }

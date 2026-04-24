@@ -18,6 +18,7 @@ namespace MagicBrosMario.Source.GameStates
             //_font = _game.Content.Load<SpriteFont>("font");
             MagicBrosMario.INSTANCE.Mario.SetVisibility(false);
             MagicBrosMario.INSTANCE.Mario.Lives = 3;
+            MarioGameController.UnMute();
         }
 
         public void Update(GameTime gameTime)

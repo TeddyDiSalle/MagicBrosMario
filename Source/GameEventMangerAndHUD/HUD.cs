@@ -209,6 +209,7 @@ public class HUD
             if (time == 0)
             {
                 waitForNextLevel = true;
+                goToTransition = true;
             }
         }
         else if (time == 0) { MagicBrosMario.INSTANCE.Mario.KillMario(); }
@@ -217,6 +218,8 @@ public class HUD
 
         if (goToTransition)
         {
+            MagicBrosMario.INSTANCE.Mario.SetVisibility(false);
+            MarioGameController.Mute();
             TransitionTimer -= (float)gametime.ElapsedGameTime.TotalSeconds;
 
             if (TransitionTimer <= 0)
