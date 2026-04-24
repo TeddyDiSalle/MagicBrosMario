@@ -60,9 +60,10 @@ public static class BlockFactory
 
     public static QuestionMarkBlock InvisQuestionMarkBlock(QuestionMarkBlock.InnerItem item)
     {
-        AnimatedSprite sprite = null;
+        AnimatedSprite invisSprite = BlockSharedTexture.NewAnimatedSprite(16, 48, 16, 16, 1, 0.0f);
+        invisSprite.Visible = false;
         var emptySprite = BlockSharedTexture.NewSprite(64, 48, 16, 16);
-        var block = new QuestionMarkBlock(sprite, emptySprite, item);
+        var block = new QuestionMarkBlock(invisSprite, emptySprite, item);
         return block;
     }
 
@@ -177,5 +178,62 @@ public static class BlockFactory
 
         return new PipeEntryBlock(
             sprite, facing, half, exit, exitDirection);
+    }
+
+    /// <summary>
+    /// bridge block
+    /// </summary>
+    /// <param name="group">group number, blocks of same bridge should be in the same group</param>
+    /// <param name="order">collapse ordering of the blocks, start from 1(first), avoid having same order for two blocks</param>
+    /// <returns></returns>
+    public static BridgeBlock BridgeBlock(int group, int order)
+    {
+        var sprite = BlockSharedTexture.NewSprite(96, 32, 16, 16);
+        var block = new BridgeBlock(sprite, group, order);
+        return block;
+    }
+
+    public static Block MinecraftLogBlock()
+    {
+        var sprite = BlockSharedTexture.NewSprite(16, 208, 16, 16);
+        var block = new Block(sprite);
+        return block;
+    }
+
+    public static Block MinecraftLeafBlock()
+    {
+        var sprite = BlockSharedTexture.NewSprite(32, 208, 16, 16);
+        var block = new Block(sprite);
+        return block;
+    }
+
+    public static Block MinecraftCobblestoneBlock()
+    {
+        var sprite = BlockSharedTexture.NewSprite(48, 208, 16, 16);
+        var block = new Block(sprite);
+        return block;
+    }
+
+    public static QuestionMarkBlock MinecraftChestBlock(QuestionMarkBlock.InnerItem item)
+    {
+        var sprite = BlockSharedTexture.NewAnimatedSprite(64, 208, 16, 16, 3, 0.2f);
+        var emptySprite = BlockSharedTexture.NewSprite(80, 208, 16, 16);
+        var block = new QuestionMarkBlock(sprite, emptySprite, item);
+        return block;
+    }
+
+    public static Block MinecraftObsidianBlock()
+    {
+        var sprite = BlockSharedTexture.NewSprite(96, 208, 16, 16);
+        // replace this with actual obsidian
+        var block = new Block(sprite);
+        return block;
+    }
+
+    public static BrickBlock MinecraftBricksBlock()
+    {
+        var sprite = BlockSharedTexture.NewSprite(112, 208, 16, 16);
+        var block = new BrickBlock(sprite);
+        return block;
     }
 }

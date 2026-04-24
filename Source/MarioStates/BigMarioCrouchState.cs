@@ -14,12 +14,12 @@ public class BigMarioCrouchState : IPlayerState
 
     private readonly Sprite.ISprite[] Sprites;
 
-    public BigMarioCrouchState(Player Mario, Sprite.SharedTexture texture, float timeFrame, int scaleFactor)
+    public BigMarioCrouchState(Player Mario)
     {
         this.Mario = Mario;
-        this.texture = texture;
-        this.timeFrame = timeFrame;
-        this.scaleFactor = scaleFactor;
+        this.texture = Mario.Texture;
+        this.timeFrame = Mario.TimeFrame;
+        this.scaleFactor = Mario.ScaleFactor;
         Sprites = [
             texture.NewSprite(136, 94, 16, 32),
             texture.NewAnimatedSprite(136, 94, 16, 32, 4, timeFrame/4)
@@ -58,7 +58,7 @@ public class BigMarioCrouchState : IPlayerState
     {
         if (!Mario.Invincible)
         {
-            Mario.ChangeState(new SmallMarioIdleState(Mario, texture, timeFrame, scaleFactor));
+            Mario.ChangeState(new SmallMarioIdleState(Mario));
         }
     }
     public void PowerUp(Power power)
@@ -66,7 +66,7 @@ public class BigMarioCrouchState : IPlayerState
         switch (power)
         {
             case Power.FireFlower:
-                Mario.ChangeState(new FireMarioCrouchState(Mario, texture, timeFrame, scaleFactor));
+                Mario.ChangeState(new FireMarioCrouchState(Mario));
                 break;
             case Power.Mushroom:
                 //Nothing
@@ -74,6 +74,9 @@ public class BigMarioCrouchState : IPlayerState
             case Power.Star:
                 Mario.Invincible = true;
                 Mario.StarTimeRemaining = 0;
+                break;
+            case Power.Cloud:
+                Mario.ChangeState(new CloudMarioCrouchState(Mario));
                 break;
         }
     }
@@ -119,7 +122,7 @@ public class BigMarioCrouchState : IPlayerState
         CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
         if (!Mario.IsCrouching)
         {
-            Mario.ChangeState(new BigMarioIdleState(Mario, texture, timeFrame, scaleFactor));
+            Mario.ChangeState(new BigMarioIdleState(Mario));
         }
     }
     public void Draw(SpriteBatch spriteBatch)

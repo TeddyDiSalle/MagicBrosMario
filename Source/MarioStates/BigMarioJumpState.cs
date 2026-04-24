@@ -11,16 +11,15 @@ public class BigMarioJumpState : IPlayerState
     private Sprite.ISprite CurrentSprite;
     private readonly float timeFrame;
     private readonly int scaleFactor;
-    private const int maxJumpCalls = 6;
-    private int JumpCalls = 0;
+
     private readonly Sprite.ISprite[] Sprites;
 
-    public BigMarioJumpState(Player Mario, Sprite.SharedTexture texture, float timeFrame, int scaleFactor)
+    public BigMarioJumpState(Player Mario)
     {
         this.Mario = Mario;
-        this.texture = texture;
-        this.timeFrame = timeFrame;
-        this.scaleFactor = scaleFactor;
+        this.texture = Mario.Texture;
+        this.timeFrame = Mario.TimeFrame;
+        this.scaleFactor = Mario.ScaleFactor;
         Sprites = [texture.NewSprite(69, 59, 16, 32),
             texture.NewAnimatedSprite(69, 59, 16, 32, 4, timeFrame/4)];
         for (int i = 0; i < Sprites.Length; i++)
@@ -33,7 +32,7 @@ public class BigMarioJumpState : IPlayerState
         CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
         Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 16 * scaleFactor, 32 * scaleFactor);
         SoundController.PlaySound(SoundType.JumpSuper, 1.0f);
-        Mario.IsJumping = true;
+        Mario.IsJumping = true; 
         Mario.IsGrounded = false;
     }
     public void Left(GameTime gameTime)
@@ -46,15 +45,15 @@ public class BigMarioJumpState : IPlayerState
     }
     public void Jump(GameTime gameTime)
     {
-        if (Mario.IsJumping && JumpCalls < maxJumpCalls)
+        if (Mario.IsJumping && Mario.JumpCalls < Player.maxJumpCalls)
         {
             Mario.MoveUp(gameTime, 0.3f);
-            JumpCalls++;
+            Mario.JumpCalls++;
         }
     }
     public void Crouch(GameTime gameTime)
     {
-        Mario.ChangeState(new BigMarioCrouchState(Mario, texture, timeFrame, scaleFactor));
+        Mario.ChangeState(new BigMarioCrouchState(Mario));
     }
     public void Attack()
     {
@@ -64,7 +63,7 @@ public class BigMarioJumpState : IPlayerState
     {
         if (!Mario.Invincible)
         {
-            Mario.ChangeState(new SmallMarioJumpState(Mario, texture, timeFrame, scaleFactor));
+            Mario.ChangeState(new SmallMarioJumpState(Mario));
         }
     }
     public void PowerUp(Power power)
@@ -72,7 +71,7 @@ public class BigMarioJumpState : IPlayerState
         switch (power)
         {
             case Power.FireFlower:
-                Mario.ChangeState(new FireMarioJumpState(Mario, texture, timeFrame, scaleFactor));
+                Mario.ChangeState(new FireMarioJumpState(Mario));
                 break;
             case Power.Mushroom:
                 //Nothing
@@ -80,6 +79,9 @@ public class BigMarioJumpState : IPlayerState
             case Power.Star:
                 Mario.Invincible = true;
                 Mario.StarTimeRemaining = 0;
+                break;
+            case Power.Cloud:
+                Mario.ChangeState(new CloudMarioJumpState(Mario));
                 break;
         }
     }
@@ -126,10 +128,6 @@ public class BigMarioJumpState : IPlayerState
         if (Mario.IsGrounded)
         {
             Mario.IsJumping = false;
-        }
-        if (Mario.Velocity.Y == 0)
-        {
-            Mario.ChangeState(new BigMarioIdleState(Mario, texture, timeFrame, scaleFactor));
         }
     }
     public void Draw(SpriteBatch spriteBatch)

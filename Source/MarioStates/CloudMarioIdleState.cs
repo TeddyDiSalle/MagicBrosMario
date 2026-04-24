@@ -4,58 +4,57 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MagicBrosMario.Source.MarioStates;
 //Vincent Do
-public class BigMarioMoveState : IPlayerState
+public class CloudMarioIdleState : IPlayerState
 {
     private readonly Player Mario;
     private readonly Sprite.SharedTexture texture;
-
     private Sprite.ISprite CurrentSprite;
-    private int Frame = 0;
     private readonly float timeFrame;
-    private double timer = 0;
     private readonly int scaleFactor;
 
     private readonly Sprite.ISprite[] Sprites;
-    private bool Braking;
-    public BigMarioMoveState(Player Mario)
+
+    public CloudMarioIdleState(Player Mario)
     {
         this.Mario = Mario;
         this.texture = Mario.Texture;
         this.timeFrame = Mario.TimeFrame;
         this.scaleFactor = Mario.ScaleFactor;
+
         Sprites = [
-            texture.NewAnimatedSprite(2, 94, 16, 32, 4, timeFrame),
-            texture.NewAnimatedSprite(2, 129, 16, 32, 16, timeFrame/4),
-            texture.NewSprite(69, 94, 16, 32),
-            texture.NewAnimatedSprite(69, 94, 16, 32, 4, timeFrame/4)
+            texture.NewSprite(2, 339, 16, 32),
+            texture.NewAnimatedSprite(2, 339, 16, 32, 4, timeFrame/4)
         ];
         for (int i = 0; i < Sprites.Length; i++)
         {
             Sprites[i].Scale = scaleFactor;
             Sprites[i].Visible = false;
         }
-        CurrentSprite = Sprites[Frame];
+        CurrentSprite = Sprites[0];
         CurrentSprite.Visible = true;
         CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
-        Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 16*scaleFactor, 32*scaleFactor);
+        Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 16 * scaleFactor, 32 * scaleFactor);
     }
     public void Left(GameTime gameTime)
     {
         Mario.MoveLeft(gameTime);
+        Mario.ChangeState(new CloudMarioMoveState(Mario));
     }
     public void Right(GameTime gameTime)
     {
         Mario.MoveRight(gameTime);
+        Mario.ChangeState(new CloudMarioMoveState(Mario));
     }
+
     public void Jump(GameTime gameTime)
     {
         if (!Mario.IsGrounded && !Mario.WasGrounded) { return; }
         Mario.MoveUp(gameTime);
-        Mario.ChangeState(new BigMarioJumpState(Mario));
+        Mario.ChangeState(new CloudMarioJumpState(Mario));
     }
     public void Crouch(GameTime gameTime)
     {
-        Mario.ChangeState(new BigMarioCrouchState(Mario));
+        Mario.ChangeState(new CloudMarioCrouchState(Mario));
     }
     public void Attack()
     {
@@ -65,7 +64,7 @@ public class BigMarioMoveState : IPlayerState
     {
         if (!Mario.Invincible)
         {
-            Mario.ChangeState(new SmallMarioMoveState(Mario));
+            Mario.ChangeState(new SmallMarioIdleState(Mario));
         }
     }
     public void PowerUp(Power power)
@@ -73,7 +72,7 @@ public class BigMarioMoveState : IPlayerState
         switch (power)
         {
             case Power.FireFlower:
-                Mario.ChangeState(new FireMarioMoveState(Mario));
+                Mario.ChangeState(new FireMarioIdleState(Mario));
                 break;
             case Power.Mushroom:
                 //Nothing
@@ -83,18 +82,17 @@ public class BigMarioMoveState : IPlayerState
                 Mario.StarTimeRemaining = 0;
                 break;
             case Power.Cloud:
-                Mario.ChangeState(new CloudMarioMoveState(Mario));
+                //Nothing
                 break;
         }
     }
-
     public Power GetCurrentPower()
     {
-        return Power.Mushroom;
+        return Power.Cloud;
     }
     public void Idle()
     {
-        Mario.ChangeState(new BigMarioIdleState(Mario));
+        //Nothing
     }
     public void StateChangePrep()
     {
@@ -114,75 +112,23 @@ public class BigMarioMoveState : IPlayerState
         CurrentSprite = Sprites[index];
         CurrentSprite.Visible = true;
     }
-    private void IsBraking(GameTime gameTime)
+    public void Update(GameTime gameTime)
     {
-        bool BrakingRight = !Mario.Flipped && Mario.Velocity.X < 0;
-        bool BrakingLeft = Mario.Flipped && Mario.Velocity.X > 0;
-        if (BrakingRight || BrakingLeft)
+        if (Mario.Invincible)
         {
-            Frame = 2;
-            timer = 0;
-            Braking = true;
-            if (BrakingRight)
-            {
-                Mario.MoveRight(gameTime, 8);
-            }
-            else
-            {
-                Mario.MoveLeft(gameTime, 8);
-            }
-        }
-
-        if(Braking && (!Mario.Flipped && Mario.Velocity.X >= 0 || Mario.Flipped && Mario.Velocity.X <= 0))
-        {
-            Braking = false;
-        }
-    }
-
-    private void UpdateMovementAnimations(GameTime gameTime)
-    {
-        if (timer <= timeFrame) { return; }
-
-        if (Frame == 2)
-        {
-            Frame = 0;
-        }
-        else if (Frame == 3)
-        {
-            Frame = 1;
-        }
-        IsBraking(gameTime);
-        timer = 0;
-    }
-
-    private void UpdateStarAnimations(double time)
-    {
-        if (!Mario.Invincible) { return; }
-        Mario.StarTimeRemaining += time;
-        if (Braking)
-        {
-            Frame = 3;
+            SwitchSprite(1);
+            Mario.StarTimeRemaining += gameTime.ElapsedGameTime.TotalSeconds;
         }
         else
         {
-            Frame = 1;
+            SwitchSprite(0);
         }
-    }
-    public void Update(GameTime gameTime)
-    {
-        double time = gameTime.ElapsedGameTime.TotalSeconds;
-        timer += time;
-        
-        UpdateMovementAnimations(gameTime);
-        UpdateStarAnimations(time);
-        SwitchSprite(Frame);
-
         CurrentSprite.Update(gameTime);
         CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
         CurrentSprite.HFlipped = Mario.Flipped;
     }
     public void Draw(SpriteBatch spriteBatch)
-    {
+    { 
         CurrentSprite.Draw(spriteBatch);
     }
 }

@@ -5,37 +5,39 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MagicBrosMario.Source.MarioStates;
 using System;
+using MagicBrosMario.Source.Collision;
 namespace MagicBrosMario.Source.GameStates
 {
 	public class PlayingState : IGameState
 	{
-		private MagicBrosMario _game;
 		public ILevel _level {get; private set;}
 
-		public PlayingState(MagicBrosMario game, ILevel level)
+		public PlayingState(ILevel level)
 		{
-			_game = game;
 			_level = level;
 
-			Texture2D blockTex = _game.Content.Load<Texture2D>("blocks");
-			Texture2D enemySheet = _game.Content.Load<Texture2D>("characters");
-			Texture2D itemSheet = _game.Content.Load<Texture2D>("items");
+			Texture2D blockTex = MagicBrosMario.INSTANCE.Content.Load<Texture2D>("blocks");
+			Texture2D enemySheet = MagicBrosMario.INSTANCE.Content.Load<Texture2D>("characters");
+			Texture2D itemSheet = MagicBrosMario.INSTANCE.Content.Load<Texture2D>("items");
 
-			_level.Initialize(_game.Content, blockTex, enemySheet, itemSheet);
+			_level.Initialize(MagicBrosMario.INSTANCE.Content, blockTex, enemySheet, itemSheet);
+			 
 
-			_game.Mario = new Player(_game.MarioTexture); // This will have to change so we can keep track of lives and the power of mario between levels
-			// But if you die right now, there is no way to come back to live
-			_game.Mario.SetPositon(new Vector2(_level.MarioStartPosX, _level.MarioStartPosY));
+            //MagicBrosMario.INSTANCE.Mario = new Player(MagicBrosMario.INSTANCE.MarioTexture); // This will have to change so we can keep track of lives and the power of mario between levels
+																							  // But if you die right now, there is no way to come back to live
+
+				
+            MagicBrosMario.INSTANCE.Mario.SetPositon(new Vector2(_level.MarioStartPosX, _level.MarioStartPosY));
 		}
 
 		public void Update(GameTime gameTime)
 		{
 			MarioGameController.Update(gameTime);
 			_level.Update(gameTime);
-			_game.Mario.Update(gameTime);
+            MagicBrosMario.INSTANCE.Mario.Update(gameTime);
 
 			
-			int cameraX = Math.Max(Camera.Instance.Position.X, (int)_game.Mario.Position.X - Camera.Instance.WindowSize.X / 2);
+			int cameraX = Math.Max(Camera.Instance.Position.X, (int)MagicBrosMario.INSTANCE.Mario.Position.X - Camera.Instance.WindowSize.X / 2);
 			Camera.Instance.Position = new Point(cameraX, 0);
 			Camera.Instance.Update(gameTime);
             HUD.Instance.Update(gameTime);
@@ -55,7 +57,9 @@ namespace MagicBrosMario.Source.GameStates
         public void Clear()
         {
             _level.Clear();
+			//MagicBrosMario.INSTANCE.Mario.Lives--;
 			Camera.Instance.Sprites.Clear();
+			CollisionController.Instance.RemoveAll();
         }
     }
 }

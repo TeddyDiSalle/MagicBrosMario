@@ -11,20 +11,21 @@ namespace MagicBrosMario.Source.GameStates
 {
     internal class TransitionState : IGameState
     {
-        private MagicBrosMario _game;
         private ILevel _nextLevel;
         private Texture2D _transitionTexture;
         private float _timer = 1.5f;
 		private SpriteFont _font;
 
 
-		public TransitionState(MagicBrosMario game, ILevel nextLevel)
+		public TransitionState(ILevel nextLevel)
         {
-            _game = game;
             _nextLevel = nextLevel;
-            _transitionTexture = _game.Content.Load<Texture2D>("TransitionScreen");
+            _transitionTexture = MagicBrosMario.INSTANCE.Content.Load<Texture2D>("TransitionScreen");
 
-			_font = _game.Content.Load<SpriteFont>("Font");
+            _font = MagicBrosMario.INSTANCE.font;
+
+			MagicBrosMario.INSTANCE.Mario.ResetPlayer();
+
 
 		}
 
@@ -34,28 +35,35 @@ namespace MagicBrosMario.Source.GameStates
 
             if (_timer <= 0)
             {
-                _game.CurrentState = new PlayingState(_game, _nextLevel);
+            if (MagicBrosMario.INSTANCE.Mario.Lives > 0) {
+				MagicBrosMario.INSTANCE.CurrentState = new PlayingState(_nextLevel);
+			}
+            else
+            {
+                MagicBrosMario.INSTANCE.CurrentState = new TitleScreenState();
+            }
+                
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.R))
             {
-                _game.CurrentState = new TitleScreenState(_game);
+                MagicBrosMario.INSTANCE.CurrentState = new TitleScreenState();
             }
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(_transitionTexture, new Rectangle(0, 0,
-                _game.GraphicsDevice.Viewport.Width,
-                _game.GraphicsDevice.Viewport.Height), Color.White);
+                 MagicBrosMario.INSTANCE.GraphicsDevice.Viewport.Width,
+                 MagicBrosMario.INSTANCE.GraphicsDevice.Viewport.Height), Color.White);
 
 
-			string text = "Lives: " + _game.Mario.Lives;
+			string text = "Lives: " + MagicBrosMario.INSTANCE.Mario.Lives;
 
 			Vector2 textSize = _font.MeasureString(text);
-			Vector2 position = new Vector2((_game.GraphicsDevice.Viewport.Width / 2) - (textSize.X / 2), (_game.GraphicsDevice.Viewport.Height / 2));
+			Vector2 position = new Vector2((MagicBrosMario.INSTANCE.GraphicsDevice.Viewport.Width / 2) - (textSize.X / 2), (MagicBrosMario.INSTANCE.GraphicsDevice.Viewport.Height / 2));
 
-			spriteBatch.DrawString(_game.font, text, position, Color.White);
+			spriteBatch.DrawString(MagicBrosMario.INSTANCE.font, text, position, Color.White);
 		}
 
         public void Clear()

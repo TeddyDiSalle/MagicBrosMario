@@ -26,9 +26,7 @@ namespace MagicBrosMario.Source.Items
 		{
 			get
 			{
-				int width = (int)(sprite.Size.X - 4);
-				int height = sprite.Size.Y + 1;
-				return new Rectangle((int)floatPosition.X + 2, (int)floatPosition.Y, width, height);
+				return new Rectangle((int)floatPosition.X + 2, (int)floatPosition.Y, sprite.Size.X, sprite.Size.Y);
 			}
 		}
 
