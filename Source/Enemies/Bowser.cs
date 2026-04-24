@@ -2,6 +2,7 @@ using MagicBrosMario.Source.Block;
 using MagicBrosMario.Source.Collision;
 using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.MarioStates;
+using MagicBrosMario.Source.Sound;
 using MagicBrosMario.Source.Sprite;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -127,6 +128,7 @@ public class Bowser : IEnemy, ICollidable
             Position.X, Position.Y, movingRight);
         activeFireballs.Add(fireball);
         CollisionController.Instance.AddEnemy(fireball);
+        SoundController.PlaySound(SoundType.BowserFires, 1.0f);
     }
 
     private void Move(GameTime gameTime)
