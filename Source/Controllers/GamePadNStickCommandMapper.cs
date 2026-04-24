@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 namespace MagicBrosMario.Source;
 public class GamePadNStickCommandMapper
 {
@@ -37,7 +38,7 @@ public class GamePadNStickCommandMapper
         
         double dt = time.ElapsedGameTime.TotalSeconds;
         
-        // check keyboard
+        // check controller
         foreach (var (key, b) in _button){
             bool isDown = gamepad.IsButtonDown(key);
 
@@ -74,6 +75,13 @@ public class GamePadNStickCommandMapper
     {
         foreach (var (key, binding) in keyboardMapper.GetKeys())
         {
+            if(!KeysAndButtonsConverter.ToButton(key).HasValue){
+                continue;
+            }
+            else
+            {
+                //Console.WriteLine("Mapping key " + key + " to button " + KeysAndButtonsConverter.ToButton(key).Value);
+            }
             Buttons button = (Buttons)KeysAndButtonsConverter.ToButton(key);
             Bind(button, binding.Action, binding.InitialDelay, binding.RepeatInterval);
         }

@@ -50,14 +50,17 @@ public static class MarioGameController{
         
         Action<GameTime> goDebug = gt => MagicBrosMario.INSTANCE.CurrentState = new TransitionState(new DebugRoom());
         Action<GameTime> goLevel1 = gt => MagicBrosMario.INSTANCE.CurrentState = new TransitionState(new Level1());
+        Action<GameTime> goLevel2 = gt => MagicBrosMario.INSTANCE.CurrentState = new TransitionState(new Level2());
+
 
         keysNMouseInputMap.Bind(Keys.R, gt => MagicBrosMario.INSTANCE.CurrentState =new TitleScreenState()); // reset game
         keysNMouseInputMap.Bind(Keys.X, goDebug);
         keysNMouseInputMap.Bind(Keys.Y, goLevel1);
+        keysNMouseInputMap.Bind(Keys.Z, goLevel2);
         // mouse inputs
-        keysNMouseInputMap.Bind(m => m.IsButtonDown(MouseButton.Right), gt => MagicBrosMario.INSTANCE.Exit());
-        keysNMouseInputMap.Bind(m => m.IsButtonDown(MouseButton.Left) && m.Position.X < gameData.halfX, goDebug);//If you click the left side of the screen, call DebugRomm()
-        keysNMouseInputMap.Bind(m => m.IsButtonDown(MouseButton.Left) && m.Position.X >= gameData.halfX, goLevel1); //If you click the right side of the screen, call Level1()
+        //keysNMouseInputMap.Bind(m => m.IsButtonDown(MouseButton.Right), gt => MagicBrosMario.INSTANCE.Exit());
+        //keysNMouseInputMap.Bind(m => m.IsButtonDown(MouseButton.Left) && m.Position.X < gameData.halfX, goDebug);//If you click the left side of the screen, call DebugRomm()
+        //keysNMouseInputMap.Bind(m => m.IsButtonDown(MouseButton.Left) && m.Position.X >= gameData.halfX, goLevel1); //If you click the right side of the screen, call Level1()
 
         MarioBinds();
 
@@ -93,7 +96,7 @@ public static class MarioGameController{
     {
         if(!muted){
             MNKUpdate(gameTime);
-
+            GPUpdate(gameTime);
         }
     }
 

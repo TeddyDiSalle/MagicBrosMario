@@ -15,6 +15,8 @@ public static class KeysAndButtonsConverter{
                 return Keys.X;
             case Buttons.Y:
                 return Keys.Y;
+            case Buttons.RightShoulder:
+                return Keys.Z;
             case Buttons.Back:
                 return Keys.Q;
             case Buttons.Start:
@@ -36,7 +38,7 @@ public static class KeysAndButtonsConverter{
             case Buttons.LeftThumbstickRight:
                 return Keys.Right;
             default:
-                System.Diagnostics.Debug.WriteLine("No key mapping for button " + b);
+                System.Console.WriteLine("No key mapping for button " + b);
                 return null;
         }
     }
@@ -51,10 +53,12 @@ public static class KeysAndButtonsConverter{
                 return Buttons.X;
             case Keys.Y:
                 return Buttons.Y;
+            case Keys.Z:
+                return Buttons.RightShoulder;
             case Keys.Q:
-                return Buttons.Back;
+                return Buttons.None;
             case Keys.Escape:
-                return Buttons.Start;
+                return Buttons.None;
             case Keys.Down:
                 return Buttons.DPadDown;
             case Keys.Up:
@@ -63,8 +67,20 @@ public static class KeysAndButtonsConverter{
                 return Buttons.DPadLeft;
             case Keys.Right:
                 return Buttons.DPadRight;
+            case Keys.S:
+                return Buttons.LeftThumbstickDown;
+            case Keys.W:
+                return Buttons.LeftThumbstickUp;
+            case Keys.A:
+                return Buttons.LeftThumbstickLeft;
+            case Keys.D:
+                return Buttons.LeftThumbstickRight;
+            case Keys.P:
+                return Buttons.Back;
+            case Keys.R:
+                return Buttons.Start;
             default:
-                System.Diagnostics.Debug.WriteLine("No key mapping for button " + k);
+                System.Console.WriteLine("No key mapping for button " + k);
                 return null;
         }
     }
