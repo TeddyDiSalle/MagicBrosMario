@@ -1,28 +1,29 @@
-﻿using MagicBrosMario.Source.Sound;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Diagnostics;
 
 namespace MagicBrosMario.Source.MarioStates;
 //Vincent Do
-public class SmallMarioSlideState : IPlayerState
+public class CloudMarioCrouchState : IPlayerState
 {
     private readonly Player Mario;
     private readonly Sprite.SharedTexture texture;
     private Sprite.ISprite CurrentSprite;
     private readonly float timeFrame;
     private readonly int scaleFactor;
-    private readonly Sprite.ISprite[] Sprites;
-    private double LandingTimer = 0;
 
-    public SmallMarioSlideState(Player Mario)
+    private readonly Sprite.ISprite[] Sprites;
+
+    public CloudMarioCrouchState(Player Mario)
     {
         this.Mario = Mario;
         this.texture = Mario.Texture;
         this.timeFrame = Mario.TimeFrame;
         this.scaleFactor = Mario.ScaleFactor;
-        Sprites = [texture.NewSprite(156, 2, 16, 16),
-            texture.NewSprite(173, 2, 16, 16)];
+        Sprites = [
+            texture.NewSprite(136, 374, 16, 32),
+            texture.NewAnimatedSprite(136, 374, 16, 32, 4, timeFrame/4)
+        ];
         for (int i = 0; i < Sprites.Length; i++)
         {
             Sprites[i].Scale = scaleFactor;
@@ -31,7 +32,7 @@ public class SmallMarioSlideState : IPlayerState
         CurrentSprite = Sprites[0];
         CurrentSprite.Visible = true;
         CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
-        Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 16 * scaleFactor, 16 * scaleFactor);
+        Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 16 * scaleFactor, 32 * scaleFactor);
     }
     public void Left(GameTime gameTime)
     {
@@ -43,7 +44,7 @@ public class SmallMarioSlideState : IPlayerState
     }
     public void Jump(GameTime gameTime)
     {
-        //nothing
+        //Nothing
     }
     public void Crouch(GameTime gameTime)
     {
@@ -55,15 +56,33 @@ public class SmallMarioSlideState : IPlayerState
     }
     public void TakeDamage()
     {
-        //nothing
+        if (!Mario.Invincible)
+        {
+            Mario.ChangeState(new SmallMarioIdleState(Mario));
+        }
     }
     public void PowerUp(Power power)
     {
-        //Nothing
+        switch (power)
+        {
+            case Power.FireFlower:
+                Mario.ChangeState(new FireMarioCrouchState(Mario));
+                break;
+            case Power.Mushroom:
+                //Nothing
+                break;
+            case Power.Star:
+                Mario.Invincible = true;
+                Mario.StarTimeRemaining = 0;
+                break;
+            case Power.Cloud:
+                //Nothing
+                break;
+        }
     }
     public Power GetCurrentPower()
     {
-        return Power.None;
+        return Power.Cloud;
     }
     public void Idle()
     {
@@ -83,38 +102,31 @@ public class SmallMarioSlideState : IPlayerState
     }
     private void SwitchSprite(int index)
     {
-        CurrentSprite.Visible = false; 
+        CurrentSprite.Visible = false;
         CurrentSprite = Sprites[index];
         CurrentSprite.Visible = true;
     }
     public void Update(GameTime gameTime)
     {
-        if (Mario.Position.Y >= Mario.FlagPoleBottomY)
+        if (Mario.Invincible)
         {
-            Mario.SetPositon(new Vector2(Mario.Position.X, Mario.FlagPoleBottomY));
-            Mario.SetVelocity(Vector2.Zero);
-            SwitchSprite(1); // landing/holding sprite
-                             // wait a moment then transition to walk state
-            LandingTimer += gameTime.ElapsedGameTime.TotalSeconds;
-            if (LandingTimer >= 0.5)
-            {
-                Mario.ChangeState(new SmallMarioMoveState(Mario));
-                Mario.EndPhase = Player.EndLevelPhase.Walking;
-            }
+            SwitchSprite(1);
+            Mario.StarTimeRemaining += gameTime.ElapsedGameTime.TotalSeconds;
         }
         else
         {
-            SwitchSprite(0); // sliding sprite
-            Mario.SetVelocity(new Vector2(0, 3));
+            SwitchSprite(0);
         }
-
         CurrentSprite.Update(gameTime);
-        CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
         CurrentSprite.HFlipped = Mario.Flipped;
+        CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
+        if (!Mario.IsCrouching)
+        {
+            Mario.ChangeState(new CloudMarioIdleState(Mario));
+        }
     }
     public void Draw(SpriteBatch spriteBatch)
     {
         CurrentSprite.Draw(spriteBatch);
     }
-
 }

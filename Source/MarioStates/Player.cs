@@ -1,5 +1,6 @@
 ﻿using MagicBrosMario.Source.Block;
 using MagicBrosMario.Source.Collision;
+using MagicBrosMario.Source.GameStates;
 using MagicBrosMario.Source.HUDAndScoring;
 using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.Sound;
@@ -36,6 +37,9 @@ public class Player : ICollidable
     public double DamageTimer = 2;
     public Sprite.SharedTexture Texture { get; }
     public bool IsJumping { get; set; } = false;
+
+    public int JumpCalls { get; set; } = 0;
+    public const int maxJumpCalls = 6;
     public bool ApplyGravity { get; set; } = true;
     //For traveling through pipe
     public enum PipeTravelPhase { None, Entering, Exiting }
@@ -58,7 +62,7 @@ public class Player : ICollidable
     {
         this.Texture = texture;
         CollisionBox = new Rectangle((int)Position.X, (int)Position.Y, 0, 0);
-        PlayerState = new SmallMarioIdleState(this, texture, TimeFrame, ScaleFactor);
+        PlayerState = new SmallMarioIdleState(this);
         PlayerCollision = new PlayerCollisionHandler(this);
     }
     public void CreateFireball()
@@ -120,8 +124,9 @@ public class Player : ICollidable
     {
         if (DamageTimer >= DamageCoolDown)
         {
-            DamageTimer = 0;
             PlayerState.TakeDamage();
+            if(PlayerState is MarioDeadState) { return; }
+            DamageTimer = 0;
         }
     }
     public void InvincibilityOnEnemyContact()
@@ -132,14 +137,17 @@ public class Player : ICollidable
     {
         if (PlayerState is not MarioDeadState)
         {
-            ChangeState(new MarioDeadState(this, Texture, TimeFrame, ScaleFactor));
+            ChangeState(new MarioDeadState(this));
             Lives--;
         }
         
+
     }
     public void ResetPlayer()
     {
-        ChangeState(new SmallMarioIdleState(this, Texture, TimeFrame, ScaleFactor));
+        ChangeState(new SmallMarioIdleState(this));
+        IsAlive = true;
+        DamageTimer = 2.0;
     }
     public void PowerUp(Power power)
     {
@@ -222,29 +230,27 @@ public class Player : ICollidable
         }
         if (!WasGrounded || ApplyGravity)
         {
-            Velocity += new Vector2(0, Gravity);
+            Velocity += new Vector2(0, (PlayerState.GetCurrentPower() == Power.Cloud) ? Gravity*3/4 : Gravity);
         }
         Position += Velocity;
         if (PipePhase == PipeTravelPhase.Entering)
         {
             MarioGameController.Mute();
             SetVisibility(true);
-            Debug.WriteLine("Entering pipe: " + Position + "  " + PipeEntryDestination + " " + Vector2.Distance(Position, PipeEntryDestination));
             SetVelocity(PipeTravelVelocity);
             ApplyGravity = false;
             if (Vector2.Distance(Position, PipeEntryDestination) < 20f)
             {
                 SetPositon(PipeExitPosition);
                 Camera.Instance.Position = new Point((int)Position.X - Camera.Instance.WindowSize.X/2, Camera.Instance.Position.Y);
-                Debug.WriteLine("Pipe exit pos: "+PipeExitPosition);
                 PipePhase = PipeTravelPhase.Exiting;
             }
+            PlayerState.Update(gameTime);
             return;
         }
         if (PipePhase == PipeTravelPhase.Exiting)
         {
             SetVelocity(PipeExitVelocity);
-            Debug.WriteLine("pipe exit vel :" +PipeExitVelocity);
             if (Vector2.Distance(Position, PipeExitPosition + PipeExitVelocity * 20) < 20f)
             {
                 SetVelocity(Vector2.Zero);
@@ -252,6 +258,7 @@ public class Player : ICollidable
                 MarioGameController.UnMute();
                 ApplyGravity = true;
             }
+            PlayerState.Update(gameTime);
             return;
         }
         if (EndPhase == EndLevelPhase.SlidingDown)

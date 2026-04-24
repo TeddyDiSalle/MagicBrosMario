@@ -1,4 +1,5 @@
 //Made by Teddy
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
@@ -14,6 +15,8 @@ public static class KeysAndButtonsConverter{
                 return Keys.X;
             case Buttons.Y:
                 return Keys.Y;
+            case Buttons.RightShoulder:
+                return Keys.Z;
             case Buttons.Back:
                 return Keys.Q;
             case Buttons.Start:
@@ -35,6 +38,7 @@ public static class KeysAndButtonsConverter{
             case Buttons.LeftThumbstickRight:
                 return Keys.Right;
             default:
+                System.Console.WriteLine("No key mapping for button " + b);
                 return null;
         }
     }
@@ -49,7 +53,34 @@ public static class KeysAndButtonsConverter{
                 return Buttons.X;
             case Keys.Y:
                 return Buttons.Y;
+            case Keys.Z:
+                return Buttons.RightShoulder;
+            case Keys.Q:
+                return Buttons.None;
+            case Keys.Escape:
+                return Buttons.None;
+            case Keys.Down:
+                return Buttons.DPadDown;
+            case Keys.Up:
+                return Buttons.DPadUp;
+            case Keys.Left:
+                return Buttons.DPadLeft;
+            case Keys.Right:
+                return Buttons.DPadRight;
+            case Keys.S:
+                return Buttons.LeftThumbstickDown;
+            case Keys.W:
+                return Buttons.LeftThumbstickUp;
+            case Keys.A:
+                return Buttons.LeftThumbstickLeft;
+            case Keys.D:
+                return Buttons.LeftThumbstickRight;
+            case Keys.P:
+                return Buttons.Back;
+            case Keys.R:
+                return Buttons.Start;
             default:
+                System.Console.WriteLine("No key mapping for button " + k);
                 return null;
         }
     }

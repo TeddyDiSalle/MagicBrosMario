@@ -12,6 +12,7 @@ namespace MagicBrosMario.Source.Items
 		private AnimatedSprite sprite;
 		private Vector2 floatPosition;
 		private bool isCollected = false;
+		private int groupNum;
 
 		public Rectangle CollisionBox
 		{
@@ -21,13 +22,14 @@ namespace MagicBrosMario.Source.Items
 			}
 		}
 
-		public Axe(SharedTexture texture, int positionX, int positionY)
+		public Axe(SharedTexture texture, int positionX, int positionY, int group)
 		{
 			sprite = texture.NewAnimatedSprite(5, 117, 16, 16, 4, 0.025f);
 			sprite.Scale = 2f;
 			floatPosition = new Vector2(positionX, positionY);
 			sprite.Position = floatPosition.ToPoint();
 			CollisionController.Instance.AddItem(this);
+			groupNum = group;
 		}
 
 		public void Update(GameTime gameTime)
