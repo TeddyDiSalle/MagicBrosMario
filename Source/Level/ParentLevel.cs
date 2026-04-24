@@ -50,6 +50,8 @@ public abstract class ParentLevel : ILevel
 
     private readonly DeferredPipeLinkResolver _pipeResolver = new();
     private readonly HashSet<IEnemy> _activatedEnemies = new();
+    private int bridgeGroupCounter = 0;
+    private int bridgeOrderCounter = 0;
 
     public void Initialize(
         Microsoft.Xna.Framework.Content.ContentManager contentManager,
@@ -240,13 +242,27 @@ public abstract class ParentLevel : ILevel
             return;
         }
 
+        int? group = null;
+        int? order = null;
+        if(token.BlockId == "16") {// bridge block
+            if(!(blocks[row][col-1] is BridgeBlock)){ // new bridge group
+                bridgeGroupCounter++;
+                bridgeOrderCounter = 0;
+            }else{ // there is already a bridge block to the left, same group
+                bridgeOrderCounter++;
+            }
+            group = bridgeGroupCounter;
+            order = bridgeOrderCounter;
+        }
+
         blocks[row][col] = BlockManager.CreateBlock(
             token.BlockId,
             col * tileSize,
             row * tileSize,
             LevelCellTokenParser.ToQuestionBlockItem(itemId),
             null,
-            tileSize
+            group,
+            order
         );
 
         CollisionController.Instance.AddBlock(blocks[row][col]);
