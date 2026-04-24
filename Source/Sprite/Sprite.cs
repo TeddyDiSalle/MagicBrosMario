@@ -49,7 +49,7 @@ public class Sprite(
     public Point Size { get; private set; }
 
     public Color Color { get; set; } = Color.White;
-    public float Depth { get; set; } = 1.0f;
+    public float Depth { get; set; } = 0.0f;
 
     private readonly Rectangle sourceRect = new(offsetX, offsetY, width, height);
     private Rectangle destRect = new(0, 0, width, height);
@@ -109,7 +109,7 @@ public class Sprite(
 
     public void Background()
     {
-        Depth = 0.0f;
+        Depth = 1.0f;
     }
 
     public void Midground()

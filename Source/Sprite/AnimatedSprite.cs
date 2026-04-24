@@ -52,7 +52,7 @@ public class AnimatedSprite(
     public Point Size { get; private set; }
     
     public Color Color { get; set; } = Color.White;
-    public float Depth { get; set; } = 1.0f;
+    public float Depth { get; set; } = 0.0f;
 
     private Rectangle destRect = new(0, 0, frameWidth, frameHeight);
 
@@ -108,7 +108,7 @@ public class AnimatedSprite(
 
     public void Background()
     {
-        Depth = 0.0f;
+        Depth = 1.0f;
     }
     public void Midground()
     {
