@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using MagicBrosMario.Source.Block;
 using MagicBrosMario.Source.Collision;
 using MagicBrosMario.Source.HUDAndScoring;
@@ -42,6 +43,7 @@ public abstract class ParentLevel : ILevel
 
     private int levWidth;
     private int levHeight;
+    protected List<Point> checkpointPositions = new List<Point>(); 
 
     public int MarioStartPosX { get; protected set; }
     public int MarioStartPosY { get; protected set; }
@@ -60,7 +62,7 @@ public abstract class ParentLevel : ILevel
         Texture2D iTexture)
     {
         tileSize = _blockSize * _scale;
-
+         
         ValidateCsvDimensions();
         InitializeLevelArrays();
 
@@ -144,6 +146,16 @@ public abstract class ParentLevel : ILevel
     public void Update(GameTime gt)
     {
         Rectangle activationBounds = GetEnemyActivationBounds();
+        for (int i = 0; i < checkpointPositions.Count; i++)
+        {
+            if(MagicBrosMario.INSTANCE.Mario.Position.X > checkpointPositions[i].X)
+            {
+                MarioStartPosX = checkpointPositions[i].X;
+                MarioStartPosY = checkpointPositions[i].Y;
+                checkpointPositions.RemoveAt(i);
+            }
+        }
+
 
         for (int r = 0; r < levHeight; r++)
         {
@@ -280,8 +292,7 @@ public abstract class ParentLevel : ILevel
         CollisionController.Instance.AddEnemy(enemies[row][col]);
     }
 
-        private Rectangle GetEnemyActivationBounds()
-    {
+        private Rectangle GetEnemyActivationBounds(){
         const int leftBufferTiles = 2;
         const int rightBufferTiles = 6;
         const int verticalBufferTiles = 2;
