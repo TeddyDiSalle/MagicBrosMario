@@ -13,7 +13,7 @@ public class PiranhaPlant : IEnemy, ICollidable
 {
     public bool AlwaysActive => false;
     private const float RISE_SPEED = 100f;
-    private const float PAUSE_DURATION = 0f;
+    private const float PAUSE_DURATION = 2f;
     private const int RISE_HEIGHT = 48;
     private const float SCALE = 2f;
 
@@ -52,7 +52,7 @@ public class PiranhaPlant : IEnemy, ICollidable
         visibleY = pipeY - RISE_HEIGHT;
         aliveSprite = EnemyTexture.NewAnimatedSprite(125, 180, 16, 23, 2, 0.2f);
         aliveSprite.Scale = SCALE;
-        Position = new Point(pipeX, hiddenY);
+        Position = new Point(pipeX+15, hiddenY);
         isAlive = true;
         state = PiranhaState.Rising;
         pauseTimer = PAUSE_DURATION;
