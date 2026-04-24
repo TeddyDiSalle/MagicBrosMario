@@ -6,38 +6,37 @@ using Microsoft.Xna.Framework.Input;
 
 namespace MagicBrosMario.Source.GameStates
 {
-	public class TitleScreenState : IGameState
-	{
-		private Texture2D _titleTexture;
+    public class TitleScreenState : IGameState
+    {
+        private Texture2D _titleTexture;
         private SpriteFont _font;
 
         public TitleScreenState()
         {
-
             _titleTexture = MagicBrosMario.INSTANCE.TitleScreen;
             _font = MagicBrosMario.INSTANCE.font;
             //_font = _game.Content.Load<SpriteFont>("font");
 
             MagicBrosMario.INSTANCE.Mario.Lives = 3;
-
-
-		}
+        }
 
         public void Update(GameTime gameTime)
-		{
+        {
             if (Keyboard.GetState().IsKeyDown(Keys.Enter))
             {
                 MagicBrosMario.INSTANCE.CurrentState = new TransitionState(new Level.Level1());
             }
         }
 
-		public void Draw(SpriteBatch spriteBatch)
-		{
-			spriteBatch.Draw(_titleTexture, new Rectangle(0, 0,
-                MagicBrosMario.INSTANCE.GraphicsDevice.Viewport.Width,
-                MagicBrosMario.INSTANCE.GraphicsDevice.Viewport.Height), Color.White);
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(_titleTexture, _titleTexture.Bounds,
+                new Rectangle(0, 0,
+                    MagicBrosMario.INSTANCE.GraphicsDevice.Viewport.Width,
+                    MagicBrosMario.INSTANCE.GraphicsDevice.Viewport.Height),
+                Color.White, 0f, Vector2.Zero, SpriteEffects.None, 1.0f);
 
-			string text = "Press Enter to Start\n\n  Press R to Reset";
+            string text = "Press Enter to Start\n\n  Press R to Reset";
 
             Vector2 textSize = _font.MeasureString(text);
             Vector2 position = new Vector2(
@@ -46,8 +45,6 @@ namespace MagicBrosMario.Source.GameStates
             );
 
             spriteBatch.DrawString(_font, text, position, Color.White);
-
-
         }
 
         public void Clear()
