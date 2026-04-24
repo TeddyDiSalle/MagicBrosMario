@@ -100,7 +100,7 @@ public class FireMarioMoveState : IPlayerState
                 break;
         }
     }
-    public Power GetCurrentPower()
+    public Power GetCurrentMode()
     {
         return Power.FireFlower;
     }

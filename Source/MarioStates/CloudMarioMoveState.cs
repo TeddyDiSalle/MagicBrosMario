@@ -88,7 +88,7 @@ public class CloudMarioMoveState : IPlayerState
         }
     }
 
-    public Power GetCurrentPower()
+    public Power GetCurrentMode()
     {
         return Power.Cloud;
     }

@@ -27,6 +27,7 @@ namespace MagicBrosMario.Source.Items
 			
 			floatPosition = new Vector2(positionX, positionY);
 			sprite.Position = floatPosition.ToPoint();
+			sprite.Midground();
 
 		}
 

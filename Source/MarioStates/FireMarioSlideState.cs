@@ -61,7 +61,7 @@ public class FireMarioSlideState : IPlayerState
     {
         //Nothing
     }
-    public Power GetCurrentPower()
+    public Power GetCurrentMode()
     {
         return Power.FireFlower;
     }

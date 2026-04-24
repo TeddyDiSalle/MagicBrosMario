@@ -18,6 +18,7 @@ public static class BlockFactory
     public static Block GroundBlock()
     {
         var sprite = BlockSharedTexture.NewSprite(16, 32, 16, 16);
+        sprite.Midground();
         var block = new Block(sprite);
         return block;
     }
@@ -25,6 +26,7 @@ public static class BlockFactory
     public static Block BlueGroundBlock()
     {
         var sprite = BlockSharedTexture.NewSprite(32, 32, 16, 16);
+        sprite.Midground();
         var block = new Block(sprite);
         return block;
     }
@@ -32,6 +34,7 @@ public static class BlockFactory
     public static BrickBlock Bricks()
     {
         var sprite = BlockSharedTexture.NewSprite(48, 32, 16, 16);
+        sprite.Midground();
         var block = new BrickBlock(sprite);
         return block;
     }
@@ -39,6 +42,7 @@ public static class BlockFactory
     public static Block BlueBricks()
     {
         var sprite = BlockSharedTexture.NewSprite(64, 32, 16, 16);
+        sprite.Midground();
         var block = new Block(sprite);
         return block;
     }
@@ -46,6 +50,7 @@ public static class BlockFactory
     public static Block BaseBlock()
     {
         var sprite = BlockSharedTexture.NewSprite(80, 32, 16, 16);
+        sprite.Midground();
         var block = new Block(sprite);
         return block;
     }
@@ -136,6 +141,7 @@ public static class BlockFactory
             default:
                 throw new Exception("unreachable default case");
         }
+        sprite.Midground();
 
         return new Block(sprite);
     }
@@ -175,6 +181,7 @@ public static class BlockFactory
             default:
                 throw new Exception("unreachable default case");
         }
+        sprite.Midground();
 
         return new PipeEntryBlock(
             sprite, facing, half, exit, exitDirection);
@@ -189,6 +196,7 @@ public static class BlockFactory
     public static BridgeBlock BridgeBlock(int group, int order)
     {
         var sprite = BlockSharedTexture.NewSprite(96, 32, 16, 16);
+        sprite.Midground();
         var block = new BridgeBlock(sprite, group, order);
         return block;
     }
@@ -196,6 +204,7 @@ public static class BlockFactory
     public static Block MinecraftLogBlock()
     {
         var sprite = BlockSharedTexture.NewSprite(16, 208, 16, 16);
+        sprite.Midground();
         var block = new Block(sprite);
         return block;
     }
@@ -203,6 +212,7 @@ public static class BlockFactory
     public static Block MinecraftLeafBlock()
     {
         var sprite = BlockSharedTexture.NewSprite(32, 208, 16, 16);
+        sprite.Midground();
         var block = new Block(sprite);
         return block;
     }
@@ -210,6 +220,7 @@ public static class BlockFactory
     public static Block MinecraftCobblestoneBlock()
     {
         var sprite = BlockSharedTexture.NewSprite(48, 208, 16, 16);
+        sprite.Midground();
         var block = new Block(sprite);
         return block;
     }
@@ -225,6 +236,7 @@ public static class BlockFactory
     public static Block MinecraftObsidianBlock()
     {
         var sprite = BlockSharedTexture.NewSprite(96, 208, 16, 16);
+        sprite.Midground();
         // replace this with actual obsidian
         var block = new Block(sprite);
         return block;
@@ -233,6 +245,7 @@ public static class BlockFactory
     public static BrickBlock MinecraftBricksBlock()
     {
         var sprite = BlockSharedTexture.NewSprite(112, 208, 16, 16);
+        sprite.Midground();
         var block = new BrickBlock(sprite);
         return block;
     }

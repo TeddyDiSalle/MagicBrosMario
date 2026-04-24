@@ -1,4 +1,5 @@
 // Made By Teddy
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -55,6 +56,8 @@ public abstract class ParentLevel : ILevel
     private int bridgeGroupCounter = 0;
     private int bridgeOrderCounter = 0;
 
+    private ISprite backgroundSprite;
+
     public void Initialize(
         Microsoft.Xna.Framework.Content.ContentManager contentManager,
         Texture2D bTexture,
@@ -88,7 +91,8 @@ public abstract class ParentLevel : ILevel
 
         if (enemyLines[0].Split(',').Length != levWidth || itemLines[0].Split(',').Length != levWidth)
         {
-            throw new Exception($"Level: Enemy or Item CSV file has different width than Block CSV file {levWidth} vs {enemyLines[0].Split(',').Length} vs {itemLines[0].Split(',').Length}");
+            throw new Exception(
+                $"Level: Enemy or Item CSV file has different width than Block CSV file {levWidth} vs {enemyLines[0].Split(',').Length} vs {itemLines[0].Split(',').Length}");
         }
     }
 
@@ -135,12 +139,10 @@ public abstract class ParentLevel : ILevel
         SharedTexture backgroundSharedTexture = new SharedTexture();
         backgroundSharedTexture.BindTexture(backgroundTexture);
 
-        ISprite backgroundSprite = backgroundSharedTexture.NewSprite(0, 0, backWidth, backHeight);
+        backgroundSprite = backgroundSharedTexture.NewSprite(0, 0, backWidth, backHeight);
         backgroundSprite.Scale = (float)tileSize / _blockSize;
         backgroundSprite.Visible = true;
-        
-        Camera.Instance.Sprites.Remove(backgroundSprite);
-        Camera.Instance.backgroundSprite = backgroundSprite;
+        backgroundSprite.Background();
     }
 
     public void Update(GameTime gt)
@@ -165,7 +167,8 @@ public abstract class ParentLevel : ILevel
                 {
                     IEnemy enemy = enemies[r][c];
 
-                    if (enemy.AlwaysActive|| _activatedEnemies.Contains(enemy) || ShouldActivateEnemy(enemy, activationBounds))
+                    if (enemy.AlwaysActive || _activatedEnemies.Contains(enemy) ||
+                        ShouldActivateEnemy(enemy, activationBounds))
                     {
                         _activatedEnemies.Add(enemy);
                         enemy.Update(gt);
@@ -185,9 +188,7 @@ public abstract class ParentLevel : ILevel
         }
     }
 
-    public void Draw(SpriteBatch sb)
-    {
-    }
+    public void Draw(SpriteBatch sb) { }
 
     protected void LoadContent()
     {
@@ -331,28 +332,11 @@ public abstract class ParentLevel : ILevel
     public void Clear()
     {
         _activatedEnemies.Clear();
-        Camera.Instance.backgroundSprite = null;
-        for (int r = 0; r < levHeight; r++)
-        {
-            for (int c = 0; c < levWidth; c++)
-            {
-                if (blocks[r][c] != null)
-                {
-                    CollisionController.Instance.RemoveBlock(blocks[r][c]);
-                    blocks[r][c] = null;
-                }
-                if (enemies[r][c] != null)
-                {
-                    CollisionController.Instance.RemoveEnemy(enemies[r][c]);
-                    enemies[r][c] = null;
-                }
-                if (items[r][c] != null)
-                {
-                    CollisionController.Instance.RemoveItem(items[r][c]);
-                    items[r][c] = null;
-                }
-            }
-        }
+        CollisionController.Instance.RemoveAll();
+        blocks = [];
+        items = [];
+        enemies = [];
+        backgroundSprite.Drop();
         HUD.Instance.LevelOver();
         SoundController.StopMusic();
     }

@@ -12,7 +12,7 @@ public interface IPlayerState
     void Attack();
     void TakeDamage();
     void PowerUp(Power power);
-    Power GetCurrentPower();
+    Power GetCurrentMode();
     void StateChangePrep();
     void SetVisibility(bool visible);
     void Idle();
