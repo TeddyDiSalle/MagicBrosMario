@@ -30,7 +30,7 @@ namespace MagicBrosMario.Source.GameStates
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_titleTexture, _titleTexture.Bounds,
+            spriteBatch.Draw(_titleTexture, new Rectangle(0, 0, _titleTexture.Width, _titleTexture.Height),
                 new Rectangle(0, 0,
                     MagicBrosMario.INSTANCE.GraphicsDevice.Viewport.Width,
                     MagicBrosMario.INSTANCE.GraphicsDevice.Viewport.Height),
