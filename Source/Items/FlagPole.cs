@@ -33,7 +33,6 @@ namespace MagicBrosMario.Source.Items
 		{
 			if (playerHit) return;
 			playerHit = true;
-			PlayerHit = true;
 		}
 
 		public void Update(GameTime gameTime) { }

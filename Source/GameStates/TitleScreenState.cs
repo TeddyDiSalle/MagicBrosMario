@@ -18,7 +18,7 @@ namespace MagicBrosMario.Source.GameStates
             _font = MagicBrosMario.INSTANCE.font;
             //_font = _game.Content.Load<SpriteFont>("font");
 
-            //_game.Mario.Lives = 3;
+            MagicBrosMario.INSTANCE.Mario.Lives = 3;
 
 
 		}
