@@ -16,13 +16,20 @@ namespace MagicBrosMario.Source.Items
 
 		private float riseAmount = 0f;
 		private const float RISE_TARGET = 48f;
-		private const float SPEED = 200f;
+		private const float SPEED = 200f; 
 
 		public Rectangle CollisionBox => new Rectangle((int)floatPosition.X, (int)floatPosition.Y, (int)(8 * sprite.Scale), (int)(16 * sprite.Scale));
 
-		public Coin(SharedTexture texture, int positionX, int positionY)
+		public Coin(SharedTexture texture, int positionX, int positionY, bool Minecraft)
 		{
-			sprite = texture.NewAnimatedSprite(128, 95, 8, 16, 4, 0.05f);
+			if (Minecraft) {
+				sprite = texture.NewAnimatedSprite(146, 120, 16, 12, 1, 0.05f);
+			}
+			else 
+			{
+				sprite = texture.NewAnimatedSprite(128, 95, 8, 16, 4, 0.05f);
+			}
+
 			sprite.Scale = 2f;
 			
 			floatPosition = new Vector2(positionX, positionY);
@@ -69,6 +76,10 @@ namespace MagicBrosMario.Source.Items
 			if (!isCollected)
 			{
 				sprite.Draw(spriteBatch);
+			}
+			else 
+			{
+				sprite.Drop();
 			}
 		}
 

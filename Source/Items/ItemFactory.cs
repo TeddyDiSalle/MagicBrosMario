@@ -16,7 +16,7 @@ public static class ItemFactory {
         return item;
     }
     public static IItems CreateMushroom(int x, int y) {
-        var item = new Mushroom(ITEM_SHARED_TEXTURE, x, y);
+        var item = new Mushroom(ITEM_SHARED_TEXTURE, x, y, false);
         return item;
     }
     public static IItems CreateFireFlower(int x, int y) {
@@ -29,7 +29,7 @@ public static class ItemFactory {
         return item;
     }
     public static IItems CreateOneUp(int x, int y) {
-        var item = new OneUp(ITEM_SHARED_TEXTURE, x, y);
+        var item = new OneUp(ITEM_SHARED_TEXTURE, x, y, false);
         return item;
     }
     public static IItems CreateFlagPole(int x, int y) {

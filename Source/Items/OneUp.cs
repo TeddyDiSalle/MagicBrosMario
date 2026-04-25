@@ -34,11 +34,20 @@ namespace MagicBrosMario.Source.Items
 
 		public Point position { get => sprite.Position; private set => sprite.Position = value; }
 
-		public OneUp(SharedTexture texture, int positionX, int positionY)
+		public OneUp(SharedTexture texture, int positionX, int positionY, bool Minecraft)
 		{
-			sprite = texture.NewSprite(214, 34, 16, 16);
-			sprite.Scale = 2f;
 
+			if (Minecraft)
+			{
+				sprite = texture.NewSprite(124, 117, 14, 15);
+				sprite.Scale = 2.2f;
+			}
+			else
+			{
+				sprite = texture.NewSprite(214, 34, 16, 16);
+				sprite.Scale = 2f;
+			}
+			  
 			floatPosition = new Vector2(positionX, positionY);
 			sprite.Position = floatPosition.ToPoint();
             sprite.Midground();
