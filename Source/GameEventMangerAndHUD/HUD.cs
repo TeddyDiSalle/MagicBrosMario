@@ -212,8 +212,9 @@ public class HUD
             if (time == 0)
             {
                 //waitForNextLevel = true;
-                goToTransition = true;
-            }
+                //goToTransition = true;
+				MagicBrosMario.INSTANCE.CurrentState = new TransitionState(new Level.Level2());
+			}
         }
         else if (time == 0 && !levelOver) { MagicBrosMario.INSTANCE.Mario.KillMario(); }
         coin.Position = new Point(Camera.Instance.Position.X + 250, 27);
@@ -224,14 +225,14 @@ public class HUD
             MagicBrosMario.INSTANCE.Mario.SetVisibility(false);
             MarioGameController.Mute();
             TransitionTimer -= (float)gametime.ElapsedGameTime.TotalSeconds;
-
+                       
             if (TransitionTimer <= 0)
             {
                 MagicBrosMario.INSTANCE.CurrentState = new TransitionState(new Level.Level1());
                 goToTransition = false;
                 TransitionTimer = 3f;
-}
-        }
+            }
+        } 
 
     }
     public void Draw(SpriteBatch _spriteBatch)

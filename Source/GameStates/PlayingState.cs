@@ -26,8 +26,6 @@ namespace MagicBrosMario.Source.GameStates
 			_level.Initialize(MagicBrosMario.INSTANCE.Content, blockTex, enemySheet, itemSheet);
 
 
-            //MagicBrosMario.INSTANCE.Mario = new Player(MagicBrosMario.INSTANCE.MarioTexture); // This will have to change so we can keep track of lives and the power of mario between levels
-            // But if you die right now, there is no way to come back to live
             MarioGameController.UnMute();
             MagicBrosMario.INSTANCE.Mario.SetVisibility(true);
 			MagicBrosMario.INSTANCE.Mario.EndPhase = Player.EndLevelPhase.None;
