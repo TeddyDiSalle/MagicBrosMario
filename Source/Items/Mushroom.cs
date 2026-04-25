@@ -32,10 +32,21 @@ namespace MagicBrosMario.Source.Items
 
 		public Point position { get => sprite.Position; private set => sprite.Position = value; }
 
-		public Mushroom(SharedTexture texture, int positionX, int positionY)
+		public Mushroom(SharedTexture texture, int positionX, int positionY, bool Minecraft)
 		{
-			sprite = texture.NewSprite(184, 34, 16, 16);
-			sprite.Scale = 2f;
+
+			if (Minecraft)
+			{
+				sprite = texture.NewSprite(167, 119, 12, 13);
+				sprite.Scale = 2.5f;
+			}
+			else
+			{
+				sprite = texture.NewSprite(184, 34, 16, 16);
+				sprite.Scale = 2f;
+			} 
+
+			 
 			floatPosition = new Vector2(positionX, positionY);
 			sprite.Position = floatPosition.ToPoint();
             sprite.Midground();

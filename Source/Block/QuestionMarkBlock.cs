@@ -19,9 +19,10 @@ public class QuestionMarkBlock : BlockBase<QuestionMarkBlock>
         Mushroom,
         PoisonMushroom,
         AntiGravityCloud,
+        Gold,
+        Diamond,
+        Totem
     }
-
-    public Rectangle CollisionBox => new(sprite.Position.X, sprite.Position.Y, sprite.Size.X, sprite.Size.Y);
 
     private bool empty = false;
     private AnimatedSprite sprite;
@@ -56,22 +57,22 @@ public class QuestionMarkBlock : BlockBase<QuestionMarkBlock>
         IItems item = null;
         switch (innerItem)
         {
-            case InnerItem.Coin:
-                item = new Coin(MagicBrosMario.INSTANCE.ItemTexture, Position.X + 8, Position.Y);
-                HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.CoinCollected, EventPosition = Position});
+            case InnerItem.Coin:  
+				item = new Coin(MagicBrosMario.INSTANCE.ItemTexture, Position.X + 8, Position.Y, false);
+				HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.CoinCollected, EventPosition = Position});
 				break;
             case InnerItem.Star:
                 item = new Star(MagicBrosMario.INSTANCE.ItemTexture, Position.X + 1, Position.Y - 5);
                 HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.PowerupAppears, EventPosition = Position });
                 break;
             case InnerItem.OneUp:
-                item = new OneUp(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 5);
+                item = new OneUp(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 5, false);
                 HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.PowerupAppears, EventPosition = Position });
                 break;
 			case InnerItem.Mushroom:
 				if (player.GetCurrentPower() == Power.None)
 				{
-					item = new Mushroom(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 5);
+					item = new Mushroom(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 5, false);
 				}
 				else
 				{
@@ -83,15 +84,27 @@ public class QuestionMarkBlock : BlockBase<QuestionMarkBlock>
                 item = new PoisonMushroom(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 5);
                 HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.PowerupAppears, EventPosition = Position });
                 break;
-            case InnerItem.AntiGravityCloud:
-                item = new AntiGravityCloud(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y + 2);
-                HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.PowerupAppears, EventPosition = Position });
-                break;
-            default:
+			case InnerItem.AntiGravityCloud:
+				item = new AntiGravityCloud(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y + 2);
+				HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.PowerupAppears, EventPosition = Position });
+				break;
+			case InnerItem.Gold:
+				item = new Coin(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y, true);
+				HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.PowerupAppears, EventPosition = Position });
+				break;
+			case InnerItem.Diamond:
+				item = new Mushroom(MagicBrosMario.INSTANCE.ItemTexture, Position.X + 1, Position.Y - 5, true);
+				HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.PowerupAppears, EventPosition = Position });
+				break;
+			case InnerItem.Totem:
+				item = new OneUp(MagicBrosMario.INSTANCE.ItemTexture, Position.X + 1, Position.Y - 4, true);
+				HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.PowerupAppears, EventPosition = Position });
+				break;
+			default:
                 throw new Exception("impossible default branch");
         }
 
-        MagicBrosMario.INSTANCE.level.AddItem(item);
+		MagicBrosMario.INSTANCE.level.AddItem(item);
     }
 
     public override void OnCollideItem(IItems item, CollideDirection direction)
