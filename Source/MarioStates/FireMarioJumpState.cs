@@ -87,7 +87,7 @@ public class FireMarioJumpState : IPlayerState
                 Mario.StarTimeRemaining = 0;
                 break;
             case Power.Cloud:
-                //Nothing
+                Mario.ChangeState(new CloudMarioJumpState(Mario));
                 break;
         }
     }

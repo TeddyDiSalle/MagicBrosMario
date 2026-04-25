@@ -53,6 +53,10 @@ public class HUD
         FloatingText text = new(gameEvent, num);
         textsList.Add(text);
     }
+    public void ResetScore()
+    {
+        score = 0;
+    }
     public void SendEvent(GameEvent gameEvent)
     {
         switch (gameEvent.EventType)
