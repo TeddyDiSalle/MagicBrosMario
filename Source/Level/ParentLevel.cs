@@ -321,13 +321,10 @@ public abstract class ParentLevel : ILevel
 
     public void AddItem(IItems item)
     {
-        for (int r = 0; r < levHeight; r++)
-        {
-            for (int c = 0; c < levWidth; c++)
-            {
+        for (int r = 0; r < levHeight; r++){
+            for (int c = 0; c < levWidth; c++){
                 //Console.WriteLine($"Trying to add item at row {r}, col {c}");
-                if (items[r][c] == null)
-                {
+                if (items[r][c] == null){
                     items[r][c] = item;
                     CollisionController.Instance.AddItem(item);
                     return;
@@ -352,8 +349,7 @@ public abstract class ParentLevel : ILevel
         SoundController.StopMusic();
     }
 
-    public void GoToNextLevel() // need further implmentaition
-    {
+    public void GoToNextLevel(){ // need further implmentaition
         _activatedEnemies.Clear();
         CollisionController.Instance.RemoveAll();
         blocks = [];
@@ -367,8 +363,7 @@ public abstract class ParentLevel : ILevel
         SoundController.StopMusic();
     }
 
-    public void showPositionOnScreen()
-    {
+    public void showPositionOnScreen(){
         Vector2 exactPosition = MagicBrosMario.INSTANCE.Mario.Position;
         Vector2 tilePosition = new Vector2((int)(exactPosition.X / tileSize), (int)(exactPosition.Y / tileSize));
         Console.WriteLine($"Mario is at pixel position {exactPosition} and tile position {tilePosition}");

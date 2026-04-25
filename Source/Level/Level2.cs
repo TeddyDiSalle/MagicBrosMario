@@ -9,13 +9,15 @@ public class Level2 : ParentLevel
 	Point secondCheckpoint = new Point(100*tileSize, 10*tileSize);
 	Point thirdCheckpoint = new Point(161*tileSize, 0*tileSize);
 	Point fourthCheckpoint = new Point(211*tileSize, 10*tileSize);
+	Point fifthCheckpoint = new Point(311*tileSize, 10*tileSize);
 	public Level2()	{
 		MarioStartPos = spawnPoint;
 		
 		checkpointPositions.Add(firstCheckpoint); // after Teddy's
 		checkpointPositions.Add(secondCheckpoint); // after Roshan's
 		checkpointPositions.Add(thirdCheckpoint); // after Vincent's
-		checkpointPositions.Add(fourthCheckpoint); // after Chuang.s
+		checkpointPositions.Add(fourthCheckpoint); // after Chuang's
+		checkpointPositions.Add(fifthCheckpoint); // after Brian's
 
 		Name = "1-2";
 		TimeLimit = 500;

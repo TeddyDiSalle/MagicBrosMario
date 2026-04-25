@@ -56,6 +56,7 @@ internal static class LevelCellTokenParser
             "02" => QuestionMarkBlock.InnerItem.Star,
             "03" => QuestionMarkBlock.InnerItem.OneUp,
             "04" => QuestionMarkBlock.InnerItem.Mushroom,
+            "13" => QuestionMarkBlock.InnerItem.AntiGravityCloud,
             _ => null
         };
     }
