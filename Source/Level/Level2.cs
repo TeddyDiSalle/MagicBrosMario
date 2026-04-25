@@ -14,6 +14,7 @@ public class Level2 : ParentLevel
 		
 		checkpointPositions.Add(firstCheckpoint); // after Teddy's
 		checkpointPositions.Add(secondCheckpoint); // after Roshan's
+		checkpointPositions.Add(thirdCheckpoint); // after Vincent's
 		checkpointPositions.Add(fourthCheckpoint); // after Chuang.s
 
 		Name = "1-2";
