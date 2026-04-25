@@ -233,7 +233,7 @@ public static class BlockFactory
 
     public static QuestionMarkBlock MinecraftChestBlock(QuestionMarkBlock.InnerItem item)
     {
-        var sprite = BlockSharedTexture.NewAnimatedSprite(64, 208, 16, 16, 3, 0.2f);
+        var sprite = BlockSharedTexture.NewAnimatedSprite(64, 208, 16, 16, 1, 1000000f);
         var emptySprite = BlockSharedTexture.NewSprite(80, 208, 16, 16);
         var block = new QuestionMarkBlock(sprite, emptySprite, item);
         return block;
