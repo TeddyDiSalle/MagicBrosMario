@@ -1,4 +1,5 @@
-﻿using MagicBrosMario.Source.Level;
+﻿using MagicBrosMario.Source.HUDAndScoring;
+using MagicBrosMario.Source.Level;
 using MagicBrosMario.Source.MarioStates;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -18,6 +19,7 @@ namespace MagicBrosMario.Source.GameStates
             //_font = _game.Content.Load<SpriteFont>("font");
             MagicBrosMario.INSTANCE.Mario.SetVisibility(false);
             MagicBrosMario.INSTANCE.Mario.Lives = 3;
+            HUD.Instance.ResetScore();
             MarioGameController.UnMute();
         }
 
