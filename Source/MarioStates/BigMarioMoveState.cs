@@ -33,6 +33,7 @@ public class BigMarioMoveState : IPlayerState
         {
             Sprites[i].Scale = scaleFactor;
             Sprites[i].Visible = false;
+            Sprites[i].Depth = 0.6f;
         }
         CurrentSprite = Sprites[Frame];
         CurrentSprite.Visible = true;

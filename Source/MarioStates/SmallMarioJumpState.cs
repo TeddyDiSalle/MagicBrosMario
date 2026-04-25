@@ -26,6 +26,7 @@ public class SmallMarioJumpState : IPlayerState
         {
             Sprites[i].Scale = scaleFactor;
             Sprites[i].Visible = false;
+            Sprites[i].Depth = 0.6f;
         }
         CurrentSprite = Sprites[0];
         CurrentSprite.Visible = true;
