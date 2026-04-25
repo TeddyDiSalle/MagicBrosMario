@@ -92,7 +92,7 @@ public class FireMarioIdleState : IPlayerState
                 Mario.StarTimeRemaining = 0;
                 break;
             case Power.Cloud:
-                //Nothing
+                Mario.ChangeState(new CloudMarioIdleState(Mario));
                 break;
         }
     }
