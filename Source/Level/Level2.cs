@@ -1,15 +1,20 @@
+using System.Runtime.ExceptionServices;
 using Microsoft.Xna.Framework;
 
 namespace MagicBrosMario.Source.Level;
 public class Level2 : ParentLevel
 {
+	Point spawnPoint = new Point(1*tileSize, 10*tileSize);
+	Point firstCheckpoint = new Point(63*tileSize, 10*tileSize);
+	Point secondCheckpoint = new Point(100*tileSize, 10*tileSize);
+	Point thirdCheckpoint = new Point(161*tileSize, 0*tileSize);
+	Point fourthCheckpoint = new Point(211*tileSize, 10*tileSize);
 	public Level2()	{
-		MarioStartPos = new Point(1*tileSize, 10*tileSize);
+		MarioStartPos = spawnPoint;
 		
-		checkpointPositions.Add(new Point(63*tileSize, 10*tileSize)); // after Tedy's
-		checkpointPositions.Add(new Point(100*tileSize, 10*tileSize)); // after Roshan's
-		checkpointPositions.Add(new Point(161*tileSize, 0*tileSize)); // after Vincent's
-		checkpointPositions.Add(new Point(211*tileSize, 10*tileSize)); // after Chuang.s
+		checkpointPositions.Add(firstCheckpoint); // after Teddy's
+		checkpointPositions.Add(secondCheckpoint); // after Roshan's
+		checkpointPositions.Add(fourthCheckpoint); // after Chuang.s
 
 		Name = "1-2";
 		TimeLimit = 500;
