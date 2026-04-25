@@ -6,10 +6,10 @@ public class Level2 : ParentLevel
 	public Level2()	{
 		MarioStartPos = new Point(1*tileSize, 10*tileSize);
 		
-		checkpointPositions.Add(new Point(50, 10*tileSize));
-		checkpointPositions.Add(new Point(2000, 10*tileSize));
-		checkpointPositions.Add(new Point(2000, 10*tileSize));
-		checkpointPositions.Add(new Point(2000, 10*tileSize));
+		checkpointPositions.Add(new Point(63*tileSize, 10*tileSize)); // after Tedy's
+		checkpointPositions.Add(new Point(100*tileSize, 10*tileSize)); // after Roshan's
+		checkpointPositions.Add(new Point(161*tileSize, 0*tileSize)); // after Vincent's
+		checkpointPositions.Add(new Point(211*tileSize, 10*tileSize)); // after Chuang.s
 
 		Name = "1-2";
 		TimeLimit = 500;

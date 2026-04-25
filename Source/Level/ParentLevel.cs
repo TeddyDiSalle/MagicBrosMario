@@ -149,7 +149,6 @@ public abstract class ParentLevel : ILevel
 
     public void Update(GameTime gt)
     {
-        //showPositionOnScreen();
         Rectangle activationBounds = GetEnemyActivationBounds();
         for (int i = 0; i < checkpointPositions.Count; i++)
         {
@@ -326,7 +325,7 @@ public abstract class ParentLevel : ILevel
         {
             for (int c = 0; c < levWidth; c++)
             {
-                Console.WriteLine($"Trying to add item at row {r}, col {c}");
+                //Console.WriteLine($"Trying to add item at row {r}, col {c}");
                 if (items[r][c] == null)
                 {
                     items[r][c] = item;

@@ -8,6 +8,7 @@ using System.Dynamic;
 namespace MagicBrosMario.Source;
 public interface ILevel
 {
+    void showPositionOnScreen();
     string ToString(){ return Name; }
     string Name { get; }
     int TimeLimit {get;}
