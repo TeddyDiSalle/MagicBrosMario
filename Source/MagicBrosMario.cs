@@ -1,4 +1,5 @@
-﻿using System.Dynamic;
+﻿using System;
+using System.Dynamic;
 using MagicBrosMario.Source.GameStates;
 using MagicBrosMario.Source.MarioStates;
 using MagicBrosMario.Source.Sound;
@@ -29,7 +30,16 @@ public class MagicBrosMario : Game
 
             if (value is PlayingState newPlayingState)
             {
+                if(level == null || level.GetType() != newPlayingState._level.GetType()){
+                    //Console.WriteLine("Switching to level: " + newPlayingState._level.Name);
+                    MarioStartPosition = new Point(-1, -1); // let go controll of mario's start position
+                }
                 level = newPlayingState._level;
+                newPlayingState.Initialize();
+            }
+            if(value is TitleScreenState)
+            {
+                MarioStartPosition = new Point(-1, -1);
             }
 
             Camera.Instance.Position = Point.Zero; // Camera has to go to the beginning of the level
@@ -49,6 +59,9 @@ public class MagicBrosMario : Game
 
     //Use this for now
     public ILevel level { get; set; }
+
+    // Set to -1, -1 to indicate that it has not been set yet
+    public Point MarioStartPosition {get; set;} = new Point(-1,-1);
     //Keep Just In Case
     //private ILevel lvl;
 

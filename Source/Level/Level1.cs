@@ -9,9 +9,9 @@ public class Level1 : ParentLevel
 	int  rightBeforeFlagpoleX = 6100;
 	int secretRoomX = 6700;
 	public Level1()	{
-		MarioStartPos = new Point(normalStartx, 10*tileSize);
+		MarioStartPos = new Point(normalStartx, 11*tileSize);
 
-		checkpointPositions.Add(new Point(1315, 10*tileSize));
+		checkpointPositions.Add(new Point(82*tileSize, 11*tileSize));
 		
 		Name = "1-1";
 		TimeLimit = 400;

@@ -63,7 +63,10 @@ public abstract class ParentLevel : ILevel
         Texture2D eTexture,
         Texture2D iTexture)
     {
-        MagicBrosMario.INSTANCE.Mario.LevelStartPosition = MarioStartPos;
+        if(MagicBrosMario.INSTANCE.MarioStartPosition.X == -1)
+        {
+            MagicBrosMario.INSTANCE.MarioStartPosition = MarioStartPos;
+        }
          
         ValidateCsvDimensions();
         InitializeLevelArrays();
@@ -146,13 +149,14 @@ public abstract class ParentLevel : ILevel
 
     public void Update(GameTime gt)
     {
+        //showPositionOnScreen();
         Rectangle activationBounds = GetEnemyActivationBounds();
         for (int i = 0; i < checkpointPositions.Count; i++)
         {
             if(MagicBrosMario.INSTANCE.Mario.Position.X > checkpointPositions[i].X)
             {
-                Console.WriteLine("Checkpoint reached at position: " + checkpointPositions[i]);
-                MagicBrosMario.INSTANCE.Mario.LevelStartPosition = checkpointPositions[i];
+                //Console.WriteLine("Checkpoint reached at posdition: " + checkpointPositions[i]);
+                MagicBrosMario.INSTANCE.MarioStartPosition = checkpointPositions[i];
                 checkpointPositions.RemoveAt(i);
             }
         }
@@ -322,6 +326,7 @@ public abstract class ParentLevel : ILevel
         {
             for (int c = 0; c < levWidth; c++)
             {
+                Console.WriteLine($"Trying to add item at row {r}, col {c}");
                 if (items[r][c] == null)
                 {
                     items[r][c] = item;
@@ -334,7 +339,21 @@ public abstract class ParentLevel : ILevel
         throw new Exception("No empty slot available to add item");
     }
 
-    public void Clear()
+    public void Clear(){
+        _activatedEnemies.Clear();
+        CollisionController.Instance.RemoveAll();
+        blocks = [];
+        items = [];
+        enemies = [];
+        if(backgroundSprite != null) {
+            backgroundSprite.Drop();
+            backgroundSprite = null;
+        }
+        HUD.Instance.LevelOver();
+        SoundController.StopMusic();
+    }
+
+    public void GoToNextLevel() // need further implmentaition
     {
         _activatedEnemies.Clear();
         CollisionController.Instance.RemoveAll();
@@ -347,5 +366,12 @@ public abstract class ParentLevel : ILevel
         }
         HUD.Instance.LevelOver();
         SoundController.StopMusic();
+    }
+
+    public void showPositionOnScreen()
+    {
+        Vector2 exactPosition = MagicBrosMario.INSTANCE.Mario.Position;
+        Vector2 tilePosition = new Vector2((int)(exactPosition.X / tileSize), (int)(exactPosition.Y / tileSize));
+        Console.WriteLine($"Mario is at pixel position {exactPosition} and tile position {tilePosition}");
     }
 }

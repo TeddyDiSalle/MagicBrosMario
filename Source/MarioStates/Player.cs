@@ -32,7 +32,6 @@ public class Player : ICollidable
     private readonly List<MarioFireball> fireballs = [];
     private float FireballTimer = 0;
     public int Lives { get; set; } = 3;
-    public Point LevelStartPosition { get; set; }
     public bool IsAlive { get; set; } = true;
     private const double DamageCoolDown = 2.0;
     public double DamageTimer = 2;

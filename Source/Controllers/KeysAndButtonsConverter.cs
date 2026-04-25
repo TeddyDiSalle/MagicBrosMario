@@ -82,7 +82,7 @@ public static class KeysAndButtonsConverter{
             case Keys.R:
                 return Buttons.Start;
             default:
-                System.Console.WriteLine("No key mapping for button " + k);
+                //System.Console.WriteLine("No key mapping for button " + k);
                 return null;
         }
     }

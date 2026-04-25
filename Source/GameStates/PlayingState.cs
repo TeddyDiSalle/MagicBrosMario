@@ -15,7 +15,10 @@ namespace MagicBrosMario.Source.GameStates
 		public PlayingState(ILevel level)
 		{
 			_level = level;
-
+		}
+		
+		public void Initialize()
+		{
 			Texture2D blockTex = MagicBrosMario.INSTANCE.Content.Load<Texture2D>("blocks");
 			Texture2D enemySheet = MagicBrosMario.INSTANCE.Content.Load<Texture2D>("characters");
 			Texture2D itemSheet = MagicBrosMario.INSTANCE.Content.Load<Texture2D>("items");
@@ -29,8 +32,9 @@ namespace MagicBrosMario.Source.GameStates
             MagicBrosMario.INSTANCE.Mario.SetVisibility(true);
 			MagicBrosMario.INSTANCE.Mario.EndPhase = Player.EndLevelPhase.None;
             MagicBrosMario.INSTANCE.Mario.SetVelocity(new Vector2(0,0));
-            MagicBrosMario.INSTANCE.Mario.SetPositon(new Vector2(MagicBrosMario.INSTANCE.Mario.LevelStartPosition.X, MagicBrosMario.INSTANCE.Mario.LevelStartPosition.Y));
+            MagicBrosMario.INSTANCE.Mario.SetPositon(new Vector2(MagicBrosMario.INSTANCE.MarioStartPosition.X, MagicBrosMario.INSTANCE.MarioStartPosition.Y));
 		}
+
 
 		public void Update(GameTime gameTime)
 		{
