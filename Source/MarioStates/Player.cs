@@ -148,6 +148,9 @@ public class Player : ICollidable
         ChangeState(new SmallMarioIdleState(this));
         IsAlive = true;
         DamageTimer = 2.0;
+        EndPhase = EndLevelPhase.None;
+        PipePhase = PipeTravelPhase.None;
+        PlayerCollision.ResetCollisionFields();
     }
     public void PowerUp(Power power)
     {

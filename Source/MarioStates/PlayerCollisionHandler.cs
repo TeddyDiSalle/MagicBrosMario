@@ -29,6 +29,11 @@ public class PlayerCollisionHandler
         CollisionController.Instance.BindPlayer(player);
     }
 
+    public void ResetCollisionFields()
+    {
+        ReachedFlagpole = false;
+    }
+
     public void OnCollidePlayer(Player player, Collision.CollideDirection direction)
     {
         //Nothing
