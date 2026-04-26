@@ -17,23 +17,25 @@ namespace MagicBrosMario.Source.Items
 		private Vector2 floatPosition;
 		private bool isSliding = false;
 		private float amountFell = 0f;
+		private FlagPole associatedPole;
 
 		public Rectangle CollisionBox => new Rectangle(
 			(int)floatPosition.X, (int)floatPosition.Y,
 			sprite.Size.X, sprite.Size.Y);
 
-		public Flag(SharedTexture texture, int positionX, int positionY)
+		public Flag(SharedTexture texture, int positionX, int positionY, FlagPole pole)
 		{
 			sprite = texture.NewSprite(259, 44, 16, 16);
 			sprite.Scale = 2f;
 			floatPosition = new Vector2(positionX, positionY);
 			sprite.Position = floatPosition.ToPoint();
+			associatedPole = pole;
 			CollisionController.Instance.AddItem(this);
 		}
 
 		public void Update(GameTime gameTime)
 		{
-			if (!isSliding && FlagPole.PlayerHit)
+			if (!isSliding && associatedPole.getPlayerHit())
 			{
 				isSliding = true;
 			}
