@@ -1,4 +1,5 @@
-﻿using MagicBrosMario.Source.Block;
+﻿using System;
+using MagicBrosMario.Source.Block;
 using MagicBrosMario.Source.Collision;
 using MagicBrosMario.Source.MarioStates;
 using MagicBrosMario.Source.Sprite;
@@ -51,6 +52,8 @@ namespace MagicBrosMario.Source.Items
 		{
 			if (isCollected) return; 
 			isCollected = true;
+			//Console.WriteLine($"Axe collected! Group: {groupNum}");
+			BridgeBlock.CollapseBridge(groupNum);
 			CollisionController.Instance.RemoveItem(this);
 			sprite.Drop();
 		}

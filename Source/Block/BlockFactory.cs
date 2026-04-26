@@ -261,7 +261,7 @@ public static class BlockFactory
         return item switch
         {
             Source.Block.QuestionMarkBlock.InnerItem.Coin => Source.Block.QuestionMarkBlock.InnerItem.Gold,
-            Source.Block.QuestionMarkBlock.InnerItem.Star => Source.Block.QuestionMarkBlock.InnerItem.Diamond,
+            Source.Block.QuestionMarkBlock.InnerItem.Mushroom => Source.Block.QuestionMarkBlock.InnerItem.Diamond,
             Source.Block.QuestionMarkBlock.InnerItem.OneUp => Source.Block.QuestionMarkBlock.InnerItem.Totem,
             _ => item
         };

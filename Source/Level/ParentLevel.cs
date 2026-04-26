@@ -53,7 +53,7 @@ public abstract class ParentLevel : ILevel
     private readonly DeferredPipeLinkResolver _pipeResolver = new();
     private readonly HashSet<IEnemy> _activatedEnemies = new();
     private int bridgeGroupCounter = 0;
-    private int bridgeOrderCounter = 0;
+    private int bridgeOrderCounter = 1;
 
     private ISprite backgroundSprite;
 
@@ -187,6 +187,11 @@ public abstract class ParentLevel : ILevel
                         items[r][c] = null;
                     }
                 }
+
+                if (blocks[r][c] != null)
+                {
+                    blocks[r][c].Update(gt);
+                }
             }
         }
     }
@@ -235,11 +240,11 @@ public abstract class ParentLevel : ILevel
         if (string.IsNullOrEmpty(token.BlockId))
         {
             int? group = null;
-            if (itemId == "20")
+            if (itemId == "06")
             {
                 // axe has appeared so there is a new group of bridge blocks coming up
                 bridgeGroupCounter++;
-                bridgeOrderCounter = 0;
+                bridgeOrderCounter = 1;
                 group = bridgeGroupCounter;
             }
 

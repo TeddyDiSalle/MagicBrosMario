@@ -93,6 +93,7 @@ public static class BlockManager
 
         if(order != null) // bridge block
         {
+            //Console.WriteLine($"Creating bridge block with group {group} and order {order} at position ({x}, {y})");
             return BlockFactory.BridgeBlock((int)group, (int)order)
                 .WithPosition(x, y)
                 .WithScale(_scale);

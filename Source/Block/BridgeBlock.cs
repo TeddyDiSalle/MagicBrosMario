@@ -40,7 +40,7 @@ public class BridgeBlock(ISprite sprite, int group, int order) : BlockBase<Bridg
         GroupCounter[group] += 1;
         
         Sprite.Drop();
-        Sprite = null;
+        //Sprite = null;
         CollisionController.Instance.RemoveBlock(this);
     }
 

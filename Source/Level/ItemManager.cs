@@ -34,6 +34,7 @@ public static class ItemManager
     public static IItems CreateItem(string itemId, int x, int y, int? group = null)
     {   
         if(group != null) {
+            //Console.WriteLine($"Creating axe at position ({x}, {y}) with group {group}");
             return ItemFactory.CreateAxe(x, y, (int)group);
         }
         if (ItemConstructors.TryGetValue(itemId, out var constructor))
