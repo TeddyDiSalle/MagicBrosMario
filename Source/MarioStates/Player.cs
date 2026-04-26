@@ -347,7 +347,7 @@ public class Player : ICollidable
         {
             KillMario();
         }
-
+        IsSprinting = false;
         PlayerState.Update(gameTime);
         CollisionBox = new Rectangle((int)Math.Ceiling(Position.X), (int)Math.Ceiling(Position.Y), CollisionBox.Width, CollisionBox.Height);
         if(EndPhase == EndLevelPhase.InCastleGate) { SetVisibility(false); }
