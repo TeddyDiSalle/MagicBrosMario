@@ -18,7 +18,7 @@ public class MagicBrosMario : Game
     private IGameState _currentStateDONOUTUSE;
     private bool isPaused = false;
     public bool finishedLevel1 = false;
-
+    private readonly Color backgroundColor = new Color(146, 144, 255);
     public IGameState CurrentState
     {
         get => _currentStateDONOUTUSE;
@@ -160,8 +160,7 @@ public class MagicBrosMario : Game
 
     protected override void Draw(GameTime gameTime)
     {
-        GraphicsDevice.Clear(Color.CornflowerBlue);
-
+        GraphicsDevice.Clear(backgroundColor);
         _spriteBatch.Begin(samplerState: SamplerState.PointClamp, sortMode: SpriteSortMode.BackToFront);
         
         CurrentState.Draw(_spriteBatch);
