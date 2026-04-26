@@ -37,6 +37,7 @@ public class Player : ICollidable
     public double DamageTimer = 2;
     public Sprite.SharedTexture Texture { get; }
     public bool IsJumping { get; set; } = false;
+    private bool IsSprinting = false;
 
     public int JumpCalls { get; set; } = 0;
     public const int maxJumpCalls = 6;
@@ -232,6 +233,11 @@ public class Player : ICollidable
         }
     }
 
+    public void Sprint()
+    {
+        IsSprinting = true;
+    }
+
     public void SetVisibility(bool visible)
     {
         PlayerState.SetVisibility(visible);
@@ -255,7 +261,7 @@ public class Player : ICollidable
         {
             Velocity += new Vector2(0, (PlayerState.GetCurrentMode() == Power.Cloud) ? Gravity*3/4 : Gravity);
         }
-        Position += Velocity;
+        Position += (!IsSprinting) ? Velocity : (Velocity + new Vector2( Velocity.X/2, 0));
         if (PipePhase == PipeTravelPhase.Entering)
         {
             MarioGameController.Mute();
