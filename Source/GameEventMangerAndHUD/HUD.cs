@@ -232,7 +232,13 @@ public class HUD
                        
             if (TransitionTimer <= 0)
             {
-                MagicBrosMario.INSTANCE.CurrentState = new TransitionState(new Level.Level1());
+                if (!MagicBrosMario.INSTANCE.finishedLevel1) {
+					MagicBrosMario.INSTANCE.CurrentState = new TransitionState(new Level.Level1());
+				}
+                else
+                {
+					MagicBrosMario.INSTANCE.CurrentState = new TransitionState(new Level.Level2());
+				}
                 goToTransition = false;
                 TransitionTimer = 3f;
             }

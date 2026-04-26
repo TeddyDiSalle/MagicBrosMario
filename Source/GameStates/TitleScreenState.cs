@@ -21,6 +21,7 @@ namespace MagicBrosMario.Source.GameStates
             MagicBrosMario.INSTANCE.Mario.Lives = 3;
             HUD.Instance.ResetScore();
             MarioGameController.UnMute();
+            MagicBrosMario.INSTANCE.finishedLevel1 = false;
         }
 
         public void Update(GameTime gameTime)
