@@ -29,7 +29,7 @@ public class BridgeBlock(ISprite sprite, int group, int order) : BlockBase<Brick
     {
         GroupCounter.TryAdd(group, 0);
 
-        if (GroupCounter[group] == order)
+        if (GroupCounter[group] != order)
             return;
 
         bridgeBreakProgress += gameTime.ElapsedGameTime.Milliseconds;
