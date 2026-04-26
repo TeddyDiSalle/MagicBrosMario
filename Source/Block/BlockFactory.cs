@@ -1,4 +1,5 @@
 using System;
+using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.Sprite;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -235,7 +236,7 @@ public static class BlockFactory
     {
         var sprite = BlockSharedTexture.NewAnimatedSprite(64, 208, 16, 16, 1, 1f);
         var emptySprite = BlockSharedTexture.NewSprite(80, 208, 16, 16);
-        var block = new QuestionMarkBlock(sprite, emptySprite, item);
+        var block = new QuestionMarkBlock(sprite, emptySprite, ToMinecraftChestItem(item));
         return block;
     }
 
@@ -253,5 +254,16 @@ public static class BlockFactory
         sprite.Midground();
         var block = new BrickBlock(sprite);
         return block;
+    }
+
+    public static QuestionMarkBlock.InnerItem ToMinecraftChestItem(QuestionMarkBlock.InnerItem item)
+    {
+        return item switch
+        {
+            Source.Block.QuestionMarkBlock.InnerItem.Coin => Source.Block.QuestionMarkBlock.InnerItem.Gold,
+            Source.Block.QuestionMarkBlock.InnerItem.Star => Source.Block.QuestionMarkBlock.InnerItem.Diamond,
+            Source.Block.QuestionMarkBlock.InnerItem.OneUp => Source.Block.QuestionMarkBlock.InnerItem.Totem,
+            _ => item
+        };
     }
 }
