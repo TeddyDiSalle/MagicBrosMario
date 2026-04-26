@@ -26,7 +26,7 @@ namespace MagicBrosMario.Source.GameStates
 
         public void Update(GameTime gameTime)
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.Enter))
+            if (MarioGameController.IsStartButtonPressed())
             {
                 MagicBrosMario.INSTANCE.CurrentState = new TransitionState(new Level.Level1());
             }

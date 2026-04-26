@@ -93,6 +93,8 @@ public static class MarioGameController{
         keysNMouseInputMap.Bind(Keys.Z, gt => MagicBrosMario.INSTANCE.Mario.Attack());
         keysNMouseInputMap.Bind(Keys.N, gt => MagicBrosMario.INSTANCE.Mario.Attack());
         keysNMouseInputMap.Bind(Keys.E, gt =>  MagicBrosMario.INSTANCE.Mario.TakeDamage());
+        keysNMouseInputMap.Bind(Keys.B, gt =>  MagicBrosMario.INSTANCE.Mario.Sprint());
+        keysNMouseInputMap.Bind(Keys.LeftShift, gt =>  MagicBrosMario.INSTANCE.Mario.Sprint());
         keysNMouseInputMap.Bind(Keys.Q, gt => MagicBrosMario.INSTANCE.Exit()); 
         keysNMouseInputMap.Bind(Keys.R, gt => MagicBrosMario.INSTANCE.CurrentState =new TitleScreenState()); // reset MagicBrosMario.INSTANCE
     }
@@ -102,51 +104,90 @@ public static class MarioGameController{
         gamePadNStickInputMap = new GamePadNStickCommandMapper();
         gamePadNStickInputMap.SetFromKeyboardMapper(keysNMouseInputMap);
     }
+
+    private enum ActiveInputType
+    {
+        KeyboardMouse,
+        GamePad
+    }
+
+    private static ActiveInputType activeInput = ActiveInputType.KeyboardMouse;
+
     public static void Update(GameTime gameTime)
     {
-        if(!muted){
+        if (muted)
+            return;
+
+        KeyboardInfo keyb = gameData.keyb;
+        MouseInfo mouse = gameData.mouse;
+        GamePadInfo gamepad = gameData.gamepad;
+
+        keyb.Update();
+        mouse.Update();
+
+        //bool gamepadConnected = GamePad.GetState(PlayerIndex.One).IsConnected;
+
+        //if (gamepadConnected)
+            gamepad.Update();
+
+        bool keyboardIsBeingUsed = IsKeyboardMovementInput(keyb);
+        bool gamepadIsBeingUsed = IsGamePadMovementInput(gamepad); // || gamepadConnected;
+
+        // Switch active device only when that device is actually being used
+        if (keyboardIsBeingUsed && !gamepadIsBeingUsed)
+        {
+            activeInput = ActiveInputType.KeyboardMouse;
+        }
+        else if (gamepadIsBeingUsed && !keyboardIsBeingUsed)
+        {
+            activeInput = ActiveInputType.GamePad;
+        }
+
+        if (activeInput == ActiveInputType.GamePad)
+        {
+            GPUpdate(gameTime);
+        }
+        else
+        {
             MNKUpdate(gameTime);
-            //GPUpdate(gameTime);
         }
     }
 
-    private static void MNKUpdate(GameTime gt)
-    {
+    private static void MNKUpdate(GameTime gt){
         KeyboardInfo keyb = gameData.keyb;
-            MouseInfo mouse = gameData.mouse;
-            keyb.Update();
-            mouse.Update();
-            
-            Player player = MagicBrosMario.INSTANCE.Mario;
-            
-            keysNMouseInputMap.ProcessInput(gt, keyb, mouse);// check all the inputs of the mouse and keyboard and run their corresponding function
+        MouseInfo mouse = gameData.mouse;
 
-            if (!keyb.IsKeyDown(Keys.S) && !keyb.IsKeyDown(Keys.Down))
-            {
-                player.ReleaseCrouch();
-            }
+        Player player = MagicBrosMario.INSTANCE.Mario;
 
-            bool moving =
-                keyb.IsKeyDown(Keys.A) || keyb.IsKeyDown(Keys.Left) ||
-                keyb.IsKeyDown(Keys.D) || keyb.IsKeyDown(Keys.Right) ||
-                keyb.IsKeyDown(Keys.S) || keyb.IsKeyDown(Keys.Down) ||
-                keyb.IsKeyDown(Keys.W) || keyb.IsKeyDown(Keys.Up);
-            if(!moving)
-            {
-                player.Idle();
-            }
+        keysNMouseInputMap.ProcessInput(gt, keyb, mouse);
+
+        if (!keyb.IsKeyDown(Keys.S) && !keyb.IsKeyDown(Keys.Down))
+        {
+            player.ReleaseCrouch();
+        }
+
+        bool moving =
+            keyb.IsKeyDown(Keys.A) || keyb.IsKeyDown(Keys.Left) ||
+            keyb.IsKeyDown(Keys.D) || keyb.IsKeyDown(Keys.Right) ||
+            keyb.IsKeyDown(Keys.S) || keyb.IsKeyDown(Keys.Down) ||
+            keyb.IsKeyDown(Keys.W) || keyb.IsKeyDown(Keys.Up);
+
+        if (!moving)
+        {
+            player.Idle();
+        }
     }
 
-    private static void GPUpdate(GameTime gt)
-    {
+    
+    private static void GPUpdate(GameTime gt){
         GamePadInfo gamepad = gameData.gamepad;
-        gamepad.Update();
 
         Player player = MagicBrosMario.INSTANCE.Mario;
 
         gamePadNStickInputMap.ProcessInput(gt, gamepad);
 
-        if (!gamepad.IsButtonDown(Buttons.LeftThumbstickDown) && !gamepad.IsButtonDown(Buttons.DPadDown))
+        if (!gamepad.IsButtonDown(Buttons.LeftThumbstickDown) &&
+            !gamepad.IsButtonDown(Buttons.DPadDown))
         {
             player.ReleaseCrouch();
         }
@@ -155,11 +196,33 @@ public static class MarioGameController{
             gamepad.IsButtonDown(Buttons.LeftThumbstickLeft) || gamepad.IsButtonDown(Buttons.DPadLeft) ||
             gamepad.IsButtonDown(Buttons.LeftThumbstickRight) || gamepad.IsButtonDown(Buttons.DPadRight) ||
             gamepad.IsButtonDown(Buttons.LeftThumbstickDown) || gamepad.IsButtonDown(Buttons.DPadDown) ||
-            gamepad.IsButtonDown(Buttons.LeftThumbstickUp) || gamepad.IsButtonDown(Buttons.DPadUp);
-        if(!moving)
+            gamepad.IsButtonDown(Buttons.LeftThumbstickUp) || gamepad.IsButtonDown(Buttons.DPadUp)|| gamepad.IsButtonDown(Buttons.A);
+
+        if (!moving)
         {
             player.Idle();
         }
+    }
+
+    private static bool IsKeyboardMovementInput(KeyboardInfo keyb){
+        return
+            keyb.IsKeyDown(Keys.A) || keyb.IsKeyDown(Keys.Left) ||
+            keyb.IsKeyDown(Keys.D) || keyb.IsKeyDown(Keys.Right) ||
+            keyb.IsKeyDown(Keys.S) || keyb.IsKeyDown(Keys.Down) ||
+            keyb.IsKeyDown(Keys.W) || keyb.IsKeyDown(Keys.Up) ||
+            keyb.IsKeyDown(Keys.Space);
+    }
+
+    private static bool IsGamePadMovementInput(GamePadInfo gamepad){
+        return
+            gamepad.IsButtonDown(Buttons.LeftThumbstickLeft) || gamepad.IsButtonDown(Buttons.DPadLeft) ||
+            gamepad.IsButtonDown(Buttons.LeftThumbstickRight) || gamepad.IsButtonDown(Buttons.DPadRight) ||
+            gamepad.IsButtonDown(Buttons.LeftThumbstickDown) || gamepad.IsButtonDown(Buttons.DPadDown) ||
+            gamepad.IsButtonDown(Buttons.LeftThumbstickUp) || gamepad.IsButtonDown(Buttons.DPadUp) ||
+            gamepad.IsButtonDown(Buttons.A) ||
+            gamepad.IsButtonDown(Buttons.B) ||
+            gamepad.IsButtonDown(Buttons.X) ||
+            gamepad.IsButtonDown(Buttons.Y);
     }
 
     public static bool IsMuted()
@@ -175,21 +238,19 @@ public static class MarioGameController{
         muted = false;
     }
 
-    public static bool IsKeyDown(Keys k)
-    {
-        Buttons butt = (Buttons)k;
-        if(k == Keys.Down || k == Keys.S){
-            butt = Buttons.LeftThumbstickDown;
-        }
-        return gameData.keyb.IsKeyDown(k) || gameData.gamepad.IsButtonDown(butt);
-    }
-
     public static bool IsMarioDown()
     {
-        return  gameData.keyb.IsKeyDown(Keys.S) || gameData.keyb.IsKeyDown(Keys.Down) || gameData.gamepad.IsButtonDown(Buttons.LeftThumbstickDown);
+        return  gameData.keyb.IsKeyDown(Keys.S) || gameData.keyb.IsKeyDown(Keys.Down) || 
+                gameData.gamepad.IsButtonDown(Buttons.LeftThumbstickDown) || gameData.gamepad.IsButtonDown(Buttons.DPadDown);
     }
     public static bool IsMarioUp()
     {
-        return gameData.keyb.IsKeyDown(Keys.W) || gameData.keyb.IsKeyDown(Keys.Up) || gameData.gamepad.IsButtonDown(Buttons.LeftThumbstickUp);
+        return gameData.keyb.IsKeyDown(Keys.W) || gameData.keyb.IsKeyDown(Keys.Up) ||
+               gameData.gamepad.IsButtonDown(Buttons.LeftThumbstickUp) || gameData.gamepad.IsButtonDown(Buttons.DPadUp)|| gameData.gamepad.IsButtonDown(Buttons.A);
+    }
+
+    public static bool IsStartButtonPressed()
+    {
+        return gameData.keyb.IsKeyDown(Keys.Enter) || gameData.gamepad.IsButtonDown(Buttons.A);
     }
 }
