@@ -10,8 +10,6 @@ namespace MagicBrosMario.Source.Items
 {
 	internal class FlagPole : IItems, ICollidable
 	{
-		public static bool PlayerHit = false;
-
 		private Sprite.ISprite sprite;
 		private Vector2 floatPosition;
 		private bool playerHit = false;
@@ -34,6 +32,11 @@ namespace MagicBrosMario.Source.Items
 			if (playerHit) return;
 			playerHit = true;
 			MagicBrosMario.INSTANCE.finishedLevel1 = true;
+		}
+
+		public bool getPlayerHit()
+		{
+			return playerHit;
 		}
 
 		public void Update(GameTime gameTime) { }
