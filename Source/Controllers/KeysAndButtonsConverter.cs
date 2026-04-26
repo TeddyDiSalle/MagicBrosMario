@@ -49,14 +49,10 @@ public static class KeysAndButtonsConverter{
                 return Buttons.A;
             case Keys.B:
                 return Buttons.B;
-            case Keys.D0:
-                return Buttons.X;
-            case Keys.D1:
-                return Buttons.Y;
             case Keys.Z:
                 return Buttons.RightShoulder;
             case Keys.N:
-                return Buttons.RightShoulder;
+                return Buttons.X;
             case Keys.Q:
                 return Buttons.None;
             case Keys.Escape:
@@ -78,9 +74,9 @@ public static class KeysAndButtonsConverter{
             case Keys.D:
                 return Buttons.LeftThumbstickRight;
             case Keys.P:
-                return Buttons.Back;
-            case Keys.R:
                 return Buttons.Start;
+            case Keys.R:
+                return Buttons.Back;
             default:
                 //System.Console.WriteLine("No key mapping for button " + k);
                 return null;
