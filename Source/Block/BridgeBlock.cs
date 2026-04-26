@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace MagicBrosMario.Source.Block;
 
-public class BridgeBlock(ISprite sprite, int group, int order) : BlockBase<BrickBlock>(sprite)
+public class BridgeBlock(ISprite sprite, int group, int order) : BlockBase<BridgeBlock>(sprite)
 {
     // in millis
     private const int BridgeBreakTimeDiff = 100;
