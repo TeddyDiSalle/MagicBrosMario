@@ -29,6 +29,7 @@ public class FireMarioJumpState : IPlayerState
         {
             Sprites[i].Scale = scaleFactor;
             Sprites[i].Visible = false;
+            Sprites[i].Depth = 0.6f;
         }
         CurrentSprite = Sprites[0];
         CurrentSprite.Visible = true;
@@ -120,6 +121,7 @@ public class FireMarioJumpState : IPlayerState
     }
     public void Update(GameTime gameTime)
     {
+        if (!MarioGameController.IsMarioUp()) { Mario.JumpCalls = Player.maxJumpCalls; }
         if (Mario.Invincible)
         {
             Mario.StarTimeRemaining += gameTime.ElapsedGameTime.TotalSeconds;

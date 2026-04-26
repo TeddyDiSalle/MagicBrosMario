@@ -43,7 +43,6 @@ public class PlayerCollisionHandler
                 if (direction == CollideDirection.Down)
                 {
                     player.SetPositon(player.Position + new Vector2(cloud.getX(), 0));
-                    player.SetVelocity(new Vector2(player.Velocity.X, 0));
                     UnjumpOnGroundCollide();
                 }
                 break;
@@ -57,27 +56,20 @@ public class PlayerCollisionHandler
                 });
                 break;
             case MovingPlatform_Size1 plat:
-                Debug.WriteLine("platform size 1 collision detected");
                 UnCollide(plat.CollisionBox, direction);
                 if (direction is CollideDirection.Left or CollideDirection.Right) { return; }
-                player.SetVelocity(new Vector2(player.Velocity.X, 0));
                 player.SetPositon(player.Position + new Vector2(0, plat.getY()));
                 UnjumpOnGroundCollide();
                 break;
             case MovingPlatform_Size2 plat:
-                Debug.WriteLine("platform size 2 collision detected");
                 UnCollide(plat.CollisionBox, direction);
                 if (direction is CollideDirection.Left or CollideDirection.Right) { return; }
-                player.SetVelocity(new Vector2(player.Velocity.X, 0));
                 player.SetPositon(player.Position + new Vector2(0, plat.getY()));
                 UnjumpOnGroundCollide();
                 break;
             case MovingPlatform_Size3 plat:
-                Debug.WriteLine("platform size 3" +
-                    " collision detected");
                 UnCollide(plat.CollisionBox, direction);
                 if (direction is CollideDirection.Left or CollideDirection.Right) { return; }
-                player.SetVelocity(new Vector2(player.Velocity.X, 0));
                 player.SetPositon(player.Position + new Vector2(0, plat.getY()));
                 UnjumpOnGroundCollide();
                 break;

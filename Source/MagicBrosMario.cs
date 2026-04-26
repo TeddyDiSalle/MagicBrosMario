@@ -17,6 +17,7 @@ public class MagicBrosMario : Game
     private SpriteBatch _spriteBatch;
     private IGameState _currentStateDONOUTUSE;
     private bool isPaused = false;
+    public bool finishedLevel1 = false;
 
     public IGameState CurrentState
     {

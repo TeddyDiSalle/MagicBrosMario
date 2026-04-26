@@ -33,6 +33,7 @@ namespace MagicBrosMario.Source.Items
 		{
 			if (playerHit) return;
 			playerHit = true;
+			MagicBrosMario.INSTANCE.finishedLevel1 = true;
 		}
 
 		public void Update(GameTime gameTime) { }

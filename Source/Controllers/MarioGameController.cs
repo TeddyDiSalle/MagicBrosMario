@@ -179,5 +179,8 @@ public static class MarioGameController{
     {
         return  gameData.keyb.IsKeyDown(Keys.S) || gameData.keyb.IsKeyDown(Keys.Down) || gameData.gamepad.IsButtonDown(Buttons.LeftThumbstickDown);
     }
-
+    public static bool IsMarioUp()
+    {
+        return gameData.keyb.IsKeyDown(Keys.W) || gameData.keyb.IsKeyDown(Keys.Up) || gameData.gamepad.IsButtonDown(Buttons.LeftThumbstickUp);
+    }
 }

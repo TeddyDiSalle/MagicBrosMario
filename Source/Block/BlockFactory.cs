@@ -233,7 +233,7 @@ public static class BlockFactory
 
     public static QuestionMarkBlock MinecraftChestBlock(QuestionMarkBlock.InnerItem item)
     {
-        var sprite = BlockSharedTexture.NewAnimatedSprite(64, 208, 16, 16, 1, 1000000f);
+        var sprite = BlockSharedTexture.NewAnimatedSprite(64, 208, 16, 16, 1, 1f);
         var emptySprite = BlockSharedTexture.NewSprite(80, 208, 16, 16);
         var block = new QuestionMarkBlock(sprite, emptySprite, item);
         return block;
@@ -243,7 +243,6 @@ public static class BlockFactory
     {
         var sprite = BlockSharedTexture.NewSprite(96, 208, 16, 16);
         sprite.Midground();
-        // replace this with actual obsidian
         var block = new Block(sprite);
         return block;
     }
