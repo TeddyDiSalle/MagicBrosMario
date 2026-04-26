@@ -93,8 +93,8 @@ public static class MarioGameController{
         keysNMouseInputMap.Bind(Keys.Z, gt => MagicBrosMario.INSTANCE.Mario.Attack());
         keysNMouseInputMap.Bind(Keys.N, gt => MagicBrosMario.INSTANCE.Mario.Attack());
         keysNMouseInputMap.Bind(Keys.E, gt =>  MagicBrosMario.INSTANCE.Mario.TakeDamage());
-        //keysNMouseInputMap.Bind(Keys.B, gt =>  MagicBrosMario.INSTANCE.Mario.Sprint());
-        //keysNMouseInputMap.Bind(Keys.LeftShift, gt =>  MagicBrosMario.INSTANCE.Mario.Sprint());
+        keysNMouseInputMap.Bind(Keys.B, gt =>  MagicBrosMario.INSTANCE.Mario.Sprint());
+        keysNMouseInputMap.Bind(Keys.LeftShift, gt =>  MagicBrosMario.INSTANCE.Mario.Sprint());
         keysNMouseInputMap.Bind(Keys.Q, gt => MagicBrosMario.INSTANCE.Exit()); 
         keysNMouseInputMap.Bind(Keys.R, gt => MagicBrosMario.INSTANCE.CurrentState =new TitleScreenState()); // reset MagicBrosMario.INSTANCE
     }
@@ -238,15 +238,6 @@ public static class MarioGameController{
         muted = false;
     }
 
-    public static bool IsKeyDown(Keys k)
-    {
-        Buttons butt = (Buttons)k;
-        if(k == Keys.Down || k == Keys.S){
-            butt = Buttons.LeftThumbstickDown;
-        }
-        return gameData.keyb.IsKeyDown(k) || gameData.gamepad.IsButtonDown(butt);
-    }
-
     public static bool IsMarioDown()
     {
         return  gameData.keyb.IsKeyDown(Keys.S) || gameData.keyb.IsKeyDown(Keys.Down) || 
@@ -256,5 +247,10 @@ public static class MarioGameController{
     {
         return gameData.keyb.IsKeyDown(Keys.W) || gameData.keyb.IsKeyDown(Keys.Up) ||
                gameData.gamepad.IsButtonDown(Buttons.LeftThumbstickUp) || gameData.gamepad.IsButtonDown(Buttons.DPadUp)|| gameData.gamepad.IsButtonDown(Buttons.A);
+    }
+
+    public static bool IsStartButtonPressed()
+    {
+        return gameData.keyb.IsKeyDown(Keys.Enter) || gameData.gamepad.IsButtonDown(Buttons.A);
     }
 }
