@@ -261,7 +261,7 @@ public class Player : ICollidable
         {
             Velocity += new Vector2(0, (PlayerState.GetCurrentMode() == Power.Cloud) ? Gravity*3/4 : Gravity);
         }
-        Position += (!IsSprinting) ? Velocity : (Velocity + new Vector2( Velocity.X/2, 0));
+        Position += (!IsSprinting) ? Velocity : (Velocity + new Vector2( Velocity.X/3, 0));
         if (PipePhase == PipeTravelPhase.Entering)
         {
             MarioGameController.Mute();
