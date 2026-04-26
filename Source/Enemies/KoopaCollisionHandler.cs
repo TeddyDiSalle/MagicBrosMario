@@ -89,5 +89,28 @@ public class KoopaCollisionHandler
                 Data = this
             });
         }
+        if (item is Cloud or MovingPlatform_Size1 or MovingPlatform_Size2 or MovingPlatform_Size3)
+        {
+            HandlePlatformCollision(item, direction);
+            return;
+        }
+    }
+
+    private void HandlePlatformCollision(IItems item, CollideDirection direction)
+    {
+        if (direction == CollideDirection.Down)
+        {
+            Rectangle intersect = Rectangle.Intersect(koopa.CollisionBox, item.CollisionBox);
+            koopa.Position = new Point(koopa.Position.X, koopa.Position.Y - intersect.Height);
+            koopa.ResetGravity();
+        }
+        else if (direction == CollideDirection.Left || direction == CollideDirection.Right)
+        {
+            if (item.CollisionBox.Y < koopa.Position.Y + koopa.CollisionBox.Height - 4)
+            {
+                if (koopa.IsWalking() || koopa.IsShellMoving())
+                    koopa.UnCollide(Rectangle.Intersect(koopa.CollisionBox, item.CollisionBox), direction);
+            }
+        }
     }
 }

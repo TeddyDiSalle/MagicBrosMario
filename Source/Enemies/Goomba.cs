@@ -19,12 +19,13 @@ public class Goomba : IEnemy, ICollidable
     private bool movingRight = true;
     private bool isAlive = true;
     private float velocityY = 0f;
+    private GoombaCollisionHandler collisionHandler;
 
     public Point Position
     {
         get => sprites[0].Position;
-        set 
-        { 
+        set
+        {
             foreach (var sprite in sprites)
                 sprite.Position = value;
         }
@@ -41,7 +42,7 @@ public class Goomba : IEnemy, ICollidable
 
     public Goomba(SharedTexture EnemyTexture, int y, int x)
     {
-        sprites = [EnemyTexture.NewAnimatedSprite(296, 187, 16, 16, 2, 0.2f), 
+        sprites = [EnemyTexture.NewAnimatedSprite(296, 187, 16, 16, 2, 0.2f),
                     EnemyTexture.NewSprite(276, 187, 16, 16)];
         foreach (var sprite in sprites)
         {
@@ -49,6 +50,7 @@ public class Goomba : IEnemy, ICollidable
             sprite.Visible = false;
         }
         Position = new Point(x, y);
+        collisionHandler = new GoombaCollisionHandler(this);
     }
 
     public bool GetIsAlive() => isAlive;
@@ -85,7 +87,7 @@ public class Goomba : IEnemy, ICollidable
         CollisionController.Instance.RemoveEnemy(this);
     }
 
-    private void UnCollide(Rectangle intersect, CollideDirection direction)
+    public void UnCollide(Rectangle intersect, CollideDirection direction)
     {
         if (direction == CollideDirection.Left)
         {
@@ -99,66 +101,20 @@ public class Goomba : IEnemy, ICollidable
         }
     }
 
+    public void ResetGravity() => velocityY = 0;
+
     // Camera handles drawing
     public void Draw(SpriteBatch _spriteBatch) { }
 
-    public void OnCollideEnemy(IEnemy enemy, CollideDirection direction)
-    {
-        if (enemy is Bowser || (enemy is Koopa koopa && koopa.IsShellMoving()))
-        {
-            Kill();
-            HUD.Instance.SendEvent(new GameEvent
-            {
-                EventType = GameEventType.EnemyStomped,
-                EventPosition = Position,
-                Data = this
-            });
-            return;
-        }
-        if (direction == CollideDirection.Left || direction == CollideDirection.Right)
-            UnCollide(Rectangle.Intersect(CollisionBox, enemy.CollisionBox), direction);
-    }
+    public void OnCollideEnemy(IEnemy enemy, CollideDirection direction) =>
+        collisionHandler.OnCollideEnemy(enemy, direction);
 
-    public void OnCollideBlock(IBlock block, CollideDirection direction)
-    {
-        if (direction == CollideDirection.Down)
-        {
-            Rectangle intersect = Rectangle.Intersect(CollisionBox, block.CollisionBox);
-            Position = new Point(Position.X, Position.Y - intersect.Height);
-            velocityY = 0;
-        }
-        else if (direction == CollideDirection.Left || direction == CollideDirection.Right)
-        {
-            if (block.CollisionBox.Y < Position.Y + CollisionBox.Height - 4)
-                UnCollide(Rectangle.Intersect(CollisionBox, block.CollisionBox), direction);
-        }
-    }
+    public void OnCollideBlock(IBlock block, CollideDirection direction) =>
+        collisionHandler.OnCollideBlock(block, direction);
 
-    public void OnCollidePlayer(Player player, CollideDirection direction)
-    {
-        if(player.GetCurrentPower().Equals(Power.Star)|| (direction == CollideDirection.Top))
-        {
-            Kill();
-            HUD.Instance.SendEvent(new GameEvent
-            {
-                EventType = GameEventType.EnemyStomped,
-                EventPosition = Position,
-                Data = this
-            });
-        }
-    }
+    public void OnCollidePlayer(Player player, CollideDirection direction) =>
+        collisionHandler.OnCollidePlayer(player, direction);
 
-    public void OnCollideItem(IItems item, CollideDirection direction)
-    {
-        if (item is MarioFireball)
-        {
-            Kill();
-            HUD.Instance.SendEvent(new GameEvent
-            {
-                EventType = GameEventType.EnemyKilledByFireball,
-                EventPosition = Position,
-                Data = this
-            });
-        }
-    }
+    public void OnCollideItem(IItems item, CollideDirection direction) =>
+        collisionHandler.OnCollideItem(item, direction);
 }

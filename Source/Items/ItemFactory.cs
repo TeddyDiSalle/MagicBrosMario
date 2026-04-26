@@ -36,10 +36,10 @@ public static class ItemFactory {
         int flagXOffset = -25;
         int flagYOffset = 20; 
         int flagPoleXOffset = 8; 
-        int flagPoleYOffset = 15; 
-        new FlagPole(ITEM_SHARED_TEXTURE, x+flagPoleXOffset, y+flagPoleYOffset);
-        var item = new Flag(ITEM_SHARED_TEXTURE, x+flagXOffset+flagPoleXOffset, y+flagYOffset+flagPoleYOffset);
-        return item;
+        int flagPoleYOffset = 15;
+		FlagPole pole = new FlagPole(ITEM_SHARED_TEXTURE, x + flagPoleXOffset, y + flagPoleYOffset);
+		var item = new Flag(ITEM_SHARED_TEXTURE, x + flagXOffset + flagPoleXOffset, y + flagYOffset + flagPoleYOffset, pole);
+		return item;
     }
 
     public static IItems CreateAxe(int x, int y, int group) {
