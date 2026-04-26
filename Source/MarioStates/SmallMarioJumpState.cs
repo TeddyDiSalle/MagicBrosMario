@@ -114,6 +114,7 @@ public class SmallMarioJumpState : IPlayerState
     }
     public void Update(GameTime gameTime)
     {
+        if (!MarioGameController.IsMarioUp()) { Mario.JumpCalls = Player.maxJumpCalls; }
         if (Mario.Invincible)
         {
             SwitchSprite(1);

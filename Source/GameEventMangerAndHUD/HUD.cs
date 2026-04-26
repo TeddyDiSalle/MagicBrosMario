@@ -129,6 +129,10 @@ public class HUD
                     score += 1000;
                     DisplayScoreGain(gameEvent, 1000);
                 }
+                else
+                {
+                    SoundController.PlaySound(SoundType.OneUp, 1.0f);
+                }
                 break;
             case GameEventType.FlagpoleReached:
                 SoundController.StopMusic();

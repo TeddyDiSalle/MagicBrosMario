@@ -121,6 +121,7 @@ public class FireMarioJumpState : IPlayerState
     }
     public void Update(GameTime gameTime)
     {
+        if (!MarioGameController.IsMarioUp()) { Mario.JumpCalls = Player.maxJumpCalls; }
         if (Mario.Invincible)
         {
             Mario.StarTimeRemaining += gameTime.ElapsedGameTime.TotalSeconds;
