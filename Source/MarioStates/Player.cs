@@ -166,6 +166,7 @@ public class Player : ICollidable
         DamageTimer = 2.0;
         EndPhase = EndLevelPhase.None;
         PipePhase = PipeTravelPhase.None;
+        StarTimeRemaining = StarDuration;
         PlayerCollision.ResetCollisionFields();
     }
     public void PowerUp(Power power)
