@@ -269,8 +269,7 @@ public abstract class ParentLevel : ILevel
 
         int? group = null;
         int? order = null;
-        if (token.BlockId == "16")
-        {
+        if (token.BlockId == "16"){
             // bridge block
             if (!(blocks[row][col - 1] is BridgeBlock))
             {
