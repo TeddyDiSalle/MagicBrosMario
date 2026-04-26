@@ -33,7 +33,7 @@ public class MagicBrosMario : Game
             {
                 if(level == null || level.GetType() != newPlayingState._level.GetType()){
                     //Console.WriteLine("Switching to level: " + newPlayingState._level.Name);
-                    MarioStartPosition = new Point(-1, -1); // let go controll of mario's start position
+                    MarioStartPosition = new Point(-1, -1); // let go control of mario's start position
                 }
                 level = newPlayingState._level;
                 newPlayingState.Initialize();

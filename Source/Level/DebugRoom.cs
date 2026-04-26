@@ -11,7 +11,6 @@ public class DebugRoom : ParentLevel
 		Name = "Debug";
 		TimeLimit = 999;
 		backgroundMusic = Sound.MusicType.Debug;
-		volume = 0.8f;
 
 		//If you wish to edit the debug room for your own purposes
 		// Look at Blocks, Items, or Enemies.xml in the LevelData folder for the correct object ids

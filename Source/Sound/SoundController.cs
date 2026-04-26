@@ -148,4 +148,38 @@ public class SoundController
             MediaPlayer.Resume();
         }
     }
+
+    public static void ToggleMusic()
+    {
+        if (MediaPlayer.State == MediaState.Playing)
+        {
+            PauseMusic();
+        }
+        else if (MediaPlayer.State == MediaState.Paused)
+        {
+            ResumeMusic();
+        }
+    }
+
+    public static void ToggleMute()
+    {
+        if (MediaPlayer.Volume > 0)
+        {
+            Mute();
+        }
+        else
+        {
+            UnMute();
+        }
+    }
+
+    public static void Mute()
+    {
+        MediaPlayer.Volume = 0.0f;
+    }
+
+    public static void UnMute()
+    {// wish there was a way to remember the volume before muting, but 0.5 seems like a good default
+        MediaPlayer.Volume = 0.5f;
+    }
 }

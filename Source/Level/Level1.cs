@@ -4,14 +4,17 @@ namespace MagicBrosMario.Source.Level;
 public class Level1 : ParentLevel
 {
 	
-	// x= 100 is start, x= 6100 is right before flagpole
-	int normalStartx = 3*tileSize;
-	int  rightBeforeFlagpoleX = 6100;
-	int secretRoomX = 6700;
+	static int NormalLevelHeight = 10*tileSize;
+	Point spawnPoint = new Point(3*tileSize, NormalLevelHeight);
+	Point Checkpoint1 = new Point(82*tileSize, NormalLevelHeight);
+	//These other points are for debugging purposes
+	Point rightBeforeFlagpole = new Point(195*tileSize, NormalLevelHeight);
+	Point rightAfterFlagpole = new Point(200*tileSize, NormalLevelHeight);
+	Point secretRoom = new Point(230*tileSize, NormalLevelHeight);
 	public Level1()	{
-		MarioStartPos = new Point(normalStartx, 11*tileSize);
+		MarioStartPos = spawnPoint;
 
-		checkpointPositions.Add(new Point(82*tileSize, 11*tileSize));
+		checkpointPositions.Add(Checkpoint1); // from the og game
 		
 		Name = "1-1";
 		TimeLimit = 400;

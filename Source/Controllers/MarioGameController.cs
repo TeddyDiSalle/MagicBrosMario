@@ -8,6 +8,7 @@ using MagicBrosMario.Source.Level;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System;
+using MagicBrosMario.Source.Sound;
 
 
 namespace MagicBrosMario.Source;
@@ -67,6 +68,7 @@ public static class MarioGameController{
         keysNMouseInputMap.Bind(Keys.D1, goLevel1);
         keysNMouseInputMap.Bind(Keys.D2, goLevel2);
         keysNMouseInputMap.Bind(Keys.T, gt => MagicBrosMario.INSTANCE.level.showPositionOnScreen(), pauseIDelay, pauseRInterval); // for testing, shows mario's position on the screen when you press t
+        keysNMouseInputMap.Bind(Keys.M, gt => SoundController.ToggleMute()); 
         // mouse inputs
         //keysNMouseInputMap.Bind(m => m.IsButtonDown(MouseButton.Right), gt => MagicBrosMario.INSTANCE.Exit());
         //keysNMouseInputMap.Bind(m => m.IsButtonDown(MouseButton.Left) && m.Position.X < gameData.halfX, goDebug);//If you click the left side of the screen, call DebugRomm()
