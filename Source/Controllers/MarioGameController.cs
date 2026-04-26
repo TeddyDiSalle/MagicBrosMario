@@ -40,17 +40,26 @@ public static class MarioGameController{
     // All the binds specified for sprint 3
     private static void SetSprint5Binds()
     {
-        double pauseIDelay= 0.5;
+        double pauseIDelay = 0.5;
         double pauseRInterval = 1.0;
         //Need to make it so it can be unpaused through here
-		keysNMouseInputMap.Bind(Keys.P, gt => MagicBrosMario.INSTANCE.changePaused(), pauseIDelay, pauseRInterval);
-		keysNMouseInputMap.Bind(Keys.Escape, gt => MagicBrosMario.INSTANCE.changePaused(), pauseIDelay, pauseRInterval);
+        keysNMouseInputMap.Bind(Keys.P, gt => MagicBrosMario.INSTANCE.changePaused(), pauseIDelay, pauseRInterval);
+        keysNMouseInputMap.Bind(Keys.Escape, gt => MagicBrosMario.INSTANCE.changePaused(), pauseIDelay, pauseRInterval);
 
-        keysNMouseInputMap.Bind(Keys.Q, gt => MagicBrosMario.INSTANCE.Exit()); 
-        
+        keysNMouseInputMap.Bind(Keys.Q, gt => MagicBrosMario.INSTANCE.Exit());
+
         Action<GameTime> goDebug = gt => MagicBrosMario.INSTANCE.CurrentState = new TransitionState(new DebugRoom());
-        Action<GameTime> goLevel1 = gt => MagicBrosMario.INSTANCE.CurrentState = new TransitionState(new Level1());
-        Action<GameTime> goLevel2 = gt => MagicBrosMario.INSTANCE.CurrentState = new TransitionState(new Level2());
+        Action<GameTime> goLevel1 = gt =>
+        {
+            MagicBrosMario.INSTANCE.finishedLevel1 = false;
+            MagicBrosMario.INSTANCE.CurrentState = new TransitionState(new Level1());
+
+        };
+        Action<GameTime> goLevel2 = gt =>
+        { 
+            MagicBrosMario.INSTANCE.CurrentState = new TransitionState(new Level2());
+			MagicBrosMario.INSTANCE.finishedLevel1 = true;
+		};
 
 
         keysNMouseInputMap.Bind(Keys.R, gt => MagicBrosMario.INSTANCE.CurrentState =new TitleScreenState()); // reset game

@@ -10,7 +10,7 @@ namespace MagicBrosMario.Source.Items
 {
 	internal class Flag : IItems, ICollidable
 	{
-		private const float FallSpeed = 100f;
+		private const float FallSpeed = 160f;
 		private const float FallAmount = 250f;
 
 		private Sprite.ISprite sprite;
