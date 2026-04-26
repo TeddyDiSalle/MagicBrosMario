@@ -36,7 +36,7 @@ public abstract class ParentLevel : ILevel
 
     private readonly static int _blockSize = 16;
     private readonly static int _scale = 2;
-    protected static int tileSize= _blockSize * _scale;
+    protected static int tileSize = _blockSize * _scale;
 
     protected string[] blockLines;
     protected string[] enemyLines;
@@ -44,7 +44,7 @@ public abstract class ParentLevel : ILevel
 
     private int levWidth;
     private int levHeight;
-    protected List<Point> checkpointPositions = new List<Point>(); 
+    protected List<Point> checkpointPositions = new List<Point>();
 
     public Point MarioStartPos { get; protected set; }
     public string Name { get; protected set; }
@@ -63,11 +63,11 @@ public abstract class ParentLevel : ILevel
         Texture2D eTexture,
         Texture2D iTexture)
     {
-        if(MagicBrosMario.INSTANCE.MarioStartPosition.X == -1)
+        if (MagicBrosMario.INSTANCE.MarioStartPosition.X == -1)
         {
             MagicBrosMario.INSTANCE.MarioStartPosition = MarioStartPos;
         }
-         
+
         ValidateCsvDimensions();
         InitializeLevelArrays();
 
@@ -152,7 +152,7 @@ public abstract class ParentLevel : ILevel
         Rectangle activationBounds = GetEnemyActivationBounds();
         for (int i = 0; i < checkpointPositions.Count; i++)
         {
-            if(MagicBrosMario.INSTANCE.Mario.Position.X > checkpointPositions[i].X)
+            if (MagicBrosMario.INSTANCE.Mario.Position.X > checkpointPositions[i].X)
             {
                 //Console.WriteLine("Checkpoint reached at posdition: " + checkpointPositions[i]);
                 MagicBrosMario.INSTANCE.MarioStartPosition = checkpointPositions[i];
@@ -172,7 +172,8 @@ public abstract class ParentLevel : ILevel
                     if (enemy.AlwaysActive || _activatedEnemies.Contains(enemy) ||
                         ShouldActivateEnemy(enemy, activationBounds))
                     {
-                        _activatedEnemies.Add(enemy);
+                        if (_activatedEnemies.Add(enemy))
+                            CollisionController.Instance.AddEnemy(enemy);
                         enemy.Update(gt);
                     }
                 }
@@ -234,7 +235,9 @@ public abstract class ParentLevel : ILevel
         if (string.IsNullOrEmpty(token.BlockId))
         {
             int? group = null;
-            if(itemId == "20"){ // axe has appeared so there is a new group of bridge blocks coming up
+            if (itemId == "20")
+            {
+                // axe has appeared so there is a new group of bridge blocks coming up
                 bridgeGroupCounter++;
                 bridgeOrderCounter = 0;
                 group = bridgeGroupCounter;
@@ -266,12 +269,19 @@ public abstract class ParentLevel : ILevel
 
         int? group = null;
         int? order = null;
-        if(token.BlockId == "16") {// bridge block
-            if(!(blocks[row][col-1] is BridgeBlock)){ // new bridge group
+        if (token.BlockId == "16")
+        {
+            // bridge block
+            if (!(blocks[row][col - 1] is BridgeBlock))
+            {
+                // new bridge group
                 //We take care of a new bridge group when the axe shows up on row-1
-            }else{ // there is already a bridge block to the left, same group
+            } else
+            {
+                // there is already a bridge block to the left, same group
                 bridgeOrderCounter++;
             }
+
             group = bridgeGroupCounter;
             order = bridgeOrderCounter;
         }
@@ -298,10 +308,10 @@ public abstract class ParentLevel : ILevel
         }
 
         enemies[row][col] = EnemyManager.CreateEnemy(enemyId, col * tileSize, row * tileSize);
-        CollisionController.Instance.AddEnemy(enemies[row][col]);
     }
 
-        private Rectangle GetEnemyActivationBounds(){
+    private Rectangle GetEnemyActivationBounds()
+    {
         const int leftBufferTiles = 2;
         const int rightBufferTiles = 6;
         const int verticalBufferTiles = 2;
@@ -321,10 +331,13 @@ public abstract class ParentLevel : ILevel
 
     public void AddItem(IItems item)
     {
-        for (int r = 0; r < levHeight; r++){
-            for (int c = 0; c < levWidth; c++){
+        for (int r = 0; r < levHeight; r++)
+        {
+            for (int c = 0; c < levWidth; c++)
+            {
                 //Console.WriteLine($"Trying to add item at row {r}, col {c}");
-                if (items[r][c] == null){
+                if (items[r][c] == null)
+                {
                     items[r][c] = item;
                     CollisionController.Instance.AddItem(item);
                     return;
@@ -335,35 +348,43 @@ public abstract class ParentLevel : ILevel
         throw new Exception("No empty slot available to add item");
     }
 
-    public void Clear(){
+    public void Clear()
+    {
         _activatedEnemies.Clear();
         CollisionController.Instance.RemoveAll();
         blocks = [];
         items = [];
         enemies = [];
-        if(backgroundSprite != null) {
+        if (backgroundSprite != null)
+        {
             backgroundSprite.Drop();
             backgroundSprite = null;
         }
+
         HUD.Instance.LevelOver();
         SoundController.StopMusic();
     }
 
-    public void GoToNextLevel(){ // need further implmentaition
+    public void GoToNextLevel()
+    {
+        // need further implmentaition
         _activatedEnemies.Clear();
         CollisionController.Instance.RemoveAll();
         blocks = [];
         items = [];
         enemies = [];
-        if(backgroundSprite != null) {
+        if (backgroundSprite != null)
+        {
             backgroundSprite.Drop();
             backgroundSprite = null;
         }
+
         HUD.Instance.LevelOver();
         SoundController.StopMusic();
     }
 
-    public void showPositionOnScreen(){
+    public void showPositionOnScreen()
+    {
         Vector2 exactPosition = MagicBrosMario.INSTANCE.Mario.Position;
         Vector2 tilePosition = new Vector2((int)(exactPosition.X / tileSize), (int)(exactPosition.Y / tileSize));
         Console.WriteLine($"Mario is at pixel position {exactPosition} and tile position {tilePosition}");
