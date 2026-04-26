@@ -42,7 +42,9 @@ namespace MagicBrosMario.Source.GameStates
 
 			
 			int cameraX = Math.Max(Camera.Instance.Position.X, (int)MagicBrosMario.INSTANCE.Mario.Position.X - Camera.Instance.WindowSize.X / 2);
-			Camera.Instance.Position = new Point(cameraX, 0);
+			int cameraY = Math.Min(0, (int)MagicBrosMario.INSTANCE.Mario.Position.Y);
+
+            Camera.Instance.Position = new Point(cameraX, cameraY);
 			Camera.Instance.Update(gameTime);
             MagicBrosMario.INSTANCE.Mario.Update(gameTime);
             HUD.Instance.Update(gameTime);

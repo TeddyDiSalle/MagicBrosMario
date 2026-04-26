@@ -221,7 +221,7 @@ public class HUD
 			}
         }
         else if (time == 0 && !levelOver) { MagicBrosMario.INSTANCE.Mario.KillMario(); }
-        coin.Position = new Point(Camera.Instance.Position.X + 250, 27);
+        coin.Position = new Point(Camera.Instance.Position.X + 260, Camera.Instance.Position.Y + 27);
         coin.Update(gametime);
 
         if (goToTransition)
@@ -256,7 +256,7 @@ public class HUD
         _spriteBatch.DrawString(font, "x" + numStr, new Vector2(275, 26), Color.White);
 
         _spriteBatch.DrawString(font, "LEVEL", new Vector2(425, 10), Color.White);
-        _spriteBatch.DrawString(font, MagicBrosMario.INSTANCE.level.Name, new Vector2(459, 26), Color.White);
+        _spriteBatch.DrawString(font, MagicBrosMario.INSTANCE.level.Name, new Vector2(442, 26), Color.White);
 
         numStr = time.ToString().PadLeft(3, '0');
         _spriteBatch.DrawString(font, "TIME", new Vector2(575, 10), Color.White);
