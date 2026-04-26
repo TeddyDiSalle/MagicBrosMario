@@ -145,7 +145,22 @@ public class Player : ICollidable
     }
     public void ResetPlayer()
     {
-        ChangeState(new SmallMarioIdleState(this));
+        switch (GetCurrentMode())
+        {
+            case Power.None:
+                ChangeState(new SmallMarioIdleState(this));
+                break;
+            case Power.Mushroom:
+                ChangeState(new BigMarioIdleState(this));
+                break;
+            case Power.FireFlower:
+                ChangeState(new FireMarioIdleState(this));
+                break;
+            case Power.Cloud:
+                ChangeState(new CloudMarioIdleState(this));
+                break;
+        }
+        
         IsAlive = true;
         DamageTimer = 2.0;
         EndPhase = EndLevelPhase.None;

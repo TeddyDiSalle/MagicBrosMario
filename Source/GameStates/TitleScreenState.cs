@@ -19,7 +19,7 @@ namespace MagicBrosMario.Source.GameStates
             //_font = _game.Content.Load<SpriteFont>("font");
             MagicBrosMario.INSTANCE.Mario.SetVisibility(false);
             MagicBrosMario.INSTANCE.Mario.Lives = 3;
-            HUD.Instance.ResetScore();
+            HUD.Instance.ResetScoreAndCoins();
             MarioGameController.UnMute();
             MagicBrosMario.INSTANCE.finishedLevel1 = false;
         }

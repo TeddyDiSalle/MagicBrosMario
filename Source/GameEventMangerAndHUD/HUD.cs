@@ -17,7 +17,7 @@ public class HUD
     private readonly SpriteFont font = MagicBrosMario.INSTANCE.font;
     private readonly AnimatedSprite coin = new(MagicBrosMario.INSTANCE.ItemTexture, 192, 64, 10, 14, 4, 0.15f);
     private int score = 0;
-    private int coinCount = 82; //For testing and functionality check in
+    private int coinCount = 0;
     private int time = 150;
     private int FrameCount = 0;
     private bool levelOver = false;
@@ -53,9 +53,10 @@ public class HUD
         FloatingText text = new(gameEvent, num);
         textsList.Add(text);
     }
-    public void ResetScore()
+    public void ResetScoreAndCoins()
     {
         score = 0;
+        coinCount = 0;
     }
     public void SendEvent(GameEvent gameEvent)
     {
