@@ -5,7 +5,7 @@ namespace MagicBrosMario.Source.Level;
 public class Level2 : ParentLevel
 {
 	
-	static int NormalLevelHeight = 10*tileSize;
+	static int NormalLevelHeight = 11*tileSize;
 	Point spawnPoint = new Point(1*tileSize, NormalLevelHeight);
 	Point firstCheckpoint = new Point(63*tileSize, NormalLevelHeight);
 	Point secondCheckpoint = new Point(100*tileSize, NormalLevelHeight);
