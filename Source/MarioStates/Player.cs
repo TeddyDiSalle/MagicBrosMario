@@ -1,6 +1,5 @@
 ﻿using MagicBrosMario.Source.Block;
 using MagicBrosMario.Source.Collision;
-using MagicBrosMario.Source.GameStates;
 using MagicBrosMario.Source.HUDAndScoring;
 using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.Sound;
@@ -9,7 +8,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 
 namespace MagicBrosMario.Source.MarioStates;
@@ -141,23 +139,21 @@ public class Player : ICollidable
             ChangeState(new MarioDeadState(this));
             Lives--;
         }
-        
-
     }
     public void ResetPlayer()
     {
         switch (GetCurrentMode())
         {
-            case Power.None:
+            case Enums.None:
                 ChangeState(new SmallMarioIdleState(this));
                 break;
-            case Power.Mushroom:
+            case Enums.Mushroom:
                 ChangeState(new BigMarioIdleState(this));
                 break;
-            case Power.FireFlower:
+            case Enums.FireFlower:
                 ChangeState(new FireMarioIdleState(this));
                 break;
-            case Power.Cloud:
+            case Enums.Cloud:
                 ChangeState(new CloudMarioIdleState(this));
                 break;
         }
@@ -169,18 +165,18 @@ public class Player : ICollidable
         StarTimeRemaining = StarDuration;
         PlayerCollision.ResetCollisionFields();
     }
-    public void PowerUp(Power power)
+    public void PowerUp(Enums power)
     {
         PlayerState.PowerUp(power);
     }
-    public Power GetCurrentMode()
+    public Enums GetCurrentMode()
     {
         return PlayerState.GetCurrentMode();
     }
-    public Power GetCurrentPower()
+    public Enums GetCurrentPower()
     {
         
-        return (Invincible) ? Power.Star : PlayerState.GetCurrentMode();
+        return (Invincible) ? Enums.Star : PlayerState.GetCurrentMode();
     }
     public void ChangeState(IPlayerState state)
     {
@@ -250,19 +246,9 @@ public class Player : ICollidable
     public void OnCollideBlock(IBlock block, Collision.CollideDirection direction) => PlayerCollision.OnCollideBlock(block, direction);
 
     //Update and Draw
-    public void Update(GameTime gameTime)
+    //Private update helpers
+    private bool HandlePipePhase(GameTime gameTime)
     {
-        WasGrounded = IsGrounded;
-        IsGrounded = false;
-        if (DamageTimer < DamageCoolDown)
-        {
-            DamageTimer += gameTime.ElapsedGameTime.TotalSeconds;
-        }
-        if (!WasGrounded || ApplyGravity)
-        {
-            Velocity += new Vector2(0, (PlayerState.GetCurrentMode() == Power.Cloud) ? Gravity*3/4 : Gravity);
-        }
-        Position += (!IsSprinting) ? Velocity : (Velocity + new Vector2( Velocity.X/3, 0));
         if (PipePhase == PipeTravelPhase.Entering)
         {
             MarioGameController.Mute();
@@ -272,11 +258,11 @@ public class Player : ICollidable
             if (Vector2.Distance(Position, PipeEntryDestination) < 20f)
             {
                 SetPositon(PipeExitPosition);
-                Camera.Instance.Position = new Point((int)Position.X - Camera.Instance.WindowSize.X/2, Camera.Instance.Position.Y);
+                Camera.Instance.Position = new Point((int)Position.X - Camera.Instance.WindowSize.X / 2, Camera.Instance.Position.Y);
                 PipePhase = PipeTravelPhase.Exiting;
             }
             PlayerState.Update(gameTime);
-            return;
+            return true;
         }
         if (PipePhase == PipeTravelPhase.Exiting)
         {
@@ -289,8 +275,12 @@ public class Player : ICollidable
                 ApplyGravity = true;
             }
             PlayerState.Update(gameTime);
-            return;
+            return true;
         }
+        return false;
+    }
+    private void HandleEndPhase(GameTime gameTime)
+    {
         if (EndPhase == EndLevelPhase.SlidingDown)
         {
             SetVisibility(true);
@@ -308,7 +298,7 @@ public class Player : ICollidable
         }
         if (EndPhase == EndLevelPhase.Walking)
         {
-            SetVelocity(new Vector2(3,0) + new Vector2(0, Velocity.Y));
+            SetVelocity(new Vector2(3, 0) + new Vector2(0, Velocity.Y));
             Right(gameTime);
             if (Position.X >= CastleEntranceX)
             {
@@ -318,15 +308,10 @@ public class Player : ICollidable
                 SetVisibility(false);
             }
         }
-        if (StarTimeRemaining >= StarDuration)
-        {
-            StarTimeRemaining = 0;
-            Invincible = false;
-        }
-        if (IsCrouching)
-        {
-            Idle();
-        }
+    }
+
+    private void UpdateFireBalls(GameTime gameTime)
+    {
         if (FireballTimer < fireballCooldown)
         {
             FireballTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -339,6 +324,9 @@ public class Player : ICollidable
                 fireballs.RemoveAt(i);
             }
         }
+    }
+    private void BoundsCheck()
+    {
         if (Position.X < Camera.Instance.Position.X)
         {
             SetPositon(new Vector2(Camera.Instance.Position.X, Position.Y));
@@ -348,6 +336,35 @@ public class Player : ICollidable
         {
             KillMario();
         }
+    }
+    public void Update(GameTime gameTime)
+    {
+        WasGrounded = IsGrounded;
+        IsGrounded = false;
+        if (DamageTimer < DamageCoolDown)
+        {
+            DamageTimer += gameTime.ElapsedGameTime.TotalSeconds;
+        }
+        if (!WasGrounded || ApplyGravity)
+        {
+            Velocity += new Vector2(0, (PlayerState.GetCurrentMode() == Enums.Cloud) ? Gravity*3/4 : Gravity);
+        }
+        Position += (!IsSprinting) ? Velocity : (Velocity + new Vector2(Velocity.X/3, 0));
+
+        if (HandlePipePhase(gameTime)) { return; }
+        HandleEndPhase(gameTime);
+        BoundsCheck();
+        if (StarTimeRemaining >= StarDuration)
+        {
+            StarTimeRemaining = 0;
+            Invincible = false;
+        }
+        if (IsCrouching)
+        {
+            Idle();
+        }
+        UpdateFireBalls(gameTime);
+
         IsSprinting = false;
         PlayerState.Update(gameTime);
         CollisionBox = new Rectangle((int)Math.Ceiling(Position.X), (int)Math.Ceiling(Position.Y), CollisionBox.Width, CollisionBox.Height);
