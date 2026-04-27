@@ -64,7 +64,8 @@ namespace MagicBrosMario.Source.Items
 
 				if (riseAmount <= 0)
 				{
-					isCollected = true; 
+					isCollected = true;
+					sprite.Drop();
 				}
 			}
 
@@ -76,10 +77,6 @@ namespace MagicBrosMario.Source.Items
 			if (!isCollected)
 			{
 				sprite.Draw(spriteBatch);
-			}
-			else 
-			{
-				sprite.Drop();
 			}
 		}
 
