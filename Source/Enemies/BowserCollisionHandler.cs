@@ -18,7 +18,7 @@ public class BowserCollisionHandler
 
     public void OnCollidePlayer(Player player, CollideDirection direction)
     {
-        if (player.GetCurrentPower().Equals(Power.Star) || direction == CollideDirection.Top)
+        if (player.GetCurrentPower().Equals(Power.Star))
         {
             bowser.Kill();
             HUD.Instance.SendEvent(new GameEvent

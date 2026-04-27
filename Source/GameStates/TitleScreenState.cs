@@ -22,6 +22,7 @@ namespace MagicBrosMario.Source.GameStates
             HUD.Instance.ResetScoreAndCoins();
             MarioGameController.UnMute();
             MagicBrosMario.INSTANCE.finishedLevel1 = false;
+            MagicBrosMario.INSTANCE.finishedLevel2 = false;
         }
 
         public void Update(GameTime gameTime)

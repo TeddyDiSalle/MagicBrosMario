@@ -58,6 +58,14 @@ public class HUD
         score = 0;
         coinCount = 0;
     }
+    public void KilledBowser()
+    {
+        LevelOver();
+        SendEvent(new GameEvent { EventType = GameEventType.EndOfLevel });
+        MagicBrosMario.INSTANCE.finishedLevel2 = true;
+        SoundController.PlaySound(SoundType.BowserFires, 0.8f);
+        SoundController.PlaySound(SoundType.WorldClear, 1.0f);
+    }
     public void SendEvent(GameEvent gameEvent)
     {
         switch (gameEvent.EventType)
@@ -67,6 +75,14 @@ public class HUD
                 break;
             case GameEventType.EnemyStomped:
                 SoundController.PlaySound(SoundType.Stomp, 1.0f);
+                if(gameEvent.Data is Bowser)
+                {
+                    score += 5000;
+                    DisplayScoreGain(gameEvent, 5000);
+                    StompChain++;
+                    KilledBowser();
+                    return;
+                }
                 if (stompChainTimer >= stompChainCD)
                 {
                     StompChain = 0;
@@ -98,6 +114,7 @@ public class HUD
                 {
                     score += 5000;
                     DisplayScoreGain(gameEvent, 5000);
+                    KilledBowser();
                 }
                 SoundController.PlaySound(SoundType.Stomp, 1.0f);
                 break;
@@ -193,7 +210,7 @@ public class HUD
                 textsList.RemoveAt(i);
             }
         }
-        if (waitForNextLevel) { return; }
+        //if (waitForNextLevel) { return; }
         FrameCount++;
         if (FrameCount >= 24 && time >0 && !levelOver)
         {
@@ -213,12 +230,12 @@ public class HUD
         {
             time--;
             score += 50;
-            //Point incrementing sound
+            //Point incrementing sound - Not found
             if (time == 0)
             {
-                //waitForNextLevel = true;
-                //goToTransition = true;
-				MagicBrosMario.INSTANCE.CurrentState = new TransitionState(new Level.Level2());
+                waitForNextLevel = true;
+                goToTransition = true;
+				//MagicBrosMario.INSTANCE.CurrentState = new TransitionState(new Level.Level2());
 			}
         }
         else if (time == 0 && !levelOver) { MagicBrosMario.INSTANCE.Mario.KillMario(); }
@@ -236,10 +253,14 @@ public class HUD
                 if (!MagicBrosMario.INSTANCE.finishedLevel1) {
 					MagicBrosMario.INSTANCE.CurrentState = new TransitionState(new Level.Level1());
 				}
-                else
+                else if (!MagicBrosMario.INSTANCE.finishedLevel2)
                 {
 					MagicBrosMario.INSTANCE.CurrentState = new TransitionState(new Level.Level2());
-				}
+                }
+                else
+                {
+                    MagicBrosMario.INSTANCE.CurrentState = new TitleScreenState();
+                }
                 goToTransition = false;
                 TransitionTimer = 3f;
             }
