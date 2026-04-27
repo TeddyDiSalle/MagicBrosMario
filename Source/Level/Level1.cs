@@ -1,3 +1,4 @@
+using MagicBrosMario.Source.MarioStates;
 using Microsoft.Xna.Framework;
 
 namespace MagicBrosMario.Source.Level;
@@ -25,6 +26,7 @@ public class Level1 : ParentLevel
 		Level1ItemCVS = "Content/LevelData/1-1/Items1-1.csv";
 		BackgroundName = "1-1LazyDebugBackground";
 		ReadFromCSV();
+		MagicBrosMario.INSTANCE.Mario.ChangeState(new SmallMarioIdleState(MagicBrosMario.INSTANCE.Mario));
 	}
 	
 

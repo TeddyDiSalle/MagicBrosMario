@@ -62,6 +62,7 @@ public class HUD
     {
         LevelOver();
         SendEvent(new GameEvent { EventType = GameEventType.EndOfLevel });
+        MagicBrosMario.INSTANCE.Mario.Invincible = true;
         MagicBrosMario.INSTANCE.finishedLevel2 = true;
         SoundController.PlaySound(SoundType.BowserFires, 0.8f);
         SoundController.PlaySound(SoundType.WorldClear, 1.0f);
