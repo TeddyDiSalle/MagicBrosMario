@@ -148,16 +148,16 @@ public class Player : ICollidable
     {
         switch (GetCurrentMode())
         {
-            case Power.None:
+            case Enums.None:
                 ChangeState(new SmallMarioIdleState(this));
                 break;
-            case Power.Mushroom:
+            case Enums.Mushroom:
                 ChangeState(new BigMarioIdleState(this));
                 break;
-            case Power.FireFlower:
+            case Enums.FireFlower:
                 ChangeState(new FireMarioIdleState(this));
                 break;
-            case Power.Cloud:
+            case Enums.Cloud:
                 ChangeState(new CloudMarioIdleState(this));
                 break;
         }
@@ -169,18 +169,18 @@ public class Player : ICollidable
         StarTimeRemaining = StarDuration;
         PlayerCollision.ResetCollisionFields();
     }
-    public void PowerUp(Power power)
+    public void PowerUp(Enums power)
     {
         PlayerState.PowerUp(power);
     }
-    public Power GetCurrentMode()
+    public Enums GetCurrentMode()
     {
         return PlayerState.GetCurrentMode();
     }
-    public Power GetCurrentPower()
+    public Enums GetCurrentPower()
     {
         
-        return (Invincible) ? Power.Star : PlayerState.GetCurrentMode();
+        return (Invincible) ? Enums.Star : PlayerState.GetCurrentMode();
     }
     public void ChangeState(IPlayerState state)
     {
@@ -260,7 +260,7 @@ public class Player : ICollidable
         }
         if (!WasGrounded || ApplyGravity)
         {
-            Velocity += new Vector2(0, (PlayerState.GetCurrentMode() == Power.Cloud) ? Gravity*3/4 : Gravity);
+            Velocity += new Vector2(0, (PlayerState.GetCurrentMode() == Enums.Cloud) ? Gravity*3/4 : Gravity);
         }
         Position += (!IsSprinting) ? Velocity : (Velocity + new Vector2( Velocity.X/3, 0));
         if (PipePhase == PipeTravelPhase.Entering)

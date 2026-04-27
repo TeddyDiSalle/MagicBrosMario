@@ -28,7 +28,7 @@ public class CloudMarioSlideState : IPlayerState
             Sprites[i].Scale = scaleFactor;
             Sprites[i].Visible = false;
         }
-        CurrentSprite = Sprites[0];
+        CurrentSprite = Sprites[(int)SlideEnums.sliding];
         CurrentSprite.Visible = true;
         CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
         Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 16 * scaleFactor, 32 * scaleFactor);
@@ -57,13 +57,13 @@ public class CloudMarioSlideState : IPlayerState
     {
         //nothing
     }
-    public void PowerUp(Power power)
+    public void PowerUp(Enums power)
     {
         //Nothing
     }
-    public Power GetCurrentMode()
+    public Enums GetCurrentMode()
     {
-        return Power.Cloud;
+        return Enums.Cloud;
     }
     public void Idle()
     {
@@ -93,8 +93,8 @@ public class CloudMarioSlideState : IPlayerState
         {
             Mario.SetPositon(new Vector2(Mario.Position.X, Mario.FlagPoleBottomY));
             Mario.SetVelocity(Vector2.Zero);
-            SwitchSprite(1); // landing/holding sprite
-                             // wait a moment then transition to walk state
+            SwitchSprite((int)SlideEnums.landed); 
+                             
             LandingTimer += gameTime.ElapsedGameTime.TotalSeconds;
             if (LandingTimer >= 0.5)
             {
@@ -104,7 +104,7 @@ public class CloudMarioSlideState : IPlayerState
         }
         else
         {
-            SwitchSprite(0); // sliding sprite
+            SwitchSprite((int)SlideEnums.sliding);  
             Mario.SetVelocity(new Vector2(0, 3));
         }
 

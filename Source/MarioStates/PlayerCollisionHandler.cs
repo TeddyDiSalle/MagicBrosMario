@@ -52,7 +52,7 @@ public class PlayerCollisionHandler
                 }
                 break;
             case Fireflower:
-                player.PowerUp(Power.FireFlower);
+                player.PowerUp(Enums.FireFlower);
                 HUD.Instance.SendEvent(new GameEvent
                 {
                     EventType = GameEventType.PowerupCollected,
@@ -79,7 +79,7 @@ public class PlayerCollisionHandler
                 UnjumpOnGroundCollide();
                 break;
             case Mushroom:
-                player.PowerUp(Power.Mushroom);
+                player.PowerUp(Enums.Mushroom);
                 HUD.Instance.SendEvent(new GameEvent
                 {
                     EventType = GameEventType.PowerupCollected,
@@ -101,7 +101,7 @@ public class PlayerCollisionHandler
                 });
                 break;
             case Star:
-                player.PowerUp(Power.Star);
+                player.PowerUp(Enums.Star);
                 HUD.Instance.SendEvent(new GameEvent
                 {
                     EventType = GameEventType.PowerupCollected,
@@ -110,7 +110,7 @@ public class PlayerCollisionHandler
                 });
                 break;
             case AntiGravityCloud:
-                player.PowerUp(Power.Cloud);
+                player.PowerUp(Enums.Cloud);
                 HUD.Instance.SendEvent(new GameEvent
                 {
                     EventType = GameEventType.PowerupCollected,
@@ -129,16 +129,16 @@ public class PlayerCollisionHandler
                 IPlayerState sliding = null;
                 switch (player.GetCurrentMode())
                 {
-                    case Power.Mushroom:
+                    case Enums.Mushroom:
                         sliding = new BigMarioSlideState(player);
                         break;
-                    case Power.FireFlower:
+                    case Enums.FireFlower:
                         sliding = new FireMarioSlideState(player);
                         break;
-                    case Power.None:
+                    case Enums.None:
                         sliding = new SmallMarioSlideState(player);
                         break;
-                    case Power.Cloud:
+                    case Enums.Cloud:
                         sliding = new CloudMarioSlideState(player);
                         break;
                 }
@@ -283,16 +283,16 @@ public class PlayerCollisionHandler
         player.JumpCalls = 0;
         switch (player.GetCurrentMode())
         {
-            case Power.None:
+            case Enums.None:
                 player.ChangeState(new SmallMarioIdleState(player));
                 break;
-            case Power.Mushroom:
+            case Enums.Mushroom:
                 player.ChangeState(new BigMarioIdleState(player));
                 break;
-            case Power.FireFlower: 
+            case Enums.FireFlower: 
                 player.ChangeState(new FireMarioIdleState(player));
                 break;
-            case Power.Cloud:
+            case Enums.Cloud:
                 player.ChangeState(new CloudMarioIdleState(player));
                 break;
             default:

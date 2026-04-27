@@ -48,7 +48,7 @@ internal sealed class EventManager(HUD hud)
                 }
                 break;
             case GameEventType.LandedOnGround:
-                if (MagicBrosMario.INSTANCE.Mario.GetCurrentPower() != Power.Star)
+                if (MagicBrosMario.INSTANCE.Mario.GetCurrentPower() != Enums.Star)
                     StompChain = 0;
                 break;
             case GameEventType.EnemyKilledByFireball:

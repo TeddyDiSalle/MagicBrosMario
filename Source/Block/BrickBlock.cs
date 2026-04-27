@@ -17,11 +17,11 @@ public class BrickBlock(ISprite sprite) : BlockBase<BrickBlock>(sprite)
         // if mario is in big state
         switch (mario.GetCurrentPower())
         {
-            case Power.FireFlower:
-            case Power.Mushroom:
+            case Enums.FireFlower:
+            case Enums.Mushroom:
                 break;
-            case Power.None:
-            case Power.Star:
+            case Enums.None:
+            case Enums.Star:
             default: return;
         }
 

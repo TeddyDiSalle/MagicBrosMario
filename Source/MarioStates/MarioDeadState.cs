@@ -53,13 +53,13 @@ public class MarioDeadState : IPlayerState
     {
         //Nothing
     }
-    public void PowerUp(Power power)
+    public void PowerUp(Enums power)
     {
         //Nothing
     }
-    public Power GetCurrentMode()
+    public Enums GetCurrentMode()
     {
-        return Power.None;
+        return Enums.None;
     }
     public void Idle()
     {
