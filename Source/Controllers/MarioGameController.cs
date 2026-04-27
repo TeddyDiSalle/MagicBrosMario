@@ -40,7 +40,27 @@ public static class MarioGameController{
     }
     // All the binds specified for sprint 3
     private static void SetSprint5Binds()
+    {   
+        //MenuBinds();
+        //MarioBinds();
+
+        //SetGamePad();
+
+
+        SetTASBinds();
+    }
+
+    private static void SetTASBinds(){
+        keysNMouseInputMap.Bind(Keys.F1, gt => MarioTAS.Instance.BeatLevel1_1());
+        keysNMouseInputMap.Bind(Keys.F2, gt => MarioTAS.Instance.BeatLevel1_2());
+        keysNMouseInputMap.Bind(Keys.F3, gt => MarioTAS.Instance.ExecuteTAS());
+        keysNMouseInputMap.Bind(Keys.F4, gt => MarioTAS.Instance.Stop());
+        
+    }
+
+    private static void MenuBinds()
     {
+        
         double pauseIDelay = 0.5;
         double pauseRInterval = 1.0;
         //Need to make it so it can be unpaused through here
@@ -73,10 +93,6 @@ public static class MarioGameController{
         //keysNMouseInputMap.Bind(m => m.IsButtonDown(MouseButton.Right), gt => MagicBrosMario.INSTANCE.Exit());
         //keysNMouseInputMap.Bind(m => m.IsButtonDown(MouseButton.Left) && m.Position.X < gameData.halfX, goDebug);//If you click the left side of the screen, call DebugRomm()
         //keysNMouseInputMap.Bind(m => m.IsButtonDown(MouseButton.Left) && m.Position.X >= gameData.halfX, goLevel1); //If you click the right side of the screen, call Level1()
-
-        MarioBinds();
-
-        SetGamePad();
 
     }
 

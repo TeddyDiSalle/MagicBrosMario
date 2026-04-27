@@ -140,7 +140,7 @@ public class MagicBrosMario : Game
     protected override void Update(GameTime gameTime)
     {
         MarioGameController.Update(gameTime);
-
+        MarioTAS.Instance.Update(gameTime);
         if (!isPaused)
         {
             CurrentState.Update(gameTime);
