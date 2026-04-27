@@ -73,4 +73,13 @@ public static class ItemFactory {
         return item;
     }
 
+    public static IItems CreateCloud(int x, int y) {
+        var item = new Cloud(ITEM_SHARED_TEXTURE, x, y);
+        return item;
+    }
+    public static IItems CreatePoisonMushroom(int x, int y) {
+        var item = new Mushroom(ITEM_SHARED_TEXTURE, x, y, true);
+        return item;
+    }
+
 }

@@ -62,7 +62,9 @@ public static class ItemManager
             "Down1Platform" => (x, y) => ItemFactory.CreateMovingPlatform(x, y, 1, false),
             "Down2Platform" => (x, y) => ItemFactory.CreateMovingPlatform(x, y, 2, false),
             "Down3Platform" => (x, y) => ItemFactory.CreateMovingPlatform(x, y, 3, false),
-            "Cloud" => (x, y) => ItemFactory.CreateAntiGravityCloud(x, y),
+            "CloudPowerup" => (x, y) => ItemFactory.CreateAntiGravityCloud(x, y),
+            "FloatingCloud" => (x, y) => ItemFactory.CreateCloud(x, y),
+            "PoisonMushroom" => (x, y) => ItemFactory.CreatePoisonMushroom(x, y),
             _ => throw new ArgumentException($"Unknown item function: {functionName}")
         };
     }
