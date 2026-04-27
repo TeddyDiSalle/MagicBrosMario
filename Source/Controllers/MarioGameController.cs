@@ -95,6 +95,7 @@ public static class MarioGameController{
         keysNMouseInputMap.Bind(Keys.Z, gt => MagicBrosMario.INSTANCE.Mario.Attack());
         keysNMouseInputMap.Bind(Keys.N, gt => MagicBrosMario.INSTANCE.Mario.Attack());
         keysNMouseInputMap.Bind(Keys.E, gt =>  MagicBrosMario.INSTANCE.Mario.TakeDamage());
+        keysNMouseInputMap.Bind(Keys.P, gt =>  MagicBrosMario.INSTANCE.Mario.PowerUp(Power.FireFlower));
         keysNMouseInputMap.Bind(Keys.B, gt =>  MagicBrosMario.INSTANCE.Mario.Sprint());
         keysNMouseInputMap.Bind(Keys.LeftShift, gt =>  MagicBrosMario.INSTANCE.Mario.Sprint());
         keysNMouseInputMap.Bind(Keys.Q, gt => MagicBrosMario.INSTANCE.Exit()); 
