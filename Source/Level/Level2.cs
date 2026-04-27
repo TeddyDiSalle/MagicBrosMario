@@ -13,7 +13,7 @@ public class Level2 : ParentLevel
 	Point fourthCheckpoint = new Point(211*tileSize, NormalLevelHeight);
 	Point fifthCheckpoint = new Point(311*tileSize, NormalLevelHeight);
 	public Level2()	{
-		MarioStartPos = spawnPoint;
+		MarioStartPos = fourthCheckpoint;
 		
 		checkpointPositions.Add(firstCheckpoint); // after Teddy's
 		checkpointPositions.Add(secondCheckpoint); // after Roshan's, would also like to forever kill Meteor Mage after this point

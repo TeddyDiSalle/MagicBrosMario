@@ -13,5 +13,7 @@
     <Item id= "10" function="Down1Platform" />
     <Item id= "11" function="Down2Platform" />
     <Item id= "12" function="Down3Platform" />
-    <Item id= "13" function="Cloud" />
+    <Item id= "13" function="CloudPowerup" />
+    <Item id= "14" function="FloatingCloud" />
+    <Item id= "15" function="PoisonMushroom" />
 </Items>
