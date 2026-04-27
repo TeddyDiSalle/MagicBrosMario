@@ -11,7 +11,7 @@ public class Level2 : ParentLevel
 	Point secondCheckpoint = new Point(100*tileSize, NormalLevelHeight);
 	Point thirdCheckpoint = new Point(161*tileSize, 0*tileSize);
 	Point fourthCheckpoint = new Point(211*tileSize, NormalLevelHeight);
-	Point fifthCheckpoint = new Point(311*tileSize, NormalLevelHeight);
+	Point fifthCheckpoint = new Point(311*tileSize, 9*tileSize);
 	public Level2()	{
 		MarioStartPos = spawnPoint;
 		
