@@ -19,9 +19,9 @@ public class HUD
     private bool goToTransition = false;
     private float TransitionTimer = 3f;
     public bool dead { get; private set; } = false;
-    public bool waitForNextLevel { get; private set; } = false;
+    public bool WaitForNextLevel { get; private set; } = false;
     private bool playtimewarning = true;
-    private List<FloatingText> textsList = [];
+    private readonly List<FloatingText> textsList = [];
     public static HUD Instance { get; } = new();
     internal int Score { get => score; set => score = value; }
     internal int CoinCount { get => coinCount; set => coinCount = value; }
@@ -37,12 +37,12 @@ public class HUD
     public void LevelOver()
     {
         levelOver = true;
-        waitForNextLevel = true;
+        WaitForNextLevel = true;
     }
     public void LevelStart()
     {
         levelOver = false;
-        waitForNextLevel = false;
+        WaitForNextLevel = false;
         dead = false;
     }
     public void SetTime(int time)
@@ -101,7 +101,7 @@ public class HUD
             score += 50;
             if (time == 0)
             {
-                waitForNextLevel = true;
+                WaitForNextLevel = true;
                 goToTransition = true;
 			}
         }
