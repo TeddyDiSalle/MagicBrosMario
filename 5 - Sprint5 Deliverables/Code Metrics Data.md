@@ -1,4 +1,14 @@
-4//2026:
+4/23/2026:
+Project: MagicBrosMario
+Configuration: Debug
+Scope: Assembly
+Assembly: C:\Users\v1nc4\Documents\GitHub\MagicBrosMario\bin\Debug\net10.0\MagicBrosMario.dll
+Maintainability Index: 82
+Cyclomatic Complexity: 2,041
+Depth of Inheritance: 2
+Class Coupling: 181
+Lines of Source code: 10,129
+Lines of Executable code: 3,052
 
 4/25/2026:
 Project: MagicBrosMario
