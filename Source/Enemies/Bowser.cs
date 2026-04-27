@@ -20,6 +20,9 @@ public class Bowser : IEnemy, ICollidable
     private const float SCALE = 2f;
     private const float MIN_DIRECTION_CHANGE_TIME = 1.0f;
     private const float MAX_DIRECTION_CHANGE_TIME = 3.0f;
+    private const int LEFT_BOUND = -200;
+    private const int RIGHT_BOUND = 200;
+    private int spawnX;
 
     private Sprite.AnimatedSprite walkingRightSprite;
     private Sprite.AnimatedSprite walkingLeftSprite;
@@ -68,6 +71,7 @@ public class Bowser : IEnemy, ICollidable
         fireCooldownTimer = FIRE_COOLDOWN;
         directionChangeTimer = GetRandomDirectionTime();
         collisionHandler = new BowserCollisionHandler(this);
+        spawnX = x;
     }
 
     private float GetRandomDirectionTime()
@@ -132,22 +136,35 @@ public class Bowser : IEnemy, ICollidable
     }
 
     private void Move(GameTime gameTime)
+{
+    var sec = gameTime.ElapsedGameTime.TotalSeconds;
+    var dx = (int)(sec * VELOCITY);
+
+    directionChangeTimer -= (float)sec;
+    if (directionChangeTimer <= 0)
     {
-        var sec = gameTime.ElapsedGameTime.TotalSeconds;
-        var dx = (int)(sec * VELOCITY);
-
-        directionChangeTimer -= (float)sec;
-        if (directionChangeTimer <= 0)
-        {
-            movingRight = !movingRight;
-            directionChangeTimer = GetRandomDirectionTime();
-        }
-
-        if (movingRight)
-            Position = new Point(Position.X + dx, Position.Y);
-        else
-            Position = new Point(Position.X - dx, Position.Y);
+        movingRight = !movingRight;
+        directionChangeTimer = GetRandomDirectionTime();
     }
+
+    if (movingRight)
+        Position = new Point(Position.X + dx, Position.Y);
+    else
+        Position = new Point(Position.X - dx, Position.Y);
+
+    if (Position.X >= spawnX + RIGHT_BOUND)
+    {
+        Position = new Point(spawnX + RIGHT_BOUND, Position.Y);
+        movingRight = false;
+        directionChangeTimer = GetRandomDirectionTime();
+    }
+    else if (Position.X <= spawnX + LEFT_BOUND)
+    {
+        Position = new Point(spawnX + LEFT_BOUND, Position.Y);
+        movingRight = true;
+        directionChangeTimer = GetRandomDirectionTime();
+    }
+}
 
     public void Kill()
     {
