@@ -18,6 +18,7 @@ public class MagicBrosMario : Game
     private IGameState _currentStateDONOUTUSE;
     private bool isPaused = false;
     public bool finishedLevel1 = false;
+    public bool finishedLevel2 = false;
     private readonly Color backgroundColor = new Color(146, 144, 255);
     public IGameState CurrentState
     {

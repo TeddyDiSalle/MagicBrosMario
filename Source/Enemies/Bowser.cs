@@ -96,7 +96,7 @@ public class Bowser : IEnemy, ICollidable
     public void Update(GameTime gameTime)
     {
         if (!isAlive) return;
-
+        if (Position.Y > Camera.Instance.Position.Y + Camera.Instance.WindowSize.Y) { health = 1; TakeDamage(); }
         float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
         Move(gameTime);
 
