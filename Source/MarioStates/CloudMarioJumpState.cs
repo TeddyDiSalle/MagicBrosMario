@@ -53,7 +53,7 @@ public class CloudMarioJumpState : IPlayerState
     }
     public void Crouch(GameTime gameTime)
     {
-        Mario.ChangeState(new BigMarioCrouchState(Mario));
+        Mario.ChangeState(new CloudMarioCrouchState(Mario));
     }
     public void Attack()
     {
