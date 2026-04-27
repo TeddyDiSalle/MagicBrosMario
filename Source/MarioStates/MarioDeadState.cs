@@ -1,4 +1,7 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MagicBrosMario.Source.HUDAndScoring;
+using MagicBrosMario.Source.Sound;
+using MagicBrosMario.Source.Sprite;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MagicBrosMario.Source.MarioStates;
@@ -10,16 +13,21 @@ public class MarioDeadState : IPlayerState
     private readonly Sprite.Sprite CurrentSprite;
     private readonly float timeFrame;
     private readonly int scaleFactor;
-    public MarioDeadState(Player Mario, Sprite.SharedTexture texture, float timeFrame, int scaleFactor)
+    public MarioDeadState(Player Mario)
     {
         this.Mario = Mario;
-        this.texture = texture;
-        this.timeFrame = timeFrame;
-        this.scaleFactor = scaleFactor;
+        this.texture = Mario.Texture;
+        this.timeFrame = Mario.TimeFrame;
+        this.scaleFactor = Mario.ScaleFactor;
         CurrentSprite = texture.NewSprite(136, 2, 16, 16);
         CurrentSprite.Scale = scaleFactor;
-        Mario.KillMario();
-        Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 0 * scaleFactor, 0 * scaleFactor);
+        CurrentSprite.Visible = true;
+        Mario.SetVelocity(new Vector2(0, -6));
+        Mario.IsAlive = false;
+        Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 16 * scaleFactor, 16 * scaleFactor);
+        SoundController.StopMusic();
+        SoundController.PlaySound(SoundType.MarioDie, 1.0f);
+        HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.Death });
     }
     public void Left(GameTime gameTime)
     {
@@ -49,7 +57,7 @@ public class MarioDeadState : IPlayerState
     {
         //Nothing
     }
-    public Power GetCurrentPower()
+    public Power GetCurrentMode()
     {
         return Power.None;
     }
@@ -62,10 +70,18 @@ public class MarioDeadState : IPlayerState
         CurrentSprite.Visible = false;
         CurrentSprite.Drop();
     }
+    public void SetVisibility(bool visible)
+    {
+        CurrentSprite.Visible = true;
+    }
 
     public void Update(GameTime gameTime)
     {
         CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
+        if (CurrentSprite.Position.Y > Camera.Instance.Position.Y + Camera.Instance.WindowSize.Y)
+        {
+            Mario.SetVelocity(Vector2.Zero);
+        }
     }
     public void Draw(SpriteBatch spriteBatch)
     {

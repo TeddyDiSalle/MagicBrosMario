@@ -12,21 +12,73 @@ public static class ItemFactory {
     }
 
     public static IItems CreateCoin(int x, int y) {
-        var item = new Coin(ITEM_SHARED_TEXTURE, x, y);
+        var item = new CollectableCoin(ITEM_SHARED_TEXTURE, x, y);
         return item;
     }
-
+    public static IItems CreateMushroom(int x, int y) {
+        var item = new Mushroom(ITEM_SHARED_TEXTURE, x, y, false);
+        return item;
+    }
     public static IItems CreateFireFlower(int x, int y) {
-        var item = new Fireflower(ITEM_SHARED_TEXTURE, 100, 100, x, y); // TODO get rid of bounds in parameters
+        var item = new Fireflower(ITEM_SHARED_TEXTURE, x, y);
         return item;
     }
 
     public static IItems CreateStar(int x, int y) {
-        var item = new Star(ITEM_SHARED_TEXTURE, 100, 100, x, y); // TODO get rid of bounds in parameters
+        var item = new Star(ITEM_SHARED_TEXTURE, x, y);
         return item;
     }
     public static IItems CreateOneUp(int x, int y) {
-        var item = new OneUp(ITEM_SHARED_TEXTURE, 100, 100, x, y); // TODO get rid of bounds in parameters
+        var item = new OneUp(ITEM_SHARED_TEXTURE, x, y, false);
+        return item;
+    }
+    public static IItems CreateFlagPole(int x, int y) {
+        int flagXOffset = -25;
+        int flagYOffset = 20; 
+        int flagPoleXOffset = 8; 
+        int flagPoleYOffset = 15;
+		FlagPole pole = new FlagPole(ITEM_SHARED_TEXTURE, x + flagPoleXOffset, y + flagPoleYOffset);
+		var item = new Flag(ITEM_SHARED_TEXTURE, x + flagXOffset + flagPoleXOffset, y + flagYOffset + flagPoleYOffset, pole);
+		return item;
+    }
+
+    public static IItems CreateAxe(int x, int y, int group) {
+        var item = new Axe(ITEM_SHARED_TEXTURE, x, y, group);
+        return item;
+    }
+
+    public static IItems CreateMovingPlatform(int x, int y, int size, bool goUp) {
+        int direction = goUp ? -1 : 1;
+
+        IItems item;
+        switch (size)
+        {   case 1:
+                item = new MovingPlatform_Size1(ITEM_SHARED_TEXTURE, Camera.Instance.WindowSize.Y, x, y, direction);
+                break;
+            case 2:
+                item = new MovingPlatform_Size2(ITEM_SHARED_TEXTURE, Camera.Instance.WindowSize.Y, x, y, direction);
+                break;
+            case 3:
+                item = new MovingPlatform_Size3(ITEM_SHARED_TEXTURE, Camera.Instance.WindowSize.Y, x, y, direction);
+                break;
+            default:
+                item = new MovingPlatform_Size1(ITEM_SHARED_TEXTURE, Camera.Instance.WindowSize.Y, x, y, direction);
+                break;
+        }
+        return item;
+    }
+
+    public static IItems CreateAntiGravityCloud(int x, int y) {
+        var item = new AntiGravityCloud(ITEM_SHARED_TEXTURE, x, y);
+        return item;
+    }
+
+    public static IItems CreateCloud(int x, int y) {
+        var item = new Cloud(ITEM_SHARED_TEXTURE, x, y);
+        return item;
+    }
+    public static IItems CreatePoisonMushroom(int x, int y) {
+        var item = new Mushroom(ITEM_SHARED_TEXTURE, x, y, true);
         return item;
     }
 

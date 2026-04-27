@@ -10,16 +10,17 @@ using System.Text;
 
 namespace MagicBrosMario.Source.Items
 {
-	internal class Cloud : IItems
+	internal class Cloud : IItems, ICollidable
 	{
 
-		private Sprite.Sprite sprite;
+		private Sprite.ISprite sprite;
 		private Point position;
 		private float speed = 80f;
 		private int direction = 1;
 		private int xLimit;
 		private int yLimit;
 		private int xDifference = 0;
+		private bool startMoving = false;
 
         public Rectangle CollisionBox
         {
@@ -29,25 +30,25 @@ namespace MagicBrosMario.Source.Items
             }
         }
 
-        public Cloud(SharedTexture texture, int screenWidth, int screenHeight, int positionX, int positionY)
+        public Cloud(SharedTexture texture, int positionX, int positionY)
 		{
 
-			sprite = new Sprite.Sprite(texture, 123, 38, 48, 8);
-			yLimit = screenHeight;
-			xLimit = screenWidth;
+            sprite = texture.NewSprite(123, 38, 48, 8); 
 
 			position = new Point(positionX, positionY);
-			sprite.Scale = 3f;
+			sprite.Scale = 2f;
+            CollisionController.Instance.AddItem(this);
 
-		}
+        }
 		public void Update(GameTime gameTime)
 		{
 			float time = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-			xDifference = (int)(direction * speed * time);
-
-			position.X += xDifference;
-
+			if (startMoving)
+			{
+				xDifference = (int)(direction * speed * time);
+				position.X += xDifference;
+			}
 
 			sprite.Position = position;
 
@@ -63,7 +64,14 @@ namespace MagicBrosMario.Source.Items
 			return xDifference;
         }
 
-        public void OnCollidePlayer(Player player, CollideDirection direction) { }
+        public void OnCollidePlayer(Player player, CollideDirection direction) {
+
+			if (direction == CollideDirection.Top)
+			{
+				startMoving = true;
+			}
+
+		}
 
         public void OnCollideItem(IItems item, CollideDirection direction) { }
 

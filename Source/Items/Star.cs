@@ -4,83 +4,87 @@ using MagicBrosMario.Source.MarioStates;
 using MagicBrosMario.Source.Sprite;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Runtime.CompilerServices;
 
 namespace MagicBrosMario.Source.Items
 {
-	public class Star : IItems
-	{
-		private AnimatedSprite sprite;
-		private Vector2 position;
-		private float speed = 80f;
-		private int xDirection = 1;
-		private int yDirection = -1;
-		private int xLimit;
-		private float yBottom;
-		private float yTop;
-        private bool isCollected = false;
+    public class Star : IItems
+    {
+        private const float X_SPEED = 150f;
+        private const float GRAVITY_SPEED = 800f;
+        private const float JUMP_FORCE = -300f;
+        private const float RISE_SPEED = 40f;
 
+        private AnimatedSprite sprite;
+        private Vector2 floatPosition;
+        private float yVelocity = 0f;
+        private int xDirection = 1;
+        private bool isCollected = false;
+        private bool hasRisen = false;
+        private float riseAmount = 0f;
+        private float riseTarget = 32f;
+
+        public Point position { get => sprite.Position; private set => sprite.Position = value; }
 
         public Rectangle CollisionBox
         {
             get
-            {
-                return new Rectangle(sprite.Position.X, sprite.Position.Y, (int)(14 * sprite.Scale), (int)(16 * sprite.Scale));
+            { 
+                return new Rectangle(sprite.Position.X + 2, sprite.Position.Y, sprite.Size.X, sprite.Size.Y);
             }
         }
 
-        public Star(SharedTexture texture, int screenWidth, int screenHeight, int positionX, int positionY)
-		{
-			sprite = new AnimatedSprite(texture, 5, 94, 14, 16, 4, 0.03f);
-			yBottom = positionY + 30f;
-			yTop = positionY - 30f;
-			xLimit = screenWidth;
+        public Star(SharedTexture texture, int positionX, int positionY)
+        {
+            sprite = texture.NewAnimatedSprite(5, 94, 14, 16, 4, 0.08f);
 
-			position = new Vector2(positionX, positionY);
-			sprite.Position = position.ToPoint();
-			sprite.Scale = 3f;
+            if (positionX <= 0) positionX = 1;
+            if (positionY <= 0) positionY = 1;
 
+            floatPosition = new Vector2(positionX, positionY);
+            sprite.Position = floatPosition.ToPoint();
+            sprite.Scale = 2f;
+            sprite.Midground();
+            CollisionController.Instance.AddItem(this);
 		}
 
-		public void Update(GameTime gameTime)
-		{
-			if (!isCollected)
-			{
-				float time = (float)gameTime.ElapsedGameTime.TotalSeconds;
+        public void Update(GameTime gameTime)
+        {
+            if (isCollected) return;
 
-				position.X += (int)(xDirection * speed * time);
-				position.Y += (int)(yDirection * speed * time);
+            float time = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-				if (position.X <= 0)
-				{
-					position.X = 0;
-					xDirection = 1;
-				}
-				else if (position.X + sprite.Size.X >= xLimit)
-				{
-					position.X = xLimit - sprite.Size.X;
-					xDirection = -1;
-				}
+            if (!hasRisen)
+            {
+                float riseStep = RISE_SPEED * time;
+                floatPosition.Y -= riseStep;
+                riseAmount += riseStep;
 
-				if (position.Y <= yTop)
-				{
-					position.Y = yTop;
-					yDirection = 1;
-				}
-				else if (position.Y >= yBottom)
-				{
-					position.Y = yBottom;
-					yDirection = -1;
-				}
+                if (riseAmount >= riseTarget)
+                {
+                    hasRisen = true;
+                }
+            }
+            else
+            {
+                move(gameTime);
+            }
 
+            sprite.Position = floatPosition.ToPoint();
+            sprite.Update(gameTime);
+        }
 
-				sprite.Position = position.ToPoint();
-				sprite.Update(gameTime);
-			}
-		}
+        private void move(GameTime gameTime)
+        {
+            float time = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-		public void Draw(SpriteBatch spriteBatch)
-		{
+            yVelocity += GRAVITY_SPEED * time;
+
+            floatPosition.X += xDirection * X_SPEED * time;
+            floatPosition.Y += yVelocity * time;
+        }
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
             if (!isCollected)
             {
                 sprite.Draw(spriteBatch);
@@ -89,22 +93,42 @@ namespace MagicBrosMario.Source.Items
 
         public void OnCollidePlayer(Player player, CollideDirection direction)
         {
-            if (isCollected) return;
-
-            isCollected = true;
+			if (isCollected) return;
+			isCollected = true;
+            CollisionController.Instance.RemoveItem(this);
+            sprite.Drop();
         }
 
         public void OnCollideItem(IItems item, CollideDirection direction) { }
 
         public void OnCollideEnemy(IEnemy enemy, CollideDirection direction) { }
 
-        public void OnCollideBlock(IBlock block, CollideDirection direction) { }
-
-        public bool getCollected()
+        public void OnCollideBlock(IBlock block, CollideDirection direction)
         {
-            return isCollected;
-        }
-    }
+            if (!hasRisen) return;
 
-	
+            if (direction == CollideDirection.Down)
+            {
+                floatPosition.Y = block.CollisionBox.Top - (16 * sprite.Scale);
+                yVelocity = JUMP_FORCE;
+            }
+            else if (direction == CollideDirection.Top)
+            {
+                floatPosition.Y = block.CollisionBox.Bottom + 1;
+                yVelocity = 0;
+            }
+            else if (direction == CollideDirection.Left)
+            {
+                xDirection = 1;
+                floatPosition.X = block.CollisionBox.Right + 1;
+            }
+            else if (direction == CollideDirection.Right)
+            {
+                xDirection = -1;
+                floatPosition.X = block.CollisionBox.Left - (14 * sprite.Scale) - 1;
+            }
+        }
+
+        public bool getCollected() => isCollected;
+    }
 }

@@ -14,12 +14,12 @@ public class BigMarioCrouchState : IPlayerState
 
     private readonly Sprite.ISprite[] Sprites;
 
-    public BigMarioCrouchState(Player Mario, Sprite.SharedTexture texture, float timeFrame, int scaleFactor)
+    public BigMarioCrouchState(Player Mario)
     {
         this.Mario = Mario;
-        this.texture = texture;
-        this.timeFrame = timeFrame;
-        this.scaleFactor = scaleFactor;
+        this.texture = Mario.Texture;
+        this.timeFrame = Mario.TimeFrame;
+        this.scaleFactor = Mario.ScaleFactor;
         Sprites = [
             texture.NewSprite(136, 94, 16, 32),
             texture.NewAnimatedSprite(136, 94, 16, 32, 4, timeFrame/4)
@@ -28,11 +28,12 @@ public class BigMarioCrouchState : IPlayerState
         {
             Sprites[i].Scale = scaleFactor;
             Sprites[i].Visible = false;
+            Sprites[i].Depth = 0.6f;
         }
         CurrentSprite = Sprites[0];
         CurrentSprite.Visible = true;
         CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
-        Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 16 * scaleFactor, 22 * scaleFactor);
+        Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 16 * scaleFactor, 32 * scaleFactor);
     }
     public void Left(GameTime gameTime)
     {
@@ -58,7 +59,7 @@ public class BigMarioCrouchState : IPlayerState
     {
         if (!Mario.Invincible)
         {
-            Mario.ChangeState(new SmallMarioIdleState(Mario, texture, timeFrame, scaleFactor));
+            Mario.ChangeState(new SmallMarioIdleState(Mario));
         }
     }
     public void PowerUp(Power power)
@@ -66,7 +67,7 @@ public class BigMarioCrouchState : IPlayerState
         switch (power)
         {
             case Power.FireFlower:
-                Mario.ChangeState(new FireMarioCrouchState(Mario, texture, timeFrame, scaleFactor));
+                Mario.ChangeState(new FireMarioCrouchState(Mario));
                 break;
             case Power.Mushroom:
                 //Nothing
@@ -75,9 +76,12 @@ public class BigMarioCrouchState : IPlayerState
                 Mario.Invincible = true;
                 Mario.StarTimeRemaining = 0;
                 break;
+            case Power.Cloud:
+                Mario.ChangeState(new CloudMarioCrouchState(Mario));
+                break;
         }
     }
-    public Power GetCurrentPower()
+    public Power GetCurrentMode()
     {
         return Power.Mushroom;
     }
@@ -92,6 +96,10 @@ public class BigMarioCrouchState : IPlayerState
         {
             Sprites[i].Drop();
         }
+    }
+    public void SetVisibility(bool visible)
+    {
+        CurrentSprite.Visible = visible;
     }
     private void SwitchSprite(int index)
     {
@@ -111,11 +119,11 @@ public class BigMarioCrouchState : IPlayerState
             SwitchSprite(0);
         }
         CurrentSprite.Update(gameTime);
-        CurrentSprite.Flipped = Mario.Flipped;
+        CurrentSprite.HFlipped = Mario.Flipped;
         CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
         if (!Mario.IsCrouching)
         {
-            Mario.ChangeState(new BigMarioIdleState(Mario, texture, timeFrame, scaleFactor));
+            Mario.ChangeState(new BigMarioIdleState(Mario));
         }
     }
     public void Draw(SpriteBatch spriteBatch)

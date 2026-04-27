@@ -1,87 +1,135 @@
-﻿// Made by Brian
-using MagicBrosMario.Source.Block;
+﻿using MagicBrosMario.Source.Block;
 using MagicBrosMario.Source.Collision;
 using MagicBrosMario.Source.MarioStates;
 using MagicBrosMario.Source.Sprite;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace MagicBrosMario.Source.Items
 {
-    internal class Mushroom : IItems
+	internal class Mushroom : IItems, ICollidable
 	{
-
-		private Sprite.Sprite sprite;
-		private Point position;
-		private float speed = 80f;
-		private int direction = 1;
-		private int xLimit;
-		private int yLimit;
+		private const float GRAVITY_SPEED = 250f;
+		private const float RISE_SPEED = 30f;
+		private const float X_SPEED = 120f;
+		private Sprite.ISprite sprite;
+		private Vector2 floatPosition;
+		private int xDirection = 1;
 		private bool isCollected = false;
+		private bool hasRisen = false;
+		private bool isOnBlock = false;
+		private float riseAmount = 0f;
+		private float riseTarget = 32f;
 
-        public Rectangle CollisionBox
-        {
-            get
-            {
-                return new Rectangle(sprite.Position.X, sprite.Position.Y, (int)(16 * sprite.Scale), (int)(16 * sprite.Scale));
-            }
-        }
+		public Rectangle CollisionBox
+		{
+			get
+			{
+				return new Rectangle((int)floatPosition.X + 2, (int)floatPosition.Y, sprite.Size.X, sprite.Size.Y);
+			}
+		}
 
-        public Mushroom(SharedTexture texture, int screenWidth, int screenHeight, int positionX, int positionY)
+		public Point position { get => sprite.Position; private set => sprite.Position = value; }
+
+		public Mushroom(SharedTexture texture, int positionX, int positionY, bool Minecraft)
 		{
 
-			sprite = texture.NewSprite(184, 34, 16, 16);
-			yLimit = screenHeight;
-			xLimit = screenWidth;
+			if (Minecraft)
+			{
+				sprite = texture.NewSprite(167, 119, 12, 13);
+				sprite.Scale = 2.5f;
+			}
+			else
+			{
+				sprite = texture.NewSprite(184, 34, 16, 16);
+				sprite.Scale = 2f;
+			} 
 
-			position = new Point(positionX, positionY);
-			sprite.Scale = 3f;
-
+			 
+			floatPosition = new Vector2(positionX, positionY);
+			sprite.Position = floatPosition.ToPoint();
+            sprite.Midground();
+            CollisionController.Instance.AddItem(this);
 		}
+
 		public void Update(GameTime gameTime)
+		{
+			if (isCollected) return;
+			float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
+			if (!hasRisen)
+			{
+				Rise(dt);
+			}
+			else
+			{
+				if (!isOnBlock)
+				{
+					floatPosition.Y += (GRAVITY_SPEED * dt);
+				}
+				floatPosition.X += (xDirection * X_SPEED * dt);
+			}
+			sprite.Position = floatPosition.ToPoint();
+			isOnBlock = false;
+		}
+
+		private void Rise(float dt)
+		{
+			float step = RISE_SPEED * dt;
+			floatPosition.Y -= step;
+			riseAmount += step;
+			if (riseAmount >= riseTarget)
+			{
+				hasRisen = true;
+			}
+		}
+
+		public void Draw(SpriteBatch spriteBatch)
 		{
 			if (!isCollected)
 			{
-                float time = (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-                position.X += (int)(direction * speed * time);
-
-                if (position.X <= 0 || position.X + sprite.Size.X >= xLimit)
-                {
-                    direction *= -1;
-                }
-
-                sprite.Position = position;
-
-                sprite.Update(gameTime);
-            }
+				sprite.Draw(spriteBatch);
+			}
 		}
-		public void Draw(SpriteBatch spriteBatch)
+
+		public void OnCollideBlock(IBlock block, CollideDirection direction)
 		{
-            if (!isCollected)
-            {
-                sprite.Draw(spriteBatch);
-            }
-        }
+			if (hasRisen)
+			{
+				Rectangle blockBox = block.CollisionBox;
+				if (direction == CollideDirection.Down)
+				{
+					isOnBlock = true;
+					floatPosition.Y = blockBox.Top - sprite.Size.Y;
+				}
+				else if (direction == CollideDirection.Left)
+				{
+					xDirection = 1;
+					floatPosition.X = blockBox.Right;
+				}
+				else if (direction == CollideDirection.Right)
+				{
+					xDirection = -1;
+					floatPosition.X = blockBox.Left - sprite.Size.X;
+				}
+				else if (direction == CollideDirection.Top)
+				{
+					floatPosition.Y = blockBox.Bottom;
+				}
+				sprite.Position = floatPosition.ToPoint();
+			}
+		}
 
-        public void OnCollidePlayer(Player player, CollideDirection direction)
-        {
-            if (isCollected) return;
+		public void OnCollidePlayer(Player player, CollideDirection direction)
+		{
+			if (isCollected) return;
+			isCollected = true;
+			CollisionController.Instance.RemoveItem(this);
+			sprite.Drop();
+		}
 
-            isCollected = true;
-        }
-
-        public void OnCollideItem(IItems item, CollideDirection direction) { }
-
-        public void OnCollideEnemy(IEnemy enemy, CollideDirection direction) { }
-
-        public void OnCollideBlock(IBlock block, CollideDirection direction) { }
-
-        public bool getCollected()
-        {
-            return isCollected;
-        }
-
-    }
+		public void OnCollideItem(IItems item, CollideDirection direction) { }
+		public void OnCollideEnemy(IEnemy enemy, CollideDirection direction) { }
+		public bool getCollected() => isCollected;
+	}
 }
-  

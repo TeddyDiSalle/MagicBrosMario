@@ -28,7 +28,7 @@ public class Camera {
         }
         private set;
     }
-
+    
     public HashSet<ISprite> Sprites { get; } = [];
 
     public Point WindowSize {

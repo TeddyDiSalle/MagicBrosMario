@@ -1,13 +1,12 @@
-﻿using MagicBrosMario.Source.Collision;
-using MagicBrosMario.Source.Items;
-using MagicBrosMario.Source.Level;
+﻿using System;
+using System.Dynamic;
+using MagicBrosMario.Source.GameStates;
 using MagicBrosMario.Source.MarioStates;
+using MagicBrosMario.Source.Sound;
 using MagicBrosMario.Source.Sprite;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Microsoft.Xna.Framework.Input;
 
 
 namespace MagicBrosMario.Source;
@@ -16,30 +15,85 @@ public class MagicBrosMario : Game
 {
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
-    private MarioGameController Controller;
+    private IGameState _currentStateDONOUTUSE;
+    private bool isPaused = false;
+    public bool finishedLevel1 = false;
+    public bool finishedLevel2 = false;
+    private readonly Color backgroundColor = new Color(146, 144, 255);
+    public IGameState CurrentState
+    {
+        get => _currentStateDONOUTUSE;
+        set
+        {
+            if (_currentStateDONOUTUSE is PlayingState playingState)
+            {
+                playingState.Clear();
+            }
+
+            if (value is PlayingState newPlayingState)
+            {
+                if(level == null || level.GetType() != newPlayingState._level.GetType()){
+                    //Console.WriteLine("Switching to level: " + newPlayingState._level.Name);
+                    MarioStartPosition = new Point(-1, -1); // let go control of mario's start position
+                }
+                level = newPlayingState._level;
+                newPlayingState.Initialize();
+            }
+            if(value is TitleScreenState)
+            {
+                MarioStartPosition = new Point(-1, -1);
+            }
+
+            Camera.Instance.Position = Point.Zero; // Camera has to go to the beginning of the level
+            _currentStateDONOUTUSE = value;
+        }
+    }
 
     public Player Mario;
-    private SharedTexture MarioTexture;
-    private SharedTexture ItemTexture;
-    private SharedTexture EnemyTexture;
-    private SharedTexture FireTexture;
-    private float[] MarioStartPos = { 100, 300 };
-    private ILevel lvl;
-    private SpriteFont _font;
 
-    private List<IItems> ItemsList;
-    private List<IEnemy> Enemies;
-    private int ScreenWidth;
-    private int ScreenHeight;
+    public SharedTexture MarioTexture { get; }
+    public SharedTexture ItemTexture { get; }
+    public SharedTexture EnemyTexture { get; }
+    public SharedTexture FireTexture { get; }
+
+    public Texture2D TitleScreen { get; private set; }
+    public SpriteFont font { get; private set; }
+
+    //Use this for now
+    public ILevel level { get; set; }
+
+    // Set to -1, -1 to indicate that it has not been set yet
+    public Point MarioStartPosition {get; set;} = new Point(-1,-1);
+    //Keep Just In Case
+    //private ILevel lvl;
+
+    public static MagicBrosMario INSTANCE { get; private set; }
+
+
+    public enum GameState
+    {
+        TitleScreen,
+        Loading, // The black transition screen
+        Playing,
+        Paused,
+        GameOver
+    }
 
     public MagicBrosMario()
     {
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
-        ScreenWidth = Window.ClientBounds.Width;
-        ScreenHeight = Window.ClientBounds.Height;
-        new Camera(_graphics);
+        var _ = new Camera(_graphics);
+
+        EnemyTexture = new SharedTexture();
+        ItemTexture = new SharedTexture();
+        MarioTexture = new SharedTexture();
+        FireTexture = new SharedTexture();
+
+        INSTANCE = this;
+
+        Mario = new Player(MagicBrosMario.INSTANCE.MarioTexture);
     }
 
 
@@ -47,100 +101,136 @@ public class MagicBrosMario : Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-        _font = Content.Load<SpriteFont>("Font");
-
         Texture2D marioSheet = Content.Load<Texture2D>("MarioSpriteSheet");
         Texture2D blockTexture = Content.Load<Texture2D>("blocks");
         Texture2D itemSheet = Content.Load<Texture2D>("items");
         Texture2D enemySheet = Content.Load<Texture2D>("characters");
         Texture2D fireSheet = Content.Load<Texture2D>("enemies");
 
+        SoundController.LoadSounds();
 
-        EnemyTexture = new SharedTexture();
+
+        TitleScreen = Content.Load<Texture2D>("MarioTitleScreen");
+
         EnemyTexture.BindTexture(enemySheet);
-
-        ItemTexture = new SharedTexture();
         ItemTexture.BindTexture(itemSheet);
-
-        MarioTexture = new SharedTexture();
         MarioTexture.BindTexture(marioSheet);
-
-        FireTexture = new SharedTexture();
         FireTexture.BindTexture(fireSheet);
+        font = Content.Load<SpriteFont>("Font");
 
-        lvl = new Level1();
-        lvl.Initialize(blockTexture, enemySheet, itemSheet);
+        setController();
+        CurrentState = new TitleScreenState();
+        this.Mario = new Player(MarioTexture);
+    }
 
-        Mario = new Player(MarioTexture);
-        Mario.SetPositon(new Vector2(MarioStartPos[0], MarioStartPos[1]));
-        //Mario.PowerUp(Power.FireFlower);
 
-        MarioGameController.Sprint2Controller data = new MarioGameController.Sprint2Controller
+    private void setController()
+    {
+        MarioGameController.Sprint5Controller data = new MarioGameController.Sprint5Controller
         {
-            player = Mario,
             mouse = new MouseInfo(),
             keyb = new KeyboardInfo(),
-            halfX = _graphics.PreferredBackBufferWidth / 2,
-            halfY = _graphics.PreferredBackBufferHeight / 2
+            gamepad = new GamePadInfo(),
+            halfX = Camera.Instance.WindowSize.X / 2,
+            halfY = Camera.Instance.WindowSize.Y / 2
         };
-        Controller = new MarioGameController(this, ref data);
-        ItemsList = [
-            new Fireflower(ItemTexture, ScreenWidth, ScreenHeight, 700, 150),
-            new Fireflower_Underground(ItemTexture, ScreenWidth, ScreenHeight, 600, 150),
-            new Mushroom(ItemTexture, ScreenWidth, ScreenHeight, 100, 150),
-            //new OneUp(ItemTexture, ScreenWidth, ScreenHeight, 1, 150),
-            //new Star(ItemTexture, ScreenWidth, ScreenHeight, 50, 150),
-            //new MovingPlatform_Size1(ItemTexture, ScreenWidth, ScreenHeight, 300, 300, 1),
-            //new MovingPlatform_Size2(ItemTexture, ScreenWidth, ScreenHeight, 300, 200, 1),
-            //new MovingPlatform_Size3(ItemTexture, ScreenWidth, ScreenHeight, 300, 100, 1),
-            //new Cloud(ItemTexture, ScreenWidth, ScreenHeight, 0, 200),
-        ];
-        Enemies = [
-            //new Goomba(EnemyTexture, 100, 700),
-            //new Goomba(EnemyTexture, 330, 700),
-            //new Koopa(EnemyTexture, 500, 700),
-            //new Bowser(EnemyTexture, FireTexture, 250, 0, 700)
-            ];
-
-        CollisionController.Instance.BindPlayer(Mario);
-        foreach(IItems item in ItemsList)
-            CollisionController.Instance.AddItem(item);
-        foreach(IEnemy enemy in Enemies)
-            CollisionController.Instance.AddEnemy(enemy);
+        MarioGameController.Initialize(ref data);
     }
 
     protected override void Update(GameTime gameTime)
     {
-        Controller.Update(gameTime);
-        lvl.Update(gameTime);
-        Mario.Update(gameTime);
+        MarioGameController.Update(gameTime);
 
-        for (int i = 0; i < ItemsList.Count; i++)
+        if (!isPaused)
         {
-            ItemsList[i].Update(gameTime);
+            CurrentState.Update(gameTime);
         }
-        for (int i = 0; i < Enemies.Count; i++)
-        {
-            Enemies[i].Update(gameTime);
-            if (!Enemies[i].GetIsAlive())
-            {
-                CollisionController.Instance.RemoveEnemy(Enemies[i]);
-            }
-        }
-        Camera.Instance.Update(gameTime);
-        int cameraX = Math.Max(Camera.Instance.Position.X, (int)Mario.Position.X - Camera.Instance.WindowSize.X / 2);
-        Camera.Instance.Position = new Point(cameraX, 0);
-        CollisionController.Instance.Update(gameTime);
+
+        //Temp stuff may need some may not
+        //Controller.Update(gameTime);
+        //lvl.Update(gameTime);
+        //Mario.Update(gameTime);
+
+        //int cameraX = Math.Max(Camera.Instance.Position.X, (int)Mario.Position.X - Camera.Instance.WindowSize.X / 2);
+        //Camera.Instance.Position = new Point(cameraX, 0);
+        //Camera.Instance.Update(gameTime);
+        //HUD.Instance.Update(gameTime);
+
+        //CollisionController.Instance.Update(gameTime);
     }
 
     protected override void Draw(GameTime gameTime)
     {
-        GraphicsDevice.Clear(Color.CornflowerBlue);
-
-        _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+        GraphicsDevice.Clear(backgroundColor);
+        _spriteBatch.Begin(samplerState: SamplerState.PointClamp, sortMode: SpriteSortMode.BackToFront);
+        
+        CurrentState.Draw(_spriteBatch);
         Camera.Instance.Draw(_spriteBatch);
         _spriteBatch.End();
 
+
         base.Draw(gameTime);
     }
+
+
+    public void changePaused()
+    {
+        isPaused = !isPaused;
+    }
+
+    public bool getPaused()
+    {
+        return isPaused;
+    }
+
+    /*
+        public void Debug()
+        {
+            resetLevel();
+            Texture2D blockTexture = Content.Load<Texture2D>("blocks");
+            Texture2D itemSheet = Content.Load<Texture2D>("items");
+            Texture2D enemySheet = Content.Load<Texture2D>("characters");
+
+            level = new DebugRoom();
+            level.Initialize(Content, blockTexture, enemySheet, itemSheet);
+            resetMario();
+        }
+
+        public void Level1()
+        {
+            resetLevel();
+            Texture2D blockTexture = Content.Load<Texture2D>("blocks");
+            Texture2D itemSheet = Content.Load<Texture2D>("items");
+            Texture2D enemySheet = Content.Load<Texture2D>("characters");
+
+            lvl = new Level1();
+            lvl.Initialize(Content, blockTexture, enemySheet, itemSheet);
+            HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.StartLevel });
+            resetMario();
+        }
+
+        private void resetLevel()
+        {
+            if (level != null) level.Clear();
+
+            Camera.Instance.Position = Point.Zero;
+            Camera.Instance.Sprites.Clear();
+        }
+
+        private void resetMario()
+        {
+            CollisionController.Instance.RemovePlayer();
+            Mario = new Player(MarioTexture);
+            Mario.SetPositon(new Vector2(level.MarioStartPosX, level.MarioStartPosY));
+            Mario.PowerUp(Power.FireFlower);
+            setController();
+        }
+
+        private void resetHUD(int x)
+        {
+            HUD.Instance.SetLevel(x);
+            HUD.Instance.SetTime(200);
+        }
+
+    */
 }

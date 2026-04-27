@@ -21,12 +21,12 @@ public class SmallMarioMoveState : IPlayerState
     private readonly Sprite.ISprite[] Sprites;
     private bool Braking;
 
-    public SmallMarioMoveState(Player Mario, Sprite.SharedTexture texture, float timeFrame, int scaleFactor)
+    public SmallMarioMoveState(Player Mario)
     {
         this.Mario = Mario;
-        this.texture = texture;
-        this.timeFrame = timeFrame;
-        this.scaleFactor = scaleFactor;
+        this.texture = Mario.Texture;
+        this.timeFrame = Mario.TimeFrame;
+        this.scaleFactor = Mario.ScaleFactor;
         Sprites = [
             texture.NewAnimatedSprite(2, 21, 16, 16, 4, timeFrame),
             texture.NewAnimatedSprite(2, 40, 16, 16, 16, timeFrame/4),
@@ -37,6 +37,7 @@ public class SmallMarioMoveState : IPlayerState
         {
             Sprites[i].Scale = scaleFactor;
             Sprites[i].Visible = false;
+            Sprites[i].Depth = 0.6f;
         }
         CurrentSprite = Sprites[0];
         CurrentSprite.Visible = true;
@@ -53,8 +54,9 @@ public class SmallMarioMoveState : IPlayerState
     }
     public void Jump(GameTime gameTime)
     {
+        if (!Mario.IsGrounded && !Mario.WasGrounded) { return; }
         Mario.MoveUp(gameTime);
-        Mario.ChangeState(new SmallMarioJumpState(Mario, texture, timeFrame, scaleFactor));
+        Mario.ChangeState(new SmallMarioJumpState(Mario));
     }
     public void Crouch(GameTime gameTime)
     {
@@ -68,7 +70,7 @@ public class SmallMarioMoveState : IPlayerState
     {
         if (!Mario.Invincible)
         {
-            Mario.ChangeState(new MarioDeadState(Mario, texture, timeFrame, scaleFactor));
+            Mario.KillMario();
         }
     }
     public void PowerUp(Power power)
@@ -76,24 +78,27 @@ public class SmallMarioMoveState : IPlayerState
         switch (power)
         {
             case Power.FireFlower:
-                Mario.ChangeState(new FireMarioMoveState(Mario, texture, timeFrame, scaleFactor));
+                Mario.ChangeState(new FireMarioMoveState(Mario));
                 break;
             case Power.Mushroom:
-                Mario.ChangeState(new BigMarioMoveState(Mario, texture, timeFrame, scaleFactor));
+                Mario.ChangeState(new BigMarioMoveState(Mario));
                 break;
             case Power.Star:
                 Mario.Invincible = true;
                 Mario.StarTimeRemaining = 0;
                 break;
+            case Power.Cloud:
+                Mario.ChangeState(new CloudMarioMoveState(Mario));
+                break;
         }
     }
-    public Power GetCurrentPower()
+    public Power GetCurrentMode()
     {
         return Power.None;
     }
     public void Idle()
     {
-        Mario.ChangeState(new SmallMarioIdleState(Mario, texture, timeFrame, scaleFactor));
+        Mario.ChangeState(new SmallMarioIdleState(Mario));
     }
     public void StateChangePrep()
     {
@@ -102,6 +107,10 @@ public class SmallMarioMoveState : IPlayerState
         {
             Sprites[i].Drop();
         }
+    }
+    public void SetVisibility(bool visible)
+    {
+        CurrentSprite.Visible = visible;
     }
     private void SwitchSprite(int index)
     {
@@ -174,7 +183,7 @@ public class SmallMarioMoveState : IPlayerState
         SwitchSprite(Frame);
         CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
         CurrentSprite.Update(gameTime);
-        CurrentSprite.Flipped = Mario.Flipped;
+        CurrentSprite.HFlipped = Mario.Flipped;
     }
     public void Draw(SpriteBatch spriteBatch)
     {

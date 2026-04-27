@@ -23,7 +23,8 @@ public class Sprite(
 {
     public bool Animated => false;
     public bool Visible { get; set; } = true;
-    public bool Flipped { get; set; } = false;
+    public bool HFlipped { get; set; } = false;
+    public bool VFlipped { get; set; } = false;
 
     public Point Position
     {
@@ -48,6 +49,7 @@ public class Sprite(
     public Point Size { get; private set; }
 
     public Color Color { get; set; } = Color.White;
+    public float Depth { get; set; } = 0.0f;
 
     private readonly Rectangle sourceRect = new(offsetX, offsetY, width, height);
     private Rectangle destRect = new(0, 0, width, height);
@@ -59,7 +61,8 @@ public class Sprite(
         UpdateDestRect();
     }
 
-    public void UpdateDestRect() {
+    public void UpdateDestRect()
+    {
         var screenPosition = Camera.Instance.Position;
         destRect = new Rectangle(Position.X - screenPosition.X, Position.Y - screenPosition.Y, Size.X, Size.Y);
         shouldDraw = Camera.Instance.ShouldDraw(destRect);
@@ -70,21 +73,47 @@ public class Sprite(
         // no update for non-animated sprite
     }
 
-    public void Draw(SpriteBatch spriteBatch) {
+    public void Draw(SpriteBatch spriteBatch)
+    {
         if (!(Visible && shouldDraw)) return;
-        
-        if (Flipped)
+
+        if (HFlipped)
         {
-            spriteBatch.Draw(texture.Texture, destRect, sourceRect, Color, 0f, Vector2.Zero,
-                SpriteEffects.FlipHorizontally, 0f);
-        }
-        else
+            if (VFlipped)
+            {
+                spriteBatch.Draw(texture.Texture, destRect, sourceRect, Color, 180f, Vector2.Zero,
+                    SpriteEffects.None, Depth);
+            } else
+            {
+                spriteBatch.Draw(texture.Texture, destRect, sourceRect, Color, 0f, Vector2.Zero,
+                    SpriteEffects.FlipHorizontally, Depth);
+            }
+        } else
         {
-            spriteBatch.Draw(texture.Texture, destRect, sourceRect, Color);
+            if (VFlipped)
+            {
+                spriteBatch.Draw(texture.Texture, destRect, sourceRect, Color, 0f, Vector2.Zero,
+                    SpriteEffects.FlipVertically, Depth);
+            } else
+            {
+                spriteBatch.Draw(texture.Texture, destRect, sourceRect, Color, 0f, Vector2.Zero,
+                    SpriteEffects.None, Depth);
+            }
         }
     }
 
-    public void Drop() {
+    public void Drop()
+    {
         Camera.Instance.Sprites.Remove(this);
+    }
+
+    public void Background()
+    {
+        Depth = 1.0f;
+    }
+
+    public void Midground()
+    {
+        Depth = 0.5f;
     }
 }

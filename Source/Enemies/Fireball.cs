@@ -1,145 +1,94 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using MagicBrosMario.Source.Collision;
 using MagicBrosMario.Source.Block;
 using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.MarioStates;
 
 namespace MagicBrosMario.Source;
-
-public class Fireball : ICollidable
+//Roshan Ramamurthy
+public class Fireball : IEnemy, ICollidable
 {
+    public bool AlwaysActive => true;
     private const int VELOCITY = 150;
     private const float LIFETIME = 3.0f;
 
     private Sprite.AnimatedSprite spriteRight;
     private Sprite.AnimatedSprite spriteLeft;
-    private Boolean movingRight;
+    private bool movingRight;
     private float lifetimeRemaining;
     private bool isActive = true;
 
-    public Point Position
-    {
-        get { return movingRight ? spriteRight.Position : spriteLeft.Position; }
-    }
+    public Point Position => movingRight ? spriteRight.Position : spriteLeft.Position;
 
     public Rectangle CollisionBox
     {
         get
         {
-            if (!isActive)
-            {
-                return Rectangle.Empty;
-            }
-
+            if (!isActive) return Rectangle.Empty;
             var currentSprite = movingRight ? spriteRight : spriteLeft;
-            return new Rectangle(
-                currentSprite.Position.X,
-                currentSprite.Position.Y,
-                currentSprite.Size.X,
-                currentSprite.Size.Y
-            );
+            return new Rectangle(Position.X, Position.Y, currentSprite.Size.X, currentSprite.Size.Y);
         }
     }
 
-    public Fireball(
-        Sprite.AnimatedSprite fireballSpriteRight,
-        Sprite.AnimatedSprite fireballSpriteLeft,
-        int startX,
-        int startY,
-        bool movingRight)
+    public Fireball(Sprite.AnimatedSprite fireballSpriteRight, Sprite.AnimatedSprite fireballSpriteLeft,
+        int startX, int startY, bool movingRight)
     {
-        this.spriteRight = fireballSpriteRight;
-        this.spriteLeft = fireballSpriteLeft;
+        spriteRight = fireballSpriteRight;
+        spriteLeft = fireballSpriteLeft;
         this.movingRight = movingRight;
-        this.lifetimeRemaining = LIFETIME;
-        spriteRight.Visible = true;
-        spriteLeft.Visible = true;
-        
+        lifetimeRemaining = LIFETIME;
+        spriteRight.Scale = 3f;
+        spriteLeft.Scale = 3f;
+        spriteRight.Visible = false;
+        spriteLeft.Visible = false;
         spriteRight.Position = new Point(startX, startY);
         spriteLeft.Position = new Point(startX, startY);
     }
 
     public void Update(GameTime gameTime)
     {
-        if (!isActive)
-        {
-            return;
-        }
+        if (!isActive) return;
 
         lifetimeRemaining -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-
         if (lifetimeRemaining <= 0)
         {
-            isActive = false;
+            Deactivate();
             return;
         }
 
         var sec = (double)gameTime.ElapsedGameTime.TotalMilliseconds / 1000.0;
         var dx = (int)(sec * VELOCITY);
+        var newPos = movingRight
+            ? new Point(spriteRight.Position.X + dx, spriteRight.Position.Y)
+            : new Point(spriteLeft.Position.X - dx, spriteLeft.Position.Y);
+        spriteRight.Position = newPos;
+        spriteLeft.Position = newPos;
 
-        if (movingRight)
-        {
-            var newPos = new Point(spriteRight.Position.X + dx, spriteRight.Position.Y);
-            spriteRight.Position = newPos;
-            spriteLeft.Position = newPos;
-        }
-        else
-        {
-            var newPos = new Point(spriteLeft.Position.X - dx, spriteLeft.Position.Y);
-            spriteRight.Position = newPos;
-            spriteLeft.Position = newPos;
-        }
-
-        spriteRight.Update(gameTime);
-        spriteLeft.Update(gameTime);
+        spriteRight.Visible = movingRight;
+        spriteLeft.Visible = !movingRight;
     }
-
-    public bool IsExpired()
-    {
-        return !isActive || lifetimeRemaining <= 0;
-    }
-
-    public void Draw(SpriteBatch _spriteBatch)
-    {
-        if (!isActive)
-        {
-            return;
-        }
-
-        if (movingRight)
-        {
-            spriteRight.Visible = true;
-            spriteLeft.Visible = false;
-            spriteRight.Draw(_spriteBatch);
-        }
-        else
-        {
-            spriteRight.Visible = false;
-            spriteLeft.Visible = true;
-            spriteLeft.Draw(_spriteBatch);
-        }
-    }
-
-    public void OnCollidePlayer(Player player, CollideDirection direction)
+    public bool GetIsAlive() => isActive;
+    public void Kill() => Deactivate();
+    private void Deactivate()
     {
         isActive = false;
+        spriteRight.Drop();
+        spriteLeft.Drop();
+        CollisionController.Instance.RemoveEnemy(this);
     }
 
-    public void OnCollideItem(IItems item, CollideDirection direction)
-    {
-        // Fireballs don't interact with items
-    }
 
-    public void OnCollideEnemy(IEnemy enemy, CollideDirection direction)
-    {
-        // Fireball just deactivates itself — the enemy handles its own death
-        isActive = false;
-    }
+    public bool IsExpired() => !isActive || lifetimeRemaining <= 0;
 
-    public void OnCollideBlock(IBlock block, CollideDirection direction)
-    {
-        isActive = false;
-    }
+    // Camera handles drawing
+    public void Draw(SpriteBatch _spriteBatch) { }
+
+    public void OnCollidePlayer(Player player, CollideDirection direction) => Deactivate();
+
+    public void OnCollideItem(IItems item, CollideDirection direction) { }
+
+    public void OnCollideEnemy(IEnemy enemy, CollideDirection direction) { }
+
+    public void OnCollideBlock(IBlock block, CollideDirection direction) => Deactivate();
 }

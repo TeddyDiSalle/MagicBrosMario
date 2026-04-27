@@ -68,14 +68,29 @@
 /processorParam:TextureFormat=Color
 /build:items.png
 
-#begin LevelData/Blocks.xml
-/copy:LevelData/Blocks.xml
+#begin items.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:items.png
 
-#begin LevelData/Enemies.xml
-/copy:LevelData/Enemies.xml
-
-#begin LevelData/Items.xml
-/copy:LevelData/Items.xml
+#begin LevelData/1-1/1-1LazyDebugBackground.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:LevelData/1-1/1-1LazyDebugBackground.png
 
 #begin LevelData/1-1/Blocks1-1.csv
 /copy:LevelData/1-1/Blocks1-1.csv
@@ -86,8 +101,23 @@
 #begin LevelData/1-1/Items1-1.csv
 /copy:LevelData/1-1/Items1-1.csv
 
-#begin LevelData/1-1/1-1LazyDebugBackground.png
-/copy:LevelData/1-1/1-1LazyDebugBackground.png
+#begin LevelData/1-2/Blocks1-2.csv
+/copy:LevelData/1-2/Blocks1-2.csv
+
+#begin LevelData/1-2/Enemies1-2.csv
+/copy:LevelData/1-2/Enemies1-2.csv
+
+#begin LevelData/1-2/Items1-2.csv
+/copy:LevelData/1-2/Items1-2.csv
+
+#begin LevelData/Blocks.xml
+/copy:LevelData/Blocks.xml
+
+#begin LevelData/Enemies.xml
+/copy:LevelData/Enemies.xml
+
+#begin LevelData/Items.xml
+/copy:LevelData/Items.xml
 
 #begin LevelData/SMB_NES_World_1-1_Map.png
 /importer:TextureImporter
@@ -112,4 +142,178 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:MarioSpriteSheet.png
+
+#begin MarioTitleScreen.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:MarioTitleScreen.png
+
+#begin Sounds/1-1/smb_overworld.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Sounds/1-1/smb_overworld.mp3
+
+#begin Sounds/Blocks/break.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Blocks/break.wav
+
+#begin Sounds/Blocks/vine.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Blocks/vine.wav
+
+#begin Sounds/Debug/Aria_Math.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Sounds/Debug/Aria_Math.mp3
+
+#begin Sounds/Enemies/bowser_falls.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Enemies/bowser_falls.wav
+
+#begin Sounds/Enemies/bowser_fires.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Enemies/bowser_fires.wav
+
+#begin Sounds/Enviroment/bump.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Enviroment/bump.wav
+
+#begin Sounds/Enviroment/fireworks.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Enviroment/fireworks.wav
+
+#begin Sounds/Enviroment/flagpole.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Enviroment/flagpole.wav
+
+#begin Sounds/Enviroment/game_over.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Enviroment/game_over.wav
+
+#begin Sounds/Enviroment/pause.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Enviroment/pause.wav
+
+#begin Sounds/Enviroment/stage_clear.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Enviroment/stage_clear.wav
+
+#begin Sounds/Enviroment/time_warning.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Enviroment/time_warning.wav
+
+#begin Sounds/Enviroment/world_clear.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Enviroment/world_clear.wav
+
+#begin Sounds/Items/coin.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Items/coin.wav
+
+#begin Sounds/Items/one_up.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Items/one_up.wav
+
+#begin Sounds/Items/power_up_appear.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Items/power_up_appear.wav
+
+#begin Sounds/Items/power_up.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Items/power_up.wav
+
+#begin Sounds/Mario/fireball.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Mario/fireball.wav
+
+#begin Sounds/Mario/jump_small.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Mario/jump_small.wav
+
+#begin Sounds/Mario/jump_super.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Mario/jump_super.wav
+
+#begin Sounds/Mario/kick.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Mario/kick.wav
+
+#begin Sounds/Mario/mario_die.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Mario/mario_die.wav
+
+#begin Sounds/Mario/pipe_travel_power_down.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Mario/pipe_travel_power_down.wav
+
+#begin Sounds/Mario/stomp.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Mario/stomp.wav
+
+#begin TransitionScreen.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:TransitionScreen.png
 
