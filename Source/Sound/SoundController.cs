@@ -29,7 +29,7 @@ public class SoundController
     public static void LoadSounds()
     {
         string L1Path = "1-1/";
-        string L2Path = "1-2/";
+        //string L2Path = "1-2/";
         string DebugPath = "Debug/";
         string BlocksPath = "Blocks/";
         string EnemiesPath = "Enemies/";

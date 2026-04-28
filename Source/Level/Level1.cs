@@ -9,9 +9,9 @@ public class Level1 : ParentLevel
 	Point spawnPoint = new Point(3*tileSize, NormalLevelHeight);
 	Point Checkpoint1 = new Point(82*tileSize, NormalLevelHeight);
 	//These other points are for debugging purposes
-	Point rightBeforeFlagpole = new Point(195*tileSize, NormalLevelHeight);
-	Point rightAfterFlagpole = new Point(200*tileSize, NormalLevelHeight);
-	Point secretRoom = new Point(230*tileSize, NormalLevelHeight);
+	//Point rightBeforeFlagpole = new Point(195*tileSize, NormalLevelHeight);
+	//Point rightAfterFlagpole = new Point(200*tileSize, NormalLevelHeight);
+	//Point secretRoom = new Point(230*tileSize, NormalLevelHeight);
 	public Level1()	{
 		MarioStartPos = spawnPoint;
 
@@ -28,14 +28,4 @@ public class Level1 : ParentLevel
 		ReadFromCSV();
 		MagicBrosMario.INSTANCE.Mario.ChangeState(new SmallMarioIdleState(MagicBrosMario.INSTANCE.Mario));
 	}
-	
-
-	//private void JustTheFloor(){
-	//	int floorLevel = 10;
-	//	for (int c = 0; c < levWidth; c++)
-	//	{
-	//		blocks[levHeight - floorLevel][c] =   BlockManager.CreateBlock("04", c * tileSize, (levHeight - floorLevel) * tileSize);
-	//		Camera.Instance.Sprites.Add(blocks[levHeight - floorLevel][c].Sprite);
-	//	}	
-	//}
 }

@@ -67,7 +67,6 @@ public static class MarioGameController{
         keysNMouseInputMap.Bind(Keys.D0, goDebug);
         keysNMouseInputMap.Bind(Keys.D1, goLevel1);
         keysNMouseInputMap.Bind(Keys.D2, goLevel2);
-        keysNMouseInputMap.Bind(Keys.T, gt => MagicBrosMario.INSTANCE.level.showPositionOnScreen(), pauseIDelay, pauseRInterval); // for testing, shows mario's position on the screen when you press t
         keysNMouseInputMap.Bind(Keys.M, gt => SoundController.ToggleMute()); 
         // mouse inputs
         //keysNMouseInputMap.Bind(m => m.IsButtonDown(MouseButton.Right), gt => MagicBrosMario.INSTANCE.Exit());
@@ -95,7 +94,6 @@ public static class MarioGameController{
         keysNMouseInputMap.Bind(Keys.Z, gt => MagicBrosMario.INSTANCE.Mario.Attack());
         keysNMouseInputMap.Bind(Keys.N, gt => MagicBrosMario.INSTANCE.Mario.Attack());
         keysNMouseInputMap.Bind(Keys.E, gt =>  MagicBrosMario.INSTANCE.Mario.TakeDamage());
-        keysNMouseInputMap.Bind(Keys.P, gt =>  MagicBrosMario.INSTANCE.Mario.PowerUp(Power.FireFlower));
         keysNMouseInputMap.Bind(Keys.B, gt =>  MagicBrosMario.INSTANCE.Mario.Sprint());
         keysNMouseInputMap.Bind(Keys.LeftShift, gt =>  MagicBrosMario.INSTANCE.Mario.Sprint());
         keysNMouseInputMap.Bind(Keys.Q, gt => MagicBrosMario.INSTANCE.Exit()); 
