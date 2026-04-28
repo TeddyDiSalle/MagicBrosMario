@@ -106,24 +106,24 @@
 
 ## Readability Review by Roshan Ramamurthy
 
-[Class.cs](../Source/Class.cs) by Author
+[AntiGravityCloud.cs](..\Source\Items\AntiGravityCloud.cs) by Brian
 
-- Date:
-- Time:
+- Date: 4.27.26
+- Time: 1 minute
 
 ### Comments
 
->
+> Easy to follow, the constant names make it clear what the cloud does. The up and down floating logic is split nicely with hasRisen. The position property is lowercase which doesn't match the rest of the code, and the 40f should probably be a constant like the others.
 
 ---
 
 ## Maintainability Review by Roshan Ramamurthy
 
-[Class.cs](../Source/Class.cs) by Author
+[GamePadNStickCommandMapper.cs](..\Source\Controllers\GamePadNStickCommandMapper.cs) by Teddy
 
-- Date:
-- Time:
+- Date: 4.27.26
+- Time: 1 minute
 
 ### Comments
 
->
+> The RepeatBinding inner class keeps everything organized and SetFromKeyboardMapper is a nice way to avoid duplicating binds. There's some commented out keyboard code that should be deleted, and the while loop for repeat interval could have an infinite loop if the interval is 0.
