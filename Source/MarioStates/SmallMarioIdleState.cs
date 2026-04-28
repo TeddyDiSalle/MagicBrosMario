@@ -27,7 +27,7 @@ public class SmallMarioIdleState : IPlayerState
             Sprites[i].Visible = false;
             Sprites[i].Depth = 0.6f;
         }
-        CurrentSprite = Sprites[0];
+        CurrentSprite = Sprites[(int)IdleEnums.regularIdle];
         CurrentSprite.Visible = true;
         CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
         Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 16 * scaleFactor, 16 * scaleFactor);
@@ -64,28 +64,28 @@ public class SmallMarioIdleState : IPlayerState
             Mario.KillMario();
         }
     }
-    public void PowerUp(Power power)
+    public void PowerUp(Enums power)
     {
         switch (power)
         {
-            case Power.FireFlower:
+            case Enums.FireFlower:
                 Mario.ChangeState(new FireMarioIdleState(Mario));
                 break;
-            case Power.Mushroom:
+            case Enums.Mushroom:
                 Mario.ChangeState(new BigMarioIdleState(Mario));
                 break;
-            case Power.Star:
+            case Enums.Star:
                 Mario.Invincible = true;
                 Mario.StarTimeRemaining = 0;
                 break;
-            case Power.Cloud:
+            case Enums.Cloud:
                 Mario.ChangeState(new CloudMarioIdleState(Mario));
                 break;
         }
     }
-    public Power GetCurrentMode()
+    public Enums GetCurrentMode()
     {
-        return Power.None;
+        return Enums.None;
     }
     public void Idle()
     {
@@ -113,12 +113,12 @@ public class SmallMarioIdleState : IPlayerState
     {
         if (Mario.Invincible)
         {
-            SwitchSprite(1);
+            SwitchSprite((int)IdleEnums.starIdle);
             Mario.StarTimeRemaining += gameTime.ElapsedGameTime.TotalSeconds;
         }
         else
         {
-            SwitchSprite(0);
+            SwitchSprite((int)IdleEnums.regularIdle);
         }
         CurrentSprite.Update(gameTime);
         CurrentSprite.HFlipped = Mario.Flipped;

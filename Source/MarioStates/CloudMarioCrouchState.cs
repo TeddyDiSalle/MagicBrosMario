@@ -30,7 +30,7 @@ public class CloudMarioCrouchState : IPlayerState
             Sprites[i].Visible = false;
             Sprites[i].Depth = 0.6f;
         }
-        CurrentSprite = Sprites[0];
+        CurrentSprite = Sprites[(int)CrouchEnums.regularCrouch];
         CurrentSprite.Visible = true;
         CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
         Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 16 * scaleFactor, 32 * scaleFactor);
@@ -62,28 +62,28 @@ public class CloudMarioCrouchState : IPlayerState
             Mario.ChangeState(new SmallMarioIdleState(Mario));
         }
     }
-    public void PowerUp(Power power)
+    public void PowerUp(Enums power)
     {
         switch (power)
         {
-            case Power.FireFlower:
+            case Enums.FireFlower:
                 Mario.ChangeState(new FireMarioCrouchState(Mario));
                 break;
-            case Power.Mushroom:
+            case Enums.Mushroom:
                 //Nothing
                 break;
-            case Power.Star:
+            case Enums.Star:
                 Mario.Invincible = true;
                 Mario.StarTimeRemaining = 0;
                 break;
-            case Power.Cloud:
+            case Enums.Cloud:
                 //Nothing
                 break;
         }
     }
-    public Power GetCurrentMode()
+    public Enums GetCurrentMode()
     {
-        return Power.Cloud;
+        return Enums.Cloud;
     }
     public void Idle()
     {
@@ -111,12 +111,12 @@ public class CloudMarioCrouchState : IPlayerState
     {
         if (Mario.Invincible)
         {
-            SwitchSprite(1);
+            SwitchSprite((int)CrouchEnums.starCrouch);
             Mario.StarTimeRemaining += gameTime.ElapsedGameTime.TotalSeconds;
         }
         else
         {
-            SwitchSprite(0);
+            SwitchSprite((int)CrouchEnums.regularCrouch);
         }
         CurrentSprite.Update(gameTime);
         CurrentSprite.HFlipped = Mario.Flipped;

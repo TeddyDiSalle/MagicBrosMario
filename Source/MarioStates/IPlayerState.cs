@@ -11,8 +11,8 @@ public interface IPlayerState
     void Crouch(GameTime gameTime);
     void Attack();
     void TakeDamage();
-    void PowerUp(Power power);
-    Power GetCurrentMode();
+    void PowerUp(Enums power);
+    Enums GetCurrentMode();
     void StateChangePrep();
     void SetVisibility(bool visible);
     void Idle();

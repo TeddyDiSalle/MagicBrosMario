@@ -12,7 +12,7 @@ public class FireMarioMoveState : IPlayerState
 
     private ISprite CurrentSprite;
 
-    private int Frame = 0;
+    private int spriteIndex = (int)MoveEnums.regularMove;
     private readonly float timeFrame;
     private double timer = 0;
     private readonly int scaleFactor;
@@ -44,7 +44,7 @@ public class FireMarioMoveState : IPlayerState
             Sprites[i].Visible = false;
             Sprites[i].Depth = 0.6f;
         }
-        CurrentSprite = Sprites[Frame];
+        CurrentSprite = Sprites[(int)MoveEnums.regularMove];
         CurrentSprite.Visible = true;
         CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
         Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 16 * scaleFactor, 32 * scaleFactor);
@@ -82,28 +82,28 @@ public class FireMarioMoveState : IPlayerState
             Mario.ChangeState(new SmallMarioMoveState(Mario));
         }
     }
-    public void PowerUp(Power power)
+    public void PowerUp(Enums power)
     {
         switch (power)
         {
-            case Power.FireFlower:
+            case Enums.FireFlower:
                 //Nothing
                 break;
-            case Power.Mushroom:
+            case Enums.Mushroom:
                 Mario.ChangeState(new BigMarioMoveState(Mario));
                 break;
-            case Power.Star:
+            case Enums.Star:
                 Mario.Invincible = true;
                 Mario.StarTimeRemaining = 0;
                 break;
-            case Power.Cloud:
+            case Enums.Cloud:
                 Mario.ChangeState(new CloudMarioMoveState(Mario));
                 break;
         }
     }
-    public Power GetCurrentMode()
+    public Enums GetCurrentMode()
     {
-        return Power.FireFlower;
+        return Enums.FireFlower;
     }
     public void Idle()
     {
@@ -133,7 +133,7 @@ public class FireMarioMoveState : IPlayerState
         bool BrakingLeft = Mario.Flipped && Mario.Velocity.X > 0;
         if (BrakingRight || BrakingLeft)
         {
-            Frame = 2;
+            spriteIndex = (int)MoveEnums.regularBrake;
             timer = 0;
             Braking = true;
             if (BrakingRight)
@@ -156,13 +156,13 @@ public class FireMarioMoveState : IPlayerState
     {
         if (timer <= timeFrame) { return; }
 
-        if (Frame == 2)
+        if (spriteIndex == (int)MoveEnums.regularBrake)
         {
-            Frame = 0;
+            spriteIndex = (int)MoveEnums.regularMove;
         }
-        else if (Frame == 3)
+        else if (spriteIndex == (int)MoveEnums.starBrake)
         {
-            Frame = 1;
+            spriteIndex = (int)MoveEnums.starMove;
         }
         IsBraking(gameTime);
         timer = 0;
@@ -174,11 +174,11 @@ public class FireMarioMoveState : IPlayerState
         Mario.StarTimeRemaining += time;
         if (Braking)
         {
-            Frame = 3;
+            spriteIndex = (int)MoveEnums.starBrake;
         }
         else
         {
-            Frame = 1;
+            spriteIndex = (int)MoveEnums.starMove;
         }    
     }
     public void Update(GameTime gameTime)
@@ -191,7 +191,7 @@ public class FireMarioMoveState : IPlayerState
         UpdateStarAnimations(time);
         if (IsAttacking)
         {
-            SwitchSprite(Frame + 4);
+            SwitchSprite(spriteIndex + 4); //Switches to respective attack sprite given spriteIndex
             if(AttackTimer > timeFrame)
             {
                 IsAttacking = false;
@@ -200,7 +200,7 @@ public class FireMarioMoveState : IPlayerState
         }
         else
         {
-            SwitchSprite(Frame);
+            SwitchSprite(spriteIndex);
         }
         CurrentSprite.Update(gameTime);
         CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
