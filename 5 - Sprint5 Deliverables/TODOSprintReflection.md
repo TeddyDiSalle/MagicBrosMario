@@ -17,7 +17,6 @@ Our team benefited from keeping a debug room and quick room-switching controls i
 ## What We Would Improve Next Sprint
 - Continue refining pipe entry/exit logic and camera transitions.
 - Add more dedicated helper classes where large files are becoming hard to read.
-- Continue improving documentation and code review records as features stabilize.
 
 ## Overall Assessment
 Our performance this sprint was noticeably better than the previous sprint due to our increased proactiveness in completing our work early enough to work out any problems during implementation. Although there are a couple of bugs that we haven't figured out how to fix including the false collisions described above and Mario not appearing after a level transition until player input.
