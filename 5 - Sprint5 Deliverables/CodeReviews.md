@@ -54,7 +54,7 @@
 
 ## Readability Review by Teddy DiSalle
 
-[Class.cs](../Source/Sound/SoundController.cs) by Chuang-Yun
+[SoundController.cs](../Source/Sound/SoundController.cs) by Chuang-Yun
 
 - Date: 4/27/2026
 - Time: 1 minute
@@ -67,40 +67,40 @@
 
 ## Maintainability Review by Teddy DiSalle
 
-[Class.cs](../Source/Items/AntiGravityCloud.cs) by Brian Perusek
+[AntiGravityCloud.cs](../Source/Items/AntiGravityCloud.cs) by Brian Perusek
 
 - Date: 4/27/2026
 - Time: 2 minutes
 
 ### Comments
 
->Pretty good, lots of abstraction so the class only has to deal with exactly what's different with it compared to other sprites, objects, and items. There are a few unanmed magic numbers particularly in the constructor as well as update. These can be identified with context, contructor knowledge, and nearby variable names. If just those were cleaned up, the whole thing could be easily changed by anyone or understood for debugging.  
+> Pretty good, lots of abstraction so the class only has to deal with exactly what's different with it compared to other sprites, objects, and items. There are a few unanmed magic numbers particularly in the constructor as well as update. These can be identified with context, contructor knowledge, and nearby variable names. If just those were cleaned up, the whole thing could be easily changed by anyone or understood for debugging.  
 
 ---
 
 ## Readability Review by Chuang-Yun Huang
 
-[Class.cs](../Source/Class.cs) by Author
+[Axe.cs](../Source/Items/Axe.cs) by Brian
 
-- Date:
-- Time:
+- Date: 4/27/2026
+- Time: 2 minutes
 
 ### Comments
 
->
+> Really clean class. The namings are consistent and informative. The code are organized. The early return with isColected makes it a lot easier to read. 10/10
 
 ---
 
 ## Maintainability Review by Chuang-Yun Huang
 
-[Class.cs](../Source/Class.cs) by Author
+[LevelCellTokenParser.cs](../Source/Level/LevelCellTokenParser.cs) by Teddy
 
-- Date:
-- Time:
+- Date: 4/27/2026
+- Time: 2 minutes
 
 ### Comments
 
->
+> Didn't expect to see a parser and a resolver for parsing level, but the code is really nice and readable. No messy parsing logic and I can understand each part just by reading the comments without the help of any decoder only causal transformer. 10/10
 
 ---
 
