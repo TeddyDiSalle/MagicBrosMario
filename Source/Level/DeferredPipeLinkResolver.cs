@@ -4,6 +4,8 @@ using MagicBrosMario.Source.Block;
 using MagicBrosMario.Source.Collision;
 using Microsoft.Xna.Framework;
 
+#nullable enable
+
 namespace MagicBrosMario.Source.Level;
 
 internal sealed class DeferredPipeLinkResolver

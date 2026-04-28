@@ -2,7 +2,7 @@ using System;
 using MagicBrosMario.Source.Block;
 
 namespace MagicBrosMario.Source.Level;
-
+#nullable enable
 internal readonly record struct LevelCellToken(string BlockId, string? PipeLabel);
 
 internal static class LevelCellTokenParser

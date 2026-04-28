@@ -53,7 +53,7 @@ public class CloudMarioJumpState : IPlayerState
     }
     public void Crouch(GameTime gameTime)
     {
-        Mario.ChangeState(new BigMarioCrouchState(Mario));
+        Mario.ChangeState(new CloudMarioCrouchState(Mario));
     }
     public void Attack()
     {
@@ -66,28 +66,28 @@ public class CloudMarioJumpState : IPlayerState
             Mario.ChangeState(new SmallMarioJumpState(Mario));
         }
     }
-    public void PowerUp(Power power)
+    public void PowerUp(Enums power)
     {
         switch (power)
         {
-            case Power.FireFlower:
+            case Enums.FireFlower:
                 Mario.ChangeState(new FireMarioJumpState(Mario));
                 break;
-            case Power.Mushroom:
+            case Enums.Mushroom:
                 //Nothing
                 break;
-            case Power.Star:
+            case Enums.Star:
                 Mario.Invincible = true;
                 Mario.StarTimeRemaining = 0;
                 break;
-            case Power.Cloud:
+            case Enums.Cloud:
                 //Nothing
                 break;
         }
     }
-    public Power GetCurrentMode()
+    public Enums GetCurrentMode()
     {
-        return Power.Cloud;
+        return Enums.Cloud;
     }
     public void Idle()
     {
@@ -116,12 +116,12 @@ public class CloudMarioJumpState : IPlayerState
         if (!MarioGameController.IsMarioUp()) { Mario.JumpCalls = Player.maxJumpCalls; }
         if (Mario.Invincible)
         {
-            SwitchSprite(1);
+            SwitchSprite((int)JumpEnums.starJump);
             Mario.StarTimeRemaining += gameTime.ElapsedGameTime.TotalSeconds;
         }
         else
         {
-            SwitchSprite(0);
+            SwitchSprite((int)JumpEnums.regularJump);
         }
         CurrentSprite.Update(gameTime);
         CurrentSprite.HFlipped = Mario.Flipped;

@@ -16,7 +16,6 @@ public class FireMarioIdleState : IPlayerState
     private readonly Sprite.ISprite[] Sprites;
 
     private bool IsAttacking = false;
-
     public FireMarioIdleState(Player Mario)
     {
         this.Mario = Mario;
@@ -36,7 +35,7 @@ public class FireMarioIdleState : IPlayerState
             Sprites[i].Visible = false;
             Sprites[i].Depth = 0.6f;
         }
-        CurrentSprite = Sprites[0];
+        CurrentSprite = Sprites[(int)IdleEnums.regularIdle];
         CurrentSprite.Visible = true;
         CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);
         Mario.CollisionBox = new Rectangle(Mario.CollisionBox.X, Mario.CollisionBox.Y, 16 * scaleFactor, 32 * scaleFactor);
@@ -78,28 +77,28 @@ public class FireMarioIdleState : IPlayerState
             Mario.ChangeState(new SmallMarioIdleState(Mario));
         }
     }
-    public void PowerUp(Power power)
+    public void PowerUp(Enums power)
     {
         switch (power)
         {
-            case Power.FireFlower:
+            case Enums.FireFlower:
                 //Nothing
                 break;
-            case Power.Mushroom:
+            case Enums.Mushroom:
                 Mario.ChangeState(new BigMarioIdleState(Mario));
                 break;
-            case Power.Star:
+            case Enums.Star:
                 Mario.Invincible = true;
                 Mario.StarTimeRemaining = 0;
                 break;
-            case Power.Cloud:
+            case Enums.Cloud:
                 Mario.ChangeState(new CloudMarioIdleState(Mario));
                 break;
         }
     }
-    public Power GetCurrentMode()
+    public Enums GetCurrentMode()
     {
-        return Power.FireFlower;
+        return Enums.FireFlower;
     }
     public void Idle()
     {
@@ -128,11 +127,11 @@ public class FireMarioIdleState : IPlayerState
         if (Mario.Invincible)
         {
             Mario.StarTimeRemaining += gameTime.ElapsedGameTime.TotalSeconds;
-            SwitchSprite((IsAttacking) ? 3 : 1);
+            SwitchSprite((IsAttacking) ? (int)Attack2Enum.starAttack : (int)IdleEnums.starIdle);
         }
         else
         {
-            SwitchSprite((IsAttacking) ? 2 : 0);
+            SwitchSprite((IsAttacking) ? (int)Attack2Enum.normalAttack : (int)IdleEnums.regularIdle);
         }
         CurrentSprite.Update(gameTime);
         CurrentSprite.Position = new Point((int)Mario.Position.X, (int)Mario.Position.Y);

@@ -369,28 +369,4 @@ public abstract class ParentLevel : ILevel
         SoundController.StopMusic();
     }
 
-    public void GoToNextLevel()
-    {
-        // need further implmentaition
-        _activatedEnemies.Clear();
-        CollisionController.Instance.RemoveAll();
-        blocks = [];
-        items = [];
-        enemies = [];
-        if (backgroundSprite != null)
-        {
-            backgroundSprite.Drop();
-            backgroundSprite = null;
-        }
-
-        HUD.Instance.LevelOver();
-        SoundController.StopMusic();
-    }
-
-    public void showPositionOnScreen()
-    {
-        Vector2 exactPosition = MagicBrosMario.INSTANCE.Mario.Position;
-        Vector2 tilePosition = new Vector2((int)(exactPosition.X / tileSize), (int)(exactPosition.Y / tileSize));
-        Console.WriteLine($"Mario is at pixel position {exactPosition} and tile position {tilePosition}");
-    }
 }

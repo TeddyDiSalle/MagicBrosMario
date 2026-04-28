@@ -9,15 +9,6 @@ MagicBrosMario is a Super Mario Bros. built in C# with MonoGame. The project inc
 - Roshan
 - Teddy DiSalle
 
-## Current Sprint 4 Highlights
-- Playable first level and debug room
-- Title screen and transition state
-- HUD with time limit
-- Question blocks that hold items and coins
-- Floating coins
-- Pipes and level transitions
-- Sound effects and background music
-- Mouse shortcuts for quick room switching during testing
 
 ## Controls
 ### Keyboard
@@ -72,6 +63,7 @@ MagicBrosMario/
 ├── CodeReviews/              # Sprint review notes
 ├── 3 - Sprint3 Deliverables/
 ├── 4 - Sprint4 Deliverables/
+├── 5 - Sprint5 Deliverables/
 └── README.md
 ```
 
@@ -114,20 +106,21 @@ Mario behavior is organized through state classes for small, big, and fire forms
 - Reset and quick room switching for testing
 
 ## Known Issues
-- The game does not always fully end after Mario reaches the flagpole.
-- Pipe behavior is still being refined, and some pipe interactions can still kill Mario unexpectedly.
-- Some pipe/camera transitions may still need adjustment in special cases.
+- Collision with sometimes hits the side when an object is supposed to collide with the top
+- Mario does not show up soemtimes until the player inputs a movement
 
 ## Testing Notes
 The project intentionally keeps several debug-friendly controls in place:
 - Quick reset with `R`
 - Force damage with `E`
-- Mouse-based room switching between the debug room and Level 1
+- Switch between debug room (press 0), 1-1 (press 1), 1-2 (press 2)
 
 These controls are useful during development and sprint demos.
 
-## Sprint 4 Documentation Notes
-For Sprint 4, the team focused on completing the first level, maintaining a debug/testing room, improving state transitions, and documenting code reviews and sprint reflection work.
-
 ## Credits
 This project was created by the Magic Bros team.
+Credit the song Aria Math (in debug and 1-2) to C418
+Credit sprites and other sounds/music to Nintendo
+Credit idea and inspiration to Nintendo
+Credit Minecraft sprites to Mojang
+Credit SMB NES font to Patrick Adams (TheWolfBunny64)

@@ -50,7 +50,7 @@ public class GoombaCollisionHandler
 
     public void OnCollidePlayer(Player player, CollideDirection direction)
     {
-        if (player.GetCurrentPower().Equals(Power.Star) || direction == CollideDirection.Top)
+        if (player.GetCurrentPower().Equals(Enums.Star) || direction == CollideDirection.Top)
         {
             goomba.Kill();
             HUD.Instance.SendEvent(new GameEvent

@@ -70,7 +70,7 @@ public class QuestionMarkBlock : BlockBase<QuestionMarkBlock>
                 HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.PowerupAppears, EventPosition = Position });
                 break;
 			case InnerItem.Mushroom:
-				if (player.GetCurrentMode() == Power.None || player.GetCurrentMode() == Power.Star)
+				if (player.GetCurrentMode() == Enums.None)
 				{
 					item = new Mushroom(MagicBrosMario.INSTANCE.ItemTexture, Position.X, Position.Y - 5, false);
 				}

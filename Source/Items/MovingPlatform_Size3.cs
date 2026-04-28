@@ -16,8 +16,7 @@ namespace MagicBrosMario.Source.Items
 		private Sprite.ISprite sprite;
 		private Point position;
 		private float speed = 80f;
-		private int direction;
-		private int yLimit;
+		private int direction;		private int yLimit;
 		private int yDifference = 0;
 
         public Rectangle CollisionBox
