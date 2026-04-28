@@ -17,7 +17,6 @@ namespace MagicBrosMario.Source.Items
 		private Point position;
 		private float speed = 80f;
 		private int direction;
-		private int xLimit;
 		private int yLimit;
 		private int yDifference = 0;
 
