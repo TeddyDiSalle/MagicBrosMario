@@ -123,3 +123,4 @@ Credit the song Aria Math (in debug and 1-2) to C418
 Credit sprites and other sounds/music to Nintendo
 Credit idea and inspiration to Nintendo
 Credit Minecraft sprites to Mojang
+Credit SMB NES font to Patrick Adams (TheWolfBunny64)
