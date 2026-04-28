@@ -40,6 +40,6 @@ Maintainability Index: 83
 Cyclomatic Complexity: 2,237
 Depth of Inheritance: 2
 Class Coupling: 196
-Lines of Source code: 10,870
+Lines of Source code: 10,864
 Lines of Executable code: 3,356
 
