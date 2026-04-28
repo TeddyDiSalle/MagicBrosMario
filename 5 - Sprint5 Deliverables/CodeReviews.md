@@ -28,27 +28,27 @@
 
 ## Readability Review by Brian Perusek
 
-[Class.cs](../Source/Class.cs) by Author
+[CloudMarioIdleState.cs](../Source/MarioStates/CloudMarioIdleState.cs) by Vincent
 
-- Date:
-- Time:
+- Date: 4/27
+- Time: 2 minutes
 
 ### Comments
 
->
+> Relatively simple class, pretty consistent with the other mario states
 
 ---
 
 ## Maintainability Review by Brian Perusek
 
-[Class.cs](../Source/Class.cs) by Author
+[Level2.cs](../Source/Level/Level2.cs) by Teddy
 
 - Date: 03.13.2026
-- Time: 3 minutes
+- Time: 2 minutes
 
 ### Comments
 
->
+> The code seems very maintainable. If you want to add more checkpoints, more blocks, more items, etc. then the class seems really easy to figure out how to implement it.
 
 ---
 
