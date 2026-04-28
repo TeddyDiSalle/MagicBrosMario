@@ -2,27 +2,27 @@
 
 ## Readability Review by Vincent Do
 
-[Class.cs](../Source/Class.cs) by Author
+[Axe.cs](..\Source\Items\Axe.cs) by Brian
 
-- Date:
-- Time:
+- Date: 4.27.26
+- Time: 1 minute
 
 ### Comments
 
->
+> Very simple and readable class.
 
 ---
 
 ## Maintainability Review by Vincent Do
 
-[Class.cs](../Source/Class.cs) by Author
+[BowserCollisionHandler.cs](..\Source\Enemies\BowserCollisionHandler.cs) by Roshan
 
-- Date:
-- Time:
+- Date: 4.27.26
+- Time: 1 minute
 
 ### Comments
 
->
+> This class is very maintainable. It only focuses on responding to collisions involving bowser and the code is very simple.
 
 ---
 

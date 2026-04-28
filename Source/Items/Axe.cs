@@ -36,7 +36,6 @@ namespace MagicBrosMario.Source.Items
 		public void Update(GameTime gameTime)
 		{
 			if (isCollected) return;
-			float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
 			sprite.Update(gameTime); 
 			sprite.Position = floatPosition.ToPoint();
 		} 

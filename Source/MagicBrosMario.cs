@@ -109,7 +109,6 @@ public class MagicBrosMario : Game
 
         SoundController.LoadSounds();
 
-
         TitleScreen = Content.Load<Texture2D>("MarioTitleScreen");
 
         EnemyTexture.BindTexture(enemySheet);
@@ -145,18 +144,6 @@ public class MagicBrosMario : Game
         {
             CurrentState.Update(gameTime);
         }
-
-        //Temp stuff may need some may not
-        //Controller.Update(gameTime);
-        //lvl.Update(gameTime);
-        //Mario.Update(gameTime);
-
-        //int cameraX = Math.Max(Camera.Instance.Position.X, (int)Mario.Position.X - Camera.Instance.WindowSize.X / 2);
-        //Camera.Instance.Position = new Point(cameraX, 0);
-        //Camera.Instance.Update(gameTime);
-        //HUD.Instance.Update(gameTime);
-
-        //CollisionController.Instance.Update(gameTime);
     }
 
     protected override void Draw(GameTime gameTime)
@@ -182,55 +169,4 @@ public class MagicBrosMario : Game
     {
         return isPaused;
     }
-
-    /*
-        public void Debug()
-        {
-            resetLevel();
-            Texture2D blockTexture = Content.Load<Texture2D>("blocks");
-            Texture2D itemSheet = Content.Load<Texture2D>("items");
-            Texture2D enemySheet = Content.Load<Texture2D>("characters");
-
-            level = new DebugRoom();
-            level.Initialize(Content, blockTexture, enemySheet, itemSheet);
-            resetMario();
-        }
-
-        public void Level1()
-        {
-            resetLevel();
-            Texture2D blockTexture = Content.Load<Texture2D>("blocks");
-            Texture2D itemSheet = Content.Load<Texture2D>("items");
-            Texture2D enemySheet = Content.Load<Texture2D>("characters");
-
-            lvl = new Level1();
-            lvl.Initialize(Content, blockTexture, enemySheet, itemSheet);
-            HUD.Instance.SendEvent(new GameEvent { EventType = GameEventType.StartLevel });
-            resetMario();
-        }
-
-        private void resetLevel()
-        {
-            if (level != null) level.Clear();
-
-            Camera.Instance.Position = Point.Zero;
-            Camera.Instance.Sprites.Clear();
-        }
-
-        private void resetMario()
-        {
-            CollisionController.Instance.RemovePlayer();
-            Mario = new Player(MarioTexture);
-            Mario.SetPositon(new Vector2(level.MarioStartPosX, level.MarioStartPosY));
-            Mario.PowerUp(Power.FireFlower);
-            setController();
-        }
-
-        private void resetHUD(int x)
-        {
-            HUD.Instance.SetLevel(x);
-            HUD.Instance.SetTime(200);
-        }
-
-    */
 }
