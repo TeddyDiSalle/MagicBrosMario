@@ -16,7 +16,6 @@ namespace MagicBrosMario.Source.GameStates
         {
             _titleTexture = MagicBrosMario.INSTANCE.TitleScreen;
             _font = MagicBrosMario.INSTANCE.font;
-            //_font = _game.Content.Load<SpriteFont>("font");
             MagicBrosMario.INSTANCE.Mario.SetVisibility(false);
             MagicBrosMario.INSTANCE.Mario.Lives = 3;
             HUD.Instance.ResetScoreAndCoins();

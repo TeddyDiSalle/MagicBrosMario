@@ -65,7 +65,6 @@ namespace MagicBrosMario.Source.GameStates
         public void Clear()
         {
             _level.Clear();
-			//MagicBrosMario.INSTANCE.Mario.Lives--;
 			Camera.Instance.Sprites.Clear();
 			CollisionController.Instance.RemoveAll();
         }

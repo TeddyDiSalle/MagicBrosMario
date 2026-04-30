@@ -47,11 +47,6 @@ namespace MagicBrosMario.Source.GameStates
                     MagicBrosMario.INSTANCE.CurrentState = new TitleScreenState();
                 }
             }
-
-            if (Keyboard.GetState().IsKeyDown(Keys.R))
-            {
-                MagicBrosMario.INSTANCE.CurrentState = new TitleScreenState();
-            }
         }
 
         public void Draw(SpriteBatch spriteBatch)
