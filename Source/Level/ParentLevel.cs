@@ -298,7 +298,14 @@ public abstract class ParentLevel : ILevel
         {
             for (int col = 0; col < levWidth; col++)
             {
-                action(row, col);
+                try
+                {
+                    action(row, col);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Error occurred while processing cell ({row}, {col}): {ex.Message}", ex);
+                }
             }
         }
     }
