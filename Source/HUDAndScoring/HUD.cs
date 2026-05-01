@@ -13,21 +13,21 @@ public class HUD
     private readonly AnimatedSprite coin = new(MagicBrosMario.INSTANCE.ItemTexture, 192, 64, 10, 14, 4, 0.15f);
     private int score = 0;
     private int coinCount = 0;
-    private int time = 150;
+    public int time = 150;
     private int FrameCount = 0;
-    private bool levelOver = false;
+    public bool levelOver = false;
     private bool goToTransition = false;
-    private float TransitionTimer = 3f;
+    public float TransitionTimer = 3f;
     public bool dead { get; private set; } = false;
-    public bool WaitForNextLevel { get; private set; } = false;
-    private bool playtimewarning = true;
+    public bool WaitForNextLevel { get; set; } = false;
+    public bool playtimewarning = true;
     private readonly List<FloatingText> textsList = [];
     public static HUD Instance { get; } = new();
     internal int Score { get => score; set => score = value; }
     internal int CoinCount { get => coinCount; set => coinCount = value; }
     internal bool LevelOverState { get => levelOver; set => levelOver = value; }
     internal bool Dead { set => dead = value; }
-    internal bool GoToTransition { set => goToTransition = value; }
+    internal bool GoToTransition { get => goToTransition; set => goToTransition = value; }
     private readonly EventManager eventManager;
     private HUD()
     {
@@ -59,19 +59,10 @@ public class HUD
         score = 0;
         coinCount = 0;
     }
-    public void KilledBowser()
-    {
-        LevelOver();
-        SendEvent(new GameEvent { EventType = GameEventType.EndOfLevel });
-        MagicBrosMario.INSTANCE.Mario.Invincible = true;
-        MagicBrosMario.INSTANCE.finishedLevel2 = true;
-        SoundController.PlaySound(SoundType.BowserFires, 0.8f);
-        SoundController.PlaySound(SoundType.WorldClear, 1.0f);
-    }
     public void SendEvent(GameEvent gameEvent) => eventManager.SendEvent(gameEvent);
-    public void Update(GameTime gametime)
+
+    private void UpdateHelperText(GameTime gametime)
     {
-        eventManager.UpdateStompChainTimer(gametime);
         for (int i = textsList.Count - 1; i >= 0; i--)
         {
             textsList[i].Update(gametime);
@@ -80,59 +71,19 @@ public class HUD
                 textsList.RemoveAt(i);
             }
         }
+    }
+    public void Update(GameTime gametime)
+    {
+        UpdateHelperText(gametime);
         FrameCount++;
         if (FrameCount >= 24 && time > 0 && !levelOver)
         {
             time--;
             FrameCount = 0;
         }
-        if(time == 100 && playtimewarning && !levelOver) 
-        { 
-            playtimewarning = false;  
-            SoundController.PauseMusic();
-            SoundController.PlaySound(SoundType.TimeWarning, 1.0f);
-        }else if (!playtimewarning && !SoundController.IsSoundOnCoolDown(SoundType.TimeWarning))
-        {
-            SoundController.ResumeMusic();
-        }
-        if (levelOver && !dead && !goToTransition)
-        {
-            time--;
-            score += 50;
-            if (time == 0)
-            {
-                WaitForNextLevel = true;
-                goToTransition = true;
-			}
-        }
-        else if (time == 0 && !levelOver) { MagicBrosMario.INSTANCE.Mario.KillMario(); }
         coin.Position = new Point(Camera.Instance.Position.X + 260, Camera.Instance.Position.Y + 27);
         coin.Update(gametime);
-
-        if (goToTransition)
-        {
-            MagicBrosMario.INSTANCE.Mario.SetVisibility(false);
-            MarioGameController.Mute();
-            TransitionTimer -= (float)gametime.ElapsedGameTime.TotalSeconds;
-                       
-            if (TransitionTimer <= 0)
-            {
-                if (!MagicBrosMario.INSTANCE.finishedLevel1) {
-					MagicBrosMario.INSTANCE.CurrentState = new TransitionState(new Level.Level1());
-				}
-                else if (!MagicBrosMario.INSTANCE.finishedLevel2)
-                {
-					MagicBrosMario.INSTANCE.CurrentState = new TransitionState(new Level.Level2());
-                }
-                else
-                {
-                    MagicBrosMario.INSTANCE.CurrentState = new TitleScreenState();
-                }
-                goToTransition = false;
-                TransitionTimer = 3f;
-            }
-        } 
-
+        eventManager.Update(gametime);
     }
     public void Draw(SpriteBatch _spriteBatch)
     {

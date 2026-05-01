@@ -1,8 +1,10 @@
-﻿using MagicBrosMario.Source.Items;
+﻿using MagicBrosMario.Source.GameStates;
+using MagicBrosMario.Source.Items;
 using MagicBrosMario.Source.MarioStates;
 using MagicBrosMario.Source.Sound;
 using Microsoft.Xna.Framework;
 using System;
+using static System.TimeZoneInfo;
 
 namespace MagicBrosMario.Source.HUDAndScoring;
 
@@ -13,6 +15,15 @@ internal sealed class EventManager(HUD hud)
     private int StompChain = 0;
     private readonly double stompChainCD = 1.0;
     private double stompChainTimer = 0;
+    public void KilledBowser()
+    {
+        hud.LevelOver();
+        SendEvent(new GameEvent { EventType = GameEventType.EndOfLevel });
+        MagicBrosMario.INSTANCE.Mario.Invincible = true;
+        MagicBrosMario.INSTANCE.finishedLevel2 = true;
+        SoundController.PlaySound(SoundType.BowserFires, 0.8f);
+        SoundController.PlaySound(SoundType.WorldClear, 1.0f);
+    }
     public void SendEvent(GameEvent gameEvent)
     {
         switch (gameEvent.EventType)
@@ -27,7 +38,7 @@ internal sealed class EventManager(HUD hud)
                     hud.Score+= 5000;
                     hud.DisplayScoreGain(gameEvent, 5000);
                     StompChain++;
-                    hud.KilledBowser();
+                    KilledBowser();
                     return;
                 }
                 if (stompChainTimer >= stompChainCD)
@@ -61,7 +72,7 @@ internal sealed class EventManager(HUD hud)
                 {
                     hud.Score+= 5000;
                     hud.DisplayScoreGain(gameEvent, 5000);
-                    hud.KilledBowser();
+                    KilledBowser();
                 }
                 SoundController.PlaySound(SoundType.Stomp, 1.0f);
                 break;
@@ -147,8 +158,54 @@ internal sealed class EventManager(HUD hud)
         }
     }
 
-    public void UpdateStompChainTimer(GameTime gametime)
+    public void Update(GameTime gametime)
     {
         stompChainTimer += gametime.ElapsedGameTime.TotalSeconds;
+        if (hud.time == 100 && hud.playtimewarning && !hud.levelOver)
+        {
+            hud.playtimewarning = false;
+            SoundController.PauseMusic();
+            SoundController.PlaySound(SoundType.TimeWarning, 1.0f);
+        }
+        else if (!hud.playtimewarning && !SoundController.IsSoundOnCoolDown(SoundType.TimeWarning))
+        {
+            SoundController.ResumeMusic();
+        }
+        if (hud.levelOver && !hud.dead && !hud.GoToTransition)
+        {
+            hud.time--;
+            hud.Score += 50;
+            if (hud.time == 0)
+            {
+                hud.WaitForNextLevel = true;
+                hud.GoToTransition = true;
+            }
+        }
+        else if (hud.time == 0 && !hud.levelOver) { MagicBrosMario.INSTANCE.Mario.KillMario(); }
+
+        if (hud.GoToTransition)
+        {
+            MagicBrosMario.INSTANCE.Mario.SetVisibility(false);
+            MarioGameController.Mute();
+            hud.TransitionTimer -= (float)gametime.ElapsedGameTime.TotalSeconds;
+
+            if (hud.TransitionTimer <= 0)
+            {
+                if (!MagicBrosMario.INSTANCE.finishedLevel1)
+                {
+                    MagicBrosMario.INSTANCE.CurrentState = new TransitionState(new Level.Level1());
+                }
+                else if (!MagicBrosMario.INSTANCE.finishedLevel2)
+                {
+                    MagicBrosMario.INSTANCE.CurrentState = new TransitionState(new Level.Level2());
+                }
+                else
+                {
+                    MagicBrosMario.INSTANCE.CurrentState = new TitleScreenState();
+                }
+                hud.GoToTransition = false;
+                hud.TransitionTimer = 3f;
+            }
+        }
     }
 }
