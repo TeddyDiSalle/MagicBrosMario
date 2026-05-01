@@ -4,7 +4,6 @@ using MagicBrosMario.Source.MarioStates;
 using MagicBrosMario.Source.Sound;
 using Microsoft.Xna.Framework;
 using System;
-using static System.TimeZoneInfo;
 
 namespace MagicBrosMario.Source.HUDAndScoring;
 
