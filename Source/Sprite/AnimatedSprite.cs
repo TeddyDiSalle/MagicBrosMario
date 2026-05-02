@@ -50,7 +50,7 @@ public class AnimatedSprite(
     } = 1;
 
     public Point Size { get; private set; }
-    
+
     public Color Color { get; set; } = Color.White;
     public float Depth { get; set; } = 0.0f;
 
@@ -66,7 +66,8 @@ public class AnimatedSprite(
         UpdateDestRect();
     }
 
-    public void UpdateDestRect() {
+    public void UpdateDestRect()
+    {
         var screenPosition = Camera.Instance.Position;
         destRect = new Rectangle(Position.X - screenPosition.X, Position.Y - screenPosition.Y, Size.X, Size.Y);
         shouldDraw = Camera.Instance.ShouldDraw(destRect);
@@ -85,24 +86,25 @@ public class AnimatedSprite(
         timer -= framePassed * msPerFrame;
     }
 
-    public void Draw(SpriteBatch spriteBatch) {
+    public void Draw(SpriteBatch spriteBatch)
+    {
         if (!(Visible && shouldDraw)) return;
-        
+
         var sourceRect = new Rectangle(offsetX + frameWidth * frame, offsetY, frameWidth, frameHeight);
-        
+
+        SpriteEffects effect;
         if (HFlipped)
-        {
-            spriteBatch.Draw(texture.Texture, destRect, sourceRect, Color, 0f, Vector2.Zero,
-                SpriteEffects.FlipHorizontally, Depth);
-        }
+            effect = SpriteEffects.FlipHorizontally;
         else
-        {
-            spriteBatch.Draw(texture.Texture, destRect, sourceRect, Color, 0f, Vector2.Zero,
-                SpriteEffects.None, Depth);
-        }
+            effect = SpriteEffects.None;
+
+
+        spriteBatch.Draw(texture.Texture, destRect, sourceRect, Color, 0f, Vector2.Zero,
+            effect, Depth);
     }
 
-    public void Drop() {
+    public void Drop()
+    {
         Camera.Instance.Sprites.Remove(this);
     }
 
@@ -110,6 +112,7 @@ public class AnimatedSprite(
     {
         Depth = 1.0f;
     }
+
     public void Midground()
     {
         Depth = 0.5f;
